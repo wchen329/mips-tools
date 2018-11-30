@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 /* MIPS Simulator
  * for valid opcodes, review the contained documents
  */
