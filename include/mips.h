@@ -1,10 +1,28 @@
 /* A header for mips specifc details
- * such as register name mappings.
+ * such as register name mappings
+ * and a jump list for functional routines
+ *
+ * Instruction Formats:
+ * R -
+ * I -
+ * J -
+ *
+ *
+ * wchen329
  */
+#include "primitives.h"
+#include "reg_32.h"
+
 namespace mips_tools
 {
+	// MIPS Operations
+	long MIPS_ADD(long r_s, long r_t);
+	long MIPS_SUB(long r_s, long r_t);
+	long MIPS_ADDI(long r_s, long imm);
+	long MIPS_AND(long r_s, long imm);
+
 	// friendly register names
-/*	enum REGISTERS
+	enum REGISTERS
 	{
 		$zero = 0,
 		$at = 1,
@@ -38,5 +56,5 @@ namespace mips_tools
 		$sp = 29,
 		$fp = 30,
 		$ra = 31
-	};*/
+	};
 }

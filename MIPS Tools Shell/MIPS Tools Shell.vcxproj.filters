@@ -14,5 +14,25 @@
     <ClCompile Include="..\src\shell.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\interpret.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\states.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\messages.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\interpret.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\states.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\messages.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

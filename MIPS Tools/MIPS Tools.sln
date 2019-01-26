@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MIPS Tools Core", "MIPS Tools.vcxproj", "{9C1D372F-1761-437C-A7EC-27A79BB967B6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MIPS Tools Shell", "..\MIPS Tools Shell\MIPS Tools Shell.vcxproj", "{FB9CCEE4-76B7-4A56-BAEA-F1709C4DE126}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9C1D372F-1761-437C-A7EC-27A79BB967B6} = {9C1D372F-1761-437C-A7EC-27A79BB967B6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

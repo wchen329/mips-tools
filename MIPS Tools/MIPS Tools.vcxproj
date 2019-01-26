@@ -17,7 +17,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -68,17 +68,16 @@
     <ClCompile Include="..\src\sc_cpu.cpp" />
     <ClCompile Include="..\src\mb.cpp" />
     <ClCompile Include="..\src\mmem.cpp" />
-    <ClCompile Include="..\src\sim.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\alu.h" />
     <ClInclude Include="..\include\cpu.h" />
     <ClInclude Include="..\include\mb.h" />
     <ClInclude Include="..\include\mem.h" />
     <ClInclude Include="..\include\mips.h" />
     <ClInclude Include="..\include\mmem.h" />
     <ClInclude Include="..\include\pipeline.h" />
-    <ClInclude Include="..\include\register_32.h" />
+    <ClInclude Include="..\include\primitives.h" />
+    <ClInclude Include="..\include\reg_32.h" />
     <ClInclude Include="..\include\sc_cpu.h" />
     <ClInclude Include="..\include\superscalar.h" />
   </ItemGroup>

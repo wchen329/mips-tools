@@ -22,10 +22,12 @@ namespace mips_tools
 	{
 		public:
 			void dc_on();	// power on
+			void reset();
+			void step();	// step the processor a cycle
+			sc_cpu & get_cpu();	// return cpu reference
 			mb(cpu_t ct = STANDARD, int mt = 32);
 
 		private:
-			void run();	// processor is alive at this point
 			sc_cpu mb_cpu;	// single socket cpu
 			mmem mb_mmem;  // single main memory
 			cpu_t cpu_type;	// types of MIPS processor

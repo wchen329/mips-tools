@@ -9,6 +9,11 @@ namespace mips_tools
 
 	void sc_cpu::rst()
 	{
+		for(int i = 0; i < 32; i++)
+		{
+			this->registers[i].set_data(0);
+		}
 
+		this->pc.set_data(0);
 	}
 }

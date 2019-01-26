@@ -13,6 +13,21 @@ namespace mips_tools
 		while(this->mb_cpu.cycle() == false);
 	}
 
+	void mb::reset()
+	{
+		this->mb_cpu.rst();
+	}
+
+	void mb::step()
+	{
+		this->mb_cpu.cycle();
+	}
+
+	sc_cpu& mb::get_cpu()
+	{
+		return this->mb_cpu;
+	}
+
 	mb::mb(cpu_t ct, int mt): cpu_type(ct), mmem_type(mt) 
 	{
 		
