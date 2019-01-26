@@ -1,2 +1,4 @@
 bin/*
 lib/*
+MIPS Tools/Debug/*
+MIPS Tools Shell/Debug/*

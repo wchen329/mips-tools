@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MIPS Tools Core", "MIPS Tools.vcxproj", "{9C1D372F-1761-437C-A7EC-27A79BB967B6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MIPS Tools Shell", "..\MIPS Tools Shell\MIPS Tools Shell.vcxproj", "{FB9CCEE4-76B7-4A56-BAEA-F1709C4DE126}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C1D372F-1761-437C-A7EC-27A79BB967B6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9C1D372F-1761-437C-A7EC-27A79BB967B6}.Debug|Win32.Build.0 = Debug|Win32
+		{9C1D372F-1761-437C-A7EC-27A79BB967B6}.Release|Win32.ActiveCfg = Release|Win32
+		{9C1D372F-1761-437C-A7EC-27A79BB967B6}.Release|Win32.Build.0 = Release|Win32
+		{FB9CCEE4-76B7-4A56-BAEA-F1709C4DE126}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FB9CCEE4-76B7-4A56-BAEA-F1709C4DE126}.Debug|Win32.Build.0 = Debug|Win32
+		{FB9CCEE4-76B7-4A56-BAEA-F1709C4DE126}.Release|Win32.ActiveCfg = Release|Win32
+		{FB9CCEE4-76B7-4A56-BAEA-F1709C4DE126}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
