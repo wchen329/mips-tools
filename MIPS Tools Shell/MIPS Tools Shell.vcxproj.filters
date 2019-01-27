@@ -23,6 +23,9 @@
     <ClCompile Include="..\src\messages.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\format_chk.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\interpret.h">
@@ -32,6 +35,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\messages.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\format_chk.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

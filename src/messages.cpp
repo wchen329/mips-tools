@@ -8,4 +8,5 @@ namespace mipsshell
 {
 	char * HELP = ".exit - exit\n.help - show this help message\n.echo - echo register state\n[mips assembly instruction] - execute that instruction\n";			// help message
 	char * BAD_COMMAND = "Unknown command. For more information on acceptable commands type \".help\".\n" ;  // bad command message
+	char * BAD_FORMAT = "Bad or unsupported register format.\n";
 }

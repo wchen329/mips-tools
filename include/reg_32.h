@@ -18,6 +18,7 @@ namespace mips_tools
 			BW_32 data;
 	};
 
+	reg_32 operator+(reg_32 r_1, reg_32 r_2);
 }
 
 #endif

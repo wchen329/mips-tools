@@ -10,7 +10,7 @@ namespace mips_tools
 		// Fetch
 		BW_32 inst_word_addr = this -> pc.get_data();
 		this -> pc.set_data(inst_word_addr + 4);
-		BW_32 inst_word = 0; // get instr word
+		BW_32 inst_word = this -> current_inst.get_data(); // get instr word
 
 		// Decode
 
@@ -29,12 +29,14 @@ namespace mips_tools
 		BW_32 rt = (rt_mask & inst_word) >> 16;
 		BW_32 rd = (rd_mask & inst_word) >> 11;
 		BW_32 funct = (funct_mask & inst_word);
+		BW_32 imm = (imm_mask & inst_word);
 
 		if(opcode == 0) fm = R;
 		else if(opcode >= 8 && opcode <= 15) fm = I;
 		else fm = R;
 
 		bool reg_we = true; // find write enable
+		int r_write = rt;
 
 		// Execute
 		BW_32 reg_wdata = 0;
@@ -51,17 +53,36 @@ namespace mips_tools
 
 				break;
 			case I:
+				if(opcode == 8)
+				{
+					reg_wdata = rs + imm;
+				}
 				break;
 		}
 
 		// Write Back
-		if(reg_we && rd != 0)
+		if(reg_we && r_write != 0)
 		{
-			this->registers[rd].set_data(reg_wdata);
+			this->registers[rt].set_data(reg_wdata);
 		}
 		
 
 		return true;
+	}
+
+	void sc_cpu::encode(int rs, int rt, int rd, int funct, int imm, int opcode)
+	{
+		BW_32 w = 0;
+
+		if(opcode == 8)
+		{
+			w = (w | (imm & ((1 << 16) - 1)   ));
+			w = (w | ((rt & ((1 << 5) - 1) ) << 16  ));
+			w = (w | ((rs & ((1 << 5) - 1) ) << 21  ));
+			w = (w | ((opcode & ((1 << 6) - 1) ) << 26  ));
+		}
+
+		this->force_fetch(w);
 	}
 
 	void sc_cpu::rst()
@@ -73,4 +94,5 @@ namespace mips_tools
 
 		this->pc.set_data(0);
 	}
+
 }

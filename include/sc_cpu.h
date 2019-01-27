@@ -14,14 +14,16 @@ namespace mips_tools
 	{
 		public:
 			void rst(); // async reset
+			void force_fetch(BW_32 codeword) { this -> current_inst.set_data(codeword); };	// force current instruction
 			bool cycle();
 			BW_32 get_reg_data(int index) { return this->registers[index].get_data(); }
+			void encode(int rs, int rt, int rd, int funct, int imm, int opcode);
 
 		private:
 			static const int REG_COUNT = 32;
 			reg_32 registers[REG_COUNT];
 			reg_32 pc;
-
+			reg_32 current_inst;
 	};
 }
 #endif

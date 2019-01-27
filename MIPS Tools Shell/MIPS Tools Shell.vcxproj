@@ -67,12 +67,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\format_chk.cpp" />
     <ClCompile Include="..\src\interpret.cpp" />
     <ClCompile Include="..\src\messages.cpp" />
     <ClCompile Include="..\src\shell.cpp" />
     <ClCompile Include="..\src\states.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\interpret.h" />
     <ClInclude Include="..\include\messages.h" />
     <ClInclude Include="..\include\states.h" />
