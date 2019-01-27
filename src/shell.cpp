@@ -26,7 +26,7 @@ int main(int argc, char ** argv)
 	else
 	{
 		inst_file = stdin;
-		fprintf(stdout, "MIPS Tools 1.0\n");
+		fprintf(stdout, "MIPS Tools Developmental Version\n");
 		fprintf(stdout, "Starting in interactive mode...\n");
 		fprintf(stdout, "------------------------------------\n");
 		fprintf(stdout, "- Routine calls used with . prefix -\n");

@@ -1,3 +1,6 @@
+#ifndef __REG_32_H__
+#define __REG_32_H__
+
 /* 32 bit register
  */
 #include "primitives.h"
@@ -16,3 +19,5 @@ namespace mips_tools
 	};
 
 }
+
+#endif

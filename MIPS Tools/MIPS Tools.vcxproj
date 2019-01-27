@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\mem.cpp" />
+    <ClCompile Include="..\src\mips.cpp" />
     <ClCompile Include="..\src\sc_cpu.cpp" />
     <ClCompile Include="..\src\mb.cpp" />
     <ClCompile Include="..\src\mmem.cpp" />

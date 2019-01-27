@@ -1,11 +1,14 @@
+#ifndef __MIPS_H__
+#define __MIPS_H__
+
 /* A header for mips specifc details
  * such as register name mappings
  * and a jump list for functional routines
  *
  * Instruction Formats:
- * R -
- * I -
- * J -
+ * R - 6 opcode, 5 rs, 5 rt, 5 rd, 5 shamt, 6 funct
+ * I - 6 opcode, 5 rs, 5 rt, 16 imm
+ * J - 6 opcode, 26 addr
  *
  *
  * wchen329
@@ -15,14 +18,8 @@
 
 namespace mips_tools
 {
-	// MIPS Operations
-	long MIPS_ADD(long r_s, long r_t);
-	long MIPS_SUB(long r_s, long r_t);
-	long MIPS_ADDI(long r_s, long imm);
-	long MIPS_AND(long r_s, long imm);
-
 	// friendly register names
-	enum REGISTERS
+/*	enum REGISTERS
 	{
 		$zero = 0,
 		$at = 1,
@@ -56,5 +53,24 @@ namespace mips_tools
 		$sp = 29,
 		$fp = 30,
 		$ra = 31
+	};*/
+
+	enum format
+	{
+		R, I, J	// instruction formats
 	};
+
+	// MIPS Operation Templates
+	template <class T> inline T MIPS_ADD(T r_s, T r_t);	// to still do- enforce numerical specialization on classes
+	template <class T> inline T MIPS_SUB(T r_s, T r_t);
+	template <class T> inline T MIPS_SUBU(T r_s, T r_t);
+	template <class T> inline T MIPS_ADDI(T r_s, long imm);
+	template <class T> inline T MIPS_ADDIU(T r_s, long imm);
+	template <class T> inline T MIPS_AND(T r_s, T r_t);
+	template <class T> inline T MIPS_ANDI(T r_s, long imm);
+	template <class T> inline T MIPS_OR(T r_s, T r_t);
+	template <class T> inline T MIPS_ORI(T r_s, long imm);
+
 }
+
+#endif

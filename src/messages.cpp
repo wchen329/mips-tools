@@ -6,6 +6,6 @@
  */
 namespace mipsshell
 {
-	char * HELP = "placeholder\n";			// help message
+	char * HELP = ".exit - exit\n.help - show this help message\n.echo - echo register state\n[mips assembly instruction] - execute that instruction\n";			// help message
 	char * BAD_COMMAND = "Unknown command. For more information on acceptable commands type \".help\".\n" ;  // bad command message
 }

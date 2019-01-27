@@ -1,6 +1,7 @@
 /* Interpreter implementation
  *
  */
+#define _CRT_SECURE_NO_WARNINGS // MSVC
 #include <cstdio>
 #include <cstring>
 #include "mb.h"
@@ -37,19 +38,19 @@ namespace mipsshell
 					if(!strcmp(".exit", working_set)) return true;
 					else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); current_op = SYS_HELP; }
 					else if(!strcmp(".echo", working_set)) { for(int i = 0; i < 32; i++) fprintf(stdout, "$%d = %d\n", i, mb_ptr->get_cpu().get_reg_data(i)); current_op = SYS_ECHO; }
-					else fprintf(stdout, BAD_COMMAND);
+					else { fprintf(stdout, BAD_COMMAND); return false;}
 					break;
 				case 1:
-					fprintf(stdout, BAD_COMMAND);
+					{ fprintf(stdout, BAD_COMMAND); return false;}
 					break;
 				case 2:
-					fprintf(stdout, BAD_COMMAND);
+					{ fprintf(stdout, BAD_COMMAND); return false;}
 					break;
 				case 3:
-					fprintf(stdout, BAD_COMMAND);
+					{ fprintf(stdout, BAD_COMMAND); return false;}
 					break;
 				default:
-					fprintf(stdout, BAD_COMMAND);
+					{ fprintf(stdout, BAD_COMMAND); return false;}
 					return false;
 			}
 
