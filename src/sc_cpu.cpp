@@ -17,8 +17,8 @@ namespace mips_tools
 		// -Masks-
 		BW_32 opcode_mask = (~(1 << 26)) + 1;
 		BW_32 rs_mask = ~( ((~(1 << 26)) + 1) | ((1 << 21) - 1));
-		BW_32 rt_mask = ~( ((~(1 << 20)) + 1) | ((1 << 16) - 1));
-		BW_32 rd_mask = ~( ((~(1 << 15)) + 1) | ((1 << 11) - 1));
+		BW_32 rt_mask = ~( ((~(1 << 21)) + 1) | ((1 << 16) - 1));
+		BW_32 rd_mask = ~( ((~(1 << 16)) + 1) | ((1 << 11) - 1));
 		BW_32 funct_mask = 63;
 		BW_32 imm_mask = (1 << 16) - 1;
 		BW_32 addr_mask = (1 << 26) - 1;
@@ -36,7 +36,7 @@ namespace mips_tools
 		else fm = R;
 
 		bool reg_we = true; // find write enable
-		int r_write = rt;
+		int r_write = 0;
 
 		// Execute
 		BW_32 reg_wdata = 0;
@@ -46,16 +46,14 @@ namespace mips_tools
 		{
 			case R:
 				
-				if(funct == 32)
-				{
-					reg_wdata = rs + rt;
-				}
-
+					reg_wdata = (this->registers[rs] + this->registers[rt]).get_data();
+					r_write = rd;
 				break;
 			case I:
 				if(opcode == 8)
 				{
-					reg_wdata = rs + imm;
+					reg_wdata = this->registers[rs].get_data() + imm;
+					r_write = rt;
 				}
 				break;
 		}
@@ -63,7 +61,7 @@ namespace mips_tools
 		// Write Back
 		if(reg_we && r_write != 0)
 		{
-			this->registers[rt].set_data(reg_wdata);
+			this->registers[r_write].set_data(reg_wdata);
 		}
 		
 
@@ -74,12 +72,21 @@ namespace mips_tools
 	{
 		BW_32 w = 0;
 
+		if(opcode == 0)
+		{
+			w = (w | (funct & ((1 << 7) - 1)  ));
+			w = (w | ((rd & ((1 << 6) - 1) ) << 11 ));
+			w = (w | ((rt & ((1 << 6) - 1) ) << 16 ));
+			w = (w | ((rs & ((1 << 6) - 1) ) << 21 ));
+			w = (w | ((opcode & ((1 << 7) - 1) ) << 26  ));
+		}
+
 		if(opcode == 8)
 		{
 			w = (w | (imm & ((1 << 16) - 1)   ));
-			w = (w | ((rt & ((1 << 5) - 1) ) << 16  ));
-			w = (w | ((rs & ((1 << 5) - 1) ) << 21  ));
-			w = (w | ((opcode & ((1 << 6) - 1) ) << 26  ));
+			w = (w | ((rt & ((1 << 6) - 1) ) << 16  ));
+			w = (w | ((rs & ((1 << 6) - 1) ) << 21  ));
+			w = (w | ((opcode & ((1 << 7) - 1) ) << 26  ));
 		}
 
 		this->force_fetch(w);

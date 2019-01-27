@@ -139,7 +139,7 @@ namespace mipsshell
 					else if(i_inst(current_op))
 					{
 						// later, check for branches
-						imm = 5;
+						imm = atoi(working_set);
 
 						// to implement, check for bad immediates
 					}
@@ -158,12 +158,15 @@ namespace mipsshell
 			// Add check for empty instructions
 		}
 
+		if(current_op > DUMMY) return false;
+
 		// Depending on instruction type, place each corresponding field where needed
 		
 		// Pass the values of rs, rt, rd to the processor's encoding function
 		try
 		{
-			mb_ptr ->get_cpu().encode(rs, rt, rd, 8, imm, 8);
+			int opcd = current_op == ADD ? 0 : 8;
+			mb_ptr ->get_cpu().encode(rs, rt, rd, 32, imm, opcd);
 		}
 		catch(mt_exception)
 		{
