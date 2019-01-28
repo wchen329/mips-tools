@@ -28,8 +28,5 @@ namespace mips_tools
 		return this->mb_cpu;
 	}
 
-	mb::mb(cpu_t ct, int mt): cpu_type(ct), mmem_type(mt) 
-	{
-		
-	}
+	mb::mb(cpu_t ct, int mt): cpu_type(ct), mmem_type(mt) {}
 } 

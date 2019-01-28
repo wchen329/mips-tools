@@ -9,13 +9,18 @@ namespace mips_tools
 
 	mem::mem(const mem & m)
 	{
-		// to finish
+		// disabled, see interface declaration, may enable later
 	}
 	
 	mem mem::operator=(const mem & m)
 	{
-		// to finish
+		// disabled, see interface declaration, may enable later
 		return m;
+	}
+
+	char mem::operator[](int ind)
+	{
+		return data[ind];
 	}
 
 	mem::~mem()

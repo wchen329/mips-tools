@@ -4,10 +4,11 @@
 
 namespace mips_tools
 {
-
-	class mmem : mem
+	// Main memory
+	class mmem : public mem
 	{
-
+		public:
+			mmem(int size = 1024) : mem(size){}
 	};
 
 }

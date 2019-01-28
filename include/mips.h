@@ -18,7 +18,8 @@
 
 namespace mips_tools
 {
-	// friendly register names
+
+	// Friendly Register Names -> Numerical Assignments
 	enum REGISTERS
 	{
 		$zero = 0,
@@ -55,11 +56,13 @@ namespace mips_tools
 		$ra = 31
 	};
 
+	// instruction formats
 	enum format
 	{
-		R, I, J	// instruction formats
+		R, I, J	
 	};
 
+	// MIPS Processor Opcodes
 	enum opcode
 	{
 		R_FORMAT = 0,
@@ -92,6 +95,24 @@ namespace mips_tools
 		SYS_RES = -1	// system reserved for shell interpreter
 	};
 
+	// Function codes for R-Format Instructions
+	enum funct
+	{
+		SLL = 0,
+		SRL = 2,
+		JR = 8,
+		ADD = 32,
+		ADDU = 33,
+		SUB = 34,
+		SUBU = 35,
+		AND = 36,
+		OR = 37,
+		NOR = 39,
+		SLT = 42,
+		SLTU = 43,
+		NONE = -1	// default, if not R format
+	};
+
 	// MIPS Operation Templates
 	template <class T> inline T MIPS_ADD(T r_s, T r_t);	// to still do- enforce numerical specialization on classes
 	template <class T> inline T MIPS_SUB(T r_s, T r_t);
@@ -102,7 +123,6 @@ namespace mips_tools
 	template <class T> inline T MIPS_ANDI(T r_s, long imm);
 	template <class T> inline T MIPS_OR(T r_s, T r_t);
 	template <class T> inline T MIPS_ORI(T r_s, long imm);
-
 
 	// Format check functions
 	/* Checks if an instruction is I formatted.

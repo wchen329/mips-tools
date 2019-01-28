@@ -10,14 +10,14 @@
 namespace mips_tools
 {
 
-	class sc_cpu : cpu
+	class sc_cpu : public cpu
 	{
 		public:
 			void rst(); // async reset
-			void force_fetch(BW_32 codeword) { this -> current_inst.set_data(codeword); };	// force current instruction
-			bool cycle();
+			bool cycle(); // advance the processor a cycle
 			BW_32 get_reg_data(int index) { return this->registers[index].get_data(); }
 			void encode(int rs, int rt, int rd, int funct, int imm, opcode op);
+			void force_fetch(BW_32 codeword) { this -> current_inst.set_data(codeword); };	// force current instruction
 
 		private:
 			static const int REG_COUNT = 32;

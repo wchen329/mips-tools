@@ -24,15 +24,15 @@ namespace mips_tools
 		BW_32 addr_mask = (1 << 26) - 1;
 
 		// - Actual values
-		BW_32 opcode = (opcode_mask & inst_word) >> 26;
+		BW_32 op = (opcode_mask & inst_word) >> 26;
 		BW_32 rs = (rs_mask & inst_word) >> 21;
 		BW_32 rt = (rt_mask & inst_word) >> 16;
 		BW_32 rd = (rd_mask & inst_word) >> 11;
 		BW_32 funct = (funct_mask & inst_word);
 		BW_32 imm = (imm_mask & inst_word);
 
-		if(opcode == R_FORMAT) fm = R;
-		else if(opcode >= 8 && opcode <= 15) fm = I;
+		if(op == R_FORMAT) fm = R;
+		else if(op >= 8 && op <= 15) fm = I;
 		else fm = R;
 
 		bool reg_we = true; // find write enable
@@ -46,11 +46,31 @@ namespace mips_tools
 		{
 			case R:
 				
-				reg_wdata = (this->registers[rs] + this->registers[rt]).get_data();
-				r_write = rd;
+				// Eventually replace these with template functions
+				switch(funct)
+				{
+					case ADD:
+						reg_wdata = (this->registers[rs] + this->registers[rt]).get_data();
+						r_write = rd;
+						break;
+					case OR:
+						reg_wdata = (this->registers[rs] | this->registers[rt]).get_data();
+						r_write = rd;
+						break;
+					case AND: 
+						reg_wdata = (this->registers[rs] & this->registers[rt]).get_data();
+						r_write = rd;
+						break;
+					case SUB:
+						reg_wdata = (this->registers[rs] - this->registers[rt]).get_data();
+						r_write = rd;
+						break;
+				}
+
 				break;
+				
 			case I:
-				switch(opcode)
+				switch(op)
 				{
 					case ADDI:
 						reg_wdata = this->registers[rs].get_data() + imm;

@@ -19,6 +19,9 @@ namespace mips_tools
 	};
 
 	reg_32 operator+(reg_32 r_1, reg_32 r_2);
+	reg_32 operator-(reg_32 r_1, reg_32 r_2);
+	reg_32 operator&(reg_32 r_1, reg_32 r_2);
+	reg_32 operator|(reg_32 r_1, reg_32 r_2);
 }
 
 #endif
