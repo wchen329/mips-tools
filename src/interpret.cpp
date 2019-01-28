@@ -7,9 +7,9 @@
 #include <vector>
 #include "mb.h"
 #include "messages.h"
+#include "mips.h"
 #include "mt_exception.h"
 #include "interpret.h"
-#include "format_chk.h"
 
 namespace mipsshell
 {
@@ -58,7 +58,9 @@ namespace mipsshell
 	// Main interpretation routine
 	bool interpret(char * line, mips_tools::mb * mb_ptr)
 	{
-		op current_op;
+		using namespace mips_tools;  // may be changed later to allow scoping changes
+
+		mips_tools::opcode current_op = SYS_RES;
 
 		char * working_set = strtok(line, " ");
 		int round = 0;
@@ -72,6 +74,7 @@ namespace mipsshell
 
 		while(working_set != NULL)
 		{
+
 			int len = strlen(working_set);
 			if(len < 1) continue;
 
@@ -83,14 +86,14 @@ namespace mipsshell
 			{
 				case 0:
 					if(!strcmp(".exit", working_set)) return true;
-					else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); current_op = SYS_HELP; }
-					else if(!strcmp(".echo", working_set)) { for(int i = 0; i < 32; i++) fprintf(stdout, "$%d = %d\n", i, mb_ptr->get_cpu().get_reg_data(i)); current_op = SYS_ECHO; }
-					else if(!strcmp("add", working_set)) { current_op = ADD; }
+					else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
+					else if(!strcmp(".echo", working_set)) { for(int i = 0; i < 32; i++) fprintf(stdout, "$%d = %d\n", i, mb_ptr->get_cpu().get_reg_data(i)); }
+					else if(!strcmp("add", working_set)) { current_op = R_FORMAT; }
 					else if(!strcmp("addi", working_set)) { current_op = ADDI; }
-					else if(!strcmp("sub", working_set)) { current_op = SUB; }
-					else if(!strcmp("and", working_set)) { current_op = AND; }
+					else if(!strcmp("sub", working_set)) { current_op = R_FORMAT; }
+					else if(!strcmp("and", working_set)) { current_op = R_FORMAT; }
 					else if(!strcmp("andi", working_set)) { current_op = ANDI; }
-					else if(!strcmp("or", working_set)) { current_op = OR; }	
+					else if(!strcmp("or", working_set)) { current_op = R_FORMAT; }	
 					else if(!strcmp("ori", working_set)) { current_op = ORI; }	
 					else { fprintf(stdout, BAD_COMMAND); return false;}
 					break;
@@ -158,16 +161,16 @@ namespace mipsshell
 			// Add check for empty instructions
 		}
 
-		if(current_op > DUMMY) return false;
+		if(current_op == SYS_RES) return false;
 
 		// Depending on instruction type, place each corresponding field where needed
 		
 		// Pass the values of rs, rt, rd to the processor's encoding function
 		try
 		{
-			int opcd = current_op == ADD ? 0 : 8;
-			mb_ptr ->get_cpu().encode(rs, rt, rd, 32, imm, opcd);
+			mb_ptr ->get_cpu().encode(rs, rt, rd, 32, imm, current_op);
 		}
+
 		catch(mt_exception)
 		{
 

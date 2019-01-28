@@ -31,7 +31,7 @@ namespace mips_tools
 		BW_32 funct = (funct_mask & inst_word);
 		BW_32 imm = (imm_mask & inst_word);
 
-		if(opcode == 0) fm = R;
+		if(opcode == R_FORMAT) fm = R;
 		else if(opcode >= 8 && opcode <= 15) fm = I;
 		else fm = R;
 
@@ -46,15 +46,27 @@ namespace mips_tools
 		{
 			case R:
 				
-					reg_wdata = (this->registers[rs] + this->registers[rt]).get_data();
-					r_write = rd;
+				reg_wdata = (this->registers[rs] + this->registers[rt]).get_data();
+				r_write = rd;
 				break;
 			case I:
-				if(opcode == 8)
+				switch(opcode)
 				{
-					reg_wdata = this->registers[rs].get_data() + imm;
-					r_write = rt;
+					case ADDI:
+						reg_wdata = this->registers[rs].get_data() + imm;
+						r_write = rt;
+						break;
+					case ORI:
+						reg_wdata = this->registers[rs].get_data() | imm;
+						r_write = rt;
+						break;
+					case ANDI:
+						reg_wdata = this->registers[rs].get_data() & imm;
+						r_write = rt;
+						break;
 				}
+
+
 				break;
 		}
 
@@ -68,25 +80,25 @@ namespace mips_tools
 		return true;
 	}
 
-	void sc_cpu::encode(int rs, int rt, int rd, int funct, int imm, int opcode)
+	void sc_cpu::encode(int rs, int rt, int rd, int funct, int imm, opcode op)
 	{
 		BW_32 w = 0;
 
-		if(opcode == 0)
+		if(r_inst(op))
 		{
 			w = (w | (funct & ((1 << 7) - 1)  ));
 			w = (w | ((rd & ((1 << 6) - 1) ) << 11 ));
 			w = (w | ((rt & ((1 << 6) - 1) ) << 16 ));
 			w = (w | ((rs & ((1 << 6) - 1) ) << 21 ));
-			w = (w | ((opcode & ((1 << 7) - 1) ) << 26  ));
+			w = (w | ((op & ((1 << 7) - 1) ) << 26  ));
 		}
 
-		if(opcode == 8)
+		if(i_inst(op))
 		{
 			w = (w | (imm & ((1 << 16) - 1)   ));
 			w = (w | ((rt & ((1 << 6) - 1) ) << 16  ));
 			w = (w | ((rs & ((1 << 6) - 1) ) << 21  ));
-			w = (w | ((opcode & ((1 << 7) - 1) ) << 26  ));
+			w = (w | ((op & ((1 << 7) - 1) ) << 26  ));
 		}
 
 		this->force_fetch(w);

@@ -2,6 +2,25 @@
 
 namespace mips_tools
 {
+
+	bool r_inst(opcode operation)
+	{
+		return
+		
+			operation == R_FORMAT ? true :
+			false ;
+	}
+
+	bool i_inst(opcode operation)
+	{
+		return
+			operation == ADDI ? true :
+			operation == ADDIU ? true:
+			operation == ANDI ? true :
+			operation == ORI ? true :
+			false ;
+	}
+
 	template <class T> inline T MIPS_ADD(T r_s, T r_t) { return r_s + r_t; }	// to still do- enforce numerical specialization on classes
 	template <class T> inline T MIPS_SUB(T r_s, T r_t) { return r_s - r_t; }
 	template <class T> inline T MIPS_SUBU(T r_s, T r_t) { return MIPS_SUB(r_s, r_t) };	// to still do, reimplement based on exception detection

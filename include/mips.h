@@ -19,12 +19,12 @@
 namespace mips_tools
 {
 	// friendly register names
-/*	enum REGISTERS
+	enum REGISTERS
 	{
 		$zero = 0,
 		$at = 1,
 		$v0 = 2,
-		$v0 = 3,
+		$v1 = 3,
 		$a0 = 4,
 		$a1 = 5,
 		$a2 = 6,
@@ -53,11 +53,43 @@ namespace mips_tools
 		$sp = 29,
 		$fp = 30,
 		$ra = 31
-	};*/
+	};
 
 	enum format
 	{
 		R, I, J	// instruction formats
+	};
+
+	enum opcode
+	{
+		R_FORMAT = 0,
+		DUMMY = 1,
+		JUMP = 2,
+		JAL = 3,
+		BEQ = 4,
+		BNE = 5,
+		BLEZ = 6,
+		BGTZ = 7,
+		ADDI =  8,
+		ADDIU = 9,
+		SLTI = 10,
+		SLTIU = 11,
+		ANDI = 12,
+		ORI = 13,
+		XORI = 14,
+		LUI = 15,
+		LB = 32,
+		LH = 33,
+		LWL = 34,
+		LW = 35,
+		LBU = 36,
+		LHU = 37,
+		LWR = 38,
+		SB = 40,
+		SH = 41,
+		SWL = 42,
+		SW = 43,
+		SYS_RES = -1	// system reserved for shell interpreter
 	};
 
 	// MIPS Operation Templates
@@ -70,6 +102,16 @@ namespace mips_tools
 	template <class T> inline T MIPS_ANDI(T r_s, long imm);
 	template <class T> inline T MIPS_OR(T r_s, T r_t);
 	template <class T> inline T MIPS_ORI(T r_s, long imm);
+
+
+	// Format check functions
+	/* Checks if an instruction is I formatted.
+	 */
+	bool i_inst(opcode operation);
+
+	/* Checks if an instruction is R formatted.
+	 */
+	bool r_inst(opcode operation);
 
 }
 
