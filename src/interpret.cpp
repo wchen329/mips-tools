@@ -4,61 +4,21 @@
 #define _CRT_SECURE_NO_WARNINGS // MSVC
 #include <cstdio>
 #include <cstring>
-#include <vector>
+#include "format_chk.h"
 #include "mb.h"
 #include "messages.h"
 #include "mips.h"
 #include "mt_exception.h"
 #include "interpret.h"
+#include "parser_err.h"
+#include "runtime_call.h"
 
 namespace mipsshell
 {
-
-	// Returns register number corresponding with argument if any
-	// Returns -1 if invalid or out of range
-	int get_reg_num(char * reg_str)
-	{
-		std::vector<char> numbers;
-		int len = strlen(reg_str);
-		if(len <= 1) return -1;
-		for(int i = 1; i < len; i++)
-		{
-			if(reg_str[i] >= '0' && reg_str[i] <= '9')
-			{
-				numbers.push_back(reg_str[i]);
-			}
-
-			else if(reg_str[i] == ',' && i == len - 1) continue;
-
-			else return -1;
-		}
-
-		int num = -1;
-
-		if(numbers.empty()) return -1;
-		else
-		{
-			char * num_str = new char[numbers.size()];
-
-			int k = 0;
-			for(std::vector<char>::iterator itr = numbers.begin(); itr < numbers.end(); itr++)
-			{
-				num_str[k] = *itr;
-				k++;
-			}
-			num = atoi(num_str);
-			delete[] num_str;
-		}
-
-		return num;
-	}
-
-
-
 	// Main interpretation routine
 	bool interpret(char * line, mips_tools::mb * mb_ptr)
 	{
-		
+
 		mips_tools::opcode current_op = mips_tools::SYS_RES;
 		mips_tools::funct f_code = mips_tools::NONE;
 		
@@ -83,99 +43,100 @@ namespace mipsshell
 
 
 			// now compare and execute. If running in batch mode with the -a option, the program will act as an assembler and produce a file with -o
-			switch(round)
+
+			try
 			{
+
+				switch(round)
+				{
 				case 0:
-					if(!strcmp(".exit", working_set)) return true;
-					else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
-					else if(!strcmp(".echo", working_set)) { for(int i = 0; i < 32; i++) fprintf(stdout, "$%d = %d\n", i, mb_ptr->get_cpu().get_reg_data(i)); }
-					else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
-					else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
-					else if(!strcmp("sub", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SUB; }
-					else if(!strcmp("and", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::AND; }
-					else if(!strcmp("andi", working_set)) { current_op = mips_tools::ANDI; }
-					else if(!strcmp("or", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::OR; }	
-					else if(!strcmp("ori", working_set)) { current_op = mips_tools::ORI; }	
-					else { fprintf(stdout, BAD_COMMAND); return false;}
-					break;
+						if(!strcmp(".exit", working_set)) return true;
+						else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
+						else if(!strcmp(".state", working_set)) { for(int i = 0; i < 32; i++) fprintf(stdout, "$%d = %d\n", i, mb_ptr->get_cpu().get_reg_data(i)); }
+						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
+						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
+						else if(!strcmp("sub", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SUB; }
+						else if(!strcmp("and", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::AND; }
+						else if(!strcmp("andi", working_set)) { current_op = mips_tools::ANDI; }
+						else if(!strcmp("or", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::OR; }	
+						else if(!strcmp("ori", working_set)) { current_op = mips_tools::ORI; }	
+						else { fprintf(stdout, BAD_COMMAND); return false;}
+						break;
 				
-				case 1:
-					if(r_inst(current_op))
-					{
-						rd = get_reg_num(working_set);
-						if(rd < 0) { fprintf(stdout, BAD_FORMAT); return false; }
-					}
+					case 1:
+						if(r_inst(current_op))
+						{
+							rd = get_reg_num(working_set);
+						}
 
-					else if(i_inst(current_op))
-					{
-						// later, check for branches
-						rt = get_reg_num(working_set);
-						if(rt < 0) { fprintf(stdout, BAD_FORMAT); return false; }
-					}
-
-					else { fprintf(stdout, BAD_COMMAND); return false;}
-					break;
-				
-				case 2:
-					if(r_inst(current_op))
-					{
-						rs = get_reg_num(working_set);
-						if(rs < 0) { fprintf(stdout, BAD_FORMAT); return false; }
-					}
+						else if(i_inst(current_op))
+						{
+							// later, check for branches
+							rt = get_reg_num(working_set);
+						}
+	
+						else { fprintf(stdout, BAD_COMMAND); return false;}
+						break;
 					
-					else if(i_inst(current_op))
-					{
-						// later, MUST check for branches
-						rs = get_reg_num(working_set);
-						if(rs < 0) { fprintf(stdout, BAD_FORMAT); return false; }
-					}
+					case 2:
+						if(r_inst(current_op))
+						{
+							rs = get_reg_num(working_set);
+						}
+						
+						else if(i_inst(current_op))
+						{
+							// later, MUST check for branches
+							rs = get_reg_num(working_set);
+						}
 
-					else { fprintf(stdout, BAD_COMMAND); return false;}
-					break;
+						else { fprintf(stdout, BAD_COMMAND); return false;}
+						break;
 			
-				case 3:
-					if(r_inst(current_op))
-					{
-						rt = get_reg_num(working_set);
-						if(rt < 0) { fprintf(stdout, BAD_FORMAT); return false; }
-					}
+					case 3:
+						if(r_inst(current_op))
+						{
+							rt = get_reg_num(working_set);
+						}
+						
+						else if(i_inst(current_op))
+						{
+							// later, check for branches stores and etc.
+							imm = get_imm(working_set);
+
+							// to implement, check for bad immediates
+						}
+
+						else { fprintf(stdout, BAD_COMMAND); return false;}
+						break;
 					
-					else if(i_inst(current_op))
-					{
-						// later, check for branches
-						imm = atoi(working_set);
+					default:
+						fprintf(stdout, BAD_FORMAT);
+						return false;
+				}
 
-						// to implement, check for bad immediates
-					}
+				round++;
+				working_set = strtok(NULL, " ");
 
-					else { fprintf(stdout, BAD_COMMAND); return false;}
-					break;
-				
-				default:
-					fprintf(stdout, BAD_FORMAT); return false;
-					return false;
 			}
 
-			round++;
-			working_set = strtok(NULL, " ");
+			catch(parser_err * e)
+			{
+				e->err_pr();
+				delete e;
+				return false;
+			}
 
-			// Add check for empty instructions
 		}
 
-		if(current_op == mips_tools::SYS_RES) return false;
+		// Check for insufficient arguments
+		if(current_op != mips_tools::SYS_RES) if(round != 4) { fprintf(stdout, "Expected more arguments, specification incomplete.\n"); return false; }
 
-		// Depending on instruction type, place each corresponding field where needed
+		// If system call, don't execute in CPU
+		if(current_op == mips_tools::SYS_RES) return false;
 		
 		// Pass the values of rs, rt, rd to the processor's encoding function
-		try
-		{
-			mb_ptr ->get_cpu().encode(rs, rt, rd, f_code, imm, current_op);
-		}
-
-		catch(mt_exception)
-		{
-
-		}
+		mb_ptr ->get_cpu().encode(rs, rt, rd, f_code, imm, current_op);
 
 		// Call an execution routine explicity
 		mb_ptr ->get_cpu().cycle();

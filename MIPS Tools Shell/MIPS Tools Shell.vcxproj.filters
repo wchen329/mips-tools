@@ -9,6 +9,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="localization">
+      <UniqueIdentifier>{98420712-a7cb-4bc6-9004-60ecee24e911}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\shell.cpp">
@@ -26,6 +29,12 @@
     <ClCompile Include="..\src\format_chk.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\parser_err.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\runtime_call.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\interpret.h">
@@ -38,6 +47,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\format_chk.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\parser_err.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\runtime_call.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

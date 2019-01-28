@@ -70,6 +70,8 @@
     <ClCompile Include="..\src\format_chk.cpp" />
     <ClCompile Include="..\src\interpret.cpp" />
     <ClCompile Include="..\src\messages.cpp" />
+    <ClCompile Include="..\src\parser_err.cpp" />
+    <ClCompile Include="..\src\runtime_call.cpp" />
     <ClCompile Include="..\src\shell.cpp" />
     <ClCompile Include="..\src\states.cpp" />
   </ItemGroup>
@@ -77,6 +79,8 @@
     <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\interpret.h" />
     <ClInclude Include="..\include\messages.h" />
+    <ClInclude Include="..\include\parser_err.h" />
+    <ClInclude Include="..\include\runtime_call.h" />
     <ClInclude Include="..\include\states.h" />
   </ItemGroup>
   <ItemGroup>

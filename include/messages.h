@@ -6,6 +6,7 @@ namespace mipsshell
 	extern char * HELP;			// help message
 	extern char * BAD_COMMAND;  // bad command message
 	extern char * BAD_FORMAT;	// bad format
+
 }
 
 #endif
