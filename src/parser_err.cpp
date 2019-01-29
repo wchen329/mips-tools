@@ -12,7 +12,7 @@ namespace mipsshell
 
 	void unexpected_err::err_pr()
 	{
-		fprintf(stderr, "\"%s\" was unexpected at this time. (line %d)\n", unexpected, line);
+		fprintf(stderr, "\"%s\" was unexpected at this time. Expected: \"%s%s\"\n", unexpected, expected, unexpected);
 	}
 
 	void badformat_err::err_pr()

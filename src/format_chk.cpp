@@ -13,6 +13,7 @@ namespace mipsshell
 		std::vector<char> numbers;
 		int len = strlen(reg_str);
 		if(len <= 1) throw new badformat_err();
+		if(reg_str[0] != '$') throw new unexpected_err("$", reg_str);
 		for(int i = 1; i < len; i++)
 		{
 			if(reg_str[i] >= '0' && reg_str[i] <= '9')

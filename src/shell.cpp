@@ -16,17 +16,25 @@
 int main(int argc, char ** argv)
 {
 	FILE * inst_file;
+	fprintf(stdout, "MIPS Tools Developmental Version\n");
 
 	// First get the active file in which to get instructions from
 	if(argc >= 2)
 	{
+		fprintf(stdout, "Starting in batch mode...\n");
+		mipsshell::INTERACTIVE = false;
 		inst_file = fopen(argv[1], "r");
+		if(inst_file == NULL)
+		{
+			fprintf(stderr, "Error: The file specified cannot be opened or doesn't exist.\n");
+			exit(1);
+		}
 	}
 
 	else
 	{
+		mipsshell::INTERACTIVE = true;
 		inst_file = stdin;
-		fprintf(stdout, "MIPS Tools Developmental Version\n");
 		fprintf(stdout, "Starting in interactive mode...\n");
 		fprintf(stdout, "------------------------------------\n");
 		fprintf(stdout, "- Routine calls used with . prefix -\n");
@@ -41,8 +49,8 @@ int main(int argc, char ** argv)
 	while(true)
 	{
 		char buf[100];
-		fprintf(stdout, ">> ");
-		fgets(buf, 100, inst_file);
+		if(mipsshell::INTERACTIVE) fprintf(stdout, ">> ");
+		if(fgets(buf, 100, inst_file) == NULL) break;
 		if(mipsshell::interpret(buf, MB_IN_PTR)) break;
 		
 	}
