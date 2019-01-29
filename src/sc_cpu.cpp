@@ -29,7 +29,7 @@ namespace mips_tools
 		BW_32 rt = (rt_mask & inst_word) >> 16;
 		BW_32 rd = (rd_mask & inst_word) >> 11;
 		BW_32 funct = (funct_mask & inst_word);
-		BW_32 imm = (imm_mask & inst_word);
+		BW_32 imm = (imm_mask & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
 
 		if(op == R_FORMAT) fm = R;
 		else if(op >= 8 && op <= 15) fm = I;
@@ -115,7 +115,7 @@ namespace mips_tools
 
 		if(i_inst(op))
 		{
-			w = (w | (imm & ((1 << 16) - 1)   ));
+			w = (w | (imm & ((1 << 16) - 1)));
 			w = (w | ((rt & ((1 << 6) - 1) ) << 16  ));
 			w = (w | ((rs & ((1 << 6) - 1) ) << 21  ));
 			w = (w | ((op & ((1 << 7) - 1) ) << 26  ));
