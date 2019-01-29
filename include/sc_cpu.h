@@ -1,6 +1,6 @@
 #ifndef __SC_CPU_H__
 #define __SC_CPU_H__
-#include "cpu.h"
+#include "diag_cpu.h"
 #include "reg_32.h"
 #include "primitives.h"
 #include "mips.h"
@@ -10,7 +10,7 @@
 namespace mips_tools
 {
 
-	class sc_cpu : public cpu
+	class sc_cpu : public diag_cpu
 	{
 		public:
 			void rst(); // async reset

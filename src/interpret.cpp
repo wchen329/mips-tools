@@ -4,6 +4,8 @@
 #define _CRT_SECURE_NO_WARNINGS // MSVC
 #include <cstdio>
 #include <cstring>
+#include <exception>
+#include "diag_cpu.h"
 #include "format_chk.h"
 #include "mb.h"
 #include "messages.h"
@@ -33,6 +35,18 @@ namespace mipsshell
 		int rd = -1;
 		int imm = -1;
 
+		mips_tools::diag_cpu * dcpu;
+		
+		try
+		{
+			dcpu = dynamic_cast<mips_tools::diag_cpu *>(&(mb_ptr -> get_cpu())); // IMPORTANT: check for and catch bad_cast, still needed	
+		}
+		catch(std::exception)	// will change to bad_cast
+		{
+			dcpu = nullptr;
+			fprintf(stderr, NON_DIAG_CPU);
+		}
+
 		while(working_set != NULL)
 		{
 
@@ -52,7 +66,7 @@ namespace mipsshell
 				case 0:
 						if(!strcmp(".exit", working_set)) return true;
 						else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
-						else if(!strcmp(".state", working_set)) { for(int i = 0; i < 32; i++) fprintf(stdout, "$%d = %d\n", i, mb_ptr->get_cpu().get_reg_data(i)); }
+						else if(!strcmp(".state", working_set)) { if(dcpu != nullptr) for(int i = 0; i < 32; i++) fprintf(stdout, "$%d = %d\n", i, dcpu->get_reg_data(i)); }
 						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
 						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
 						else if(!strcmp("sub", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SUB; }
@@ -141,7 +155,7 @@ namespace mipsshell
 		if(current_op == mips_tools::SYS_RES) return false;
 		
 		// Pass the values of rs, rt, rd to the processor's encoding function
-		mb_ptr ->get_cpu().encode(rs, rt, rd, f_code, imm, current_op);
+		if(dcpu != nullptr) dcpu -> encode(rs, rt, rd, f_code, imm, current_op);
 
 		// Call an execution routine explicity
 		mb_ptr ->get_cpu().cycle();
