@@ -64,5 +64,8 @@
     <ClInclude Include="..\include\mt_exception.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\diag_cpu.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

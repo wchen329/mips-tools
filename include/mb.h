@@ -32,6 +32,7 @@ namespace mips_tools
 			mmem mb_mmem;  // single main memory
 			cpu_t cpu_type;	// types of MIPS processor
 			int mmem_type;	// bit length of address space
+			
 	};
 }
 #endif

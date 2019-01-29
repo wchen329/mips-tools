@@ -20,8 +20,6 @@ namespace mipsshell
 				numbers.push_back(reg_str[i]);
 			}
 
-			else if(reg_str[i] == ',' && i == len - 1) continue;
-
 			else throw new badformat_err();
 		}
 

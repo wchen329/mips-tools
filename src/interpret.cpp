@@ -39,7 +39,7 @@ namespace mipsshell
 			int len = strlen(working_set);
 			if(len < 1) continue;
 
-			if(working_set[len-1] == '\n') working_set[len - 1] = NULL; // remove newline
+			if(working_set[len-1] == '\n' || working_set[len-1] == ',') working_set[len - 1] = NULL; // remove newline
 
 
 			// now compare and execute. If running in batch mode with the -a option, the program will act as an assembler and produce a file with -o
@@ -66,12 +66,14 @@ namespace mipsshell
 					case 1:
 						if(r_inst(current_op))
 						{
+							if((rd = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
 							rd = get_reg_num(working_set);
 						}
 
 						else if(i_inst(current_op))
 						{
 							// later, check for branches
+							if((rt = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
 							rt = get_reg_num(working_set);
 						}
 	
@@ -81,12 +83,14 @@ namespace mipsshell
 					case 2:
 						if(r_inst(current_op))
 						{
+							if((rs = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
 							rs = get_reg_num(working_set);
 						}
 						
 						else if(i_inst(current_op))
 						{
 							// later, MUST check for branches
+							if((rs = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
 							rs = get_reg_num(working_set);
 						}
 
@@ -96,6 +100,7 @@ namespace mipsshell
 					case 3:
 						if(r_inst(current_op))
 						{
+							if((rt = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
 							rt = get_reg_num(working_set);
 						}
 						

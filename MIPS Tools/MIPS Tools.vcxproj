@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h" />
+    <ClInclude Include="..\include\diag_cpu.h" />
     <ClInclude Include="..\include\mb.h" />
     <ClInclude Include="..\include\mem.h" />
     <ClInclude Include="..\include\mips.h" />

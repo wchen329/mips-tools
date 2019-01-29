@@ -18,6 +18,8 @@
 
 namespace mips_tools
 {
+	int friendly_to_numerical(char *);
+
 
 	// Friendly Register Names -> Numerical Assignments
 	enum REGISTERS
@@ -53,7 +55,8 @@ namespace mips_tools
 		$gp = 28,
 		$sp = 29,
 		$fp = 30,
-		$ra = 31
+		$ra = 31,
+		INVALID = -1
 	};
 
 	// instruction formats
