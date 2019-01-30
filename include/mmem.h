@@ -8,7 +8,10 @@ namespace mips_tools
 	class mmem : public mem
 	{
 		public:
-			mmem(int size = 1024) : mem(size){}
+			mmem(size_t size = 1024) : mem(size){}
+		private:
+			mmem operator=(const mem &);		// copy assignment, disabled
+			mmem(const mem &);					// copy constructor, disabled
 	};
 
 }

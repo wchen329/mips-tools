@@ -42,7 +42,7 @@ int main(int argc, char ** argv)
 		fprintf(stdout, "------------------------------------\n");
 	}
 
-	mips_tools::mb MB_IN;
+	mips_tools::mb MB_IN(mips_tools::STANDARD, 16);
 	MB_IN.reset();
 	mips_tools::mb * MB_IN_PTR = &MB_IN;
 

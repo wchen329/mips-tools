@@ -2,9 +2,10 @@
 
 namespace mips_tools
 {
-	mem::mem(int addr_size)
+	mem::mem(size_t size)
 	{
-		this -> data = new char[addr_size];
+		this -> data = new char[size];
+		this -> size = size;
 	}
 
 	mem::mem(const mem & m)

@@ -66,6 +66,7 @@ namespace mipsshell
 				case 0:
 						if(!strcmp(".exit", working_set)) return true;
 						else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
+						else if(!strcmp(".mem", working_set)) { fprintf(stdout, "Size: %d bytes\n", mb_ptr->get_mmem_size()); }
 						else if(!strcmp(".state", working_set)) { if(dcpu != nullptr) for(int i = 0; i < 32; i++) fprintf(stdout, "$%d = %d\n", i, dcpu->get_reg_data(i)); }
 						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
 						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }

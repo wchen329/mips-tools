@@ -100,7 +100,7 @@ namespace mips_tools
 		return true;
 	}
 
-	void sc_cpu::encode(int rs, int rt, int rd, int funct, int imm, opcode op)
+	void sc_cpu::encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op)
 	{
 		BW_32 w = 0;
 
@@ -115,7 +115,7 @@ namespace mips_tools
 
 		if(i_inst(op))
 		{
-			w = (w | (imm & ((1 << 16) - 1)));
+			w = (w | (imm_shamt_jaddr & ((1 << 16) - 1)));
 			w = (w | ((rt & ((1 << 6) - 1) ) << 16  ));
 			w = (w | ((rs & ((1 << 6) - 1) ) << 21  ));
 			w = (w | ((op & ((1 << 7) - 1) ) << 26  ));
