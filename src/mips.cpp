@@ -61,7 +61,9 @@ namespace mips_tools
 			fr_name[1] == 'v' ?
 				!strcmp("$v0", fr_name) ? $v0 :
 				!strcmp("$v1", fr_name) ? $v1 : INVALID
-
+			:
+			fr_name[1] == 'z' ?
+				!strcmp("$zero", fr_name) ? $zero : INVALID
 			: INVALID;
 
 		return reg_val;
