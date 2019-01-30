@@ -9,7 +9,7 @@ Within the MIPS Tools directory there is a Visual Studio solution. This Visual S
 UNIX compiling can be done currently by grouping the needed source files in g++ and compiling. A standard UNIX/GNU Makefile is soon to arive though!
 
 ## Using
-To use MIPS-Tools directly, run the *MIPS Tools Shell"*.
+To use MIPS-Tools directly, run the *MIPS Tools Shell*.
 
 ## Features
 The following is a list of planned features for the simulator:

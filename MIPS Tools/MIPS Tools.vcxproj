@@ -65,7 +65,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\include\mem.cpp" />
+    <ClCompile Include="..\src\mem.cpp" />
     <ClCompile Include="..\src\mips.cpp" />
     <ClCompile Include="..\src\reg_32.cpp" />
     <ClCompile Include="..\src\sc_cpu.cpp" />
