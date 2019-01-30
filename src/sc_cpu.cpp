@@ -98,8 +98,8 @@ namespace mips_tools
 						r_write = rt;
 						break;
 					case SW:
-						char s_word_p_1 = (this->registers[rt].get_data() & ((1 << 8) - 1));
-						char s_word_p_2 = ((this->registers[rt].get_data() & ((1 << 16) - 1)) - s_word_p_1) >> 8;
+						s_word_p_1 = (this->registers[rt].get_data() & ((1 << 8) - 1));
+						s_word_p_2 = ((this->registers[rt].get_data() & ((1 << 16) - 1)) - s_word_p_1) >> 8;
 						this->mem_req_write(s_word_p_1, this->registers[rs].get_data() + imm);
 						this->mem_req_write(s_word_p_2, this->registers[rs].get_data() + 1 + imm);
 						reg_we = false;
@@ -159,14 +159,11 @@ namespace mips_tools
 		if(mm.get_size() <= index) throw new mt_exception;
 
 		this->mm[index] = data;
-		char a = mm[index];
-		return;
 	}
 
 	char sc_cpu::mem_req_load(int index)
 	{
 		if(mm.get_size() <= index) throw new mt_exception;
-		char a = mm[index];
 		return this->mm[index];
 	}
 }

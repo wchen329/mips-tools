@@ -6,10 +6,10 @@
 namespace mipsshell
 {
 	// From a register specifier, i.e. %so get an integer representation
-	int get_reg_num(char *);
+	int get_reg_num(const char *);
 	
 	// From a immediate string, get an immediate value.
-	int get_imm(char *);
+	int get_imm(const char *);
 }
 
 #endif

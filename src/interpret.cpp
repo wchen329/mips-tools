@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstring>
 #include <exception>
+#include <string>
 #include "diag_cpu.h"
 #include "format_chk.h"
 #include "mb.h"
@@ -17,6 +18,7 @@
 
 namespace mipsshell
 {
+
 	// Main interpretation routine
 	bool interpret(char * line, mips_tools::mb * mb_ptr)
 	{
@@ -107,9 +109,40 @@ namespace mipsshell
 						
 						else if(i_inst(current_op))
 						{
-							// later, MUST check for branches
-							if((rs = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
-							rs = get_reg_num(working_set);
+							if(mem_inst(current_op))
+							{
+								bool left_parenth = false; bool right_parenth = false;
+								std::string wc = (std::string)working_set;
+								std::string imm_s = std::string();
+								std::string reg = std::string();
+								for(int i = 0; i < wc.length(); i++)
+								{
+									if(wc[i] == '(') { left_parenth = true; continue; }
+									if(wc[i] == ')') { right_parenth = true; continue; }
+
+									if(left_parenth)
+									{
+										imm_s.push_back(wc[i]);
+									}
+
+									else
+									{
+										reg.push_back(wc[i]);
+									}
+								}
+
+								if(!right_parenth || !left_parenth) throw new badformat_err();
+								if((rs = mips_tools::friendly_to_numerical(reg.c_str())) <= mips_tools::INVALID) rs = get_reg_num(reg.c_str());
+								imm = get_imm(imm_s.c_str());
+								
+							}
+
+							else
+							{
+								// later, MUST check for branches
+								if((rs = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
+								rs = get_reg_num(working_set);
+							}
 						}
 
 						else { fprintf(stdout, BAD_COMMAND); return false;}
@@ -124,17 +157,21 @@ namespace mipsshell
 						
 						else if(i_inst(current_op))
 						{
+							
+							if(mem_inst(current_op))
+							{
+								throw new badformat_err();
+							}
+
 							// later, check for branches stores and etc.
 							imm = get_imm(working_set);
-
-							// to implement, check for bad immediates
 						}
 
-						else { fprintf(stdout, BAD_COMMAND); return false;}
+						else { throw new badformat_err(); }
 						break;
 					
 					default:
-						fprintf(stdout, BAD_FORMAT);
+						throw new badformat_err();
 						return false;
 				}
 
@@ -153,7 +190,8 @@ namespace mipsshell
 		}
 
 		// Check for insufficient arguments
-		if(current_op != mips_tools::SYS_RES) if(round != 4) { fprintf(stdout, "Expected more arguments, specification incomplete.\n"); return false; }
+		if( (current_op != mips_tools::SYS_RES && round != 4 && !mem_inst(current_op)) || (mem_inst(current_op) && round != 3)
+			) { fprintf(stdout, "Expected more arguments, specification incomplete.\n"); return false; }
 
 		// If system call, don't execute in CPU
 		if(current_op == mips_tools::SYS_RES) return false;

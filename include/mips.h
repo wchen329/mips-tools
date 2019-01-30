@@ -18,7 +18,7 @@
 
 namespace mips_tools
 {
-	int friendly_to_numerical(char *);
+	int friendly_to_numerical(const char *);
 
 
 	// Friendly Register Names -> Numerical Assignments
@@ -135,6 +135,11 @@ namespace mips_tools
 	/* Checks if an instruction is R formatted.
 	 */
 	bool r_inst(opcode operation);
+
+	/* Checks if an instruction performs
+	 * memory access
+	 */
+	bool mem_inst(opcode operation);
 
 }
 

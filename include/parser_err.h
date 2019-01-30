@@ -31,10 +31,10 @@ namespace mipsshell
 	{
 		public:
 			void err_pr();
-			unexpected_err(char * expected, char * unexpected) { this->unexpected = unexpected; this->expected = expected; };
+			unexpected_err(const char * expected, const char * unexpected) : expected(expected), unexpected(unexpected) {};
 		private:
-			char * unexpected;	// unexpected sequence
-			char * expected;
+			const char * unexpected;	// unexpected sequence
+			const char * expected;
 	};
 }
 

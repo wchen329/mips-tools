@@ -3,7 +3,7 @@
 
 namespace mips_tools
 {
-	int friendly_to_numerical(char * fr_name)
+	int friendly_to_numerical(const char * fr_name)
 	{
 		int len = strlen(fr_name);
 		if(len < 2) return INVALID;
@@ -83,8 +83,15 @@ namespace mips_tools
 			operation == ANDI ? true :
 			operation == ORI ? true :
 			operation == LW ? true :
-			operation == SW ? true :
-			false ;
+			operation == SW ?
+			true : false ;
+	}
+
+	bool mem_inst(opcode operation)
+	{
+		return
+			(operation == LW || operation == SW || operation == SB || operation == LB )?
+			true : false;
 	}
 
 	template <class T> inline T MIPS_ADD(T r_s, T r_t) { return r_s + r_t; }	// to still do- enforce numerical specialization on classes

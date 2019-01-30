@@ -8,7 +8,7 @@ namespace mipsshell
 
 	// Returns register number corresponding with argument if any
 	// Returns -1 if invalid or out of range
-	int get_reg_num(char * reg_str)
+	int get_reg_num(const char * reg_str)
 	{
 		std::vector<char> numbers;
 		int len = strlen(reg_str);
@@ -45,7 +45,7 @@ namespace mipsshell
 	}
 
 	// Returns immediate value if valid
-	int get_imm(char * str)
+	int get_imm(const char * str)
 	{
 		int len = strlen(str);
 		
