@@ -39,7 +39,7 @@ namespace mips_tools
 	{
 		size_t s = 1 << mt;
 		this->mb_mmem = new mmem(s);
-		this->mb_cpu = new sc_cpu;
+		this->mb_cpu = new sc_cpu(*this->mb_mmem);
 	}
 
 	mb::~mb()

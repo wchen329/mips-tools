@@ -19,8 +19,9 @@ namespace mips_tools
 		return m;
 	}
 
-	char mem::operator[](int ind)
+	char& mem::operator[](int ind)
 	{
+
 		return data[ind];
 	}
 

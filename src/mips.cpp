@@ -82,6 +82,8 @@ namespace mips_tools
 			operation == ADDIU ? true:
 			operation == ANDI ? true :
 			operation == ORI ? true :
+			operation == LW ? true :
+			operation == SW ? true :
 			false ;
 	}
 

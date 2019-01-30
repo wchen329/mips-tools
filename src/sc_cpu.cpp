@@ -1,4 +1,6 @@
 #include "sc_cpu.h"
+#include "mmem.h"
+#include "mt_exception.h"
 
 namespace mips_tools
 {
@@ -24,7 +26,7 @@ namespace mips_tools
 		BW_32 addr_mask = (1 << 26) - 1;
 
 		// - Actual values
-		BW_32 op = (opcode_mask & inst_word) >> 26;
+		BW_32 op = ((opcode_mask & inst_word) >> 26) & ((1 << 6) - 1);
 		BW_32 rs = (rs_mask & inst_word) >> 21;
 		BW_32 rt = (rt_mask & inst_word) >> 16;
 		BW_32 rd = (rd_mask & inst_word) >> 11;
@@ -32,11 +34,13 @@ namespace mips_tools
 		BW_32 imm = (imm_mask & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
 
 		if(op == R_FORMAT) fm = R;
-		else if(op >= 8 && op <= 15) fm = I;
-		else fm = R;
+		else fm = I;
 
 		bool reg_we = true; // find write enable
 		int r_write = 0;
+
+		// Loads and Stores
+		char l_word_p_1; char l_word_p_2; BW_32 load_write; char s_word_p_1; char s_word_p_2;
 
 		// Execute
 		BW_32 reg_wdata = 0;
@@ -84,6 +88,22 @@ namespace mips_tools
 						reg_wdata = this->registers[rs].get_data() & imm;
 						r_write = rt;
 						break;
+					case LW:
+						l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data());
+						l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data() + 1);
+						load_write = 0;
+						load_write += l_word_p_1;
+						load_write += (l_word_p_2 << 8);
+						reg_wdata = load_write;
+						r_write = rt;
+						break;
+					case SW:
+						char s_word_p_1 = (this->registers[rt].get_data() & ((1 << 8) - 1));
+						char s_word_p_2 = ((this->registers[rt].get_data() & ((1 << 16) - 1)) - s_word_p_1) >> 8;
+						this->mem_req_write(s_word_p_1, this->registers[rs].get_data() + imm);
+						this->mem_req_write(s_word_p_2, this->registers[rs].get_data() + 1 + imm);
+						reg_we = false;
+						break;
 				}
 
 
@@ -106,19 +126,19 @@ namespace mips_tools
 
 		if(r_inst(op))
 		{
-			w = (w | (funct & ((1 << 7) - 1)  ));
-			w = (w | ((rd & ((1 << 6) - 1) ) << 11 ));
-			w = (w | ((rt & ((1 << 6) - 1) ) << 16 ));
-			w = (w | ((rs & ((1 << 6) - 1) ) << 21 ));
-			w = (w | ((op & ((1 << 7) - 1) ) << 26  ));
+			w = (w | (funct & ((1 << 6) - 1)  ));
+			w = (w | ((rd & ((1 << 5) - 1) ) << 11 ));
+			w = (w | ((rt & ((1 << 5) - 1) ) << 16 ));
+			w = (w | ((rs & ((1 << 5) - 1) ) << 21 ));
+			w = (w | ((op & ((1 << 6) - 1) ) << 26  ));
 		}
 
 		if(i_inst(op))
 		{
 			w = (w | (imm_shamt_jaddr & ((1 << 16) - 1)));
-			w = (w | ((rt & ((1 << 6) - 1) ) << 16  ));
-			w = (w | ((rs & ((1 << 6) - 1) ) << 21  ));
-			w = (w | ((op & ((1 << 7) - 1) ) << 26  ));
+			w = (w | ((rt & ((1 << 5) - 1) ) << 16  ));
+			w = (w | ((rs & ((1 << 5) - 1) ) << 21  ));
+			w = (w | ((op & ((1 << 6) - 1) ) << 26  ));
 		}
 
 		this->force_fetch(w);
@@ -134,4 +154,19 @@ namespace mips_tools
 		this->pc.set_data(0);
 	}
 
+	void sc_cpu::mem_req_write(char data, int index)
+	{
+		if(mm.get_size() <= index) throw new mt_exception;
+
+		this->mm[index] = data;
+		char a = mm[index];
+		return;
+	}
+
+	char sc_cpu::mem_req_load(int index)
+	{
+		if(mm.get_size() <= index) throw new mt_exception;
+		char a = mm[index];
+		return this->mm[index];
+	}
 }

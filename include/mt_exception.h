@@ -19,10 +19,17 @@ class mt_exception
 };
 
 // Register Out of Bounds Exception
-class reg_oob_exception : mt_exception
+class reg_oob_exception : public mt_exception
 {
 	reg_oob_exception();
 	~reg_oob_exception();
+};
+
+// Memory Out of Bounds Exception
+class mem_oob_exception : public mt_exception
+{
+	mem_oob_exception();
+	~mem_oob_exception();
 };
 
 #endif
