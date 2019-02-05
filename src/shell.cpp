@@ -36,10 +36,7 @@ int main(int argc, char ** argv)
 		mipsshell::INTERACTIVE = true;
 		inst_file = stdin;
 		fprintf(stdout, "Starting in interactive mode...\n");
-		fprintf(stdout, "------------------------------------\n");
-		fprintf(stdout, "- Routine calls used with . prefix -\n");
-		fprintf(stdout, "- Otherwise interpreted as instr.  -\n");
-		fprintf(stdout, "------------------------------------\n");
+		fprintf(stdout, "Tip: system directives are preceded by a . (for example .help)\n");
 	}
 
 	mips_tools::mb MB_IN(mips_tools::STANDARD, 16);

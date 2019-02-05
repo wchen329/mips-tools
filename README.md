@@ -6,7 +6,7 @@ MIPS-Tools is a collection of tools that may be useful in the aid of computer ar
 Within the MIPS Tools directory there is a Visual Studio solution. This Visual Studio solution is for VS2010 and it should be able to be opened in any Visual Studio that is newer that 2010 as well. From there it is as simple to run "Build" and the project should build.
 
 ### UNIX and UNIX-like
-UNIX compiling can be done currently by grouping the needed source files in g++ and compiling. A standard UNIX/GNU Makefile is soon to arive though!
+UNIX compiling can be done currently by grouping the needed source files in g++ and compiling. A standard UNIX/GNU Makefile is soon to arive though! NOTE: There are some headers that may not be included which are necessary on UNIX. If the compiler complains, simply add the necessary #include directives. Currently confirmed working for FreeBSD. 
 
 ## Using
 To use MIPS-Tools directly, run the *MIPS Tools Shell*.
