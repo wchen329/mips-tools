@@ -9,6 +9,7 @@ namespace mipsshell
 	void dot_mem(mips_tools::mem * memory);
 	void dot_rst(mips_tools::mb *);
 	void dot_state(mips_tools::diag_cpu * dcpu);
+	void dot_time(mips_tools::mb * mb_ptr);
 }
 
 #endif

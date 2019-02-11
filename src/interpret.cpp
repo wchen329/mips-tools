@@ -75,6 +75,7 @@ namespace mipsshell
 						else if(!strcmp(".mem", working_set)) { fprintf(stdout, "Main Memory Size: %d bytes\n", mb_ptr->get_mmem_size()); }
 						else if(!strcmp(".rst", working_set)) dot_rst(mb_ptr);
 						else if(!strcmp(".state", working_set)) dot_state(dcpu);
+						else if(!strcmp(".time", working_set)) dot_time(mb_ptr);
 						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
 						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
 						else if(!strcmp("sub", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SUB; }
@@ -83,8 +84,10 @@ namespace mipsshell
 						else if(!strcmp("or", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::OR; }	
 						else if(!strcmp("ori", working_set)) { current_op = mips_tools::ORI; }	
 						else if(!strcmp("xori", working_set)) { current_op = mips_tools::XORI; }
+						else if(!strcmp("lb", working_set)) { current_op = mips_tools::LB; }
 						else if(!strcmp("lh", working_set)) { current_op = mips_tools::LH; }
 						else if(!strcmp("lw", working_set)) { current_op = mips_tools::LW; }
+						else if(!strcmp("sb", working_set)) { current_op = mips_tools::SB; }
 						else if(!strcmp("sh", working_set)) { current_op = mips_tools::SH; }
 						else if(!strcmp("sw", working_set)) { current_op = mips_tools::SW; }
 						else
@@ -232,7 +235,7 @@ namespace mipsshell
 		}
 
 		// Call an execution routine explicity
-		mb_ptr ->get_cpu().cycle();
+		mb_ptr -> step();
 
 		return false;
 	}

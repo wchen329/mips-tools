@@ -21,6 +21,8 @@ namespace mips_tools
 
 	void mb::reset()
 	{
+		this->cycle_ct = 0;
+		this->sim_time = 0;
 		this->mb_cpu->rst();
 		memset(this->mb_mmem->begin(), 0, this->get_mmem_size());
 	}
@@ -28,6 +30,8 @@ namespace mips_tools
 	void mb::step()
 	{
 		this->mb_cpu->cycle();
+		this->cycle_ct++;
+		this->sim_time += mb_cpu -> get_clk_T();
 	}
 
 	void mb::DMA_write(char w, int addr)
@@ -40,7 +44,7 @@ namespace mips_tools
 		return *(this->mb_cpu);
 	}
 
-	mb::mb(cpu_t ct, int mt): cpu_type(ct), mmem_type(mt), sim_time(0)
+	mb::mb(cpu_t ct, int mt): cpu_type(ct), mmem_type(mt), sim_time(0), cycle_ct(0)
 	{
 		size_t s = 1 << mt;
 		this->mb_mmem = new mmem(s);

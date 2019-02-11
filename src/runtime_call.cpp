@@ -26,4 +26,14 @@ namespace mipsshell
 		}
 	}
 
+	void dot_time(mips_tools::mb * mb_ptr)
+	{
+		if(mb_ptr != nullptr)
+		{
+				fprintf(stdout, "TIMING INFORMATION::\n");
+				fprintf(stdout, "Clock Period = %f s\n", mb_ptr->get_cpu().get_clk_T() );
+				fprintf(stdout, "Current Cycle Count = %d cycles\n", mb_ptr->get_cycles());
+				fprintf(stdout, "Current Time Elapsed = %f s\n", mb_ptr->get_time());
+		}
+	}
 }

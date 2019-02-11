@@ -28,6 +28,8 @@ namespace mips_tools
 			void step();	// step the processor a cycle
 			void DMA_write(char data, int addr);	// direct memory access write
 			cpu & get_cpu();		// return cpu reference
+			unsigned long get_cycles() { return this->cycle_ct; };		// return current simulation cycles elapsed
+			double get_time() { return this->sim_time; } // return the current simulation time elapsed (in seconds)
 			size_t get_mmem_size();	// get main memory size in BYTES
 
 			mb(cpu_t ct = STANDARD, int mt = 16);
@@ -39,6 +41,7 @@ namespace mips_tools
 			cpu_t cpu_type;	// types of MIPS processor
 			int mmem_type;	// bit length of address space
 			double sim_time;	// current simulation time in seconds
+			unsigned long cycle_ct;	// cycle count
 			
 	};
 }

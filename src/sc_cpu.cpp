@@ -108,6 +108,15 @@ namespace mips_tools
 						reg_wdata = this->registers[rs].get_data() ^ imm;
 						r_write = rt;
 						break;
+					case LB:
+						{
+						char l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data());
+						char load_write = 0;
+						load_write += l_word_p_1;
+						reg_wdata = load_write;
+						r_write = rt;
+						}
+						break;
 					case LH:
 						{
 						char l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data());
@@ -132,6 +141,13 @@ namespace mips_tools
 						load_write += (l_word_p_4 << 24);
 						reg_wdata = load_write;
 						r_write = rt;
+						}
+						break;
+					case SB:
+						{
+						char s_word_p_1 = (this->registers[rt].get_data() & ((1 << 8) - 1));
+						this->mem_req_write(s_word_p_1, this->registers[rs].get_data() + imm);
+						reg_we = false;
 						}
 						break;
 					case SH:
