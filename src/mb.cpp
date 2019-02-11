@@ -30,12 +30,17 @@ namespace mips_tools
 		this->mb_cpu->cycle();
 	}
 
+	void mb::DMA_write(char w, int addr)
+	{
+		this->mb_mmem->begin()[addr] = w;
+	}
+
 	cpu& mb::get_cpu()
 	{
 		return *(this->mb_cpu);
 	}
 
-	mb::mb(cpu_t ct, int mt): cpu_type(ct), mmem_type(mt)
+	mb::mb(cpu_t ct, int mt): cpu_type(ct), mmem_type(mt), sim_time(0)
 	{
 		size_t s = 1 << mt;
 		this->mb_mmem = new mmem(s);

@@ -84,9 +84,24 @@ namespace mips_tools
 			operation == ADDIU ? true:
 			operation == ANDI ? true :
 			operation == ORI ? true :
+			operation == XORI ? true :
+			operation == LB ? true :
+			operation == LBU ? true :
+			operation == LH ? true :
+			operation == LHU ? true :
+			operation == LUI ? true :
 			operation == LW ? true :
-			operation == SW ?
-			true : false ;
+			operation == LWL ? true :
+			operation == SB ? true :
+			operation == SH ? true :
+			operation == SW ? true :
+			operation == BEQ ? true :
+			operation == BNE ? true :
+			operation == BLEZ ? true :
+			operation == BGTZ ? true :
+			operation == SLTI ? true :
+			operation == SLTIU ? true :
+			operation == SWL ? true : false ;
 	}
 
 	bool mem_inst(opcode operation)
@@ -98,7 +113,7 @@ namespace mips_tools
 
 	template <class T> inline T MIPS_ADD(T r_s, T r_t) { return r_s + r_t; }	// to still do- enforce numerical specialization on classes
 	template <class T> inline T MIPS_SUB(T r_s, T r_t) { return r_s - r_t; }
-	template <class T> inline T MIPS_SUBU(T r_s, T r_t) { return MIPS_SUB(r_s, r_t) };	// to still do, reimplement based on exception detection
+	template <class T> inline T MIPS_SUBU(T r_s, T r_t) { return MIPS_SUB(r_s, r_t); }	// to still do, reimplement based on exception detection
 	template <class T> inline T MIPS_ADDI(T r_s, long imm) { return r_s + imm; }
 	template <class T> inline T MIPS_ADDIU(T r_s, long imm) { return MIPS_ADDI(r_s, imm); }
 	template <class T> inline T MIPS_AND(T r_s, T r_t) { return r_s & r_t; }

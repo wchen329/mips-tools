@@ -75,6 +75,7 @@
     <ClCompile Include="..\src\runtime_call.cpp" />
     <ClCompile Include="..\src\shell.cpp" />
     <ClCompile Include="..\src\states.cpp" />
+    <ClCompile Include="primitives.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\format_chk.h" />

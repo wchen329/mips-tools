@@ -14,6 +14,7 @@
 #include "mt_exception.h"
 #include "interpret.h"
 #include "parser_err.h"
+#include "primitives.h"
 #include "runtime_call.h"
 
 namespace mipsshell
@@ -67,10 +68,11 @@ namespace mipsshell
 				{
 				case 0:
 						// This comparison will be optimized and placed in a separate routine, ultimately
+					
 						if(!strcmp(".exit", working_set)) return true;
 						else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
-						else if(!strcmp(".mem", working_set)) { fprintf(stdout, "Size: %d bytes\n", mb_ptr->get_mmem_size()); }
-						else if(!strcmp(".state", working_set)) { if(dcpu != nullptr) for(int i = 0; i < 32; i++) fprintf(stdout, "$%d = %d\n", i, dcpu->get_reg_data(i)); }
+						else if(!strcmp(".mem", working_set)) { fprintf(stdout, "Main Memory Size: %d bytes\n", mb_ptr->get_mmem_size()); }
+						else if(!strcmp(".state", working_set)) dot_state(dcpu);
 						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
 						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
 						else if(!strcmp("sub", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SUB; }
@@ -78,6 +80,7 @@ namespace mipsshell
 						else if(!strcmp("andi", working_set)) { current_op = mips_tools::ANDI; }
 						else if(!strcmp("or", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::OR; }	
 						else if(!strcmp("ori", working_set)) { current_op = mips_tools::ORI; }	
+						else if(!strcmp("xori", working_set)) { current_op = mips_tools::XORI; }
 						else if(!strcmp("lw", working_set)) { current_op = mips_tools::LW; }
 						else if(!strcmp("sw", working_set)) { current_op = mips_tools::SW; }
 						else { fprintf(stdout, BAD_COMMAND); return false;}
@@ -197,7 +200,16 @@ namespace mipsshell
 		if(current_op == mips_tools::SYS_RES) return false;
 		
 		// Pass the values of rs, rt, rd to the processor's encoding function
-		if(dcpu != nullptr) dcpu -> encode(rs, rt, rd, f_code, imm, current_op);
+		if(dcpu != nullptr)
+		{
+			mips_tools::BW_32 inst = dcpu -> encode(rs, rt, rd, f_code, imm, current_op);
+			mips_tools::BW_32_T inst_part = mips_tools::BW_32_T(inst);
+			
+			mb_ptr->DMA_write(inst_part.b_0(), dcpu->get_PC());
+			mb_ptr->DMA_write(inst_part.b_1(), dcpu->get_PC() + 1);
+			mb_ptr->DMA_write(inst_part.b_2(), dcpu->get_PC() + 2);
+			mb_ptr->DMA_write(inst_part.b_3(), dcpu->get_PC() + 3);
+		}
 
 		// Call an execution routine explicity
 		mb_ptr ->get_cpu().cycle();

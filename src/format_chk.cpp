@@ -2,6 +2,7 @@
 #include <vector>
 #include "format_chk.h"
 #include "parser_err.h"
+#include "messages.h"
 
 namespace mipsshell
 {

@@ -35,6 +35,9 @@
     <ClCompile Include="..\src\runtime_call.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="primitives.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\interpret.h">

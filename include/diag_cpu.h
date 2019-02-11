@@ -10,10 +10,12 @@ namespace mips_tools
 	class diag_cpu : public cpu
 	{
 		public:
+				// still need to do: change BW_32 to a generic
 				virtual BW_32 get_reg_data(int index) = 0;
 				virtual int get_reg_count() = 0;
-				virtual void encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op) = 0;
+				virtual BW_32 encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op) = 0;	// return an instruction word
 				virtual void force_fetch(BW_32 codeword) = 0;	// force current instruction
+				virtual BW_32 get_PC() = 0;	// get current PC value
 	};
 }
 #endif

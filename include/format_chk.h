@@ -2,6 +2,7 @@
 #define __FORMAT_CHK_H__
 
 #include "interpret.h"
+#include "diag_cpu.h"
 
 namespace mipsshell
 {
@@ -10,6 +11,7 @@ namespace mipsshell
 	
 	// From a immediate string, get an immediate value.
 	int get_imm(const char *);
+
 }
 
 #endif

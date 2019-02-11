@@ -3,6 +3,7 @@
 #include "cpu.h"
 #include "sc_cpu.h"
 #include "mmem.h"
+#include "primitives.h"
 
 namespace mips_tools
 {
@@ -10,7 +11,8 @@ namespace mips_tools
 	{
 			STANDARD = 0,
 			FIVE_P = 1,
-			FIVE_P_SS = 2
+			FIVE_P_SS = 2,
+			CUSTOM
 	};
 
 	/* Motherboard
@@ -24,6 +26,7 @@ namespace mips_tools
 			void dc_on();	// power on
 			void reset();
 			void step();	// step the processor a cycle
+			void DMA_write(char data, int addr);	// direct memory access write
 			cpu & get_cpu();		// return cpu reference
 			size_t get_mmem_size();	// get main memory size in BYTES
 
@@ -35,6 +38,7 @@ namespace mips_tools
 			mmem * mb_mmem;  // single main memory
 			cpu_t cpu_type;	// types of MIPS processor
 			int mmem_type;	// bit length of address space
+			double sim_time;	// current simulation time in seconds
 			
 	};
 }

@@ -18,8 +18,9 @@ namespace mips_tools
 			bool cycle(); // advance the processor a cycle
 			BW_32 get_reg_data(int index) { return this->registers[index].get_data(); }
 			int get_reg_count() { return REG_COUNT; }
-			void encode(int rs, int rt, int rd, int funct, int imm, opcode op);
-			void force_fetch(BW_32 codeword) { this -> current_inst.set_data(codeword); };	// force current instruction
+			BW_32 get_PC() { return this->pc.get_data(); }
+			BW_32 encode(int rs, int rt, int rd, int funct, int imm, opcode op);
+			void force_fetch(BW_32 codeword) { this -> forced_inst.set_data(codeword); };	// force current instruction
 			sc_cpu(mmem & m) : mm(m) {  }
 
 		private:
@@ -28,7 +29,7 @@ namespace mips_tools
 			static const int REG_COUNT = 32;
 			reg_32 registers[REG_COUNT];
 			reg_32 pc;
-			reg_32 current_inst;
+			reg_32 forced_inst;
 			mmem & mm;
 	};
 }

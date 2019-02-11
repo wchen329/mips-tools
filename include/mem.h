@@ -12,11 +12,11 @@ namespace mips_tools
 	class mem
 	{
 		public:
-			char& operator[](int ind);		// indexing operater into memory
-			mem(size_t size = 1024);		// constructor takes, byte size of memory as argument
-			size_t get_size(){return size;}	// returns size;
+			virtual char& operator[](int ind);		// indexing operater into memory
+			mem(size_t size = 1024);			// constructor takes, byte size of memory as argument
+			size_t get_size(){return size;}		// returns size;
 			~mem();
-			char * begin() {return data;}	// get beginning address of data range
+			char * begin() {return data;}		// get beginning address of data range
 
 		protected:
 				
