@@ -29,6 +29,9 @@
     <ClCompile Include="..\src\mem.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\syms_table.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -65,6 +68,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\diag_cpu.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\syms_table.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

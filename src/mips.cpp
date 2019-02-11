@@ -107,7 +107,7 @@ namespace mips_tools
 	bool mem_inst(opcode operation)
 	{
 		return
-			(operation == LW || operation == SW || operation == SB || operation == LB )?
+			(operation == LW || operation == SW || operation == SB || operation == LB || operation == LH || operation == SH )?
 			true : false;
 	}
 

@@ -11,6 +11,11 @@ namespace mipsshell
 		}
 	}
 
+	void dot_rst(mips_tools::mb * mb_ptr)
+	{
+		mb_ptr -> reset();
+	}
+
 	void dot_state(mips_tools::diag_cpu * dcpu)
 	{
 		if(dcpu != nullptr)

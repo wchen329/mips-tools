@@ -58,9 +58,6 @@ namespace mips_tools
 		bool reg_we = true; // find write enable
 		int r_write = 0;
 
-		// Loads and Stores
-		char l_word_p_1; char l_word_p_2; BW_32 load_write; char s_word_p_1; char s_word_p_2;
-
 		// Execute
 		BW_32 reg_wdata = 0;
 
@@ -111,21 +108,53 @@ namespace mips_tools
 						reg_wdata = this->registers[rs].get_data() ^ imm;
 						r_write = rt;
 						break;
-					case LW:
-						l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data());
-						l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data() + 1);
-						load_write = 0;
+					case LH:
+						{
+						char l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data());
+						char l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data() + 1);
+						char load_write = 0;
 						load_write += l_word_p_1;
 						load_write += (l_word_p_2 << 8);
 						reg_wdata = load_write;
 						r_write = rt;
+						}
 						break;
-					case SW:
-						s_word_p_1 = (this->registers[rt].get_data() & ((1 << 8) - 1));
-						s_word_p_2 = ((this->registers[rt].get_data() & ((1 << 16) - 1)) - s_word_p_1) >> 8;
+					case LW:
+						{
+						char l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data());
+						char l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data() + 1);
+						char l_word_p_3 = this->mem_req_load(imm + this->registers[rs].get_data() + 2);
+						char l_word_p_4 = this->mem_req_load(imm + this->registers[rs].get_data() + 3);
+						BW_32 load_write = 0;
+						load_write += l_word_p_1;
+						load_write += (l_word_p_2 << 8);
+						load_write += (l_word_p_3 << 16);
+						load_write += (l_word_p_4 << 24);
+						reg_wdata = load_write;
+						r_write = rt;
+						}
+						break;
+					case SH:
+						{
+						char s_word_p_1 = (this->registers[rt].get_data() & ((1 << 8) - 1));
+						char s_word_p_2 = ((this->registers[rt].get_data() & ((1 << 16) - 1)) - s_word_p_1) >> 8;
 						this->mem_req_write(s_word_p_1, this->registers[rs].get_data() + imm);
 						this->mem_req_write(s_word_p_2, this->registers[rs].get_data() + 1 + imm);
 						reg_we = false;
+						}
+						break;
+					case SW:
+						{
+						char s_word_p_1 = (this->registers[rt].get_data() & ((1 << 8) - 1));
+						char s_word_p_2 = ((this->registers[rt].get_data() >> 8) & ((1 << 8) - 1) );
+						char s_word_p_3 = ((this->registers[rt].get_data() >> 16) & ((1 << 8) - 1) );
+						char s_word_p_4 = ((this->registers[rt].get_data() >> 24) & ((1 << 8) - 1) );
+						this->mem_req_write(s_word_p_1, this->registers[rs].get_data() + imm);
+						this->mem_req_write(s_word_p_2, this->registers[rs].get_data() + 1 + imm);
+						this->mem_req_write(s_word_p_3, this->registers[rs].get_data() + 2 + imm);
+						this->mem_req_write(s_word_p_4, this->registers[rs].get_data() + 3 + imm);
+						reg_we = false;
+						}
 						break;
 				}
 

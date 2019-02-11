@@ -6,6 +6,7 @@
 #include <cstring>
 #include <exception>
 #include <string>
+#include "states.h"
 #include "diag_cpu.h"
 #include "format_chk.h"
 #include "mb.h"
@@ -68,10 +69,11 @@ namespace mipsshell
 				{
 				case 0:
 						// This comparison will be optimized and placed in a separate routine, ultimately
-					
+
 						if(!strcmp(".exit", working_set)) return true;
 						else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
 						else if(!strcmp(".mem", working_set)) { fprintf(stdout, "Main Memory Size: %d bytes\n", mb_ptr->get_mmem_size()); }
+						else if(!strcmp(".rst", working_set)) dot_rst(mb_ptr);
 						else if(!strcmp(".state", working_set)) dot_state(dcpu);
 						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
 						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
@@ -81,9 +83,27 @@ namespace mipsshell
 						else if(!strcmp("or", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::OR; }	
 						else if(!strcmp("ori", working_set)) { current_op = mips_tools::ORI; }	
 						else if(!strcmp("xori", working_set)) { current_op = mips_tools::XORI; }
+						else if(!strcmp("lh", working_set)) { current_op = mips_tools::LH; }
 						else if(!strcmp("lw", working_set)) { current_op = mips_tools::LW; }
+						else if(!strcmp("sh", working_set)) { current_op = mips_tools::SH; }
 						else if(!strcmp("sw", working_set)) { current_op = mips_tools::SW; }
-						else { fprintf(stdout, BAD_COMMAND); return false;}
+						else
+						{
+							bool syms = false;
+							int ws_len = strlen(working_set);
+
+							if(ws_len > 0)
+							{
+								if(working_set[ws_len-1] == ':')
+								{
+									fprintf(stdout, "Assigning symbol... [still to be implemented]\n");
+									syms = true;
+								}
+							}
+
+							if(!syms) fprintf(stdout, BAD_COMMAND); return false;
+						}
+
 						break;
 				
 					case 1:
