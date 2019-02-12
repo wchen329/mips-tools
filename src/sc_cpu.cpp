@@ -60,6 +60,7 @@ namespace mips_tools
 
 		// Execute
 		BW_32 reg_wdata = 0;
+		BW_32 branch_addr = imm << 2;
 
 		// find correct format based on opcode
 		switch(fm)
@@ -95,6 +96,23 @@ namespace mips_tools
 					case ADDI:
 						reg_wdata = this->registers[rs].get_data() + imm;
 						r_write = rt;
+						break;
+					case BEQ:
+						reg_we = false;
+						if(this->registers[rs].get_data() == this->registers[rt].get_data())
+						{
+							BW_32 curr_pc = this->get_PC();
+							this->pc.set_data(curr_pc + 4 + branch_addr);
+						}
+
+						break;
+					case BNE:
+						reg_we = false;
+						if(this->registers[rs].get_data() != this->registers[rt].get_data())
+						{
+							BW_32 curr_pc = this->get_PC();
+							this->pc.set_data(curr_pc + 4 + branch_addr);
+						}
 						break;
 					case ORI:
 						reg_wdata = this->registers[rs].get_data() | imm;

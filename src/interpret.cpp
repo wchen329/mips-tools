@@ -53,7 +53,7 @@ namespace mipsshell
 
 		while(working_set != NULL)
 		{
-
+			interpretop op = mipsshell::PROC_INST;
 			int len = strlen(working_set);
 			if(len < 1) continue;
 
@@ -71,6 +71,7 @@ namespace mipsshell
 						// This comparison will be optimized and placed in a separate routine, ultimately
 
 						if(!strcmp(".exit", working_set)) return true;
+						else if(!strcmp(".cycle", working_set)) { mb_ptr -> step(); return false; }	// step the processor on the current PC an instruction
 						else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
 						else if(!strcmp(".mem", working_set)) { fprintf(stdout, "Main Memory Size: %d bytes\n", mb_ptr->get_mmem_size()); }
 						else if(!strcmp(".rst", working_set)) dot_rst(mb_ptr);
@@ -78,6 +79,10 @@ namespace mipsshell
 						else if(!strcmp(".time", working_set)) dot_time(mb_ptr);
 						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
 						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
+						else if(!strcmp("beq", working_set)) { current_op = mips_tools::BEQ; }
+						//else if(!strcmp("bgtz", working_set)) { current_op = mips_tools::BGTZ; }
+						//else if(!strcmp("blez", working_set)) { current_op = mips_tools::BLEZ; }
+						else if(!strcmp("bne", working_set)) { current_op = mips_tools::BNE; }
 						else if(!strcmp("sub", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SUB; }
 						else if(!strcmp("and", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::AND; }
 						else if(!strcmp("andi", working_set)) { current_op = mips_tools::ANDI; }
@@ -99,7 +104,19 @@ namespace mipsshell
 							{
 								if(working_set[ws_len-1] == ':')
 								{
-									fprintf(stdout, "Assigning symbol... [still to be implemented]\n");
+									//Interactive Address Assignment
+									if(working_set[0] == '.')
+									{
+										fprintf(stdout, "Assigning symbol... [still to be implemented]\n");
+									}
+
+									// Else non interactive
+
+									else
+									{
+										op = mipsshell::SYMBOL_ASSIGNMENT;
+									}
+
 									syms = true;
 								}
 							}
@@ -213,6 +230,12 @@ namespace mipsshell
 				return false;
 			}
 
+			catch(mt_exception * e)
+			{
+				fprintf(stdout, "An internal system error has occurred...\n");
+				delete e;
+				return false;
+			}
 		}
 
 		// Check for insufficient arguments

@@ -6,6 +6,14 @@
 
 namespace mipsshell
 {
+	enum interpretop
+	{
+		PROC_INST,			// instruction for the processor
+		MEM,				// .mem
+		STATE,				// .state
+		SYMBOL_ASSIGNMENT	// symbol assignment
+	};
+
 	// From a register specifier, i.e. %so get an integer representation
 	int get_reg_num(const char *);
 	
