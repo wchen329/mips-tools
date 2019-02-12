@@ -8,6 +8,8 @@
 
 namespace mipsshell
 {
-	bool ASM_MODE;		// acting in assembler mode? true if is, false if not
-	bool INTERACTIVE;	// in interactive mode, true if is, false if not
+	bool ASM_MODE = false;		// acting in assembler mode? true if is, false if not
+	bool DEBUG_MODE = false;
+	bool INTERACTIVE = false;	// in interactive mode, true if is, false if not
+	bool HAS_INPUT = false;
 }

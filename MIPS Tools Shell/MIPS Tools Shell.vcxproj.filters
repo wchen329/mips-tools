@@ -38,6 +38,9 @@
     <ClCompile Include="..\src\primitives.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\mtsstream.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\interpret.h">
@@ -56,6 +59,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\runtime_call.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mtsstream.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mtswriter.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

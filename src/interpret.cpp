@@ -12,6 +12,7 @@
 #include "mb.h"
 #include "messages.h"
 #include "mips.h"
+#include "mtsstream.h"
 #include "mt_exception.h"
 #include "interpret.h"
 #include "parser_err.h"
@@ -255,6 +256,11 @@ namespace mipsshell
 			mb_ptr->DMA_write(inst_part.b_1(), dcpu->get_PC() + 1);
 			mb_ptr->DMA_write(inst_part.b_2(), dcpu->get_PC() + 2);
 			mb_ptr->DMA_write(inst_part.b_3(), dcpu->get_PC() + 3);
+
+			if(ASM_MODE && mtsstream::asmout != nullptr)
+			{
+				mtsstream::asmout->append(inst);
+			}
 		}
 
 		// Call an execution routine explicity

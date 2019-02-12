@@ -34,6 +34,11 @@ namespace mips_tools
 		this->sim_time += mb_cpu -> get_clk_T();
 	}
 
+	char mb::DMA_read(int addr)
+	{
+		return mb_mmem->begin()[addr];
+	}
+
 	void mb::DMA_write(char w, int addr)
 	{
 		this->mb_mmem->begin()[addr] = w;
