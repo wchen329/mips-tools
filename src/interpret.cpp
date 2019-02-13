@@ -89,13 +89,20 @@ namespace mipsshell
 						else if(!strcmp("andi", working_set)) { current_op = mips_tools::ANDI; }
 						else if(!strcmp("or", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::OR; }	
 						else if(!strcmp("ori", working_set)) { current_op = mips_tools::ORI; }	
+						else if(!strcmp("nor", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::NOR; }	
 						else if(!strcmp("xori", working_set)) { current_op = mips_tools::XORI; }
-						else if(!strcmp("lb", working_set)) { current_op = mips_tools::LB; }
-						else if(!strcmp("lh", working_set)) { current_op = mips_tools::LH; }
+						else if(!strcmp("lbu", working_set)) { current_op = mips_tools::LBU; }
+						else if(!strcmp("lhu", working_set)) { current_op = mips_tools::LHU; }
 						else if(!strcmp("lw", working_set)) { current_op = mips_tools::LW; }
 						else if(!strcmp("sb", working_set)) { current_op = mips_tools::SB; }
 						else if(!strcmp("sh", working_set)) { current_op = mips_tools::SH; }
 						else if(!strcmp("sw", working_set)) { current_op = mips_tools::SW; }
+						else if(!strcmp("sll", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SLL; }
+						else if(!strcmp("srl", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SRL; }
+						else if(!strcmp("slt", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SLT; }	
+						else if(!strcmp("slti", working_set)) { current_op = mips_tools::SLTI;}
+						else if(!strcmp("sltiu", working_set)) { current_op = mips_tools::SLTIU; }	
+						else if(!strcmp("sltu", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SLTU; }	
 						else
 						{
 							bool syms = false;
@@ -195,8 +202,16 @@ namespace mipsshell
 					case 3:
 						if(r_inst(current_op))
 						{
-							if((rt = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
-							rt = get_reg_num(working_set);
+							if(shift_inst(f_code))
+							{
+								imm = get_imm(working_set);
+							}
+
+							else
+							{
+								if((rt = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
+								rt = get_reg_num(working_set);
+							}
 						}
 						
 						else if(i_inst(current_op))

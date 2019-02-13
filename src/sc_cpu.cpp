@@ -41,6 +41,7 @@ namespace mips_tools
 		BW_32 rt_mask = ~( ((~(1 << 21)) + 1) | ((1 << 16) - 1));
 		BW_32 rd_mask = ~( ((~(1 << 16)) + 1) | ((1 << 11) - 1));
 		BW_32 funct_mask = 63;
+		BW_32 shamt_mask = (1 << 11) - 1 - funct_mask;
 		BW_32 imm_mask = (1 << 16) - 1;
 		BW_32 addr_mask = (1 << 26) - 1;
 
@@ -50,6 +51,7 @@ namespace mips_tools
 		BW_32 rt = (rt_mask & inst_word) >> 16;
 		BW_32 rd = (rd_mask & inst_word) >> 11;
 		BW_32 funct = (funct_mask & inst_word);
+		BW_32 shamt = (shamt_mask & inst_word) >> 6;
 		BW_32 imm = (imm_mask & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
 
 		if(op == R_FORMAT) fm = R;
@@ -78,10 +80,32 @@ namespace mips_tools
 						reg_wdata = (this->registers[rs] | this->registers[rt]).get_data();
 						r_write = rd;
 						break;
+					case NOR:
+						reg_wdata = ~(this->registers[rs] | this->registers[rt]).get_data();
+						r_write = rd;
+						break;
 					case AND: 
 						reg_wdata = (this->registers[rs] & this->registers[rt]).get_data();
 						r_write = rd;
 						break;
+					case SLL:
+						reg_wdata = this->registers[rs].get_data() << shamt;
+						r_write = rd;
+						break;
+					case SRL:
+						reg_wdata = this->registers[rs].get_data() >> shamt;
+						reg_wdata = (reg_wdata & ((1 << (32 - shamt)) - 1)); // make it a logical shift
+						r_write = rd;
+						break;
+					case SLT:
+						reg_wdata = this->registers[rs].get_data() < this->registers[rt].get_data() ? 1 : 0;
+						r_write = rd;
+						break;
+					case SLTU:
+						reg_wdata = this->registers[rs].get_data() < this->registers[rt].get_data() ? 1 : 0;
+						r_write = rd;
+						break;
+
 					case SUB:
 						reg_wdata = (this->registers[rs] - this->registers[rt]).get_data();
 						r_write = rd;
@@ -126,7 +150,7 @@ namespace mips_tools
 						reg_wdata = this->registers[rs].get_data() ^ imm;
 						r_write = rt;
 						break;
-					case LB:
+					case LBU:
 						{
 						char l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data());
 						char load_write = 0;
@@ -135,7 +159,7 @@ namespace mips_tools
 						r_write = rt;
 						}
 						break;
-					case LH:
+					case LHU:
 						{
 						char l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data());
 						char l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data() + 1);
@@ -167,6 +191,14 @@ namespace mips_tools
 						this->mem_req_write(s_word_p_1, this->registers[rs].get_data() + imm);
 						reg_we = false;
 						}
+						break;
+					case SLTI:
+						reg_wdata = this->registers[rs].get_data() < imm ? 1 : 0;
+						r_write = rt;
+						break;
+					case SLTIU:
+						reg_wdata = this->registers[rs].get_data() < imm ? 1 : 0;
+						r_write = rt;
 						break;
 					case SH:
 						{
@@ -213,6 +245,7 @@ namespace mips_tools
 		if(r_inst(op))
 		{
 			w = (w | (funct & ((1 << 6) - 1)  ));
+			w = (w | ((imm_shamt_jaddr & ((1 << 5) - 1) ) << 6 ));
 			w = (w | ((rd & ((1 << 5) - 1) ) << 11 ));
 			w = (w | ((rt & ((1 << 5) - 1) ) << 16 ));
 			w = (w | ((rs & ((1 << 5) - 1) ) << 21 ));

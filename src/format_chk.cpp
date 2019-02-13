@@ -54,7 +54,7 @@ namespace mipsshell
 		{
 			if(str[i] < '0' || str[i] > '9')
 			{
-				if(i != 0 && str[i] != '-')
+				if(i == 0 && str[i] != '-')
 					throw new badimm_err();
 			}
 		}

@@ -36,12 +36,14 @@ namespace mips_tools
 
 	char mb::DMA_read(int addr)
 	{
-		return mb_mmem->begin()[addr];
+		int real_addr = addr % this->get_mmem_size();
+		return mb_mmem->begin()[real_addr];
 	}
 
 	void mb::DMA_write(char w, int addr)
 	{
-		this->mb_mmem->begin()[addr] = w;
+		int real_addr = addr % this->get_mmem_size();
+		this->mb_mmem->begin()[real_addr] = w;
 	}
 
 	cpu& mb::get_cpu()

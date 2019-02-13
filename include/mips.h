@@ -141,6 +141,11 @@ namespace mips_tools
 	 */
 	bool mem_inst(opcode operation);
 
+	/* Check if a special R-format
+	 * shift instruction
+	 */
+	bool shift_inst(funct f);
+
 }
 
 #endif
