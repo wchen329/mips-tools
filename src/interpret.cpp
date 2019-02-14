@@ -18,6 +18,7 @@
 #include "parser_err.h"
 #include "primitives.h"
 #include "runtime_call.h"
+#include "syms_table.h"
 
 namespace mipsshell
 {
@@ -81,8 +82,6 @@ namespace mipsshell
 						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
 						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
 						else if(!strcmp("beq", working_set)) { current_op = mips_tools::BEQ; }
-						//else if(!strcmp("bgtz", working_set)) { current_op = mips_tools::BGTZ; }
-						//else if(!strcmp("blez", working_set)) { current_op = mips_tools::BLEZ; }
 						else if(!strcmp("bne", working_set)) { current_op = mips_tools::BNE; }
 						else if(!strcmp("sub", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SUB; }
 						else if(!strcmp("and", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::AND; }
@@ -123,6 +122,8 @@ namespace mipsshell
 									else
 									{
 										op = mipsshell::SYMBOL_ASSIGNMENT;
+										round = round - 1;
+										
 									}
 
 									syms = true;
@@ -266,7 +267,7 @@ namespace mipsshell
 		{
 			mips_tools::BW_32 inst = dcpu -> encode(rs, rt, rd, f_code, imm, current_op);
 			mips_tools::BW_32_T inst_part = mips_tools::BW_32_T(inst);
-			
+
 			mb_ptr->DMA_write(inst_part.b_0(), dcpu->get_PC());
 			mb_ptr->DMA_write(inst_part.b_1(), dcpu->get_PC() + 1);
 			mb_ptr->DMA_write(inst_part.b_2(), dcpu->get_PC() + 2);
@@ -279,7 +280,11 @@ namespace mipsshell
 		}
 
 		// Call an execution routine explicity
-		mb_ptr -> step();
+		if(INTERACTIVE) mb_ptr -> step();
+		else
+		{
+			dcpu->ghost_cycle();
+		}
 
 		return false;
 	}

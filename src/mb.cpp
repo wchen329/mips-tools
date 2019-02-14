@@ -8,7 +8,7 @@ namespace mips_tools
 	void mb::dc_on()
 	{
 		// Initialize registers and main memory to 0 values
-		this->mb_cpu->rst();
+		//this->mb_cpu->rst();
 
 		// Start fetch decoding and executing until hlt is received
 		while(this->mb_cpu->cycle() == false);

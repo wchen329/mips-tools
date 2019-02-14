@@ -77,6 +77,11 @@ int main(int argc, char ** argv)
 		if(mipsshell::interpret(buf, MB_IN_PTR)) break;
 	}
 
+	if(!mipsshell::INTERACTIVE && !mipsshell::ASM_MODE)
+	{
+		MB_IN.dc_on();
+	}
+
 	fclose(inst_file);
 	delete mipsshell::mtsstream::asmout;
 	return 0;

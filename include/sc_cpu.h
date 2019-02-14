@@ -22,6 +22,7 @@ namespace mips_tools
 			BW_32 encode(int rs, int rt, int rd, int funct, int imm, opcode op);
 			void force_fetch(BW_32 codeword) { this -> forced_inst.set_data(codeword); };	// force current instruction
 			double get_clk_T() { return this -> clk_T ; }
+			void ghost_cycle();
 			sc_cpu(mmem & m) : mm(m), clk_T(0.0000002) {  }
 
 		private:

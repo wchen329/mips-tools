@@ -286,4 +286,9 @@ namespace mips_tools
 		if(mm.get_size() <= index) throw new mt_exception;
 		return this->mm[index];
 	}
+
+	void sc_cpu::ghost_cycle()
+	{
+		this->pc.set_data(this->pc.get_data() + 4);
+	}
 }
