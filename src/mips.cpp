@@ -127,5 +127,5 @@ namespace mips_tools
 	template <class T> inline T MIPS_AND(T r_s, T r_t) { return r_s & r_t; }
 	template <class T> inline T MIPS_ANDI(T r_s, long imm) { return r_s & imm; }
 	template <class T> inline T MIPS_OR(T r_s, T r_t) { return r_s | r_t ; }
-	template <class T> inline T MIPS_ORI(T r_s, long imm) { return r_s | imm };
+	template <class T> inline T MIPS_ORI(T r_s, long imm) { return r_s | imm;  }
 }

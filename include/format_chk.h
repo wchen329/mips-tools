@@ -1,6 +1,8 @@
 #ifndef __FORMAT_CHK_H__
 #define __FORMAT_CHK_H__
 
+#include <cstring>
+#include <cstdlib>
 #include "interpret.h"
 #include "diag_cpu.h"
 

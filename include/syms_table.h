@@ -1,5 +1,7 @@
 #ifndef __SYMS_TABLE_H__
 #define __SYMS_TABLE_H__
+#include <cstddef>
+#include <cstring>
 #include <vector>
 #include "primitives.h"
 

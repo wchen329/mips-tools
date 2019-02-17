@@ -1,4 +1,5 @@
 bin/*
+build/*
 lib/*
 MIPS Tools/Debug/*
 MIPS Tools/ipch/*
