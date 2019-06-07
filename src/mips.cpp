@@ -179,13 +179,65 @@ namespace mips_tools
 		return ret;
 	}
 
-	template <class T> inline T MIPS_ADD(T r_s, T r_t) { return r_s + r_t; }	// to still do- enforce numerical specialization on classes
-	template <class T> inline T MIPS_SUB(T r_s, T r_t) { return r_s - r_t; }
-	template <class T> inline T MIPS_SUBU(T r_s, T r_t) { return MIPS_SUB(r_s, r_t); }	// to still do, reimplement based on exception detection
-	template <class T> inline T MIPS_ADDI(T r_s, long imm) { return r_s + imm; }
-	template <class T> inline T MIPS_ADDIU(T r_s, long imm) { return MIPS_ADDI(r_s, imm); }
-	template <class T> inline T MIPS_AND(T r_s, T r_t) { return r_s & r_t; }
-	template <class T> inline T MIPS_ANDI(T r_s, long imm) { return r_s & imm; }
-	template <class T> inline T MIPS_OR(T r_s, T r_t) { return r_s | r_t ; }
-	template <class T> inline T MIPS_ORI(T r_s, long imm) { return r_s | imm;  }
+	template<class in_t>
+	in_t mips_alu<in_t>::execute(ALU::ALUOp, in_t arg1, in_t arg2, bool unsigned_op)
+	{
+		in_t ret;
+
+		switch(ALUOp)
+		{
+			case ALU::ADD:
+				ret = arg1 + arg2;
+				break;
+
+			case ALU::SUB:
+				ret = arg1 - arg2;
+				break;
+
+			case ALU::SLL:
+				ret = arg1 << arg2;
+				break;
+			case ALU::SRL:
+				ret = arg1 >> arg2;
+				break;
+			default:
+				throw new mt_exception();
+		}
+
+		return ret;
+	}
+
+	void mips_decoding_unit_32::decode(	const BW_32 inst_word,
+										format& fm,
+										BW_32& op,
+										BW_32& rs,
+										BW_32& rt,
+										BW_32& rd,
+										BW_32& funct,
+										BW_32& shamt,
+										BW_32& imm )
+	{
+		// -Masks-
+		BW_32 opcode_mask = (~(1 << 26)) + 1;
+		BW_32 rs_mask = ~( ((~(1 << 26)) + 1) | ((1 << 21) - 1));
+		BW_32 rt_mask = ~( ((~(1 << 21)) + 1) | ((1 << 16) - 1));
+		BW_32 rd_mask = ~( ((~(1 << 16)) + 1) | ((1 << 11) - 1));
+		BW_32 funct_mask = 63;
+		BW_32 shamt_mask = (1 << 11) - 1 - funct_mask;
+		BW_32 imm_mask = (1 << 16) - 1;
+		BW_32 addr_mask = (1 << 26) - 1;
+
+		// - Actual values
+		op = ((opcode_mask & inst_word) >> 26) & ((1 << 6) - 1);
+		rs = (rs_mask & inst_word) >> 21;
+		rt = (rt_mask & inst_word) >> 16;
+		rd = (rd_mask & inst_word) >> 11;
+		funct = (funct_mask & inst_word);
+		shamt = (shamt_mask & inst_word) >> 6;
+		imm = (imm_mask & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
+
+		if(op == R_FORMAT) fm = R;
+		else if(j_inst(static_cast<opcode>(op))) fm = J;
+		else fm = I;
+	}
 }

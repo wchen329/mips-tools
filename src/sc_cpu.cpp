@@ -8,7 +8,7 @@ namespace mips_tools
 	bool sc_cpu::cycle()
 	{
 		format fm;
-
+		
 		// Fetch
 		BW_32 inst_word = 0;
 		BW_32 inst_word_addr = this -> pc.get_data();
@@ -23,24 +23,23 @@ namespace mips_tools
 
 		// Decode
 
-		// -Masks-
-		BW_32 opcode_mask = (~(1 << 26)) + 1;
-		BW_32 rs_mask = ~( ((~(1 << 26)) + 1) | ((1 << 21) - 1));
-		BW_32 rt_mask = ~( ((~(1 << 21)) + 1) | ((1 << 16) - 1));
-		BW_32 rd_mask = ~( ((~(1 << 16)) + 1) | ((1 << 11) - 1));
-		BW_32 funct_mask = 63;
-		BW_32 shamt_mask = (1 << 11) - 1 - funct_mask;
-		BW_32 imm_mask = (1 << 16) - 1;
-		BW_32 addr_mask = (1 << 26) - 1;
-
-		// - Actual values
-		BW_32 op = ((opcode_mask & inst_word) >> 26) & ((1 << 6) - 1);
-		BW_32 rs = (rs_mask & inst_word) >> 21;
-		BW_32 rt = (rt_mask & inst_word) >> 16;
-		BW_32 rd = (rd_mask & inst_word) >> 11;
-		BW_32 funct = (funct_mask & inst_word);
-		BW_32 shamt = (shamt_mask & inst_word) >> 6;
-		BW_32 imm = (imm_mask & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
+		BW_32 op; 
+		BW_32 rs; 
+		BW_32 rt;
+		BW_32 rd;
+		BW_32 funct;
+		BW_32 shamt;
+		BW_32 imm;
+		mips_decoding_unit_32 decoding_unit;
+		decoding_unit.decode(	inst_word,
+								fm,
+								op,
+								rs,
+								rt,
+								rd,
+								funct,
+								shamt,
+								imm		);
 
 		if(op == R_FORMAT) fm = R;
 		else if(j_inst(static_cast<opcode>(op))) fm = J;

@@ -13,17 +13,12 @@
  *
  * wchen329
  */
+#include "mt_exception.h"
 #include "primitives.h"
 #include "reg_32.h"
 
 namespace mips_tools
 {
-	int friendly_to_numerical(const char *);
-
-	class mips_alu
-	{
-
-	};
 
 	// Friendly Register Names -> Numerical Assignments
 	enum REGISTERS
@@ -120,16 +115,50 @@ namespace mips_tools
 		NONE = -1	// default, if not R format
 	};
 
-	// MIPS Operation Templates
-	template <class T> inline T MIPS_ADD(T r_s, T r_t);	// to still do- enforce numerical specialization on classes
-	template <class T> inline T MIPS_SUB(T r_s, T r_t);
-	template <class T> inline T MIPS_SUBU(T r_s, T r_t);
-	template <class T> inline T MIPS_ADDI(T r_s, long imm);
-	template <class T> inline T MIPS_ADDIU(T r_s, long imm);
-	template <class T> inline T MIPS_AND(T r_s, T r_t);
-	template <class T> inline T MIPS_ANDI(T r_s, long imm);
-	template <class T> inline T MIPS_OR(T r_s, T r_t);
-	template <class T> inline T MIPS_ORI(T r_s, long imm);
+	int friendly_to_numerical(const char *);
+
+	
+	namespace ALU
+	{
+		static enum ALUOp
+		{
+					ADD = 0,
+					SUB = 1,
+					SLL = 2,
+					SRL = 3
+		};
+	}
+
+	/* Generic ALU with four operations:
+	 * ADD, SUB, SLL, SRL
+	 */
+	template <class in_t> class mips_alu
+	{
+		public:
+			in_t execute(ALU::ALUOp, in_t arg1, in_t arg2, bool unsigned_op);
+	};
+
+	/* Decoding unit for MIPS-32
+	 *
+	 */
+	class mips_decoding_unit_32
+	{
+		public:
+			void decode(	const BW_32 inst_word,
+							format& fm,
+							BW_32& op,
+							BW_32& rs,
+							BW_32& rt,
+							BW_32& rd,
+							BW_32& funct,
+							BW_32& shamt,
+							BW_32& imm );
+	};
+
+	class mips_cu
+	{
+		
+	};
 
 	// Format check functions
 	/* Checks if an instruction is I formatted.
