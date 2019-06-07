@@ -14,4 +14,5 @@ namespace mipsshell
 	bool HAS_INPUT = false;
 	bool INPUT_SPECIFIED = false;
 	bool SUSPEND = false;
+	bool PRE_ASM = false;
 }

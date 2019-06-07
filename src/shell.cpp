@@ -3,6 +3,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <memory>
+#include "cpu.h"
+#include "diag_cpu.h"
 #include "mb.h"
 #include "mtsstream.h"
 #include "interpret.h"
@@ -145,8 +148,36 @@ int main(int argc, char ** argv)
 
 		if(!mipsshell::INTERACTIVE && !mipsshell::ASM_MODE)
 		{
+			// If given a batch file, assemble, assign symbols, then run
+			if(mipsshell::HAS_INPUT)
+			{
+				mipsshell::PRE_ASM = true;
+				while(fgets(buf, 100, inst_file) != NULL)
+				{			
+					mipsshell::interpret(buf, MB_IN_PTR);
+				}
+
+				MB_IN.get_cpu().rst();
+			}
+
 			signal(SIGINT, mipsshell::Enter_Interactive);
-			MB_IN.dc_on();
+			while(!mipsshell::SUSPEND)
+			{
+				mipsshell::PRE_ASM = false;
+				try
+				{
+					mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(MB_IN.get_cpu());
+					mips_tools::BW_32 dpc = dcpu.get_PC();
+					std::string& runtime_call = mipsshell::debug_table.lookup_from_PC(dpc);
+					mipsshell::interpret(runtime_call.c_str(), MB_IN_PTR);
+				}
+				catch(...)
+				{
+
+				}
+				
+				MB_IN.get_cpu().cycle();
+			}
 		}
 	}
 

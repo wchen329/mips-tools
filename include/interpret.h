@@ -1,9 +1,12 @@
 #ifndef __INTERPRET_H__
 #define __INTERPRET_H__
 #include "mb.h"
+#include "syms_table.h"
 
 namespace mipsshell
 {
+	extern mips_tools::syms_table debug_table;
+
 	/*enum op
 	{
 		ADD,
@@ -24,7 +27,7 @@ namespace mipsshell
 	 * may continue cycling the CPU or gives access to some
 	 * system calls
 	 */
-	bool interpret(char * line, mips_tools::mb * mb_ptr);
+	bool interpret(const char * line, mips_tools::mb * mb_ptr);
 }
 
 #endif

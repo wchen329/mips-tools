@@ -23,16 +23,18 @@
 namespace mipsshell
 {
 	mips_tools::syms_table s_table;
+	mips_tools::syms_table debug_table;
 
 	// Main interpretation routine
-	bool interpret(char * line, mips_tools::mb * mb_ptr)
+	bool interpret(const char * line, mips_tools::mb * mb_ptr)
 	{
 
 		mips_tools::opcode current_op = mips_tools::SYS_RES;
 		mips_tools::funct f_code = mips_tools::NONE;
-		
+		std::auto_ptr<char> ap(new char [strlen(line) + 1]);
+		strcpy(ap.get(), line);
 
-		char * working_set = strtok(line, " ");
+		char * working_set = strtok(ap.get(), " ");
 		int round = 0;
 		// Round: round corresponds to the position of the string in the instruction word
 		// For example in (add $s0, $s1, $s2) add is round 0, $s0 is round 1, $s1 is round 2, $s2 is round 3)
@@ -73,12 +75,28 @@ namespace mipsshell
 				case 0:
 						// This comparison will be optimized and placed in a separate routine, ultimately
 
-						if(!strcmp(".exit", working_set)) return true;
-						else if(!strcmp(".cycle", working_set)) { mb_ptr -> step(); return false; }	// step the processor on the current PC an instruction
+						if(!strcmp(".exit", working_set))
+						{
+							if(!INTERACTIVE && HAS_INPUT && !ASM_MODE && PRE_ASM)
+								debug_table.insert(".exit", dcpu->get_PC());
+							else
+							{		
+								exit(0);
+							}
+						}
+						else if(!strcmp(".cycle", working_set)){ mb_ptr -> step(); return false; }	// step the processor on the current PC an instruction
 						else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
 						else if(!strcmp(".mem", working_set)) { fprintf(stdout, "Main Memory Size: %d bytes\n", mb_ptr->get_mmem_size()); }
 						else if(!strcmp(".rst", working_set)) dot_rst(mb_ptr);
-						else if(!strcmp(".state", working_set)) dot_state(dcpu);
+						else if(!strcmp(".state", working_set))
+						{
+							if(!INTERACTIVE && HAS_INPUT && !ASM_MODE && PRE_ASM)
+								debug_table.insert(".state", dcpu->get_PC());
+							else
+							{
+								dot_state(dcpu);
+							}
+						}
 						else if(!strcmp(".time", working_set)) dot_time(mb_ptr);
 						else if(!strcmp(".run", working_set)) { fprintf(stdout, "Continuing...\n"); mipsshell::INTERACTIVE = false; mipsshell::SUSPEND = false;}
 						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }

@@ -9,6 +9,7 @@ namespace mipsshell
 	extern bool HAS_INPUT;		// no input file
 	extern bool INPUT_SPECIFIED;
 	extern bool SUSPEND;
+	extern bool PRE_ASM;
 }
 
 #endif
