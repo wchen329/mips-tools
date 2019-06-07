@@ -216,7 +216,18 @@ namespace mips_tools
 
 				case J:
 				{
-					pc.set_data((pc.get_data() + imm) << 2);
+					BW_32 jump_mask = ~((1 << 28) - 1);
+
+					switch(op)
+					{
+						case JUMP:
+							pc.set_data((pc.get_data() & jump_mask) | (imm << 2));
+							break;
+						case JAL:
+							this->registers[31].set_data(pc.get_data());
+							pc.set_data((pc.get_data() & jump_mask) | (imm << 2));
+							break;
+					}
 				}
 				break;
 		}

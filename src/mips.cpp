@@ -171,7 +171,7 @@ namespace mips_tools
 		return w;
 	}
 
-	BW_32 offset_to_address(BW_32 current, BW_32 target)
+	BW_32 offset_to_address_br(BW_32 current, BW_32 target)
 	{
 		BW_32 ret = target - current;
 		ret = ret - 4;

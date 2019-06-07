@@ -194,7 +194,7 @@ namespace mipsshell
 								try
 								{
 									mips_tools::BW_32 label_PC = s_table.lookup_from_sym(std::string(working_set));
-									imm = mips_tools::offset_to_address(dcpu->get_PC(), label_PC);
+									imm = (label_PC >> 2);
 								}
 
 								catch(std::out_of_range&)
@@ -297,7 +297,7 @@ namespace mipsshell
 								try
 								{
 									mips_tools::BW_32 label_PC = s_table.lookup_from_sym(std::string(working_set));
-									imm = mips_tools::offset_to_address(dcpu->get_PC(), label_PC);
+									imm = mips_tools::offset_to_address_br(dcpu->get_PC(), label_PC);
 								}
 
 								catch(std::out_of_range&)
@@ -369,5 +369,10 @@ namespace mipsshell
 		}
 
 		return false;
+	}
+
+	void mipsshell::set_op_and_f(const char* mnemonic, mips_tools::opcode& op, mips_tools::funct& f)
+	{
+
 	}
 }

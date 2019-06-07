@@ -165,9 +165,8 @@ namespace mips_tools
 	BW_32 generic_mips32_encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op);
 
 	/* For calculating a label offset in branches
-	 * or jumps
 	 */
-	BW_32 offset_to_address(BW_32 current, BW_32 target);
+	BW_32 offset_to_address_br(BW_32 current, BW_32 target);
 }
 
 #endif

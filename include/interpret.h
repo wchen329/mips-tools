@@ -7,21 +7,7 @@ namespace mipsshell
 {
 	extern mips_tools::syms_table debug_table;
 
-	/*enum op
-	{
-		ADD,
-		SUB,
-		SUBU,
-		ADDI,
-		ADDIU,
-		AND,
-		ANDI,
-		OR,
-		ORI,
-		DUMMY, // separator can be used for more flexible comparisons
-		SYS_ECHO,
-		SYS_HELP
-	};*/
+	void set_op_and_f(const char* mnemonic, mips_tools::opcode& op, mips_tools::funct& f);
 
 	/* A simple interpreter that
 	 * may continue cycling the CPU or gives access to some
