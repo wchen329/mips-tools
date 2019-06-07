@@ -140,6 +140,10 @@ namespace mips_tools
 	 */
 	bool r_inst(opcode operation);
 
+	/* Checks if an instruction is J formatted.
+	 */
+	bool j_inst(opcode operation);
+
 	/* Checks if an instruction performs
 	 * memory access
 	 */

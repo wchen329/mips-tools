@@ -43,6 +43,7 @@ namespace mips_tools
 		BW_32 imm = (imm_mask & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
 
 		if(op == R_FORMAT) fm = R;
+		else if(j_inst(static_cast<opcode>(op))) fm = J;
 		else fm = I;
 
 		bool reg_we = true; // find write enable
@@ -211,8 +212,12 @@ namespace mips_tools
 						}
 						break;
 				}
+				break;
 
-
+				case J:
+				{
+					pc.set_data((pc.get_data() + imm) << 2);
+				}
 				break;
 		}
 

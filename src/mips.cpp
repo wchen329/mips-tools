@@ -104,6 +104,13 @@ namespace mips_tools
 			operation == SWL ? true : false ;
 	}
 
+	bool j_inst(opcode operation)
+	{
+		return
+			operation == JUMP ? true :
+			operation == JAL ? true: false;
+	}
+
 	bool mem_inst(opcode operation)
 	{
 		return
@@ -121,11 +128,16 @@ namespace mips_tools
 
 	bool jorb_inst(opcode operation)
 	{
-		return
+		// First check jumps
+		bool is_jump = j_inst(operation);
+
+		bool is_branch =
 			operation == BEQ ? true :
 			operation == BNE ? true :
 			operation == BLEZ ? true :
 			operation == BGTZ ? true : false;
+
+		return is_jump || is_branch;
 	}
 
 	BW_32 generic_mips32_encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op)
@@ -139,15 +151,21 @@ namespace mips_tools
 			w = (w | ((rd & ((1 << 5) - 1) ) << 11 ));
 			w = (w | ((rt & ((1 << 5) - 1) ) << 16 ));
 			w = (w | ((rs & ((1 << 5) - 1) ) << 21 ));
-			w = (w | ((op & ((1 << 6) - 1) ) << 26  ));
+			w = (w | ((op & ((1 << 6) - 1) ) << 26 ));
 		}
 
 		if(i_inst(op))
 		{
 			w = (w | (imm_shamt_jaddr & ((1 << 16) - 1)));
-			w = (w | ((rt & ((1 << 5) - 1) ) << 16  ));
-			w = (w | ((rs & ((1 << 5) - 1) ) << 21  ));
-			w = (w | ((op & ((1 << 6) - 1) ) << 26  ));
+			w = (w | ((rt & ((1 << 5) - 1) ) << 16 ));
+			w = (w | ((rs & ((1 << 5) - 1) ) << 21 ));
+			w = (w | ((op & ((1 << 6) - 1) ) << 26 ));
+		}
+
+		if(j_inst(op))
+		{
+			w = (w | (imm_shamt_jaddr & ((1 << 26) - 1)));
+			w = (w | ((op & ((1 << 6) - 1) ) << 26 ));
 		}
 
 		return w;

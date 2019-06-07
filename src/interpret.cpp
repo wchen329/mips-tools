@@ -104,6 +104,7 @@ namespace mipsshell
 						else if(!strcmp("slti", working_set)) { current_op = mips_tools::SLTI;}
 						else if(!strcmp("sltiu", working_set)) { current_op = mips_tools::SLTIU; }	
 						else if(!strcmp("sltu", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SLTU; }	
+						else if(!strcmp("j", working_set)) { current_op = mips_tools::JUMP;}	
 						else
 						{
 							bool syms = false;
@@ -153,6 +154,36 @@ namespace mipsshell
 							// later, check for branches
 							if((rt = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
 							rt = get_reg_num(working_set);
+						}
+
+						else if(j_inst(current_op))
+						{
+							try
+							{
+								imm = get_imm(working_set);
+							}
+
+							catch(parser_err * e)
+							{
+								if(!jorb_inst(current_op))
+								{
+									throw;
+								}
+
+								delete e;
+
+								// Otherwise, perceive as a label, try to convert
+								try
+								{
+									mips_tools::BW_32 label_PC = s_table.lookup_from_sym(std::string(working_set));
+									imm = mips_tools::offset_to_address(dcpu->get_PC(), label_PC);
+								}
+
+								catch(std::out_of_range&)
+								{
+									throw new badformat_err();
+								}
+							}
 						}
 	
 						else { fprintf(stdout, BAD_COMMAND); return false;}
@@ -258,6 +289,8 @@ namespace mipsshell
 							}
 						}
 
+						else if(j_inst(current_op)){}
+
 						else { throw new badformat_err(); }
 						break;
 					
@@ -287,8 +320,8 @@ namespace mipsshell
 		}
 
 		// Check for insufficient arguments
-		if( (current_op != mips_tools::SYS_RES && round != 4 && !mem_inst(current_op)) || (mem_inst(current_op) && round != 3)
-			) { fprintf(stdout, "Expected more arguments, specification incomplete.\n"); return false; }
+		if( (!j_inst(current_op) && (current_op && (current_op != mips_tools::SYS_RES && round != 4 && !mem_inst(current_op)) || (mem_inst(current_op) && round != 3))) || j_inst(current_op) && round != 2)
+			{ fprintf(stdout, "Expected more arguments, specification incomplete.\n"); return false; }
 
 		// If system call, don't execute in CPU
 		if(current_op == mips_tools::SYS_RES) return false;

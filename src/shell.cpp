@@ -19,6 +19,7 @@
  */
 int main(int argc, char ** argv)
 {
+	mips_tools::cpu_t cp = mips_tools::STANDARD;
 	int mem_width = 16;
 	FILE * inst_file = NULL;
 	fprintf(stdout, "MIPS Tools 0.1 (developmental build)\n");
@@ -35,6 +36,7 @@ int main(int argc, char ** argv)
 				fprintf(stdout, "-i [file] (execute a text file with MIPS Tools commands and assembly directly using JIT compiling)\n");
 				fprintf(stdout, "-m [width] (specify a memory bit width; the total memory available will be 2^[width]\n");
 				fprintf(stdout, "-a (active assembler mode, requires the -i option):\n");
+				fprintf(stdout, "-c (select a CPU type 0: for single cycle (default) or 1: for Five Stage Pipeline)\n");
 				exit(0);
 			}
 
@@ -59,6 +61,11 @@ int main(int argc, char ** argv)
 			if(!strcmp(argv[i], "-m"))
 			{
 				if((i+1) < argc) mem_width = atoi(argv[i+1]);
+			}
+
+			if(!strcmp(argv[i], "-c"))
+			{
+				if((i+1) < argc) cp = static_cast<mips_tools::cpu_t>(atoi(argv[i+1]));
 			}
 		}
 	}
@@ -101,10 +108,26 @@ int main(int argc, char ** argv)
 		exit(1);
 	}
 
-	mips_tools::mb MB_IN(mips_tools::FIVE_P, mem_width, mipsshell::SUSPEND);
+	fprintf(stdout, "CPU Type: ");
+	switch(cp)
+	{
+		case mips_tools::STANDARD:
+			fprintf(stdout, "Single Cycle\n");
+			break;
+		case mips_tools::FIVE_P:
+			fprintf(stdout, "Five Stage Pipeline\n");
+			break;
+		default:
+			fprintf(stdout, "Invalid CPU type detected. Exiting...\n");
+			exit(1);
+	}
+
+	mips_tools::mb MB_IN(cp, mem_width, mipsshell::SUSPEND);
 	MB_IN.reset();
 	mips_tools::mb * MB_IN_PTR = &MB_IN;
 	if(mipsshell::ASM_MODE) mipsshell::mtsstream::asmout = new mipsshell::asm_ostream("a.bin");
+
+	fprintf(stdout, "Main Memory size: %d bytes\n", MB_IN.get_mmem_size());
 
 	while(true)
 	{
