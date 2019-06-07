@@ -7,6 +7,7 @@ namespace mipsshell
 	extern bool DEBUG_MODE;		// acting in debug mode? true if is, false if now
 	extern bool INTERACTIVE;	// in interactive mode, true if is, false if not
 	extern bool HAS_INPUT;		// no input file
+	extern bool SUSPEND;
 }
 
 #endif

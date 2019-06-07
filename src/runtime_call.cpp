@@ -1,8 +1,16 @@
 #include <cstdio>
 #include "runtime_call.h"
+#include "states.h"
 
 namespace mipsshell
 {
+
+	void Enter_Interactive(int a)
+	{
+		INTERACTIVE = true;
+		SUSPEND = true;
+	}
+
 	void dot_mem(mips_tools::mem * memory)
 	{
 		if(memory != nullptr)

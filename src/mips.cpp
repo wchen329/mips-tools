@@ -119,6 +119,14 @@ namespace mips_tools
 			false;
 	}
 
+	BW_32 offset_to_address(BW_32 current, BW_32 target)
+	{
+		BW_32 ret = target - current;
+		ret = ret - 4;
+		ret = (ret >> 2);
+		return ret;
+	}
+
 	template <class T> inline T MIPS_ADD(T r_s, T r_t) { return r_s + r_t; }	// to still do- enforce numerical specialization on classes
 	template <class T> inline T MIPS_SUB(T r_s, T r_t) { return r_s - r_t; }
 	template <class T> inline T MIPS_SUBU(T r_s, T r_t) { return MIPS_SUB(r_s, r_t); }	// to still do, reimplement based on exception detection

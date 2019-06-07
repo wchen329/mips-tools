@@ -7,6 +7,8 @@
 
 namespace mips_tools
 {
+	const bool NULL_SUSPEND = false; // a.k.a. never suspend
+		
 	enum cpu_t
 	{
 			STANDARD = 0,
@@ -33,10 +35,11 @@ namespace mips_tools
 			double get_time() { return this->sim_time; } // return the current simulation time elapsed (in seconds)
 			size_t get_mmem_size();	// get main memory size in BYTES
 
-			mb(cpu_t ct = STANDARD, int mt = 16);
+			mb(cpu_t ct = STANDARD, int mt = 16, const bool& SUSPEND = NULL_SUSPEND);
 			~mb();
 
 		private:
+			const bool& suspend;
 			cpu * mb_cpu;	// single socket cpu
 			mmem * mb_mmem;  // single main memory
 			cpu_t cpu_type;	// types of MIPS processor

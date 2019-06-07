@@ -22,6 +22,7 @@
 
 namespace mipsshell
 {
+	mips_tools::syms_table s_table;
 
 	// Main interpretation routine
 	bool interpret(char * line, mips_tools::mb * mb_ptr)
@@ -79,6 +80,7 @@ namespace mipsshell
 						else if(!strcmp(".rst", working_set)) dot_rst(mb_ptr);
 						else if(!strcmp(".state", working_set)) dot_state(dcpu);
 						else if(!strcmp(".time", working_set)) dot_time(mb_ptr);
+						else if(!strcmp(".run", working_set)) { fprintf(stdout, "Continuing...\n"); mipsshell::INTERACTIVE = false; mipsshell::SUSPEND = false;}
 						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
 						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
 						else if(!strcmp("beq", working_set)) { current_op = mips_tools::BEQ; }
@@ -114,7 +116,11 @@ namespace mipsshell
 									//Interactive Address Assignment
 									if(working_set[0] == '.')
 									{
-										fprintf(stdout, "Assigning symbol... [still to be implemented]\n");
+										std::string w(working_set + 1);
+										w.pop_back();
+										fprintf(stdout, "Assigning symbol... %s <-> PC = %d\n", w.c_str(), dcpu->get_PC());
+										s_table.insert(w, dcpu->get_PC());
+
 									}
 
 									// Else non interactive
@@ -210,8 +216,9 @@ namespace mipsshell
 
 							else
 							{
+
 								if((rt = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
-								rt = get_reg_num(working_set);
+									rt = get_reg_num(working_set);
 							}
 						}
 						
@@ -223,8 +230,32 @@ namespace mipsshell
 								throw new badformat_err();
 							}
 
-							// later, check for branches stores and etc.
-							imm = get_imm(working_set);
+							try
+							{
+								imm = get_imm(working_set);
+							}
+
+							catch(parser_err * e)
+							{
+								if(current_op != mips_tools::BEQ)
+								{
+									throw;
+								}
+
+								delete e;
+
+								// Otherwise, perceive as a label, try to convert
+								try
+								{
+									mips_tools::BW_32 label_PC = s_table.lookup_from_sym(std::string(working_set));
+									imm = mips_tools::offset_to_address(dcpu->get_PC(), label_PC);
+								}
+
+								catch(std::out_of_range&)
+								{
+									throw new badformat_err();
+								}
+							}
 						}
 
 						else { throw new badformat_err(); }

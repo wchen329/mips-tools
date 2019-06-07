@@ -146,6 +146,10 @@ namespace mips_tools
 	 */
 	bool shift_inst(funct f);
 
+	/* For calculating a label offset in branches
+	 * or jumps
+	 */
+	BW_32 offset_to_address(BW_32 current, BW_32 target);
 }
 
 #endif

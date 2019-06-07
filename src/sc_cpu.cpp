@@ -23,7 +23,7 @@ namespace mips_tools
 		{
 
 			BW_32 inst_word_addr = this -> pc.get_data();
-			this -> pc.set_data(inst_word_addr + 4);
+			this -> pc.set_data((inst_word_addr + 4) % this->mm.get_size());
 			BW_32_T inst_part = BW_32_T(
 			this->mem_req_load(inst_word_addr),
 			this->mem_req_load(inst_word_addr + 1),
@@ -126,7 +126,7 @@ namespace mips_tools
 						if(this->registers[rs].get_data() == this->registers[rt].get_data())
 						{
 							BW_32 curr_pc = this->get_PC();
-							this->pc.set_data(curr_pc + 4 + branch_addr);
+							this->pc.set_data(curr_pc + branch_addr);
 						}
 
 						break;
@@ -135,7 +135,7 @@ namespace mips_tools
 						if(this->registers[rs].get_data() != this->registers[rt].get_data())
 						{
 							BW_32 curr_pc = this->get_PC();
-							this->pc.set_data(curr_pc + 4 + branch_addr);
+							this->pc.set_data(curr_pc + branch_addr);
 						}
 						break;
 					case ORI:

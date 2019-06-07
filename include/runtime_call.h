@@ -6,6 +6,7 @@
 
 namespace mipsshell
 {
+	void Enter_Interactive(int arg);
 	void dot_mem(mips_tools::mem * memory);
 	void dot_rst(mips_tools::mb *);
 	void dot_state(mips_tools::diag_cpu * dcpu);

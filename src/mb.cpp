@@ -11,7 +11,8 @@ namespace mips_tools
 		//this->mb_cpu->rst();
 
 		// Start fetch decoding and executing until hlt is received
-		while(this->mb_cpu->cycle() == false);
+		while(!this->suspend)
+			this->mb_cpu->cycle();
 	}
 
 	size_t mb::get_mmem_size()
@@ -51,7 +52,7 @@ namespace mips_tools
 		return *(this->mb_cpu);
 	}
 
-	mb::mb(cpu_t ct, int mt): cpu_type(ct), mmem_type(mt), sim_time(0), cycle_ct(0)
+	mb::mb(cpu_t ct, int mt, const bool& suspend) : cpu_type(ct), mmem_type(mt), sim_time(0), cycle_ct(0), suspend(suspend)
 	{
 		size_t s = 1 << mt;
 		this->mb_mmem = new mmem(s);

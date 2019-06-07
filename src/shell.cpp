@@ -1,10 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS	// for MSVC
+#include <csignal>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include "mb.h"
 #include "mtsstream.h"
 #include "interpret.h"
+#include "runtime_call.h"
 #include "states.h"
 
 /* Shell for MIPS Tools
@@ -64,7 +66,7 @@ int main(int argc, char ** argv)
 		fprintf(stdout, "Tip: system directives are preceded by a . (for example .help)\n");
 	}
 
-	mips_tools::mb MB_IN(mips_tools::STANDARD, 16);
+	mips_tools::mb MB_IN(mips_tools::STANDARD, 16, mipsshell::SUSPEND);
 	MB_IN.reset();
 	mips_tools::mb * MB_IN_PTR = &MB_IN;
 	if(mipsshell::ASM_MODE) mipsshell::mtsstream::asmout = new mipsshell::asm_ostream("a.bin");
@@ -72,15 +74,25 @@ int main(int argc, char ** argv)
 	while(true)
 	{
 		char buf[100];
-		if(mipsshell::INTERACTIVE) fprintf(stdout, ">> ");
-		if(fgets(buf, 100, inst_file) == NULL) break;
-		if(mipsshell::interpret(buf, MB_IN_PTR)) break;
+		if(mipsshell::INTERACTIVE)
+		{
+			fprintf(stdout, ">> ");
+		}
+
+		if(mipsshell::INTERACTIVE || mipsshell::ASM_MODE)
+		{
+			if(fgets(buf, 100, inst_file) == NULL) break;
+			if(mipsshell::interpret(buf, MB_IN_PTR)) break;
+		}
+
+		if(!mipsshell::INTERACTIVE && !mipsshell::ASM_MODE)
+		{
+			signal(SIGINT, mipsshell::Enter_Interactive);
+			MB_IN.dc_on();
+		}
 	}
 
-	if(!mipsshell::INTERACTIVE && !mipsshell::ASM_MODE)
-	{
-		MB_IN.dc_on();
-	}
+
 
 	fclose(inst_file);
 	delete mipsshell::mtsstream::asmout;
