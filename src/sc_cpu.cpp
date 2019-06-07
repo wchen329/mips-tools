@@ -65,6 +65,9 @@ namespace mips_tools
 						reg_wdata = (this->registers[rs] + this->registers[rt]).get_data();
 						r_write = rd;
 						break;
+					case JR:
+						this->pc.set_data(this->registers[rs].get_data());
+						break;
 					case OR:
 						reg_wdata = (this->registers[rs] | this->registers[rt]).get_data();
 						r_write = rd;
@@ -224,7 +227,7 @@ namespace mips_tools
 							pc.set_data((pc.get_data() & jump_mask) | (imm << 2));
 							break;
 						case JAL:
-							this->registers[31].set_data(pc.get_data());
+							this->registers[31].set_data(pc.get_data() + 4); // Add 4, since it has already been incremented once
 							pc.set_data((pc.get_data() & jump_mask) | (imm << 2));
 							break;
 					}

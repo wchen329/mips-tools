@@ -122,7 +122,9 @@ namespace mipsshell
 						else if(!strcmp("slti", working_set)) { current_op = mips_tools::SLTI;}
 						else if(!strcmp("sltiu", working_set)) { current_op = mips_tools::SLTIU; }	
 						else if(!strcmp("sltu", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SLTU; }	
-						else if(!strcmp("j", working_set)) { current_op = mips_tools::JUMP;}	
+						else if(!strcmp("j", working_set)) { current_op = mips_tools::JUMP;}
+						else if(!strcmp("jal", working_set)) { current_op = mips_tools::JAL;}	
+						else if(!strcmp("jr", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::JR;}
 						else
 						{
 							bool syms = false;
@@ -163,8 +165,17 @@ namespace mipsshell
 					case 1:
 						if(r_inst(current_op))
 						{
-							if((rd = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
-							rd = get_reg_num(working_set);
+							if(f_code == mips_tools::JR)
+							{
+								if((rs = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
+								rs = get_reg_num(working_set);
+							}
+
+							else
+							{
+								if((rd = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
+								rd = get_reg_num(working_set);
+							}
 						}
 
 						else if(i_inst(current_op))
@@ -210,8 +221,11 @@ namespace mipsshell
 					case 2:
 						if(r_inst(current_op))
 						{
-							if((rs = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
-							rs = get_reg_num(working_set);
+							if (f_code != mips_tools::JR)
+							{
+								if((rs = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
+								rs = get_reg_num(working_set);
+							}
 						}
 						
 						else if(i_inst(current_op))
@@ -258,16 +272,19 @@ namespace mipsshell
 					case 3:
 						if(r_inst(current_op))
 						{
-							if(shift_inst(f_code))
+							if(f_code != mips_tools::JR)
 							{
-								imm = get_imm(working_set);
-							}
+								if(shift_inst(f_code))
+								{
+									imm = get_imm(working_set);
+								}
 
-							else
-							{
-
-								if((rt = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
-									rt = get_reg_num(working_set);
+								else
+								{
+											
+									if((rt = mips_tools::friendly_to_numerical(working_set)) <= mips_tools::INVALID)
+										rt = get_reg_num(working_set);
+								}
 							}
 						}
 						
@@ -338,7 +355,8 @@ namespace mipsshell
 		}
 
 		// Check for insufficient arguments
-		if( (!j_inst(current_op) && (current_op && (current_op != mips_tools::SYS_RES && round != 4 && !mem_inst(current_op)) || (mem_inst(current_op) && round != 3))) || j_inst(current_op) && round != 2)
+		if( (!j_inst(current_op) && ((current_op != mips_tools::SYS_RES && round != 4 && !mem_inst(current_op) && f_code != mips_tools::JR)
+									|| (mem_inst(current_op) && round != 3))) || j_inst(current_op) && round != 2 || (f_code == mips_tools::JR && round != 2))
 			{ fprintf(stdout, "Expected more arguments, specification incomplete.\n"); return false; }
 
 		// If system call, don't execute in CPU
