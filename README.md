@@ -7,16 +7,3 @@ Within the MIPS Tools directory there is a Visual Studio solution. This Visual S
 
 ### UNIX and UNIX-like
 UNIX compiling can be done currently by utilizing the csh build file provided. A standard UNIX/GNU Makefile is soon to arive though! Currently confirmed working for FreeBSD. 
-
-## Using
-To use MIPS-Tools directly, run the *MIPS Tools Shell*.
-
-## Features
-The following is a list of planned features for the simulator:
-* Basic architecture support for simulating a CPU and a single memory system
-* MIPS raw assembler (with no executable formatting)
-* Latency and cycle verbosity support
-* Default single cycle CPU and five stage pipeline support (and pipeline diagrams in ASCII!)
-* SMT emulation support
-* R10k processor simulation support
-* Custom processor and ISA (x86?) support through dynamic linking
