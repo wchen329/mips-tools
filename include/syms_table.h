@@ -2,20 +2,21 @@
 #define __SYMS_TABLE_H__
 #include <cstddef>
 #include <cstring>
+#include <map>
 #include <vector>
 #include "primitives.h"
 
 namespace mips_tools
 {
+	/* Wrapper class for the symbols table
+	 *
+	 */
 	class syms_table
 	{
 		public:
-			void put(char*, BW_32);
-			BW_32 lookup(char *);
+			void put(std::string symbol_name, BW_32 PC) { this->syms.insert(std::pair<BW_32, std::string>(PC, symbol_name)); }
 		private:
-			std::vector<char *> key_list;
-			std::vector<BW_32> val_list;
-			// Will replace with hash map later
+			std::map<BW_32, std::string> syms;
 	};
 }
 
