@@ -12,5 +12,6 @@ namespace mipsshell
 	bool DEBUG_MODE = false;
 	bool INTERACTIVE = false;	// in interactive mode, true if is, false if not
 	bool HAS_INPUT = false;
+	bool INPUT_SPECIFIED = false;
 	bool SUSPEND = false;
 }

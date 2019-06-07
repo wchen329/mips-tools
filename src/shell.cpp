@@ -19,14 +19,25 @@
  */
 int main(int argc, char ** argv)
 {
+	int mem_width = 16;
 	FILE * inst_file = NULL;
-	fprintf(stdout, "MIPS Tools Developmental Version\n");
+	fprintf(stdout, "MIPS Tools 0.1 (developmental build)\n");
 
 	// First get the active file in which to get instructions from
 	if(argc >= 2)
 	{
 		for(int i = 1; i < argc; i++)
 		{
+			if(!strcmp(argv[i], "-h"))
+			{
+				fprintf(stdout, "Usage options:\n");
+				fprintf(stdout, "-h (show this message)\n");
+				fprintf(stdout, "-i [file] (execute a text file with MIPS Tools commands and assembly directly using JIT compiling)\n");
+				fprintf(stdout, "-m [width] (specify a memory bit width; the total memory available will be 2^[width]\n");
+				fprintf(stdout, "-a (active assembler mode, requires the -i option):\n");
+				exit(0);
+			}
+
 			if(!strcmp(argv[i], "-a"))
 			{
 				fprintf(stdout, "Assembler mode ENABLED.\n");
@@ -38,14 +49,26 @@ int main(int argc, char ** argv)
 			{
 				mipsshell::INTERACTIVE = false;
 				mipsshell::HAS_INPUT = true;
-				if((i+1) < argc) inst_file = fopen(argv[i+1], "r");
+				if((i+1) < argc)
+				{
+					inst_file = fopen(argv[i+1], "r");
+					mipsshell::INPUT_SPECIFIED = true;
+				}
+			}
+
+			if(!strcmp(argv[i], "-m"))
+			{
+				if((i+1) < argc) mem_width = atoi(argv[i+1]);
 			}
 		}
+	}
 
+	if(mipsshell::HAS_INPUT)
+	{
 		fprintf(stdout, "Starting in batch mode...\n");
 		mipsshell::INTERACTIVE = false;
 
-		if(!mipsshell::HAS_INPUT)
+		if(!mipsshell::INPUT_SPECIFIED)
 		{
 			fprintf(stderr, "Error: An input file is required (specified through -i [input file] ) in order to run in batch mode.\n");
 			exit(1);
@@ -66,7 +89,19 @@ int main(int argc, char ** argv)
 		fprintf(stdout, "Tip: system directives are preceded by a . (for example .help)\n");
 	}
 
-	mips_tools::mb MB_IN(mips_tools::STANDARD, 16, mipsshell::SUSPEND);
+	if(mem_width <= 0)
+	{
+		fprintf(stderr, "Error: An error occurred when trying to read memory width (must be larger than 0 and a natural number).");
+		exit(1);
+	}
+
+	if(mem_width > 32)
+	{
+		fprintf(stderr, "Error: Memory size specified is too large (%d bits wide > 20 bits wide)", mem_width);
+		exit(1);
+	}
+
+	mips_tools::mb MB_IN(mips_tools::FIVE_P, mem_width, mipsshell::SUSPEND);
 	MB_IN.reset();
 	mips_tools::mb * MB_IN_PTR = &MB_IN;
 	if(mipsshell::ASM_MODE) mipsshell::mtsstream::asmout = new mipsshell::asm_ostream("a.bin");

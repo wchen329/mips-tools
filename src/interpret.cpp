@@ -237,7 +237,7 @@ namespace mipsshell
 
 							catch(parser_err * e)
 							{
-								if(current_op != mips_tools::BEQ)
+								if(!jorb_inst(current_op))
 								{
 									throw;
 								}

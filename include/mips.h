@@ -20,6 +20,10 @@ namespace mips_tools
 {
 	int friendly_to_numerical(const char *);
 
+	class mips_alu
+	{
+
+	};
 
 	// Friendly Register Names -> Numerical Assignments
 	enum REGISTERS
@@ -145,6 +149,16 @@ namespace mips_tools
 	 * shift instruction
 	 */
 	bool shift_inst(funct f);
+
+	/* Check if a Jump or
+	 * Branch Instruction
+	 */
+	bool jorb_inst(opcode operation);
+
+	/* "Generic" MIPS-32 architecture
+	 * encoding function asm -> binary
+	 */
+	BW_32 generic_mips32_encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op);
 
 	/* For calculating a label offset in branches
 	 * or jumps

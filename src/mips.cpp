@@ -119,6 +119,40 @@ namespace mips_tools
 			false;
 	}
 
+	bool jorb_inst(opcode operation)
+	{
+		return
+			operation == BEQ ? true :
+			operation == BNE ? true :
+			operation == BLEZ ? true :
+			operation == BGTZ ? true : false;
+	}
+
+	BW_32 generic_mips32_encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op)
+	{
+		BW_32 w = 0;
+
+		if(r_inst(op))
+		{
+			w = (w | (funct & ((1 << 6) - 1)  ));
+			w = (w | ((imm_shamt_jaddr & ((1 << 5) - 1) ) << 6 ));
+			w = (w | ((rd & ((1 << 5) - 1) ) << 11 ));
+			w = (w | ((rt & ((1 << 5) - 1) ) << 16 ));
+			w = (w | ((rs & ((1 << 5) - 1) ) << 21 ));
+			w = (w | ((op & ((1 << 6) - 1) ) << 26  ));
+		}
+
+		if(i_inst(op))
+		{
+			w = (w | (imm_shamt_jaddr & ((1 << 16) - 1)));
+			w = (w | ((rt & ((1 << 5) - 1) ) << 16  ));
+			w = (w | ((rs & ((1 << 5) - 1) ) << 21  ));
+			w = (w | ((op & ((1 << 6) - 1) ) << 26  ));
+		}
+
+		return w;
+	}
+
 	BW_32 offset_to_address(BW_32 current, BW_32 target)
 	{
 		BW_32 ret = target - current;

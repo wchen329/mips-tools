@@ -1,6 +1,7 @@
 #include <cstring>
 #include "mb.h"
 #include "cpu.h"
+#include "pipeline.h"
 #include "sc_cpu.h"
 
 namespace mips_tools
@@ -56,7 +57,15 @@ namespace mips_tools
 	{
 		size_t s = 1 << mt;
 		this->mb_mmem = new mmem(s);
-		this->mb_cpu = new sc_cpu(*this->mb_mmem);
+		switch(ct)
+		{
+			case STANDARD:
+				this->mb_cpu = new sc_cpu(*this->mb_mmem);
+				break;
+			case FIVE_P:
+				this->mb_cpu = new fsp_cpu(*this->mb_mmem);
+				break;
+		}
 	}
 
 	mb::~mb()

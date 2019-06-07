@@ -11,27 +11,15 @@ namespace mips_tools
 
 		// Fetch
 		BW_32 inst_word = 0;
-
-		// Override in the case of force fetch
-		if(forced_inst.get_data() != 0)
-		{
-			inst_word = this -> forced_inst.get_data(); // get instr word
-			forced_inst.set_data(0);
-		}
-
-		else
-		{
-
-			BW_32 inst_word_addr = this -> pc.get_data();
-			this -> pc.set_data((inst_word_addr + 4) % this->mm.get_size());
-			BW_32_T inst_part = BW_32_T(
+		BW_32 inst_word_addr = this -> pc.get_data();
+		this -> pc.set_data((inst_word_addr + 4) % this->mm.get_size());
+		BW_32_T inst_part = BW_32_T(
 			this->mem_req_load(inst_word_addr),
 			this->mem_req_load(inst_word_addr + 1),
 			this->mem_req_load(inst_word_addr + 2),
 			this->mem_req_load(inst_word_addr + 3)
-			);
-			inst_word = inst_part.as_BW_32(); // change
-		}
+		);
+		inst_word = inst_part.as_BW_32(); // change
 
 		// Decode
 
@@ -240,27 +228,7 @@ namespace mips_tools
 
 	BW_32 sc_cpu::encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op)
 	{
-		BW_32 w = 0;
-
-		if(r_inst(op))
-		{
-			w = (w | (funct & ((1 << 6) - 1)  ));
-			w = (w | ((imm_shamt_jaddr & ((1 << 5) - 1) ) << 6 ));
-			w = (w | ((rd & ((1 << 5) - 1) ) << 11 ));
-			w = (w | ((rt & ((1 << 5) - 1) ) << 16 ));
-			w = (w | ((rs & ((1 << 5) - 1) ) << 21 ));
-			w = (w | ((op & ((1 << 6) - 1) ) << 26  ));
-		}
-
-		if(i_inst(op))
-		{
-			w = (w | (imm_shamt_jaddr & ((1 << 16) - 1)));
-			w = (w | ((rt & ((1 << 5) - 1) ) << 16  ));
-			w = (w | ((rs & ((1 << 5) - 1) ) << 21  ));
-			w = (w | ((op & ((1 << 6) - 1) ) << 26  ));
-		}
-
-		return w;
+		return generic_mips32_encode(rs, rt, rd, funct, imm_shamt_jaddr, op);
 	}
 
 	void sc_cpu::rst()
@@ -271,7 +239,6 @@ namespace mips_tools
 		}
 
 		this->pc.set_data(0);
-		this->forced_inst.set_data(0);
 	}
 
 	void sc_cpu::mem_req_write(char data, int index)

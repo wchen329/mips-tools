@@ -32,6 +32,9 @@
     <ClCompile Include="..\src\syms_table.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\pipeline.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -74,6 +77,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imageable.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\reg_pipeline.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
