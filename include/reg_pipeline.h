@@ -4,6 +4,9 @@
 
 namespace mips_tools
 {
+	/* DE-EX
+	 * Pipeline Register
+	 */
 	class decode_ex_plr
 	{
 		public:
@@ -46,11 +49,15 @@ namespace mips_tools
 			int rd;
 	};
 
+	/* EX-MEM
+	 * Pipeline Register
+	 */
 	class ex_mem_plr
 	{
 		public:
 			void load(	BW_32 data_ALU,
-						BW_32 imm,
+						BW_32 data_rs,
+						BW_32 data_rt,
 						opcode op,
 						bool regWE,
 						bool memWE,
@@ -59,7 +66,8 @@ namespace mips_tools
 						int rt,
 						int rd );
 			void get(	BW_32& data_ALU,
-						BW_32& imm,
+						BW_32& data_rs,
+						BW_32& data_rt,
 						opcode& op,
 						bool& regWE,
 						bool& memWE,
@@ -69,7 +77,8 @@ namespace mips_tools
 						int& rd );
 		private:
 			BW_32 data_ALU;
-			BW_32 imm;
+			BW_32 data_rs;
+			BW_32 data_rt;
 			opcode op;
 			bool regWE;
 			bool memWE;
@@ -79,6 +88,9 @@ namespace mips_tools
 			int rd;
 	};
 
+	/* MEM-WB
+	 * Pipeline Register
+	 */
 	class mem_wb_plr
 	{
 		public:

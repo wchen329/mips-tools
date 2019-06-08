@@ -4,11 +4,12 @@ namespace mips_tools
 {
 	bool fsp_cpu::cycle()
 	{
-		/* Execute but do not yet commit transactions
-		 *
+		/* Step 1: Execute but do not yet commit transactions
+		 * Save temporaries to be commited into pipeline registers
 		 */
+
 		/* FETCH STAGE
-		 *
+		 * Fetch an instruction
 		 *
 		 *
 		 */
@@ -25,9 +26,8 @@ namespace mips_tools
 		BW_32 pc_next = pc.get_data() + 4;
 
 		/* DECODE STAGE
-		 *
-		 *
-		 *
+		 * Figure out key parameters from the instruction word
+		 * But also at this stage, resolve Jumps and Branches
 		 */
 		mips_decoding_unit_32 decoding_unit;
 		format decode_fm;
@@ -47,9 +47,9 @@ namespace mips_tools
 		bool decode_memRE = mem_read_inst(decode_op);
 
 		/* EXECUTE STAGE
-		 *
-		 *
-		 *
+		 * Perform arithmetic through the provided ALU (mips_alu<BW_32> alu)
+		 * Most operations will end up using the ALU, even if it's not used as a store
+		 * except branches and jumps
 		 */
 		BW_32 ex_data_rs, ex_data_rt, ex_shamt, ex_imm;
 		opcode ex_op;
@@ -109,6 +109,7 @@ namespace mips_tools
 			case I:
 				switch(ex_op)
 				{
+					// Arithmetic Operations that Store
 					case ADDI:
 						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
 						break;
@@ -127,27 +128,86 @@ namespace mips_tools
 					case SLTIU:
 						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs, ex_imm, true) < 0 ? 1 : 0;
 						break;
+					
+					// Memory Operations- for now, calculate the offset only
+					case LBU:
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, true);
+						break;
+					case LHU:
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, true);
+						break;
+					case LW:
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
+						break;
+					case SB:
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
+						break;
+					case SH:
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
+						break;
+					case SW:
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
+						break;
 				}
 				break;
 		}
 
 
 		/* MEMORY STAGE
-		 *
-		 *
-		 *
+		 * If memRE or memWE then access memory at the stage.
+		 * If not well... do (mostly) nothing, and just pass the corresponding flags over
+		 * to the write back stage.
 		 */
-		BW_32 mem_imm, mem_dataALU;
+		BW_32 mem_data_rs, mem_data_rt, mem_dataALU;
 		opcode mem_op;
 		bool mem_regWE, mem_memWE, mem_memRE;
 		int mem_rs, mem_rt, mem_rd;
-		this->em_plr.get(mem_dataALU, mem_imm, mem_op, mem_regWE, mem_memWE, mem_memRE, mem_rs, mem_rt, mem_rd);
+		this->em_plr.get(mem_dataALU, mem_data_rs, mem_data_rt, mem_op, mem_regWE, mem_memWE, mem_memRE, mem_rs, mem_rt, mem_rd);
+
+		// Memory operations
+		BW_32_T lr_bbb(0,0,0,0);
+		
+		switch(mem_op)
+		{
+			case LBU:
+				lr_bbb = BW_32_T(0,0,0,this->mem_req_load(mem_dataALU));
+				break;
+			case LHU:
+				lr_bbb = BW_32_T(	this->mem_req_load(mem_dataALU),
+									this->mem_req_load(mem_dataALU),
+									0,
+									0								);
+				break;
+			case LW:
+				lr_bbb = BW_32_T(	this->mem_req_load(mem_dataALU),
+									this->mem_req_load(mem_dataALU + 1),
+									this->mem_req_load(mem_dataALU + 2),
+									this->mem_req_load(mem_dataALU + 3));
+				break;
+			case SB:
+				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
+				break;
+			case SH:
+				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
+				this->mem_req_write(BW_32_T(mem_data_rt).b_1(), mem_dataALU + 1);
+				break;
+			case SW:
+				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
+				this->mem_req_write(BW_32_T(mem_data_rt).b_1(), mem_dataALU + 1);
+				this->mem_req_write(BW_32_T(mem_data_rt).b_2(), mem_dataALU + 2);
+				this->mem_req_write(BW_32_T(mem_data_rt).b_3(), mem_dataALU + 3);
+				break;
+		}
+
+		BW_32 load_result = lr_bbb.as_BW_32();
+
+		// Registry writing settings
 		int mem_write_reg_num = r_inst(mem_op) ? mem_rd : mem_rt;
-		BW_32 mem_regWriteData = mem_dataALU;
+		BW_32 mem_regWriteData = mem_read_inst(mem_op) ? load_result : mem_dataALU;
 
 		/* WRITE-BACK STAGE
-		 *
-		 *
+		 * Write back a register if the original instruction was write enabled
+		 * or do nothing if not...
 		 *
 		 */
 		BW_32 wb_save_data;
@@ -167,7 +227,7 @@ namespace mips_tools
 		this->fetch_plr.set_data(next_inst.as_BW_32());
 		this->de_plr.load(decode_rs_data, decode_rt_data, decode_funct, decode_shamt, decode_imm,
 			decode_op, decode_regWE, decode_memWE, decode_memRE, decode_rs, decode_rt, decode_rd);
-		this->em_plr.load(ex_aluResult, ex_imm, ex_op, ex_regWE, ex_memWE, ex_memRE, ex_rs, ex_rt, ex_rd);
+		this->em_plr.load(ex_aluResult, ex_data_rs, ex_data_rt, ex_op, ex_regWE, ex_memWE, ex_memRE, ex_rs, ex_rt, ex_rd);
 		this->mw_plr.load(mem_regWriteData, mem_regWE, mem_write_reg_num);
 		return true;
 	}
@@ -177,7 +237,7 @@ namespace mips_tools
 		sc_cpu::rst();
 		this->fetch_plr.set_data(0);
 		this->de_plr.load(0,0,static_cast<funct>(0),0,0,static_cast<opcode>(0),0,0,0,0,0,0);
-		this->em_plr.load(0,0,static_cast<opcode>(0),0,0,0,0,0,0);
+		this->em_plr.load(0,0,0,static_cast<opcode>(0),0,0,0,0,0,0);
 		this->mw_plr.load(0,0,0);
 	}
 

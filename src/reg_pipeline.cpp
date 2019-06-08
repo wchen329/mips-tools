@@ -59,7 +59,8 @@ namespace mips_tools
 	}
 
 	void ex_mem_plr::load(	BW_32 data_ALU,
-							BW_32 imm,
+							BW_32 data_rs,
+							BW_32 data_rt,
 							opcode op,
 							bool regWE,
 							bool memWE,
@@ -69,7 +70,8 @@ namespace mips_tools
 							int rd )
 	{
 		this->data_ALU = data_ALU;
-		this->imm = imm;
+		this->data_rs = data_rs;
+		this->data_rt = data_rt;
 		this->op = op;
 		this->regWE = regWE;
 		this->memWE = memWE;
@@ -80,7 +82,8 @@ namespace mips_tools
 	}
 
 	void ex_mem_plr::get(	BW_32& data_ALU,
-							BW_32& imm,
+							BW_32& data_rs,
+							BW_32& data_rt,
 							opcode& op,
 							bool& regWE,
 							bool& memWE,
@@ -90,7 +93,8 @@ namespace mips_tools
 							int& rd )
 	{
 		data_ALU = this->data_ALU;
-		imm = this->imm;
+		data_rs = this->data_rs;
+		data_rt = this->data_rt;
 		op = this->op;
 		regWE = this->regWE;
 		memWE = this->memWE;
