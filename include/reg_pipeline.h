@@ -7,8 +7,11 @@ namespace mips_tools
 	class decode_ex_plr
 	{
 		public:
-			void load(	BW_32 data_1,
-						BW_32 data_2,
+			void load(	BW_32 data_rs,
+						BW_32 data_rt,
+						funct func,
+						BW_32 shamt,
+						BW_32 imm,
 						opcode op,
 						bool regWE,
 						bool memWE,
@@ -16,25 +19,79 @@ namespace mips_tools
 						int rs,
 						int rt,
 						int rd );
-			void get(const BW_32& data_1, const BW_32& data_2, const opcode& op);
+			void get(	BW_32& data_rs,
+						BW_32& data_rt,
+						funct& func,
+						BW_32& shamt,
+						BW_32& imm,
+						opcode& op,
+						bool& regWE,
+						bool& memWE,
+						bool& memRE,
+						int& rs,
+						int& rt,
+						int& rd );
 		private:
-		BW_32 rs;
+			BW_32 data_rs;
+			BW_32 data_rt;
+			funct func;
+			BW_32 shamt;
+			BW_32 imm;
+			opcode op;
+			bool regWE;
+			bool memWE;
+			bool memRE;
+			int rs;
+			int rt;
+			int rd;
 	};
 
 	class ex_mem_plr
 	{
 		public:
-			void load();
-			void get();
+			void load(	BW_32 data_ALU,
+						BW_32 imm,
+						opcode op,
+						bool regWE,
+						bool memWE,
+						bool memRE,
+						int rs,
+						int rt,
+						int rd );
+			void get(	BW_32& data_ALU,
+						BW_32& imm,
+						opcode& op,
+						bool& regWE,
+						bool& memWE,
+						bool& memRE,
+						int& rs,
+						int& rt,
+						int& rd );
 		private:
+			BW_32 data_ALU;
+			BW_32 imm;
+			opcode op;
+			bool regWE;
+			bool memWE;
+			bool memRE;
+			int rs;
+			int rt;
+			int rd;
 	};
 
 	class mem_wb_plr
 	{
 		public:
-			void load();
-			void get();
+			void load(	BW_32 save_data,
+						bool regWE,
+						int r_save_num );
+			void get(	BW_32& save_data,
+						bool& regWE,
+						int& r_save_num );
 		private:
+			BW_32 save_data;
+			bool regWE;
+			int r_save_num;
 	};
 }
 

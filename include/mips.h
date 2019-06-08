@@ -125,7 +125,10 @@ namespace mips_tools
 					ADD = 0,
 					SUB = 1,
 					SLL = 2,
-					SRL = 3
+					SRL = 3,
+					OR = 4,
+					AND = 5,
+					XOR = 6
 		};
 	}
 
@@ -134,8 +137,42 @@ namespace mips_tools
 	 */
 	template <class in_t> class mips_alu
 	{
+
 		public:
-			in_t execute(ALU::ALUOp, in_t arg1, in_t arg2, bool unsigned_op);
+		in_t mips_alu::execute(ALU::ALUOp op, in_t arg1, in_t arg2, bool unsigned_op)
+		{
+			in_t ret;
+
+			switch(op)
+			{
+				case ALU::ADD:
+					ret = arg1 + arg2;
+					break;
+				case ALU::SUB:
+					ret = arg1 - arg2;
+					break;
+				case ALU::SLL:
+					ret = arg1 << arg2;
+					break;
+				case ALU::SRL:
+					ret = ((arg1 >> arg2) & ((1 << (32 - arg2)) - 1));
+					break;
+				case ALU::OR:
+					ret = (arg1 | arg2);
+					break;
+				case ALU::AND:
+					ret = (arg1 & arg2);
+					break;
+				case ALU::XOR:
+					ret = (arg1 ^ arg2);
+					break;
+
+				default:
+				throw new mt_exception();
+			}
+
+			return ret;
+		}
 	};
 
 	/* Decoding unit for MIPS-32
@@ -146,11 +183,11 @@ namespace mips_tools
 		public:
 			void decode(	const BW_32 inst_word,
 							format& fm,
-							BW_32& op,
-							BW_32& rs,
-							BW_32& rt,
-							BW_32& rd,
-							BW_32& funct,
+							opcode& op,
+							int& rs,
+							int& rt,
+							int& rd,
+							funct& funct,
 							BW_32& shamt,
 							BW_32& imm );
 	};
@@ -177,6 +214,21 @@ namespace mips_tools
 	 * memory access
 	 */
 	bool mem_inst(opcode operation);
+
+	/* Checks if an instruction performs
+	 * memory write
+	 */
+	bool mem_write_inst(opcode operation);
+
+	/* Checks if an instruction performs
+	 * memory read
+	 */
+	bool mem_read_inst(opcode operation);
+
+	/* Checks if an instruction performs
+	 * a register write
+	 */
+	bool reg_write_inst(opcode operation, funct func);
 
 	/* Check if a special R-format
 	 * shift instruction

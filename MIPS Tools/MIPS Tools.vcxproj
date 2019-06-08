@@ -69,6 +69,7 @@
     <ClCompile Include="..\src\mips.cpp" />
     <ClCompile Include="..\src\pipeline.cpp" />
     <ClCompile Include="..\src\reg_32.cpp" />
+    <ClCompile Include="..\src\reg_pipeline.cpp" />
     <ClCompile Include="..\src\sc_cpu.cpp" />
     <ClCompile Include="..\src\mb.cpp" />
     <ClCompile Include="..\src\mmem.cpp" />

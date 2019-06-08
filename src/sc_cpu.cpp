@@ -23,11 +23,11 @@ namespace mips_tools
 
 		// Decode
 
-		BW_32 op; 
-		BW_32 rs; 
-		BW_32 rt;
-		BW_32 rd;
-		BW_32 funct;
+		opcode op; 
+		int rs; 
+		int rt;
+		int rd;
+		funct func;
 		BW_32 shamt;
 		BW_32 imm;
 		mips_decoding_unit_32 decoding_unit;
@@ -37,13 +37,9 @@ namespace mips_tools
 								rs,
 								rt,
 								rd,
-								funct,
+								func,
 								shamt,
 								imm		);
-
-		if(op == R_FORMAT) fm = R;
-		else if(j_inst(static_cast<opcode>(op))) fm = J;
-		else fm = I;
 
 		bool reg_we = true; // find write enable
 		int r_write = 0;
@@ -58,7 +54,7 @@ namespace mips_tools
 			case R:
 				
 				// Eventually replace these with template functions
-				switch(funct)
+				switch(func)
 				{
 					case ADD:
 						reg_wdata = (this->registers[rs] + this->registers[rt]).get_data();

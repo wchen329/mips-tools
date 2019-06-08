@@ -16,6 +16,7 @@ namespace mips_tools
 	{
 		public:
 			bool cycle();
+			void rst();
 			fsp_cpu(mmem & m);
 		private:
 			reg_32 fetch_plr;

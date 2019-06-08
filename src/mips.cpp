@@ -114,8 +114,29 @@ namespace mips_tools
 	bool mem_inst(opcode operation)
 	{
 		return
-			(operation == LW || operation == SW || operation == SB || operation == LB || operation == LH || operation == SH )?
+			(mem_write_inst(operation) || mem_read_inst(operation))?
 			true : false;
+	}
+
+	bool mem_write_inst(opcode operation)
+	{
+		return
+			(operation == SW || operation == SB || operation == SH )?
+			true : false;
+	}
+
+	bool mem_read_inst(opcode operation)
+	{
+		return
+			(operation == LW || operation == LB || operation == LH )?
+			true : false;
+	}
+
+	bool reg_write_inst(opcode operation, funct func)
+	{
+		return
+			(mem_read_inst(operation)) || (operation == R_FORMAT && func != JR) || (operation == ADDI) || (operation == ORI)
+			|| (operation == ANDI) || (operation == XORI) || (operation == SLTI) || (operation == SLTIU);
 	}
 
 	bool shift_inst(funct f)
@@ -179,41 +200,48 @@ namespace mips_tools
 		return ret;
 	}
 
-	template<class in_t>
-	in_t mips_alu<in_t>::execute(ALU::ALUOp, in_t arg1, in_t arg2, bool unsigned_op)
+	/*BW_32 mips_alu::execute(ALU::ALUOp op, BW_32 arg1, BW_32 arg2, bool unsigned_op)
 	{
-		in_t ret;
+		BW_32 ret;
 
-		switch(ALUOp)
+		switch(op)
 		{
 			case ALU::ADD:
 				ret = arg1 + arg2;
 				break;
-
 			case ALU::SUB:
 				ret = arg1 - arg2;
 				break;
-
 			case ALU::SLL:
 				ret = arg1 << arg2;
 				break;
 			case ALU::SRL:
-				ret = arg1 >> arg2;
+				ret = ((arg1 >> arg2) & ((1 << (32 - arg2)) - 1));
 				break;
+			case ALU::OR:
+				ret = (arg1 | arg2);
+				break;
+			case ALU::AND:
+				ret = (arg1 & arg2);
+				break;
+			case ALU::XOR:
+				ret = (arg1 ^ arg2);
+				break;
+
 			default:
 				throw new mt_exception();
 		}
 
 		return ret;
-	}
+	}*/
 
 	void mips_decoding_unit_32::decode(	const BW_32 inst_word,
 										format& fm,
-										BW_32& op,
-										BW_32& rs,
-										BW_32& rt,
-										BW_32& rd,
-										BW_32& funct,
+										opcode& op,
+										int& rs,
+										int& rt,
+										int& rd,
+										funct& func,
 										BW_32& shamt,
 										BW_32& imm )
 	{
@@ -228,11 +256,11 @@ namespace mips_tools
 		BW_32 addr_mask = (1 << 26) - 1;
 
 		// - Actual values
-		op = ((opcode_mask & inst_word) >> 26) & ((1 << 6) - 1);
+		op = static_cast<opcode>(((opcode_mask & inst_word) >> 26) & ((1 << 6) - 1));
 		rs = (rs_mask & inst_word) >> 21;
 		rt = (rt_mask & inst_word) >> 16;
 		rd = (rd_mask & inst_word) >> 11;
-		funct = (funct_mask & inst_word);
+		func = static_cast<funct>((funct_mask & inst_word));
 		shamt = (shamt_mask & inst_word) >> 6;
 		imm = (imm_mask & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
 

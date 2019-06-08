@@ -14,7 +14,7 @@ namespace mips_tools
 	class sc_cpu : public diag_cpu
 	{
 		public:
-			void rst(); // async reset
+			void rst(); // "async" reset
 			bool cycle(); // advance the processor a cycle
 			BW_32 get_reg_data(int index) { return this->registers[index].get_data(); }
 			int get_reg_count() { return REG_COUNT; }
