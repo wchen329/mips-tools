@@ -6,45 +6,87 @@ namespace mips_tools
 	{
 		/* Step 1: Execute but do not yet commit transactions
 		 * Save temporaries to be commited into pipeline registers
-		 */
-
-		/* FETCH STAGE
-		 * Fetch an instruction
 		 *
+		 * In order to allow forwarding to happen evaluate backwards
+		 * (this doesn't effect the correctness of regular operation as
+		 *  everything is in one clock cycle)
+		 */
+
+
+
+		/* WRITE-BACK STAGE
+		 * Write back a register if the original instruction was write enabled
+		 * or do nothing if not...
 		 *
 		 */
-		/* TODO: check for control hazards */
-		BW_32 next_inst_addr = pc.get_data();
-		BW_32_T next_inst
-		(
-			this->mem_req_load(next_inst_addr),
-			this->mem_req_load(next_inst_addr + 1),
-			this->mem_req_load(next_inst_addr + 2),
-			this->mem_req_load(next_inst_addr + 3)
-		);
+		BW_32 wb_save_data;
+		int wb_save_num;
+		bool wb_regWE;
+		this->mw_plr.get(wb_save_data, wb_regWE, wb_save_num);
 
-		BW_32 pc_next = pc.get_data() + 4;
+		if(wb_regWE)
+		{
+			this->registers[wb_save_num].set_data(wb_save_data);
+		}
 
-		/* DECODE STAGE
-		 * Figure out key parameters from the instruction word
-		 * But also at this stage, resolve Jumps and Branches
+		/* MEMORY STAGE
+		 * If memRE or memWE then access memory at the stage.
+		 * If not well... do (mostly) nothing, and just pass the corresponding flags over
+		 * to the write back stage.
 		 */
-		mips_decoding_unit_32 decoding_unit;
-		format decode_fm;
-		opcode decode_op;
-		int decode_rs, decode_rt, decode_rd;
-		funct decode_funct;
-		BW_32 decode_shamt;
-		BW_32 decode_imm;
+		BW_32 mem_data_rs, mem_data_rt, mem_dataALU;
+		opcode mem_op;
+		bool mem_regWE, mem_memWE, mem_memRE;
+		int mem_rs, mem_rt, mem_rd;
+		this->em_plr.get(mem_dataALU, mem_data_rs, mem_data_rt, mem_op, mem_regWE, mem_memWE, mem_memRE, mem_rs, mem_rt, mem_rd);
 
-		decoding_unit.decode(fetch_plr.get_data(), decode_fm, decode_op, decode_rs, decode_rt,
-			decode_rd, decode_funct, decode_shamt, decode_imm);
+		// MEM->MEM forwarding
+		if(mem_write_inst(mem_op) && wb_regWE && wb_save_num != 0)
+		{
+			if(mem_data_rs == wb_save_num) mem_data_rs = wb_save_data;
+			if(mem_data_rt == wb_save_num) mem_data_rt = wb_save_data;
+		}
 
-		BW_32 decode_rs_data = this->registers[decode_rs].get_data();
-		BW_32 decode_rt_data = this->registers[decode_rt].get_data();
-		bool decode_regWE = reg_write_inst(decode_op, decode_funct);
-		bool decode_memWE = mem_write_inst(decode_op);
-		bool decode_memRE = mem_read_inst(decode_op);
+		// Memory operations
+		BW_32_T lr_bbb(0,0,0,0);
+		
+		switch(mem_op)
+		{
+			case LBU:
+				lr_bbb = BW_32_T(0,0,0,this->mem_req_load(mem_dataALU));
+				break;
+			case LHU:
+				lr_bbb = BW_32_T(	this->mem_req_load(mem_dataALU),
+									this->mem_req_load(mem_dataALU),
+									0,
+									0								);
+				break;
+			case LW:
+				lr_bbb = BW_32_T(	this->mem_req_load(mem_dataALU),
+									this->mem_req_load(mem_dataALU + 1),
+									this->mem_req_load(mem_dataALU + 2),
+									this->mem_req_load(mem_dataALU + 3));
+				break;
+			case SB:
+				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
+				break;
+			case SH:
+				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
+				this->mem_req_write(BW_32_T(mem_data_rt).b_1(), mem_dataALU + 1);
+				break;
+			case SW:
+				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
+				this->mem_req_write(BW_32_T(mem_data_rt).b_1(), mem_dataALU + 1);
+				this->mem_req_write(BW_32_T(mem_data_rt).b_2(), mem_dataALU + 2);
+				this->mem_req_write(BW_32_T(mem_data_rt).b_3(), mem_dataALU + 3);
+				break;
+		}
+
+		BW_32 load_result = lr_bbb.as_BW_32();
+
+		// Registry writing settings
+		int mem_write_reg_num = r_inst(mem_op) ? mem_rd : mem_rt;
+		BW_32 mem_regWriteData = mem_read_inst(mem_op) ? load_result : mem_dataALU;
 
 		/* EXECUTE STAGE
 		 * Perform arithmetic through the provided ALU (mips_alu<BW_32> alu)
@@ -67,6 +109,42 @@ namespace mips_tools
 		mips_alu<BW_32> alu; 
 
 		BW_32 ex_aluResult = 0;
+
+		// MEM->EX forwarding
+		if(wb_regWE && wb_save_num != 0)
+		{
+			if(ex_rs == wb_save_num) ex_data_rs = wb_save_data;
+			if(ex_rt == wb_save_num) ex_data_rt = wb_save_data;
+		}
+
+		// EX->EX forwarding
+		if(mem_regWE)
+		{
+			if(r_inst(mem_op))
+			{
+				// R instructions write to RD, and their results are saved directly
+				if(ex_rs == mem_rd && mem_rd != 0) ex_data_rs = mem_dataALU;
+				if(ex_rt == mem_rd && mem_rd != 0) ex_data_rt = mem_dataALU;
+
+			}
+
+			else
+			{
+				// Else, a little trickier
+				// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
+				// Otherwise, forward it!
+				if(!mem_inst(mem_op))
+				{
+					if(ex_rs == mem_rt && mem_rt != 0) ex_data_rs = mem_dataALU;
+					if(ex_rt == mem_rt && mem_rt != 0) ex_data_rt = mem_dataALU;
+				}
+
+				else
+				{
+					// stall
+				}
+			}
+		}
 
 		switch(ex_fm)
 		{
@@ -152,73 +230,74 @@ namespace mips_tools
 				break;
 		}
 
-
-		/* MEMORY STAGE
-		 * If memRE or memWE then access memory at the stage.
-		 * If not well... do (mostly) nothing, and just pass the corresponding flags over
-		 * to the write back stage.
+		/* DECODE STAGE
+		 * Figure out key parameters from the instruction word
+		 * But also at this stage, resolve Jumps and Branches
 		 */
-		BW_32 mem_data_rs, mem_data_rt, mem_dataALU;
-		opcode mem_op;
-		bool mem_regWE, mem_memWE, mem_memRE;
-		int mem_rs, mem_rt, mem_rd;
-		this->em_plr.get(mem_dataALU, mem_data_rs, mem_data_rt, mem_op, mem_regWE, mem_memWE, mem_memRE, mem_rs, mem_rt, mem_rd);
+		mips_decoding_unit_32 decoding_unit;
+		format decode_fm;
+		opcode decode_op;
+		int decode_rs, decode_rt, decode_rd;
+		funct decode_funct;
+		BW_32 decode_shamt;
+		BW_32 decode_imm;
 
-		// Memory operations
-		BW_32_T lr_bbb(0,0,0,0);
-		
-		switch(mem_op)
+		decoding_unit.decode(fetch_plr.get_data(), decode_fm, decode_op, decode_rs, decode_rt,
+			decode_rd, decode_funct, decode_shamt, decode_imm);
+
+		BW_32 decode_rs_data = this->registers[decode_rs].get_data();
+		BW_32 decode_rt_data = this->registers[decode_rt].get_data();
+
+		bool EX_EX_ENABLED = false;
+
+		/*// EX-ID Forwarding Path
+		if(mem_regWE)
 		{
-			case LBU:
-				lr_bbb = BW_32_T(0,0,0,this->mem_req_load(mem_dataALU));
-				break;
-			case LHU:
-				lr_bbb = BW_32_T(	this->mem_req_load(mem_dataALU),
-									this->mem_req_load(mem_dataALU),
-									0,
-									0								);
-				break;
-			case LW:
-				lr_bbb = BW_32_T(	this->mem_req_load(mem_dataALU),
-									this->mem_req_load(mem_dataALU + 1),
-									this->mem_req_load(mem_dataALU + 2),
-									this->mem_req_load(mem_dataALU + 3));
-				break;
-			case SB:
-				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
-				break;
-			case SH:
-				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
-				this->mem_req_write(BW_32_T(mem_data_rt).b_1(), mem_dataALU + 1);
-				break;
-			case SW:
-				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
-				this->mem_req_write(BW_32_T(mem_data_rt).b_1(), mem_dataALU + 1);
-				this->mem_req_write(BW_32_T(mem_data_rt).b_2(), mem_dataALU + 2);
-				this->mem_req_write(BW_32_T(mem_data_rt).b_3(), mem_dataALU + 3);
-				break;
-		}
+			if(r_inst(mem_op))
+			{
+				// R instructions write to RD, and their results are saved directly
+				if(decode_rs == mem_rd && decode_rs != 0) decode_rs_data = mem_dataALU;
+				if(decode_rt == mem_rd && decode_rt != 0) decode_rt_data = mem_dataALU;
+			}
 
-		BW_32 load_result = lr_bbb.as_BW_32();
+			else
+			{
+				// Else, a little trickier
+				// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
+				// Otherwise, forward it!
+				if(!mem_inst(ex_op))
+				{
+					if(decode_rs == mem_rd && decode_rs != 0) decode_rs_data = mem_dataALU;
+					if(decode_rt == mem_rd && decode_rt != 0) decode_rt_data = mem_dataALU;
+				}
 
-		// Registry writing settings
-		int mem_write_reg_num = r_inst(mem_op) ? mem_rd : mem_rt;
-		BW_32 mem_regWriteData = mem_read_inst(mem_op) ? load_result : mem_dataALU;
+				else
+				{
+					// stall
+				}
+			}
+		}*/
 
-		/* WRITE-BACK STAGE
-		 * Write back a register if the original instruction was write enabled
-		 * or do nothing if not...
+		bool decode_regWE = reg_write_inst(decode_op, decode_funct);
+		bool decode_memWE = mem_write_inst(decode_op);
+		bool decode_memRE = mem_read_inst(decode_op);
+
+		/* FETCH STAGE
+		 * Fetch an instruction
+		 *
 		 *
 		 */
-		BW_32 wb_save_data;
-		int wb_save_num;
-		bool wb_regWE;
-		this->mw_plr.get(wb_save_data, wb_regWE, wb_save_num);
+		/* TODO: check for control hazards */
+		BW_32 next_inst_addr = pc.get_data();
+		BW_32_T next_inst
+		(
+			this->mem_req_load(next_inst_addr),
+			this->mem_req_load(next_inst_addr + 1),
+			this->mem_req_load(next_inst_addr + 2),
+			this->mem_req_load(next_inst_addr + 3)
+		);
 
-		if(wb_regWE)
-		{
-			this->registers[wb_save_num].set_data(wb_save_data);
-		}
+		BW_32 pc_next = pc.get_data() + 4;
 
 		/* Commit Transactions
 		 * // TODO: watch for stalls and hazards!
