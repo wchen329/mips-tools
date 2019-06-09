@@ -4,6 +4,15 @@ namespace mips_tools
 {
 	bool fsp_cpu::cycle()
 	{
+		// Write Enable signals for pipeline registers and PC, used for stalling
+		bool we_pc = true;
+		bool we_plr_mw = true;
+		bool we_plr_em = true;
+		bool we_plr_de = true;
+		bool we_plr_fetch = true;
+		BW_32 pc_next = this->pc.get_data();
+
+
 		/* Step 1: Execute but do not yet commit transactions
 		 * Save temporaries to be commited into pipeline registers
 		 *
@@ -141,7 +150,10 @@ namespace mips_tools
 
 				else
 				{
-					// stall
+					this->flush_em_plr();
+					we_plr_fetch = false;
+					we_plr_de = false;
+					we_pc = false;
 				}
 			}
 		}
@@ -297,17 +309,21 @@ namespace mips_tools
 			this->mem_req_load(next_inst_addr + 3)
 		);
 
-		BW_32 pc_next = pc.get_data() + 4;
+		pc_next = pc.get_data() + 4;
 
 		/* Commit Transactions
-		 * // TODO: watch for stalls and hazards!
 		 */
-		pc.set_data(pc_next);
-		this->fetch_plr.set_data(next_inst.as_BW_32());
-		this->de_plr.load(decode_rs_data, decode_rt_data, decode_funct, decode_shamt, decode_imm,
-			decode_op, decode_regWE, decode_memWE, decode_memRE, decode_rs, decode_rt, decode_rd);
-		this->em_plr.load(ex_aluResult, ex_data_rs, ex_data_rt, ex_op, ex_regWE, ex_memWE, ex_memRE, ex_rs, ex_rt, ex_rd);
-		this->mw_plr.load(mem_regWriteData, mem_regWE, mem_write_reg_num);
+		if(we_plr_fetch)
+			this->fetch_plr.set_data(next_inst.as_BW_32());
+		if(we_plr_de)
+			this->de_plr.load(decode_rs_data, decode_rt_data, decode_funct, decode_shamt, decode_imm,
+				decode_op, decode_regWE, decode_memWE, decode_memRE, decode_rs, decode_rt, decode_rd);
+		if(we_plr_em)
+			this->em_plr.load(ex_aluResult, ex_data_rs, ex_data_rt, ex_op, ex_regWE, ex_memWE, ex_memRE, ex_rs, ex_rt, ex_rd);
+		if(we_plr_mw)
+			this->mw_plr.load(mem_regWriteData, mem_regWE, mem_write_reg_num);
+		if(we_pc)
+			pc.set_data(pc_next);
 		return true;
 	}
 

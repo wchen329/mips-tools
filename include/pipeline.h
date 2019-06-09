@@ -23,6 +23,8 @@ namespace mips_tools
 			decode_ex_plr de_plr;
 			ex_mem_plr em_plr;
 			mem_wb_plr mw_plr;
+			void flush_fetch_plr() { this->fetch_plr.set_data(0); }
+			void flush_em_plr() { this->em_plr.load(0,0,0,static_cast<opcode>(0),false,false,false,0,0,0); }
 	};
 }
 
