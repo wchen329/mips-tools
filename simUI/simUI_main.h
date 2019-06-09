@@ -1,9 +1,12 @@
 ﻿#pragma once
 #include <cstdio>
+#include "CPUSelectDialog.h"
+#include "memorySizeDialog.h"
 #include "Form_About.h"
 
 namespace simUI {
-
+	
+	
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -19,10 +22,18 @@ namespace simUI {
 	public:
 		Form_simUI(void)
 		{
+			cpu_type = 0;
+			mem_bits = 16;
+			cpusd = gcnew CPUSelectDialog();
+			memsd = gcnew memorySizeDialog();
 			InitializeComponent();
 		}
-
+	
 	protected:
+	private: int cpu_type;
+	private: int mem_bits;
+	private: CPUSelectDialog^ cpusd;
+	private: memorySizeDialog^ memsd;
 	private: System::Windows::Forms::MenuStrip^  menuStrip_main;
 	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
@@ -98,7 +109,6 @@ namespace simUI {
 	private: System::Windows::Forms::ToolStripButton^  toolStripButtonBreakExecution;
 	private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  saveAsToolStripMenuItem;
-
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -152,6 +162,8 @@ namespace simUI {
 			this->components = (gcnew System::ComponentModel::Container());
 			this->menuStrip_main = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveAsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->assemblySourceToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->projentToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -184,6 +196,7 @@ namespace simUI {
 			this->toolStripButtonSimulate = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripButtonRunDirective = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripButtonStop = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripButtonBreakExecution = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripIO = (gcnew System::Windows::Forms::ToolStrip());
 			this->fontDialogTextEditor = (gcnew System::Windows::Forms::FontDialog());
 			this->splitContainerMain = (gcnew System::Windows::Forms::SplitContainer());
@@ -201,9 +214,6 @@ namespace simUI {
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->openFileDialogASMSource = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->fontDialogConsole = (gcnew System::Windows::Forms::FontDialog());
-			this->toolStripButtonBreakExecution = (gcnew System::Windows::Forms::ToolStripButton());
-			this->saveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->saveAsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip_main->SuspendLayout();
 			this->toolStripSimulation->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerMain))->BeginInit();
@@ -239,6 +249,18 @@ namespace simUI {
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
 			this->fileToolStripMenuItem->Text = L"File";
+			// 
+			// saveToolStripMenuItem
+			// 
+			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(134, 22);
+			this->saveToolStripMenuItem->Text = L"Save";
+			// 
+			// saveAsToolStripMenuItem
+			// 
+			this->saveAsToolStripMenuItem->Name = L"saveAsToolStripMenuItem";
+			this->saveAsToolStripMenuItem->Size = System::Drawing::Size(134, 22);
+			this->saveAsToolStripMenuItem->Text = L"Save As...";
 			// 
 			// openToolStripMenuItem
 			// 
@@ -327,12 +349,14 @@ namespace simUI {
 			this->memorySizeToolStripMenuItem->Name = L"memorySizeToolStripMenuItem";
 			this->memorySizeToolStripMenuItem->Size = System::Drawing::Size(177, 22);
 			this->memorySizeToolStripMenuItem->Text = L"Memory Size";
+			this->memorySizeToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::memorySizeToolStripMenuItem_Click);
 			// 
 			// cPUTypeSelectionToolStripMenuItem
 			// 
 			this->cPUTypeSelectionToolStripMenuItem->Name = L"cPUTypeSelectionToolStripMenuItem";
 			this->cPUTypeSelectionToolStripMenuItem->Size = System::Drawing::Size(177, 22);
 			this->cPUTypeSelectionToolStripMenuItem->Text = L"CPU Type Selection";
+			this->cPUTypeSelectionToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::cPUTypeSelectionToolStripMenuItem_Click);
 			// 
 			// viewToolStripMenuItem
 			// 
@@ -480,6 +504,14 @@ namespace simUI {
 			this->toolStripButtonStop->Size = System::Drawing::Size(95, 22);
 			this->toolStripButtonStop->Text = L"Stop Simulation";
 			this->toolStripButtonStop->Click += gcnew System::EventHandler(this, &Form_simUI::toolStripButtonStop_Click);
+			// 
+			// toolStripButtonBreakExecution
+			// 
+			this->toolStripButtonBreakExecution->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
+			this->toolStripButtonBreakExecution->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButtonBreakExecution->Name = L"toolStripButtonBreakExecution";
+			this->toolStripButtonBreakExecution->Size = System::Drawing::Size(94, 22);
+			this->toolStripButtonBreakExecution->Text = L"Break Execution";
 			// 
 			// toolStripIO
 			// 
@@ -638,26 +670,6 @@ namespace simUI {
 			// 
 			this->openFileDialogASMSource->FileName = L"openFileDialog";
 			// 
-			// toolStripButtonBreakExecution
-			// 
-			this->toolStripButtonBreakExecution->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
-			this->toolStripButtonBreakExecution->ImageTransparentColor = System::Drawing::Color::Magenta;
-			this->toolStripButtonBreakExecution->Name = L"toolStripButtonBreakExecution";
-			this->toolStripButtonBreakExecution->Size = System::Drawing::Size(94, 22);
-			this->toolStripButtonBreakExecution->Text = L"Break Execution";
-			// 
-			// saveToolStripMenuItem
-			// 
-			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
-			this->saveToolStripMenuItem->Size = System::Drawing::Size(152, 22);
-			this->saveToolStripMenuItem->Text = L"Save";
-			// 
-			// saveAsToolStripMenuItem
-			// 
-			this->saveAsToolStripMenuItem->Name = L"saveAsToolStripMenuItem";
-			this->saveAsToolStripMenuItem->Size = System::Drawing::Size(152, 22);
-			this->saveAsToolStripMenuItem->Text = L"Save As...";
-			// 
 			// Form_simUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -762,7 +774,7 @@ private: System::Void toolStripButtonSimulate_Click(System::Object^  sender, Sys
 			 this->processSimulation->StartInfo->RedirectStandardError = true;
 			 this->processSimulation->StartInfo->RedirectStandardOutput = true;
 			 this->processSimulation->StartInfo->RedirectStandardInput = true;
-			 this->processSimulation->StartInfo->Arguments = "-WIN32_SHELL";
+			 this->processSimulation->StartInfo->Arguments = "-WIN32_SHELL -c " + cpu_type + " -m " + mem_bits;
 			 
 
 			 // Make sure to assign standard input and output correctly
@@ -843,6 +855,15 @@ private: System::Void pasteToolStripMenuItem_Click(System::Object^  sender, Syst
 		 }
 private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 Application::Exit();
+		 }
+private: System::Void cPUTypeSelectionToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+					 
+					 cpusd->ShowDialog();
+					 cpu_type = cpusd->getCPUType();
+		 }
+private: System::Void memorySizeToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+					memsd->ShowDialog();
+					mem_bits = memsd->getMemoryBits();
 		 }
 };
 }

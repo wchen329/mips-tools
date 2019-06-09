@@ -35,7 +35,7 @@ namespace simUI {
 				delete components;
 			}
 		}
-	private: System::Diagnostics::Process^  process1;
+
 	private: System::Windows::Forms::Label^  labelTitle;
 	private: System::Windows::Forms::Label^  labelVersion;
 
@@ -55,20 +55,9 @@ namespace simUI {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->process1 = (gcnew System::Diagnostics::Process());
 			this->labelTitle = (gcnew System::Windows::Forms::Label());
 			this->labelVersion = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
-			// 
-			// process1
-			// 
-			this->process1->StartInfo->Domain = L"";
-			this->process1->StartInfo->LoadUserProfile = false;
-			this->process1->StartInfo->Password = nullptr;
-			this->process1->StartInfo->StandardErrorEncoding = nullptr;
-			this->process1->StartInfo->StandardOutputEncoding = nullptr;
-			this->process1->StartInfo->UserName = L"";
-			this->process1->SynchronizingObject = this;
 			// 
 			// labelTitle
 			// 

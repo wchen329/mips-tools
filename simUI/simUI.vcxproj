@@ -86,7 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="CPUSelectDialog.cpp" />
     <ClCompile Include="Form_About.cpp" />
+    <ClCompile Include="memorySizeDialog.cpp" />
     <ClCompile Include="Run_Dialog.cpp" />
     <ClCompile Include="simUI.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -95,7 +97,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CPUSelectDialog.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Form_About.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="memorySizeDialog.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Run_Dialog.h">
@@ -112,8 +120,14 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CPUSelectDialog.resx">
+      <DependentUpon>CPUSelectDialog.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form_About.resx">
       <DependentUpon>Form_About.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="memorySizeDialog.resx">
+      <DependentUpon>memorySizeDialog.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Run_Dialog.resx">
       <DependentUpon>Run_Dialog.h</DependentUpon>
