@@ -35,7 +35,7 @@ namespace mips_tools
 
 		if(wb_regWE)
 		{
-			this->registers[wb_save_num].set_data(wb_save_data);
+			this->registers[wb_save_num].set_data(wb_save_data); // Register-File bypassing
 		}
 
 		/* MEMORY STAGE
@@ -262,8 +262,8 @@ namespace mips_tools
 
 		bool EX_EX_ENABLED = false;
 
-		/*// EX-ID Forwarding Path
-		if(mem_regWE)
+		// EX-ID Forwarding Path, specifically for Control Hazards
+		if(mem_regWE && jorb_inst(decode_op))
 		{
 			if(r_inst(mem_op))
 			{
@@ -285,11 +285,16 @@ namespace mips_tools
 
 				else
 				{
-					// stall
+					we_plr_fetch = false;
+					this->flush_em_plr();
 				}
 			}
-		}*/
+		}
 
+		// Branch prediction
+		
+
+		// Write data to carry on
 		bool decode_regWE = reg_write_inst(decode_op, decode_funct);
 		bool decode_memWE = mem_write_inst(decode_op);
 		bool decode_memRE = mem_read_inst(decode_op);

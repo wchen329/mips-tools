@@ -38,6 +38,8 @@ namespace simUI {
 
 	private: System::Windows::Forms::Label^  labelTitle;
 	private: System::Windows::Forms::Label^  labelVersion;
+	private: System::Windows::Forms::ImageList^  imageList1;
+	private: System::ComponentModel::IContainer^  components;
 
 	protected: 
 
@@ -46,7 +48,7 @@ namespace simUI {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -55,8 +57,10 @@ namespace simUI {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			this->labelTitle = (gcnew System::Windows::Forms::Label());
 			this->labelVersion = (gcnew System::Windows::Forms::Label());
+			this->imageList1 = (gcnew System::Windows::Forms::ImageList(this->components));
 			this->SuspendLayout();
 			// 
 			// labelTitle
@@ -76,6 +80,12 @@ namespace simUI {
 			this->labelVersion->Size = System::Drawing::Size(42, 13);
 			this->labelVersion->TabIndex = 1;
 			this->labelVersion->Text = L"Version";
+			// 
+			// imageList1
+			// 
+			this->imageList1->ColorDepth = System::Windows::Forms::ColorDepth::Depth8Bit;
+			this->imageList1->ImageSize = System::Drawing::Size(16, 16);
+			this->imageList1->TransparentColor = System::Drawing::Color::Transparent;
 			// 
 			// Form_About
 			// 

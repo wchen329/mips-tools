@@ -109,6 +109,9 @@ namespace simUI {
 	private: System::Windows::Forms::ToolStripButton^  toolStripButtonBreakExecution;
 	private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  saveAsToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripButton^  toolStripButtonOpen;
+	private: System::Windows::Forms::ToolStripButton^  toolStripButtonNew;
+
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -198,6 +201,7 @@ namespace simUI {
 			this->toolStripButtonStop = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripButtonBreakExecution = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripIO = (gcnew System::Windows::Forms::ToolStrip());
+			this->toolStripButtonOpen = (gcnew System::Windows::Forms::ToolStripButton());
 			this->fontDialogTextEditor = (gcnew System::Windows::Forms::FontDialog());
 			this->splitContainerMain = (gcnew System::Windows::Forms::SplitContainer());
 			this->tabControlSidepane = (gcnew System::Windows::Forms::TabControl());
@@ -214,8 +218,10 @@ namespace simUI {
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->openFileDialogASMSource = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->fontDialogConsole = (gcnew System::Windows::Forms::FontDialog());
+			this->toolStripButtonNew = (gcnew System::Windows::Forms::ToolStripButton());
 			this->menuStrip_main->SuspendLayout();
 			this->toolStripSimulation->SuspendLayout();
+			this->toolStripIO->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerMain))->BeginInit();
 			this->splitContainerMain->Panel1->SuspendLayout();
 			this->splitContainerMain->Panel2->SuspendLayout();
@@ -516,10 +522,20 @@ namespace simUI {
 			// toolStripIO
 			// 
 			this->toolStripIO->GripStyle = System::Windows::Forms::ToolStripGripStyle::Hidden;
+			this->toolStripIO->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->toolStripButtonNew, 
+				this->toolStripButtonOpen});
 			this->toolStripIO->Location = System::Drawing::Point(0, 24);
 			this->toolStripIO->Name = L"toolStripIO";
 			this->toolStripIO->Size = System::Drawing::Size(993, 25);
 			this->toolStripIO->TabIndex = 1;
+			// 
+			// toolStripButtonOpen
+			// 
+			this->toolStripButtonOpen->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->toolStripButtonOpen->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButtonOpen->Name = L"toolStripButtonOpen";
+			this->toolStripButtonOpen->Size = System::Drawing::Size(23, 22);
+			this->toolStripButtonOpen->Text = L"toolStripButtonOpen";
 			// 
 			// splitContainerMain
 			// 
@@ -670,6 +686,15 @@ namespace simUI {
 			// 
 			this->openFileDialogASMSource->FileName = L"openFileDialog";
 			// 
+			// toolStripButtonNew
+			// 
+			this->toolStripButtonNew->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->toolStripButtonNew->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButtonNew->Name = L"toolStripButtonNew";
+			this->toolStripButtonNew->Size = System::Drawing::Size(23, 22);
+			this->toolStripButtonNew->Text = L"New Assembly Source";
+			this->toolStripButtonNew->ToolTipText = L"Create a new assembly source file.";
+			// 
 			// Form_simUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -688,6 +713,8 @@ namespace simUI {
 			this->menuStrip_main->PerformLayout();
 			this->toolStripSimulation->ResumeLayout(false);
 			this->toolStripSimulation->PerformLayout();
+			this->toolStripIO->ResumeLayout(false);
+			this->toolStripIO->PerformLayout();
 			this->splitContainerMain->Panel1->ResumeLayout(false);
 			this->splitContainerMain->Panel2->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerMain))->EndInit();
