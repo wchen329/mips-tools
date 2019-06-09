@@ -51,11 +51,11 @@ namespace simUI {
 	private: System::Windows::Forms::TabControl^  tabControl1;
 	private: System::Windows::Forms::TabPage^  tabPage1;
 	private: System::Windows::Forms::TabPage^  tabPage2;
-	private: System::Windows::Forms::TabControl^  tabControl2;
-	private: System::Windows::Forms::TabPage^  tabPage3;
-	private: System::Windows::Forms::TabPage^  tabPage4;
+
+
+
 	private: System::Windows::Forms::RichTextBox^  richTextBoxConsole;
-	private: System::Windows::Forms::RichTextBox^  richTextBoxTextEditor;
+
 	private: System::Windows::Forms::ToolStripMenuItem^  fontToolStripMenuItem;
 	private: System::Windows::Forms::FontDialog^  fontDialog1;
 	private: System::Windows::Forms::ToolStripButton^  toolStripButtonSimulate;
@@ -65,6 +65,9 @@ namespace simUI {
 	private: System::Windows::Forms::ToolTip^  toolTip1;
 	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
 	private: System::Windows::Forms::ToolStripButton^  toolStripButtonStop;
+	private: System::Windows::Forms::TabControl^  tabControl2;
+	private: System::Windows::Forms::TabPage^  tabPage3;
+	private: System::Windows::Forms::RichTextBox^  richTextBoxTextEditor;
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -89,6 +92,20 @@ namespace simUI {
 	protected: 
 
 	private:
+
+		void reinitProc()
+		{
+			this->processSimulation->StartInfo->Domain = L"";
+			this->processSimulation->StartInfo->LoadUserProfile = false;
+			this->processSimulation->StartInfo->Password = nullptr;
+			this->processSimulation->StartInfo->StandardErrorEncoding = nullptr;
+			this->processSimulation->StartInfo->StandardOutputEncoding = nullptr;
+			this->processSimulation->StartInfo->UserName = L"";
+			this->processSimulation->SynchronizingObject = this;
+			this->processSimulation->OutputDataReceived += gcnew System::Diagnostics::DataReceivedEventHandler(this, &Form_simUI::processSimulation_OutputDataReceived);
+			this->processSimulation->ErrorDataReceived += gcnew System::Diagnostics::DataReceivedEventHandler(this, &Form_simUI::processSimulation_ErrorDataReceived);
+			this->processSimulation->Exited += gcnew System::EventHandler(this, &Form_simUI::processSimulation_Exited);
+		}
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -128,15 +145,14 @@ namespace simUI {
 			this->tabPage1 = (gcnew System::Windows::Forms::TabPage());
 			this->tabPage2 = (gcnew System::Windows::Forms::TabPage());
 			this->splitContainerTextConsole = (gcnew System::Windows::Forms::SplitContainer());
-			this->tabControl2 = (gcnew System::Windows::Forms::TabControl());
-			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
-			this->richTextBoxTextEditor = (gcnew System::Windows::Forms::RichTextBox());
-			this->tabPage4 = (gcnew System::Windows::Forms::TabPage());
 			this->richTextBoxConsole = (gcnew System::Windows::Forms::RichTextBox());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
 			this->processSimulation = (gcnew System::Diagnostics::Process());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
+			this->richTextBoxTextEditor = (gcnew System::Windows::Forms::RichTextBox());
+			this->tabControl2 = (gcnew System::Windows::Forms::TabControl());
 			this->menuStrip_main->SuspendLayout();
 			this->toolStripSimulation->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerMain))->BeginInit();
@@ -148,8 +164,8 @@ namespace simUI {
 			this->splitContainerTextConsole->Panel1->SuspendLayout();
 			this->splitContainerTextConsole->Panel2->SuspendLayout();
 			this->splitContainerTextConsole->SuspendLayout();
-			this->tabControl2->SuspendLayout();
 			this->tabPage3->SuspendLayout();
+			this->tabControl2->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// menuStrip_main
@@ -376,47 +392,6 @@ namespace simUI {
 			this->splitContainerTextConsole->SplitterDistance = 343;
 			this->splitContainerTextConsole->TabIndex = 0;
 			// 
-			// tabControl2
-			// 
-			this->tabControl2->Controls->Add(this->tabPage3);
-			this->tabControl2->Controls->Add(this->tabPage4);
-			this->tabControl2->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->tabControl2->Location = System::Drawing::Point(0, 0);
-			this->tabControl2->Name = L"tabControl2";
-			this->tabControl2->SelectedIndex = 0;
-			this->tabControl2->Size = System::Drawing::Size(840, 341);
-			this->tabControl2->TabIndex = 0;
-			// 
-			// tabPage3
-			// 
-			this->tabPage3->Controls->Add(this->richTextBoxTextEditor);
-			this->tabPage3->Location = System::Drawing::Point(4, 22);
-			this->tabPage3->Name = L"tabPage3";
-			this->tabPage3->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage3->Size = System::Drawing::Size(832, 315);
-			this->tabPage3->TabIndex = 0;
-			this->tabPage3->Text = L"tabPage3";
-			this->tabPage3->UseVisualStyleBackColor = true;
-			// 
-			// richTextBoxTextEditor
-			// 
-			this->richTextBoxTextEditor->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->richTextBoxTextEditor->Location = System::Drawing::Point(3, 3);
-			this->richTextBoxTextEditor->Name = L"richTextBoxTextEditor";
-			this->richTextBoxTextEditor->Size = System::Drawing::Size(826, 309);
-			this->richTextBoxTextEditor->TabIndex = 0;
-			this->richTextBoxTextEditor->Text = L"";
-			// 
-			// tabPage4
-			// 
-			this->tabPage4->Location = System::Drawing::Point(4, 22);
-			this->tabPage4->Name = L"tabPage4";
-			this->tabPage4->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage4->Size = System::Drawing::Size(832, 315);
-			this->tabPage4->TabIndex = 1;
-			this->tabPage4->Text = L"tabPage4";
-			this->tabPage4->UseVisualStyleBackColor = true;
-			// 
 			// richTextBoxConsole
 			// 
 			this->richTextBoxConsole->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -446,6 +421,38 @@ namespace simUI {
 			// 
 			this->openFileDialog1->FileName = L"openFileDialog1";
 			// 
+			// tabPage3
+			// 
+			this->tabPage3->Controls->Add(this->richTextBoxTextEditor);
+			this->tabPage3->Location = System::Drawing::Point(4, 22);
+			this->tabPage3->Name = L"tabPage3";
+			this->tabPage3->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage3->Size = System::Drawing::Size(832, 315);
+			this->tabPage3->TabIndex = 0;
+			this->tabPage3->Text = L"tabPage3";
+			this->tabPage3->UseVisualStyleBackColor = true;
+			// 
+			// richTextBoxTextEditor
+			// 
+			this->richTextBoxTextEditor->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->richTextBoxTextEditor->Font = (gcnew System::Drawing::Font(L"Courier New", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(0)));
+			this->richTextBoxTextEditor->Location = System::Drawing::Point(3, 3);
+			this->richTextBoxTextEditor->Name = L"richTextBoxTextEditor";
+			this->richTextBoxTextEditor->Size = System::Drawing::Size(826, 309);
+			this->richTextBoxTextEditor->TabIndex = 0;
+			this->richTextBoxTextEditor->Text = L"";
+			// 
+			// tabControl2
+			// 
+			this->tabControl2->Controls->Add(this->tabPage3);
+			this->tabControl2->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->tabControl2->Location = System::Drawing::Point(0, 0);
+			this->tabControl2->Name = L"tabControl2";
+			this->tabControl2->SelectedIndex = 0;
+			this->tabControl2->Size = System::Drawing::Size(840, 341);
+			this->tabControl2->TabIndex = 0;
+			// 
 			// Form_simUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -473,8 +480,8 @@ namespace simUI {
 			this->splitContainerTextConsole->Panel2->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerTextConsole))->EndInit();
 			this->splitContainerTextConsole->ResumeLayout(false);
-			this->tabControl2->ResumeLayout(false);
 			this->tabPage3->ResumeLayout(false);
+			this->tabControl2->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -529,7 +536,9 @@ private: System::Void fontToolStripMenuItem_Click(System::Object^  sender, Syste
 			 fontDialogTextEditor->ShowDialog();
 		 }
 private: System::Void toolStripButtonSimulate_Click(System::Object^  sender, System::EventArgs^  e) {
-			 this->processSimulation = gcnew System::Diagnostics::Process();
+			 this->processSimulation = (gcnew System::Diagnostics::Process());
+
+			 reinitProc();
 			 this->toolStripButtonSimulate->Enabled = false;
 			 this->richTextBoxConsole->Text += "Starting new instance of MIPS Tools...\n";
 			 this->processSimulation->StartInfo->FileName = "mtshell.exe";
@@ -576,6 +585,7 @@ private: System::Void processSimulation_Exited(System::Object^  sender, System::
 		 }
 private: System::Void toolStripButtonStop_Click(System::Object^  sender, System::EventArgs^  e) {
 			 this->processSimulation->Kill();
+			 this->richTextBoxConsole->Text += "Simulation has been aborted.";
 			 this->toolStripButtonSimulate->Enabled = true;
 			 this->toolStripButtonStop->Enabled = false;
 		 }
