@@ -285,14 +285,49 @@ namespace mips_tools
 
 				else
 				{
+					we_pc = false;
 					we_plr_fetch = false;
 					this->flush_em_plr();
 				}
 			}
 		}
 
-		// Branch prediction
-		
+		// Check for EX dependency, a REQUIRED stall for branches
+		if(ex_regWE && jorb_inst(decode_op))
+		{
+			if((decode_rs == ex_rt && decode_rs != 0) || (decode_rt == ex_rt && decode_rt != 0))
+			{
+					we_pc = false;
+					we_plr_fetch = false;
+					this->flush_em_plr();
+			}
+		}
+
+
+
+		// Execute branch instruction
+		bool branch_taken = false;
+		BW_32 branch_addr = (decode_imm << 2);
+		switch(decode_op)
+		{
+				case BEQ:
+						if(decode_rs_data == decode_rt_data)
+						{
+							BW_32 curr_pc = this->get_PC();
+							pc_next = curr_pc + branch_addr;
+							branch_taken = true;
+						}
+
+						break;
+				case BNE:
+						if(decode_rs_data != decode_rt_data)
+						{
+							BW_32 curr_pc = this->get_PC();
+							pc_next = curr_pc + branch_addr;
+							branch_taken = true;
+						}
+						break;
+		}
 
 		// Write data to carry on
 		bool decode_regWE = reg_write_inst(decode_op, decode_funct);
@@ -304,7 +339,6 @@ namespace mips_tools
 		 *
 		 *
 		 */
-		/* TODO: check for control hazards */
 		BW_32 next_inst_addr = pc.get_data();
 		BW_32_T next_inst
 		(
@@ -314,7 +348,12 @@ namespace mips_tools
 			this->mem_req_load(next_inst_addr + 3)
 		);
 
-		pc_next = pc.get_data() + 4;
+		if(!branch_taken)
+			pc_next = pc.get_data() + 4;
+		else
+			this->flush_fetch_plr();
+
+		// Basically part of "branch not taken" if not taken
 
 		/* Commit Transactions
 		 */
@@ -343,7 +382,7 @@ namespace mips_tools
 
 	fsp_cpu::fsp_cpu(mmem & m) : sc_cpu(m)
 	{
-
+		sc_cpu::clk_T = 0.00000004;
 	}
 
 }
