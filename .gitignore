@@ -5,3 +5,5 @@ MIPS Tools/Debug/*
 MIPS Tools/ipch/*
 MIPS Tools Shell/Debug/*
 MIPS Tools Shell/Release/*
+simUI/Debug/*
+simUI/Release/*
