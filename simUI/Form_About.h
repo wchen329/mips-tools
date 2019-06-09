@@ -92,7 +92,7 @@ namespace simUI {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(384, 56);
+			this->ClientSize = System::Drawing::Size(384, 98);
 			this->Controls->Add(this->labelVersion);
 			this->Controls->Add(this->labelTitle);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;

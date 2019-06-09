@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <cstdio>
 #include "Form_About.h"
 
 namespace simUI {
@@ -48,26 +49,56 @@ namespace simUI {
 	private: System::Windows::Forms::FontDialog^  fontDialogTextEditor;
 	private: System::Windows::Forms::SplitContainer^  splitContainerMain;
 	private: System::Windows::Forms::SplitContainer^  splitContainerTextConsole;
-	private: System::Windows::Forms::TabControl^  tabControl1;
-	private: System::Windows::Forms::TabPage^  tabPage1;
-	private: System::Windows::Forms::TabPage^  tabPage2;
+	private: System::Windows::Forms::TabControl^  tabControlSidepane;
+	private: System::Windows::Forms::TabPage^  tabPageProjectExp;
+	private: System::Windows::Forms::TabPage^  tabPageRecFiles;
+
+
+
+
 
 
 
 	private: System::Windows::Forms::RichTextBox^  richTextBoxConsole;
 
-	private: System::Windows::Forms::ToolStripMenuItem^  fontToolStripMenuItem;
-	private: System::Windows::Forms::FontDialog^  fontDialog1;
+
+
 	private: System::Windows::Forms::ToolStripButton^  toolStripButtonSimulate;
 	private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 	private: System::Diagnostics::Process^  processSimulation;
 	private: System::Windows::Forms::ToolStripButton^  toolStripButtonRunDirective;
 	private: System::Windows::Forms::ToolTip^  toolTip1;
-	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
+	private: System::Windows::Forms::OpenFileDialog^  openFileDialogASMSource;
+
 	private: System::Windows::Forms::ToolStripButton^  toolStripButtonStop;
-	private: System::Windows::Forms::TabControl^  tabControl2;
-	private: System::Windows::Forms::TabPage^  tabPage3;
+	private: System::Windows::Forms::TabControl^  tabControlMain;
+	private: System::Windows::Forms::TabPage^  tabPageTextEdit;
+
+
 	private: System::Windows::Forms::RichTextBox^  richTextBoxTextEditor;
+	private: System::Windows::Forms::ToolStripMenuItem^  openToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  assemblySourceToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  projentToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  cPUTypeSelectionToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  clearConsoleInputToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  fToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  consoleFontToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  textEditorFontToolStripMenuItem;
+	private: System::Windows::Forms::FontDialog^  fontDialogConsole;
+	private: System::Windows::Forms::ToolStripMenuItem^  copyToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  cutToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  pasteToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  memorySizeToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator1;
+	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator2;
+	private: System::Windows::Forms::ToolStripMenuItem^  openToolStripMenuItem1;
+	private: System::Windows::Forms::ToolStripMenuItem^  registerStatesToolStripMenuItem;
+	private: System::Windows::Forms::Label^  labelProjWarn;
+	private: System::Windows::Forms::ListView^  listViewRecentFiles;
+	private: System::Windows::Forms::ToolStripButton^  toolStripButtonBreakExecution;
+	private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  saveAsToolStripMenuItem;
+
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -121,16 +152,31 @@ namespace simUI {
 			this->components = (gcnew System::ComponentModel::Container());
 			this->menuStrip_main = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->assemblySourceToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->projentToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->toolStripSeparator1 = (gcnew System::Windows::Forms::ToolStripSeparator());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->editToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->copyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->cutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->pasteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->projectToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->simulationToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->memorySizeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->cPUTypeSelectionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->viewToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->fontToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->fToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->consoleFontToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->textEditorFontToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->toolStripSeparator2 = (gcnew System::Windows::Forms::ToolStripSeparator());
+			this->clearConsoleInputToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->toolbarsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->iOBarToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->simulationToolbarToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->toolsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->openToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->registerStatesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->statusStripMain = (gcnew System::Windows::Forms::StatusStrip());
@@ -141,31 +187,38 @@ namespace simUI {
 			this->toolStripIO = (gcnew System::Windows::Forms::ToolStrip());
 			this->fontDialogTextEditor = (gcnew System::Windows::Forms::FontDialog());
 			this->splitContainerMain = (gcnew System::Windows::Forms::SplitContainer());
-			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
-			this->tabPage1 = (gcnew System::Windows::Forms::TabPage());
-			this->tabPage2 = (gcnew System::Windows::Forms::TabPage());
+			this->tabControlSidepane = (gcnew System::Windows::Forms::TabControl());
+			this->tabPageProjectExp = (gcnew System::Windows::Forms::TabPage());
+			this->labelProjWarn = (gcnew System::Windows::Forms::Label());
+			this->tabPageRecFiles = (gcnew System::Windows::Forms::TabPage());
+			this->listViewRecentFiles = (gcnew System::Windows::Forms::ListView());
 			this->splitContainerTextConsole = (gcnew System::Windows::Forms::SplitContainer());
+			this->tabControlMain = (gcnew System::Windows::Forms::TabControl());
+			this->tabPageTextEdit = (gcnew System::Windows::Forms::TabPage());
+			this->richTextBoxTextEditor = (gcnew System::Windows::Forms::RichTextBox());
 			this->richTextBoxConsole = (gcnew System::Windows::Forms::RichTextBox());
-			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
 			this->processSimulation = (gcnew System::Diagnostics::Process());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
-			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
-			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
-			this->richTextBoxTextEditor = (gcnew System::Windows::Forms::RichTextBox());
-			this->tabControl2 = (gcnew System::Windows::Forms::TabControl());
+			this->openFileDialogASMSource = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->fontDialogConsole = (gcnew System::Windows::Forms::FontDialog());
+			this->toolStripButtonBreakExecution = (gcnew System::Windows::Forms::ToolStripButton());
+			this->saveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveAsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip_main->SuspendLayout();
 			this->toolStripSimulation->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerMain))->BeginInit();
 			this->splitContainerMain->Panel1->SuspendLayout();
 			this->splitContainerMain->Panel2->SuspendLayout();
 			this->splitContainerMain->SuspendLayout();
-			this->tabControl1->SuspendLayout();
+			this->tabControlSidepane->SuspendLayout();
+			this->tabPageProjectExp->SuspendLayout();
+			this->tabPageRecFiles->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerTextConsole))->BeginInit();
 			this->splitContainerTextConsole->Panel1->SuspendLayout();
 			this->splitContainerTextConsole->Panel2->SuspendLayout();
 			this->splitContainerTextConsole->SuspendLayout();
-			this->tabPage3->SuspendLayout();
-			this->tabControl2->SuspendLayout();
+			this->tabControlMain->SuspendLayout();
+			this->tabPageTextEdit->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// menuStrip_main
@@ -181,57 +234,155 @@ namespace simUI {
 			// 
 			// fileToolStripMenuItem
 			// 
-			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) {this->exitToolStripMenuItem});
+			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {this->saveToolStripMenuItem, 
+				this->saveAsToolStripMenuItem, this->openToolStripMenuItem, this->toolStripSeparator1, this->exitToolStripMenuItem});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
 			this->fileToolStripMenuItem->Text = L"File";
 			// 
+			// openToolStripMenuItem
+			// 
+			this->openToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->assemblySourceToolStripMenuItem, 
+				this->projentToolStripMenuItem});
+			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
+			this->openToolStripMenuItem->Size = System::Drawing::Size(134, 22);
+			this->openToolStripMenuItem->Text = L"Open...";
+			// 
+			// assemblySourceToolStripMenuItem
+			// 
+			this->assemblySourceToolStripMenuItem->Name = L"assemblySourceToolStripMenuItem";
+			this->assemblySourceToolStripMenuItem->Size = System::Drawing::Size(164, 22);
+			this->assemblySourceToolStripMenuItem->Text = L"Assembly Source";
+			this->assemblySourceToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::assemblySourceToolStripMenuItem_Click);
+			// 
+			// projentToolStripMenuItem
+			// 
+			this->projentToolStripMenuItem->Enabled = false;
+			this->projentToolStripMenuItem->Name = L"projentToolStripMenuItem";
+			this->projentToolStripMenuItem->Size = System::Drawing::Size(164, 22);
+			this->projentToolStripMenuItem->Text = L"Project";
+			// 
+			// toolStripSeparator1
+			// 
+			this->toolStripSeparator1->Name = L"toolStripSeparator1";
+			this->toolStripSeparator1->Size = System::Drawing::Size(131, 6);
+			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(92, 22);
+			this->exitToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Alt | System::Windows::Forms::Keys::F4));
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(134, 22);
 			this->exitToolStripMenuItem->Text = L"Exit";
+			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::exitToolStripMenuItem_Click);
 			// 
 			// editToolStripMenuItem
 			// 
+			this->editToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->copyToolStripMenuItem, 
+				this->cutToolStripMenuItem, this->pasteToolStripMenuItem});
 			this->editToolStripMenuItem->Name = L"editToolStripMenuItem";
 			this->editToolStripMenuItem->Size = System::Drawing::Size(39, 20);
 			this->editToolStripMenuItem->Text = L"Edit";
 			// 
+			// copyToolStripMenuItem
+			// 
+			this->copyToolStripMenuItem->Name = L"copyToolStripMenuItem";
+			this->copyToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::C));
+			this->copyToolStripMenuItem->Size = System::Drawing::Size(144, 22);
+			this->copyToolStripMenuItem->Text = L"Copy";
+			this->copyToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::copyToolStripMenuItem_Click);
+			// 
+			// cutToolStripMenuItem
+			// 
+			this->cutToolStripMenuItem->Name = L"cutToolStripMenuItem";
+			this->cutToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::X));
+			this->cutToolStripMenuItem->Size = System::Drawing::Size(144, 22);
+			this->cutToolStripMenuItem->Text = L"Cut";
+			this->cutToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::cutToolStripMenuItem_Click);
+			// 
+			// pasteToolStripMenuItem
+			// 
+			this->pasteToolStripMenuItem->Name = L"pasteToolStripMenuItem";
+			this->pasteToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::V));
+			this->pasteToolStripMenuItem->Size = System::Drawing::Size(144, 22);
+			this->pasteToolStripMenuItem->Text = L"Paste";
+			this->pasteToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::pasteToolStripMenuItem_Click);
+			// 
 			// projectToolStripMenuItem
 			// 
+			this->projectToolStripMenuItem->Enabled = false;
 			this->projectToolStripMenuItem->Name = L"projectToolStripMenuItem";
 			this->projectToolStripMenuItem->Size = System::Drawing::Size(56, 20);
 			this->projectToolStripMenuItem->Text = L"Project";
 			// 
 			// simulationToolStripMenuItem
 			// 
+			this->simulationToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->memorySizeToolStripMenuItem, 
+				this->cPUTypeSelectionToolStripMenuItem});
 			this->simulationToolStripMenuItem->Name = L"simulationToolStripMenuItem";
 			this->simulationToolStripMenuItem->Size = System::Drawing::Size(76, 20);
 			this->simulationToolStripMenuItem->Text = L"Simulation";
 			// 
+			// memorySizeToolStripMenuItem
+			// 
+			this->memorySizeToolStripMenuItem->Name = L"memorySizeToolStripMenuItem";
+			this->memorySizeToolStripMenuItem->Size = System::Drawing::Size(177, 22);
+			this->memorySizeToolStripMenuItem->Text = L"Memory Size";
+			// 
+			// cPUTypeSelectionToolStripMenuItem
+			// 
+			this->cPUTypeSelectionToolStripMenuItem->Name = L"cPUTypeSelectionToolStripMenuItem";
+			this->cPUTypeSelectionToolStripMenuItem->Size = System::Drawing::Size(177, 22);
+			this->cPUTypeSelectionToolStripMenuItem->Text = L"CPU Type Selection";
+			// 
 			// viewToolStripMenuItem
 			// 
-			this->viewToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->fontToolStripMenuItem, 
-				this->toolbarsToolStripMenuItem});
+			this->viewToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->fToolStripMenuItem, 
+				this->toolStripSeparator2, this->clearConsoleInputToolStripMenuItem, this->toolbarsToolStripMenuItem});
 			this->viewToolStripMenuItem->Name = L"viewToolStripMenuItem";
 			this->viewToolStripMenuItem->Size = System::Drawing::Size(44, 20);
 			this->viewToolStripMenuItem->Text = L"View";
 			// 
-			// fontToolStripMenuItem
+			// fToolStripMenuItem
 			// 
-			this->fontToolStripMenuItem->Name = L"fontToolStripMenuItem";
-			this->fontToolStripMenuItem->Size = System::Drawing::Size(120, 22);
-			this->fontToolStripMenuItem->Text = L"Font";
-			this->fontToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::fontToolStripMenuItem_Click);
+			this->fToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->consoleFontToolStripMenuItem, 
+				this->textEditorFontToolStripMenuItem});
+			this->fToolStripMenuItem->Name = L"fToolStripMenuItem";
+			this->fToolStripMenuItem->Size = System::Drawing::Size(188, 22);
+			this->fToolStripMenuItem->Text = L"Font...";
+			// 
+			// consoleFontToolStripMenuItem
+			// 
+			this->consoleFontToolStripMenuItem->Name = L"consoleFontToolStripMenuItem";
+			this->consoleFontToolStripMenuItem->Size = System::Drawing::Size(157, 22);
+			this->consoleFontToolStripMenuItem->Text = L"Console Font";
+			this->consoleFontToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::consoleFontToolStripMenuItem_Click);
+			// 
+			// textEditorFontToolStripMenuItem
+			// 
+			this->textEditorFontToolStripMenuItem->Name = L"textEditorFontToolStripMenuItem";
+			this->textEditorFontToolStripMenuItem->Size = System::Drawing::Size(157, 22);
+			this->textEditorFontToolStripMenuItem->Text = L"Text Editor Font";
+			this->textEditorFontToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::textEditorFontToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator2
+			// 
+			this->toolStripSeparator2->Name = L"toolStripSeparator2";
+			this->toolStripSeparator2->Size = System::Drawing::Size(185, 6);
+			// 
+			// clearConsoleInputToolStripMenuItem
+			// 
+			this->clearConsoleInputToolStripMenuItem->Name = L"clearConsoleInputToolStripMenuItem";
+			this->clearConsoleInputToolStripMenuItem->Size = System::Drawing::Size(188, 22);
+			this->clearConsoleInputToolStripMenuItem->Text = L"Clear Console Output";
+			this->clearConsoleInputToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::clearConsoleInputToolStripMenuItem_Click);
 			// 
 			// toolbarsToolStripMenuItem
 			// 
 			this->toolbarsToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->iOBarToolStripMenuItem, 
 				this->simulationToolbarToolStripMenuItem});
 			this->toolbarsToolStripMenuItem->Name = L"toolbarsToolStripMenuItem";
-			this->toolbarsToolStripMenuItem->Size = System::Drawing::Size(120, 22);
-			this->toolbarsToolStripMenuItem->Text = L"Toolbars";
+			this->toolbarsToolStripMenuItem->Size = System::Drawing::Size(188, 22);
+			this->toolbarsToolStripMenuItem->Text = L"Toolbars...";
 			// 
 			// iOBarToolStripMenuItem
 			// 
@@ -253,9 +404,23 @@ namespace simUI {
 			// 
 			// toolsToolStripMenuItem
 			// 
+			this->toolsToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->openToolStripMenuItem1, 
+				this->registerStatesToolStripMenuItem});
 			this->toolsToolStripMenuItem->Name = L"toolsToolStripMenuItem";
 			this->toolsToolStripMenuItem->Size = System::Drawing::Size(48, 20);
 			this->toolsToolStripMenuItem->Text = L"Tools";
+			// 
+			// openToolStripMenuItem1
+			// 
+			this->openToolStripMenuItem1->Name = L"openToolStripMenuItem1";
+			this->openToolStripMenuItem1->Size = System::Drawing::Size(171, 22);
+			this->openToolStripMenuItem1->Text = L"Memory Inspector";
+			// 
+			// registerStatesToolStripMenuItem
+			// 
+			this->registerStatesToolStripMenuItem->Name = L"registerStatesToolStripMenuItem";
+			this->registerStatesToolStripMenuItem->Size = System::Drawing::Size(171, 22);
+			this->registerStatesToolStripMenuItem->Text = L"Register States";
 			// 
 			// helpToolStripMenuItem
 			// 
@@ -282,8 +447,8 @@ namespace simUI {
 			// toolStripSimulation
 			// 
 			this->toolStripSimulation->GripStyle = System::Windows::Forms::ToolStripGripStyle::Hidden;
-			this->toolStripSimulation->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->toolStripButtonSimulate, 
-				this->toolStripButtonRunDirective, this->toolStripButtonStop});
+			this->toolStripSimulation->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->toolStripButtonSimulate, 
+				this->toolStripButtonRunDirective, this->toolStripButtonStop, this->toolStripButtonBreakExecution});
 			this->toolStripSimulation->Location = System::Drawing::Point(0, 49);
 			this->toolStripSimulation->Name = L"toolStripSimulation";
 			this->toolStripSimulation->Size = System::Drawing::Size(993, 25);
@@ -333,7 +498,7 @@ namespace simUI {
 			// 
 			// splitContainerMain.Panel1
 			// 
-			this->splitContainerMain->Panel1->Controls->Add(this->tabControl1);
+			this->splitContainerMain->Panel1->Controls->Add(this->tabControlSidepane);
 			// 
 			// splitContainerMain.Panel2
 			// 
@@ -342,36 +507,56 @@ namespace simUI {
 			this->splitContainerMain->SplitterDistance = 143;
 			this->splitContainerMain->TabIndex = 4;
 			// 
-			// tabControl1
+			// tabControlSidepane
 			// 
-			this->tabControl1->Controls->Add(this->tabPage1);
-			this->tabControl1->Controls->Add(this->tabPage2);
-			this->tabControl1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->tabControl1->Location = System::Drawing::Point(0, 0);
-			this->tabControl1->Name = L"tabControl1";
-			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(139, 476);
-			this->tabControl1->TabIndex = 0;
+			this->tabControlSidepane->Controls->Add(this->tabPageProjectExp);
+			this->tabControlSidepane->Controls->Add(this->tabPageRecFiles);
+			this->tabControlSidepane->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->tabControlSidepane->Location = System::Drawing::Point(0, 0);
+			this->tabControlSidepane->Name = L"tabControlSidepane";
+			this->tabControlSidepane->SelectedIndex = 0;
+			this->tabControlSidepane->Size = System::Drawing::Size(139, 476);
+			this->tabControlSidepane->TabIndex = 0;
 			// 
-			// tabPage1
+			// tabPageProjectExp
 			// 
-			this->tabPage1->Location = System::Drawing::Point(4, 22);
-			this->tabPage1->Name = L"tabPage1";
-			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage1->Size = System::Drawing::Size(131, 450);
-			this->tabPage1->TabIndex = 0;
-			this->tabPage1->Text = L"tabPage1";
-			this->tabPage1->UseVisualStyleBackColor = true;
+			this->tabPageProjectExp->Controls->Add(this->labelProjWarn);
+			this->tabPageProjectExp->Location = System::Drawing::Point(4, 22);
+			this->tabPageProjectExp->Name = L"tabPageProjectExp";
+			this->tabPageProjectExp->Padding = System::Windows::Forms::Padding(3);
+			this->tabPageProjectExp->Size = System::Drawing::Size(131, 450);
+			this->tabPageProjectExp->TabIndex = 0;
+			this->tabPageProjectExp->Text = L"Project Explorer";
+			this->tabPageProjectExp->UseVisualStyleBackColor = true;
 			// 
-			// tabPage2
+			// labelProjWarn
 			// 
-			this->tabPage2->Location = System::Drawing::Point(4, 22);
-			this->tabPage2->Name = L"tabPage2";
-			this->tabPage2->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage2->Size = System::Drawing::Size(131, 450);
-			this->tabPage2->TabIndex = 1;
-			this->tabPage2->Text = L"tabPage2";
-			this->tabPage2->UseVisualStyleBackColor = true;
+			this->labelProjWarn->AutoSize = true;
+			this->labelProjWarn->Location = System::Drawing::Point(6, 8);
+			this->labelProjWarn->Name = L"labelProjWarn";
+			this->labelProjWarn->Size = System::Drawing::Size(177, 13);
+			this->labelProjWarn->TabIndex = 0;
+			this->labelProjWarn->Text = L"Projects are currently not supported.";
+			// 
+			// tabPageRecFiles
+			// 
+			this->tabPageRecFiles->Controls->Add(this->listViewRecentFiles);
+			this->tabPageRecFiles->Location = System::Drawing::Point(4, 22);
+			this->tabPageRecFiles->Name = L"tabPageRecFiles";
+			this->tabPageRecFiles->Padding = System::Windows::Forms::Padding(3);
+			this->tabPageRecFiles->Size = System::Drawing::Size(131, 450);
+			this->tabPageRecFiles->TabIndex = 1;
+			this->tabPageRecFiles->Text = L"Recent Files";
+			this->tabPageRecFiles->UseVisualStyleBackColor = true;
+			// 
+			// listViewRecentFiles
+			// 
+			this->listViewRecentFiles->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->listViewRecentFiles->Location = System::Drawing::Point(3, 3);
+			this->listViewRecentFiles->Name = L"listViewRecentFiles";
+			this->listViewRecentFiles->Size = System::Drawing::Size(125, 444);
+			this->listViewRecentFiles->TabIndex = 0;
+			this->listViewRecentFiles->UseCompatibleStateImageBehavior = false;
 			// 
 			// splitContainerTextConsole
 			// 
@@ -383,7 +568,7 @@ namespace simUI {
 			// 
 			// splitContainerTextConsole.Panel1
 			// 
-			this->splitContainerTextConsole->Panel1->Controls->Add(this->tabControl2);
+			this->splitContainerTextConsole->Panel1->Controls->Add(this->tabControlMain);
 			// 
 			// splitContainerTextConsole.Panel2
 			// 
@@ -391,6 +576,38 @@ namespace simUI {
 			this->splitContainerTextConsole->Size = System::Drawing::Size(842, 476);
 			this->splitContainerTextConsole->SplitterDistance = 343;
 			this->splitContainerTextConsole->TabIndex = 0;
+			// 
+			// tabControlMain
+			// 
+			this->tabControlMain->Controls->Add(this->tabPageTextEdit);
+			this->tabControlMain->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->tabControlMain->Location = System::Drawing::Point(0, 0);
+			this->tabControlMain->Name = L"tabControlMain";
+			this->tabControlMain->SelectedIndex = 0;
+			this->tabControlMain->Size = System::Drawing::Size(840, 341);
+			this->tabControlMain->TabIndex = 0;
+			// 
+			// tabPageTextEdit
+			// 
+			this->tabPageTextEdit->Controls->Add(this->richTextBoxTextEditor);
+			this->tabPageTextEdit->Location = System::Drawing::Point(4, 22);
+			this->tabPageTextEdit->Name = L"tabPageTextEdit";
+			this->tabPageTextEdit->Padding = System::Windows::Forms::Padding(3);
+			this->tabPageTextEdit->Size = System::Drawing::Size(832, 315);
+			this->tabPageTextEdit->TabIndex = 0;
+			this->tabPageTextEdit->Text = L"Text Editor";
+			this->tabPageTextEdit->UseVisualStyleBackColor = true;
+			// 
+			// richTextBoxTextEditor
+			// 
+			this->richTextBoxTextEditor->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->richTextBoxTextEditor->Font = (gcnew System::Drawing::Font(L"Courier New", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(0)));
+			this->richTextBoxTextEditor->Location = System::Drawing::Point(3, 3);
+			this->richTextBoxTextEditor->Name = L"richTextBoxTextEditor";
+			this->richTextBoxTextEditor->Size = System::Drawing::Size(826, 309);
+			this->richTextBoxTextEditor->TabIndex = 0;
+			this->richTextBoxTextEditor->Text = L"";
 			// 
 			// richTextBoxConsole
 			// 
@@ -417,41 +634,29 @@ namespace simUI {
 			this->processSimulation->ErrorDataReceived += gcnew System::Diagnostics::DataReceivedEventHandler(this, &Form_simUI::processSimulation_ErrorDataReceived);
 			this->processSimulation->Exited += gcnew System::EventHandler(this, &Form_simUI::processSimulation_Exited);
 			// 
-			// openFileDialog1
+			// openFileDialogASMSource
 			// 
-			this->openFileDialog1->FileName = L"openFileDialog1";
+			this->openFileDialogASMSource->FileName = L"openFileDialog";
 			// 
-			// tabPage3
+			// toolStripButtonBreakExecution
 			// 
-			this->tabPage3->Controls->Add(this->richTextBoxTextEditor);
-			this->tabPage3->Location = System::Drawing::Point(4, 22);
-			this->tabPage3->Name = L"tabPage3";
-			this->tabPage3->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage3->Size = System::Drawing::Size(832, 315);
-			this->tabPage3->TabIndex = 0;
-			this->tabPage3->Text = L"tabPage3";
-			this->tabPage3->UseVisualStyleBackColor = true;
+			this->toolStripButtonBreakExecution->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
+			this->toolStripButtonBreakExecution->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButtonBreakExecution->Name = L"toolStripButtonBreakExecution";
+			this->toolStripButtonBreakExecution->Size = System::Drawing::Size(94, 22);
+			this->toolStripButtonBreakExecution->Text = L"Break Execution";
 			// 
-			// richTextBoxTextEditor
+			// saveToolStripMenuItem
 			// 
-			this->richTextBoxTextEditor->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->richTextBoxTextEditor->Font = (gcnew System::Drawing::Font(L"Courier New", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(0)));
-			this->richTextBoxTextEditor->Location = System::Drawing::Point(3, 3);
-			this->richTextBoxTextEditor->Name = L"richTextBoxTextEditor";
-			this->richTextBoxTextEditor->Size = System::Drawing::Size(826, 309);
-			this->richTextBoxTextEditor->TabIndex = 0;
-			this->richTextBoxTextEditor->Text = L"";
+			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->saveToolStripMenuItem->Text = L"Save";
 			// 
-			// tabControl2
+			// saveAsToolStripMenuItem
 			// 
-			this->tabControl2->Controls->Add(this->tabPage3);
-			this->tabControl2->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->tabControl2->Location = System::Drawing::Point(0, 0);
-			this->tabControl2->Name = L"tabControl2";
-			this->tabControl2->SelectedIndex = 0;
-			this->tabControl2->Size = System::Drawing::Size(840, 341);
-			this->tabControl2->TabIndex = 0;
+			this->saveAsToolStripMenuItem->Name = L"saveAsToolStripMenuItem";
+			this->saveAsToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->saveAsToolStripMenuItem->Text = L"Save As...";
 			// 
 			// Form_simUI
 			// 
@@ -475,13 +680,16 @@ namespace simUI {
 			this->splitContainerMain->Panel2->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerMain))->EndInit();
 			this->splitContainerMain->ResumeLayout(false);
-			this->tabControl1->ResumeLayout(false);
+			this->tabControlSidepane->ResumeLayout(false);
+			this->tabPageProjectExp->ResumeLayout(false);
+			this->tabPageProjectExp->PerformLayout();
+			this->tabPageRecFiles->ResumeLayout(false);
 			this->splitContainerTextConsole->Panel1->ResumeLayout(false);
 			this->splitContainerTextConsole->Panel2->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerTextConsole))->EndInit();
 			this->splitContainerTextConsole->ResumeLayout(false);
-			this->tabPage3->ResumeLayout(false);
-			this->tabControl2->ResumeLayout(false);
+			this->tabControlMain->ResumeLayout(false);
+			this->tabPageTextEdit->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -533,9 +741,16 @@ private: System::Void aboutToolStripMenuItem_Click(System::Object^  sender, Syst
 			about->ShowDialog();
 		 }
 private: System::Void fontToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-			 fontDialogTextEditor->ShowDialog();
+			 
 		 }
 private: System::Void toolStripButtonSimulate_Click(System::Object^  sender, System::EventArgs^  e) {
+			 
+			 if(richTextBoxTextEditor->Text == "")
+			 {
+				 this->richTextBoxConsole->Text += "Error: input file is empty.\n";
+				 return;
+			 }
+
 			 this->processSimulation = (gcnew System::Diagnostics::Process());
 
 			 reinitProc();
@@ -557,7 +772,7 @@ private: System::Void toolStripButtonSimulate_Click(System::Object^  sender, Sys
 			try
 			 {
 				 this->processSimulation->Start();
-				 this->richTextBoxConsole->Text += "Simulation process initiated.\n";
+				 this->richTextBoxConsole->Text += "Simulation initiated.\n";
 				 this->toolStripButtonStop->Enabled = true;
 			 }
 
@@ -579,18 +794,55 @@ private: System::Void processSimulation_OutputDataReceived(System::Object^  send
 			 this->richTextBoxConsole->Text += e->Data + "\n";
 		 }
 private: System::Void processSimulation_Exited(System::Object^  sender, System::EventArgs^  e) {
-			 this->richTextBoxConsole->Text += "Simulation has finished.";
+			 this->richTextBoxConsole->Text += "Simulation has finished.\n";
 			 this->toolStripButtonSimulate->Enabled = true;
 			 this->toolStripButtonStop->Enabled = false;
 		 }
 private: System::Void toolStripButtonStop_Click(System::Object^  sender, System::EventArgs^  e) {
+			if(!this->processSimulation->HasExited)
+			{
 			 this->processSimulation->Kill();
-			 this->richTextBoxConsole->Text += "Simulation has been aborted.";
+			}
+			 this->richTextBoxConsole->Text += "Simulation has been aborted.\n";
 			 this->toolStripButtonSimulate->Enabled = true;
 			 this->toolStripButtonStop->Enabled = false;
 		 }
 private: System::Void processSimulation_ErrorDataReceived(System::Object^  sender, System::Diagnostics::DataReceivedEventArgs^  e) {
 			 this->richTextBoxConsole->Text += e->Data + "\n";
+		 }
+private: System::Void assemblySourceToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if(openFileDialogASMSource->ShowDialog() != System::Windows::Forms::DialogResult::OK) return;
+
+			 try
+			 {
+			 System::IO::StreamReader^ reader = gcnew System::IO::StreamReader(openFileDialogASMSource->FileName);
+			 richTextBoxTextEditor->Text = reader->ReadToEnd();
+			 }
+			 catch(System::IO::FileNotFoundException^)
+			 {
+				 this->richTextBoxConsole->Text += "Error: The file requested could not be opened and may not exist.\n";
+			 }
+		 }
+private: System::Void clearConsoleInputToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 this->richTextBoxConsole->Text = "";
+		 }
+private: System::Void consoleFontToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 fontDialogConsole->ShowDialog();
+			 this->richTextBoxConsole->Font = fontDialogConsole->Font;
+		 }
+private: System::Void textEditorFontToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 fontDialogTextEditor->ShowDialog();
+			 this->richTextBoxTextEditor->Font = fontDialogTextEditor->Font;
+		 }
+private: System::Void copyToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 
+		 }
+private: System::Void cutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void pasteToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 Application::Exit();
 		 }
 };
 }
