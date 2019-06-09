@@ -15,4 +15,6 @@ namespace mipsshell
 	bool INPUT_SPECIFIED = false;
 	bool SUSPEND = false;
 	bool PRE_ASM = false;
+	bool WIN_32_GUI = false;
+	bool EXIT_COND = false;
 }

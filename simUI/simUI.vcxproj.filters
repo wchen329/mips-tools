@@ -32,6 +32,9 @@
     <ClCompile Include="Form_About.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Run_Dialog.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -47,6 +50,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="standard_properties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Run_Dialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

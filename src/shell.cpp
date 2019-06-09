@@ -61,6 +61,15 @@ int main(int argc, char ** argv)
 				}
 			}
 
+			if(!strcmp(argv[i], "-WIN32_SHELL"))
+			{
+				mipsshell::INTERACTIVE = false;
+				mipsshell::HAS_INPUT = true;
+				inst_file = stdin;
+				mipsshell::INPUT_SPECIFIED = true;
+				mipsshell::WIN_32_GUI = true;
+			}
+
 			if(!strcmp(argv[i], "-m"))
 			{
 				if((i+1) < argc) mem_width = atoi(argv[i+1]);
@@ -75,8 +84,11 @@ int main(int argc, char ** argv)
 
 	if(mipsshell::HAS_INPUT)
 	{
-		fprintf(stdout, "Starting in batch mode...\n");
-		mipsshell::INTERACTIVE = false;
+		if(!mipsshell::WIN_32_GUI)
+		{
+			fprintf(stdout, "Starting in batch mode...\n");
+			mipsshell::INTERACTIVE = false;
+		}
 
 		if(!mipsshell::INPUT_SPECIFIED)
 		{
@@ -132,7 +144,7 @@ int main(int argc, char ** argv)
 
 	fprintf(stdout, "Main Memory size: %d bytes\n", MB_IN.get_mmem_size());
 
-	while(true)
+	while(!mipsshell::EXIT_COND)
 	{
 		char buf[100];
 		if(mipsshell::INTERACTIVE)
@@ -161,7 +173,7 @@ int main(int argc, char ** argv)
 			}
 
 			signal(SIGINT, mipsshell::Enter_Interactive);
-			while(!mipsshell::SUSPEND)
+			while(!mipsshell::SUSPEND && !mipsshell::EXIT_COND)
 			{
 				mipsshell::PRE_ASM = false;
 				try

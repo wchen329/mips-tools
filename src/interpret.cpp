@@ -81,7 +81,8 @@ namespace mipsshell
 								debug_table.insert(".exit", dcpu->get_PC());
 							else
 							{		
-								exit(0);
+								mipsshell::EXIT_COND = true;
+								return true;
 							}
 						}
 						else if(!strcmp(".cycle", working_set)){ mb_ptr -> step(); return false; }	// step the processor on the current PC an instruction

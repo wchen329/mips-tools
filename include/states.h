@@ -10,6 +10,8 @@ namespace mipsshell
 	extern bool INPUT_SPECIFIED;
 	extern bool SUSPEND;
 	extern bool PRE_ASM;
+	extern bool WIN_32_GUI;
+	extern bool EXIT_COND;
 }
 
 #endif

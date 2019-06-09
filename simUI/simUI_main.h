@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Form_About.h"
 
 namespace simUI {
@@ -22,16 +22,6 @@ namespace simUI {
 		}
 
 	protected:
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		~Form_simUI()
-		{
-			if (components)
-			{
-				delete components;
-			}
-		}
 	private: System::Windows::Forms::MenuStrip^  menuStrip_main;
 	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
@@ -69,6 +59,13 @@ namespace simUI {
 	private: System::Windows::Forms::ToolStripMenuItem^  fontToolStripMenuItem;
 	private: System::Windows::Forms::FontDialog^  fontDialog1;
 	private: System::Windows::Forms::ToolStripButton^  toolStripButtonSimulate;
+	private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
+	private: System::Diagnostics::Process^  processSimulation;
+	private: System::Windows::Forms::ToolStripButton^  toolStripButtonRunDirective;
+	private: System::Windows::Forms::ToolTip^  toolTip1;
+	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
+	private: System::Windows::Forms::ToolStripButton^  toolStripButtonStop;
+	private: System::ComponentModel::IContainer^  components;
 
 
 
@@ -95,7 +92,7 @@ namespace simUI {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -104,8 +101,10 @@ namespace simUI {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			this->menuStrip_main = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->editToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->projectToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->simulationToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -120,6 +119,8 @@ namespace simUI {
 			this->statusStripMain = (gcnew System::Windows::Forms::StatusStrip());
 			this->toolStripSimulation = (gcnew System::Windows::Forms::ToolStrip());
 			this->toolStripButtonSimulate = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripButtonRunDirective = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripButtonStop = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripIO = (gcnew System::Windows::Forms::ToolStrip());
 			this->fontDialogTextEditor = (gcnew System::Windows::Forms::FontDialog());
 			this->splitContainerMain = (gcnew System::Windows::Forms::SplitContainer());
@@ -133,6 +134,9 @@ namespace simUI {
 			this->tabPage4 = (gcnew System::Windows::Forms::TabPage());
 			this->richTextBoxConsole = (gcnew System::Windows::Forms::RichTextBox());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
+			this->processSimulation = (gcnew System::Diagnostics::Process());
+			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
+			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->menuStrip_main->SuspendLayout();
 			this->toolStripSimulation->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainerMain))->BeginInit();
@@ -161,9 +165,16 @@ namespace simUI {
 			// 
 			// fileToolStripMenuItem
 			// 
+			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) {this->exitToolStripMenuItem});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
 			this->fileToolStripMenuItem->Text = L"File";
+			// 
+			// exitToolStripMenuItem
+			// 
+			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(92, 22);
+			this->exitToolStripMenuItem->Text = L"Exit";
 			// 
 			// editToolStripMenuItem
 			// 
@@ -255,7 +266,8 @@ namespace simUI {
 			// toolStripSimulation
 			// 
 			this->toolStripSimulation->GripStyle = System::Windows::Forms::ToolStripGripStyle::Hidden;
-			this->toolStripSimulation->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) {this->toolStripButtonSimulate});
+			this->toolStripSimulation->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->toolStripButtonSimulate, 
+				this->toolStripButtonRunDirective, this->toolStripButtonStop});
 			this->toolStripSimulation->Location = System::Drawing::Point(0, 49);
 			this->toolStripSimulation->Name = L"toolStripSimulation";
 			this->toolStripSimulation->Size = System::Drawing::Size(993, 25);
@@ -269,6 +281,24 @@ namespace simUI {
 			this->toolStripButtonSimulate->Size = System::Drawing::Size(57, 22);
 			this->toolStripButtonSimulate->Text = L"Simulate";
 			this->toolStripButtonSimulate->Click += gcnew System::EventHandler(this, &Form_simUI::toolStripButtonSimulate_Click);
+			// 
+			// toolStripButtonRunDirective
+			// 
+			this->toolStripButtonRunDirective->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
+			this->toolStripButtonRunDirective->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButtonRunDirective->Name = L"toolStripButtonRunDirective";
+			this->toolStripButtonRunDirective->Size = System::Drawing::Size(81, 22);
+			this->toolStripButtonRunDirective->Text = L"Run Directive";
+			// 
+			// toolStripButtonStop
+			// 
+			this->toolStripButtonStop->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
+			this->toolStripButtonStop->Enabled = false;
+			this->toolStripButtonStop->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButtonStop->Name = L"toolStripButtonStop";
+			this->toolStripButtonStop->Size = System::Drawing::Size(95, 22);
+			this->toolStripButtonStop->Text = L"Stop Simulation";
+			this->toolStripButtonStop->Click += gcnew System::EventHandler(this, &Form_simUI::toolStripButtonStop_Click);
 			// 
 			// toolStripIO
 			// 
@@ -397,7 +427,24 @@ namespace simUI {
 			this->richTextBoxConsole->ReadOnly = true;
 			this->richTextBoxConsole->Size = System::Drawing::Size(840, 127);
 			this->richTextBoxConsole->TabIndex = 0;
-			this->richTextBoxConsole->Text = L"";
+			this->richTextBoxConsole->Text = L"simUI Console\n---------------\n";
+			// 
+			// processSimulation
+			// 
+			this->processSimulation->StartInfo->Domain = L"";
+			this->processSimulation->StartInfo->LoadUserProfile = false;
+			this->processSimulation->StartInfo->Password = nullptr;
+			this->processSimulation->StartInfo->StandardErrorEncoding = nullptr;
+			this->processSimulation->StartInfo->StandardOutputEncoding = nullptr;
+			this->processSimulation->StartInfo->UserName = L"";
+			this->processSimulation->SynchronizingObject = this;
+			this->processSimulation->OutputDataReceived += gcnew System::Diagnostics::DataReceivedEventHandler(this, &Form_simUI::processSimulation_OutputDataReceived);
+			this->processSimulation->ErrorDataReceived += gcnew System::Diagnostics::DataReceivedEventHandler(this, &Form_simUI::processSimulation_ErrorDataReceived);
+			this->processSimulation->Exited += gcnew System::EventHandler(this, &Form_simUI::processSimulation_Exited);
+			// 
+			// openFileDialog1
+			// 
+			this->openFileDialog1->FileName = L"openFileDialog1";
 			// 
 			// Form_simUI
 			// 
@@ -434,6 +481,19 @@ namespace simUI {
 		}
 #pragma endregion
 
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		~Form_simUI()
+		{
+			if (components)
+			{
+				delete components;
+			}
+
+			if(!this->processSimulation->HasExited) this->processSimulation->Kill();
+		}
+
 private: System::Void Form_simUI_Load(System::Object^  sender, System::EventArgs^  e) {
 		 }
 
@@ -469,8 +529,58 @@ private: System::Void fontToolStripMenuItem_Click(System::Object^  sender, Syste
 			 fontDialogTextEditor->ShowDialog();
 		 }
 private: System::Void toolStripButtonSimulate_Click(System::Object^  sender, System::EventArgs^  e) {
+			 this->processSimulation = gcnew System::Diagnostics::Process();
+			 this->toolStripButtonSimulate->Enabled = false;
 			 this->richTextBoxConsole->Text += "Starting new instance of MIPS Tools...\n";
+			 this->processSimulation->StartInfo->FileName = "mtshell.exe";
+			 this->processSimulation->StartInfo->UseShellExecute = false;
+			 this->processSimulation->StartInfo->CreateNoWindow = true;
+			 this->processSimulation->StartInfo->RedirectStandardError = true;
+			 this->processSimulation->StartInfo->RedirectStandardOutput = true;
+			 this->processSimulation->StartInfo->RedirectStandardInput = true;
+			 this->processSimulation->StartInfo->Arguments = "-WIN32_SHELL";
 			 
+
+			 // Make sure to assign standard input and output correctly
+			 // Standard input: the current open file in the currently selected text file
+			 // Standard ouput: attach to the console
+
+			try
+			 {
+				 this->processSimulation->Start();
+				 this->richTextBoxConsole->Text += "Simulation process initiated.\n";
+				 this->toolStripButtonStop->Enabled = true;
+			 }
+
+			 catch(System::ComponentModel::Win32Exception^)
+			 {
+				 this->richTextBoxConsole->Text += ("MIPS Tools could not be started. Perhaps mtshell.exe is missing?\n");
+				 return;
+			 }
+
+			 // Reading
+			 processSimulation->BeginOutputReadLine();
+
+			 // Write program
+			 processSimulation->StandardInput->Write(richTextBoxTextEditor->Text);
+			 processSimulation->StandardInput->Flush();
+			 processSimulation->StandardInput->Close();
+		 }
+private: System::Void processSimulation_OutputDataReceived(System::Object^  sender, System::Diagnostics::DataReceivedEventArgs^  e) {
+			 this->richTextBoxConsole->Text += e->Data + "\n";
+		 }
+private: System::Void processSimulation_Exited(System::Object^  sender, System::EventArgs^  e) {
+			 this->richTextBoxConsole->Text += "Simulation has finished.";
+			 this->toolStripButtonSimulate->Enabled = true;
+			 this->toolStripButtonStop->Enabled = false;
+		 }
+private: System::Void toolStripButtonStop_Click(System::Object^  sender, System::EventArgs^  e) {
+			 this->processSimulation->Kill();
+			 this->toolStripButtonSimulate->Enabled = true;
+			 this->toolStripButtonStop->Enabled = false;
+		 }
+private: System::Void processSimulation_ErrorDataReceived(System::Object^  sender, System::Diagnostics::DataReceivedEventArgs^  e) {
+			 this->richTextBoxConsole->Text += e->Data + "\n";
 		 }
 };
 }

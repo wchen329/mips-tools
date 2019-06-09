@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Form_About.cpp" />
+    <ClCompile Include="Run_Dialog.cpp" />
     <ClCompile Include="simUI.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -95,6 +96,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Form_About.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Run_Dialog.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="simUI_main.h">
@@ -110,6 +114,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Form_About.resx">
       <DependentUpon>Form_About.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Run_Dialog.resx">
+      <DependentUpon>Run_Dialog.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="simUI_main.resX">
       <DependentUpon>simUI_main.h</DependentUpon>
