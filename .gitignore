@@ -9,4 +9,4 @@ simUI/Debug/*
 simUI/Release/*
 *.exe
 *.tlog
-testing/nt_test/winnt_test/*
+testing/nt_test/winnt_test/Debug/*
