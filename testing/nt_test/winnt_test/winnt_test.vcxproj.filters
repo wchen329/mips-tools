@@ -66,5 +66,8 @@
     <ClCompile Include="..\..\tests\test_sc_cpu_ops.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\basic_assert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
