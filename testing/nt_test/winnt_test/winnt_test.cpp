@@ -27,6 +27,7 @@ int main(int argc, char ** argv)
 
 	// Add tests
 	online_tests.add_test(test_assert, "test_assert");
+	online_tests.add_test(test_register_32, "test_register_32");
 
 	std::cout << "Found " << online_tests.get_test_count() << " tests." << std::endl;
 
@@ -39,6 +40,7 @@ int main(int argc, char ** argv)
 		return 1;
 	}
 
+	Console::WriteLine(L"---TESTING FINISHED---");
 	std::cout << "Exiting with code 0 [success]" << std::endl;
 	std::cin.get();
     return 0;
