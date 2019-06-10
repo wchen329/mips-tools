@@ -35,9 +35,6 @@
     <ClCompile Include="..\src\runtime_call.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\primitives.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\mtsstream.cpp">
       <Filter>src</Filter>
     </ClCompile>

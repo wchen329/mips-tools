@@ -5,13 +5,21 @@
 
 using namespace System;
 
+/* Basic CLI/CLR based testing framework
+ *
+ * wchen329@wisc.edu
+ */
 int main(int argc, char ** argv)
 {
+	/* This section is used for running the tests themselves.
+	 * It's NOT recommended to try to use this manually, otherwise
+	 * you'll probably get a segmentation fault...
+	 */
 	if(argc >= 2)
 	{
-		if(argc == 2)
+		if(argc != 3)
 		{
-			std::cout << "Insufficient arguments. Please try again." << std::endl;
+			std::cout << "Incorrect arguments. Please try again." << std::endl;
 		}
 		if(strcmp(argv[1], "-t") != 0) return -1;
 		void(*funct)() = (void(*)())atoi(argv[2]);
@@ -19,6 +27,9 @@ int main(int argc, char ** argv)
 		return 0;
 	}
 
+	/* Main execution path
+	 *
+	 */
     Console::WriteLine(L"MIPS Tools Testing Suite");
 	Console::WriteLine(L"------------------------");
 	Console::WriteLine(L"Collecting tests...");
@@ -28,6 +39,7 @@ int main(int argc, char ** argv)
 	// Add tests
 	online_tests.add_test(test_assert, "test_assert");
 	online_tests.add_test(test_register_32, "test_register_32");
+	online_tests.add_test(test_sc_cpu_ops, "test_sc_cpu_ops");
 
 	std::cout << "Found " << online_tests.get_test_count() << " tests." << std::endl;
 

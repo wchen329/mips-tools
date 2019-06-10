@@ -63,5 +63,8 @@
     <ClCompile Include="..\..\tests\test_register32.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\tests\test_sc_cpu_ops.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

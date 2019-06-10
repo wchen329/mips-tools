@@ -21,6 +21,7 @@ namespace mips_tools
 			char b_3() { return *(w_addr() + 3);}
 			BW_32_T(BW_32 data) : w(data) {}
 			BW_32_T(char b_0, char b_1, char b_2, char b_3);
+
 			BW_32 as_BW_32() { return this-> w; }
 		private:
 			char * w_addr() { return (char*)&w; }

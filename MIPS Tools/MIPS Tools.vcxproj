@@ -39,7 +39,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../include/;$(IncludePath)</IncludePath>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
     <TargetName>mtcore</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -71,6 +71,7 @@
     <ClCompile Include="..\src\mem.cpp" />
     <ClCompile Include="..\src\mips.cpp" />
     <ClCompile Include="..\src\pipeline.cpp" />
+    <ClCompile Include="..\src\primitives.cpp" />
     <ClCompile Include="..\src\reg_32.cpp" />
     <ClCompile Include="..\src\reg_pipeline.cpp" />
     <ClCompile Include="..\src\sc_cpu.cpp" />

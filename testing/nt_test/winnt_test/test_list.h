@@ -3,5 +3,6 @@
 
 void test_assert();
 void test_register_32();
+void test_sc_cpu_ops();
 
 #endif
