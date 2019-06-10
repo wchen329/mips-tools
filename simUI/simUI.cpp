@@ -1,7 +1,7 @@
 // simUI.cpp : main project file.
 
 #include "stdafx.h"
-#include "simUI_main.h"
+#include "Form_simUI.h"
 
 using namespace simUI;
 

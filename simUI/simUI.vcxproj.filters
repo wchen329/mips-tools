@@ -18,9 +18,6 @@
     <None Include="app.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="toolStripButtonNew.Image.png">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="simUI.cpp">
@@ -52,9 +49,6 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="simUI_main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Form_About.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,6 +64,9 @@
     <ClInclude Include="memorySizeDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Form_simUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -83,13 +80,13 @@
     <EmbeddedResource Include="Run_Dialog.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include="simUI_main.resX">
-      <Filter>Resource Files</Filter>
-    </EmbeddedResource>
     <EmbeddedResource Include="CPUSelectDialog.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
     <EmbeddedResource Include="memorySizeDialog.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_simUI.resX">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
   </ItemGroup>

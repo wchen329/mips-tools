@@ -120,4 +120,15 @@
   <metadata name="imageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="richTextBoxDisclaimerCredits.Text" xml:space="preserve">
+    <value>Credits 
+-----------
+wchen329@wisc.edu
+
+DISCLAIMER
+---------------
+WARNING: This software is currently in development which means that there may be some bugs or issues that can cause problems with your machine. Use at your own risk. The MIPS Tools /simUI team does not take any responsibility from problems that may arise from usage of this software.
+
+</value>
+  </data>
 </root>
