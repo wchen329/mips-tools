@@ -30,8 +30,8 @@ int main(int argc, char ** argv)
 	/* Main execution path
 	 *
 	 */
-    Console::WriteLine(L"MIPS Tools Testing Suite");
-	Console::WriteLine(L"------------------------");
+    Console::WriteLine(L"MIPS Tools Testing Suite for Windows NT");
+	Console::WriteLine(L"---------------------------------------");
 	Console::WriteLine(L"Collecting tests...");
 
 	test_collection online_tests = test_collection();

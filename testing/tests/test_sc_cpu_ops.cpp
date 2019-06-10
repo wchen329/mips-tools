@@ -14,8 +14,8 @@ void test_sc_cpu_ops()
 	sc_cpu cpu(cpu_mem);
 	cpu.rst();
 	BW_32 pc = cpu.get_PC();
-	asserts::assertEquals<BW_32>(pc, 0);
+	assertEquals(pc, 0);
 	cpu.cycle();
 	pc = cpu.get_PC();
-	asserts::assertEquals<BW_32>(pc, 4);
+	assertEquals(pc, 4);
 }

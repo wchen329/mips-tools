@@ -13,5 +13,5 @@ void test_register_32()
 	reg_32 r;
 	r.set_data(150);
 	BW_32 value = r.get_data();
-	asserts::assertEquals<BW_32>(value, 150);
+	assertEquals(value, 150);
 }
