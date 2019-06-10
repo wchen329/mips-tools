@@ -7,3 +7,6 @@ MIPS Tools Shell/Debug/*
 MIPS Tools Shell/Release/*
 simUI/Debug/*
 simUI/Release/*
+*.exe
+*.tlog
+testing/nt_test/winnt_test/*
