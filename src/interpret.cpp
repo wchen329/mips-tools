@@ -34,7 +34,39 @@ namespace mipsshell
 		std::auto_ptr<char> ap(new char [strlen(line) + 1]);
 		strcpy(ap.get(), line);
 
-		char * working_set = strtok(ap.get(), " ");
+		int length = strlen(ap.get());
+
+		bool all_whitespace_or_tab = true;
+
+		char * start_with_no_whitespace = ap.get();
+
+		// Look for comments, snip out everything after comment sign (#)
+		for(int step = 0; step < length; step++)
+		{
+			if(ap.get()[step] != '\t' && ap.get()[step] != ' ' && ap.get()[step] != '\n')
+			{
+				all_whitespace_or_tab = false;
+			}
+
+			else
+			{
+				if(all_whitespace_or_tab)
+				{
+					start_with_no_whitespace = ap.get() + step;
+				}
+			}
+
+			if(ap.get()[step] == '#')
+			{
+				ap.get()[step] = '\0';
+				break;
+			}
+		}
+
+		if(all_whitespace_or_tab)
+			return false;
+
+		char * working_set = strtok(start_with_no_whitespace, " ");
 		int round = 0;
 		// Round: round corresponds to the position of the string in the instruction word
 		// For example in (add $s0, $s1, $s2) add is round 0, $s0 is round 1, $s1 is round 2, $s2 is round 3)

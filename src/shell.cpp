@@ -22,7 +22,7 @@
  */
 int main(int argc, char ** argv)
 {
-	mips_tools::cpu_t cp = mips_tools::FIVE_P;
+	mips_tools::cpu_t cp = mips_tools::STANDARD;
 	int mem_width = 16;
 	FILE * inst_file = NULL;
 	fprintf(stdout, "MIPS Tools 0.1 (developmental build)\n");
