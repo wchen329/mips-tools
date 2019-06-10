@@ -87,8 +87,13 @@ namespace simUI {
 		private: System::Windows::Forms::Label^  labelProjWarn;
 		private: System::Windows::Forms::ListView^  listViewRecentFiles;
 		private: System::Windows::Forms::ToolStripButton^  toolStripButtonBreakExecution;
-		private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
-		private: System::Windows::Forms::ToolStripMenuItem^  saveAsToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  toolStripMenuItemSaveASMAs;
+	private: System::Windows::Forms::ToolStripMenuItem^  toolStripMenuItemSaveProject;
+
+
+
+
+
 		private: System::Windows::Forms::ToolStripButton^  toolStripButtonOpen;
 		private: System::Windows::Forms::ToolStripButton^  toolStripButtonNew;
 		private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator3;
@@ -103,7 +108,20 @@ namespace simUI {
 		private: System::Windows::Forms::ToolStripButton^  toolStripButtonUndo;
 		private: System::Windows::Forms::ToolStripButton^  toolStripButtonRedo;
 		private: System::IO::Ports::SerialPort^  serialPort1;
-		private: System::ComponentModel::IContainer^  components;
+	private: System::Windows::Forms::ContextMenuStrip^  contextMenuStripTextEditor;
+	private: System::Windows::Forms::ToolStripMenuItem^  toolStripMenuItemCut;
+	private: System::Windows::Forms::ToolStripMenuItem^  toolStripMenuItemCopy;
+	private: System::Windows::Forms::ToolStripMenuItem^  toolStripMenuItemPaste;
+	private: System::Windows::Forms::ToolStripMenuItem^  newToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  assemblySourceToolStripMenuItemNewASM;
+	private: System::Windows::Forms::ToolStripMenuItem^  projectToolStripMenuItemNewProj;
+	private: System::Windows::Forms::ToolStripMenuItem^  toolStripMenuItemSaveASM;
+	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator5;
+	private: System::Windows::Forms::ToolStripMenuItem^  undoToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  redoToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator6;
+
+	private: System::ComponentModel::IContainer^  components;
 
 		protected: 
 
@@ -139,17 +157,25 @@ namespace simUI {
 				System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Form_simUI::typeid));
 				this->menuStrip_main = (gcnew System::Windows::Forms::MenuStrip());
 				this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-				this->saveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-				this->saveAsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->newToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->assemblySourceToolStripMenuItemNewASM = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->projectToolStripMenuItemNewProj = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->assemblySourceToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->projentToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->toolStripSeparator5 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				this->toolStripMenuItemSaveASM = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->toolStripMenuItemSaveASMAs = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->toolStripMenuItemSaveProject = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->toolStripSeparator1 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->editToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->copyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->cutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->pasteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->toolStripSeparator6 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				this->undoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->redoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->projectToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->simulationToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->memorySizeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -176,8 +202,18 @@ namespace simUI {
 				this->toolStripButtonBreakExecution = (gcnew System::Windows::Forms::ToolStripButton());
 				this->toolStripIO = (gcnew System::Windows::Forms::ToolStrip());
 				this->toolStripButtonNew = (gcnew System::Windows::Forms::ToolStripButton());
+				this->toolStripButtonNewProject = (gcnew System::Windows::Forms::ToolStripButton());
 				this->toolStripButtonOpen = (gcnew System::Windows::Forms::ToolStripButton());
+				this->toolStripButtonOpenProject = (gcnew System::Windows::Forms::ToolStripButton());
+				this->toolStripButtonSave = (gcnew System::Windows::Forms::ToolStripButton());
+				this->toolStripButtonSaveProject = (gcnew System::Windows::Forms::ToolStripButton());
 				this->toolStripSeparator3 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				this->toolStripButtonCut = (gcnew System::Windows::Forms::ToolStripButton());
+				this->toolStripButtonCopy = (gcnew System::Windows::Forms::ToolStripButton());
+				this->toolStripButtonPaste = (gcnew System::Windows::Forms::ToolStripButton());
+				this->toolStripSeparator4 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				this->toolStripButtonUndo = (gcnew System::Windows::Forms::ToolStripButton());
+				this->toolStripButtonRedo = (gcnew System::Windows::Forms::ToolStripButton());
 				this->fontDialogTextEditor = (gcnew System::Windows::Forms::FontDialog());
 				this->splitContainerMain = (gcnew System::Windows::Forms::SplitContainer());
 				this->tabControlSidepane = (gcnew System::Windows::Forms::TabControl());
@@ -189,21 +225,15 @@ namespace simUI {
 				this->tabControlMain = (gcnew System::Windows::Forms::TabControl());
 				this->tabPageTextEdit = (gcnew System::Windows::Forms::TabPage());
 				this->richTextBoxTextEditor = (gcnew System::Windows::Forms::RichTextBox());
+				this->contextMenuStripTextEditor = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+				this->toolStripMenuItemCut = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->toolStripMenuItemCopy = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				this->toolStripMenuItemPaste = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->richTextBoxConsole = (gcnew System::Windows::Forms::RichTextBox());
 				this->processSimulation = (gcnew System::Diagnostics::Process());
 				this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 				this->openFileDialogASMSource = (gcnew System::Windows::Forms::OpenFileDialog());
 				this->fontDialogConsole = (gcnew System::Windows::Forms::FontDialog());
-				this->toolStripButtonOpenProject = (gcnew System::Windows::Forms::ToolStripButton());
-				this->toolStripButtonNewProject = (gcnew System::Windows::Forms::ToolStripButton());
-				this->toolStripButtonSave = (gcnew System::Windows::Forms::ToolStripButton());
-				this->toolStripButtonSaveProject = (gcnew System::Windows::Forms::ToolStripButton());
-				this->toolStripButtonCut = (gcnew System::Windows::Forms::ToolStripButton());
-				this->toolStripButtonCopy = (gcnew System::Windows::Forms::ToolStripButton());
-				this->toolStripButtonPaste = (gcnew System::Windows::Forms::ToolStripButton());
-				this->toolStripSeparator4 = (gcnew System::Windows::Forms::ToolStripSeparator());
-				this->toolStripButtonUndo = (gcnew System::Windows::Forms::ToolStripButton());
-				this->toolStripButtonRedo = (gcnew System::Windows::Forms::ToolStripButton());
 				this->serialPort1 = (gcnew System::IO::Ports::SerialPort(this->components));
 				this->menuStrip_main->SuspendLayout();
 				this->toolStripSimulation->SuspendLayout();
@@ -221,6 +251,7 @@ namespace simUI {
 				this->splitContainerTextConsole->SuspendLayout();
 				this->tabControlMain->SuspendLayout();
 				this->tabPageTextEdit->SuspendLayout();
+				this->contextMenuStripTextEditor->SuspendLayout();
 				this->SuspendLayout();
 				// 
 				// menuStrip_main
@@ -232,67 +263,101 @@ namespace simUI {
 				this->menuStrip_main->Name = L"menuStrip_main";
 				this->menuStrip_main->Size = System::Drawing::Size(993, 24);
 				this->menuStrip_main->TabIndex = 0;
-				this->menuStrip_main->Text = L"menuStrip1";
+				this->menuStrip_main->Text = L"menuStrip";
 				// 
 				// fileToolStripMenuItem
 				// 
-				this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {this->saveToolStripMenuItem, 
-					this->saveAsToolStripMenuItem, this->openToolStripMenuItem, this->toolStripSeparator1, this->exitToolStripMenuItem});
+				this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(8) {this->newToolStripMenuItem, 
+					this->openToolStripMenuItem, this->toolStripSeparator5, this->toolStripMenuItemSaveASM, this->toolStripMenuItemSaveASMAs, this->toolStripMenuItemSaveProject, 
+					this->toolStripSeparator1, this->exitToolStripMenuItem});
 				this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 				this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
 				this->fileToolStripMenuItem->Text = L"File";
 				// 
-				// saveToolStripMenuItem
+				// newToolStripMenuItem
 				// 
-				this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
-				this->saveToolStripMenuItem->Size = System::Drawing::Size(134, 22);
-				this->saveToolStripMenuItem->Text = L"Save";
+				this->newToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->assemblySourceToolStripMenuItemNewASM, 
+					this->projectToolStripMenuItemNewProj});
+				this->newToolStripMenuItem->Name = L"newToolStripMenuItem";
+				this->newToolStripMenuItem->Size = System::Drawing::Size(187, 22);
+				this->newToolStripMenuItem->Text = L"New";
 				// 
-				// saveAsToolStripMenuItem
+				// assemblySourceToolStripMenuItemNewASM
 				// 
-				this->saveAsToolStripMenuItem->Name = L"saveAsToolStripMenuItem";
-				this->saveAsToolStripMenuItem->Size = System::Drawing::Size(134, 22);
-				this->saveAsToolStripMenuItem->Text = L"Save As...";
+				this->assemblySourceToolStripMenuItemNewASM->Name = L"assemblySourceToolStripMenuItemNewASM";
+				this->assemblySourceToolStripMenuItemNewASM->Size = System::Drawing::Size(173, 22);
+				this->assemblySourceToolStripMenuItemNewASM->Text = L"Assembly Source...";
+				// 
+				// projectToolStripMenuItemNewProj
+				// 
+				this->projectToolStripMenuItemNewProj->Enabled = false;
+				this->projectToolStripMenuItemNewProj->Name = L"projectToolStripMenuItemNewProj";
+				this->projectToolStripMenuItemNewProj->Size = System::Drawing::Size(173, 22);
+				this->projectToolStripMenuItemNewProj->Text = L"Project...";
 				// 
 				// openToolStripMenuItem
 				// 
 				this->openToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->assemblySourceToolStripMenuItem, 
 					this->projentToolStripMenuItem});
 				this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-				this->openToolStripMenuItem->Size = System::Drawing::Size(134, 22);
-				this->openToolStripMenuItem->Text = L"Open...";
+				this->openToolStripMenuItem->Size = System::Drawing::Size(187, 22);
+				this->openToolStripMenuItem->Text = L"Open";
 				// 
 				// assemblySourceToolStripMenuItem
 				// 
 				this->assemblySourceToolStripMenuItem->Name = L"assemblySourceToolStripMenuItem";
-				this->assemblySourceToolStripMenuItem->Size = System::Drawing::Size(164, 22);
-				this->assemblySourceToolStripMenuItem->Text = L"Assembly Source";
+				this->assemblySourceToolStripMenuItem->Size = System::Drawing::Size(173, 22);
+				this->assemblySourceToolStripMenuItem->Text = L"Assembly Source...";
 				this->assemblySourceToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::assemblySourceToolStripMenuItem_Click);
 				// 
 				// projentToolStripMenuItem
 				// 
 				this->projentToolStripMenuItem->Enabled = false;
 				this->projentToolStripMenuItem->Name = L"projentToolStripMenuItem";
-				this->projentToolStripMenuItem->Size = System::Drawing::Size(164, 22);
-				this->projentToolStripMenuItem->Text = L"Project";
+				this->projentToolStripMenuItem->Size = System::Drawing::Size(173, 22);
+				this->projentToolStripMenuItem->Text = L"Project...";
+				// 
+				// toolStripSeparator5
+				// 
+				this->toolStripSeparator5->Name = L"toolStripSeparator5";
+				this->toolStripSeparator5->Size = System::Drawing::Size(184, 6);
+				// 
+				// toolStripMenuItemSaveASM
+				// 
+				this->toolStripMenuItemSaveASM->Name = L"toolStripMenuItemSaveASM";
+				this->toolStripMenuItemSaveASM->Size = System::Drawing::Size(187, 22);
+				this->toolStripMenuItemSaveASM->Text = L"Save Current File";
+				// 
+				// toolStripMenuItemSaveASMAs
+				// 
+				this->toolStripMenuItemSaveASMAs->Name = L"toolStripMenuItemSaveASMAs";
+				this->toolStripMenuItemSaveASMAs->Size = System::Drawing::Size(187, 22);
+				this->toolStripMenuItemSaveASMAs->Text = L"Save Current File As...";
+				// 
+				// toolStripMenuItemSaveProject
+				// 
+				this->toolStripMenuItemSaveProject->Enabled = false;
+				this->toolStripMenuItemSaveProject->Name = L"toolStripMenuItemSaveProject";
+				this->toolStripMenuItemSaveProject->Size = System::Drawing::Size(187, 22);
+				this->toolStripMenuItemSaveProject->Text = L"Save Project";
 				// 
 				// toolStripSeparator1
 				// 
 				this->toolStripSeparator1->Name = L"toolStripSeparator1";
-				this->toolStripSeparator1->Size = System::Drawing::Size(131, 6);
+				this->toolStripSeparator1->Size = System::Drawing::Size(184, 6);
 				// 
 				// exitToolStripMenuItem
 				// 
 				this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
 				this->exitToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Alt | System::Windows::Forms::Keys::F4));
-				this->exitToolStripMenuItem->Size = System::Drawing::Size(134, 22);
+				this->exitToolStripMenuItem->Size = System::Drawing::Size(187, 22);
 				this->exitToolStripMenuItem->Text = L"Exit";
 				this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::exitToolStripMenuItem_Click);
 				// 
 				// editToolStripMenuItem
 				// 
-				this->editToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->copyToolStripMenuItem, 
-					this->cutToolStripMenuItem, this->pasteToolStripMenuItem});
+				this->editToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {this->copyToolStripMenuItem, 
+					this->cutToolStripMenuItem, this->pasteToolStripMenuItem, this->toolStripSeparator6, this->undoToolStripMenuItem, this->redoToolStripMenuItem});
 				this->editToolStripMenuItem->Name = L"editToolStripMenuItem";
 				this->editToolStripMenuItem->Size = System::Drawing::Size(39, 20);
 				this->editToolStripMenuItem->Text = L"Edit";
@@ -301,7 +366,7 @@ namespace simUI {
 				// 
 				this->copyToolStripMenuItem->Name = L"copyToolStripMenuItem";
 				this->copyToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::C));
-				this->copyToolStripMenuItem->Size = System::Drawing::Size(144, 22);
+				this->copyToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 				this->copyToolStripMenuItem->Text = L"Copy";
 				this->copyToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::copyToolStripMenuItem_Click);
 				// 
@@ -309,7 +374,7 @@ namespace simUI {
 				// 
 				this->cutToolStripMenuItem->Name = L"cutToolStripMenuItem";
 				this->cutToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::X));
-				this->cutToolStripMenuItem->Size = System::Drawing::Size(144, 22);
+				this->cutToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 				this->cutToolStripMenuItem->Text = L"Cut";
 				this->cutToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::cutToolStripMenuItem_Click);
 				// 
@@ -317,9 +382,30 @@ namespace simUI {
 				// 
 				this->pasteToolStripMenuItem->Name = L"pasteToolStripMenuItem";
 				this->pasteToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::V));
-				this->pasteToolStripMenuItem->Size = System::Drawing::Size(144, 22);
+				this->pasteToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 				this->pasteToolStripMenuItem->Text = L"Paste";
 				this->pasteToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::pasteToolStripMenuItem_Click);
+				// 
+				// toolStripSeparator6
+				// 
+				this->toolStripSeparator6->Name = L"toolStripSeparator6";
+				this->toolStripSeparator6->Size = System::Drawing::Size(149, 6);
+				// 
+				// undoToolStripMenuItem
+				// 
+				this->undoToolStripMenuItem->Name = L"undoToolStripMenuItem";
+				this->undoToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::Z));
+				this->undoToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+				this->undoToolStripMenuItem->Text = L"Undo";
+				this->undoToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::undoToolStripMenuItem_Click);
+				// 
+				// redoToolStripMenuItem
+				// 
+				this->redoToolStripMenuItem->Name = L"redoToolStripMenuItem";
+				this->redoToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::Y));
+				this->redoToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+				this->redoToolStripMenuItem->Text = L"Redo";
+				this->redoToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form_simUI::redoToolStripMenuItem_Click);
 				// 
 				// projectToolStripMenuItem
 				// 
@@ -527,6 +613,16 @@ namespace simUI {
 				this->toolStripButtonNew->Text = L"New Assembly Source";
 				this->toolStripButtonNew->ToolTipText = L"Create New Assembly Source File";
 				// 
+				// toolStripButtonNewProject
+				// 
+				this->toolStripButtonNewProject->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				this->toolStripButtonNewProject->Enabled = false;
+				this->toolStripButtonNewProject->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonNewProject.Image")));
+				this->toolStripButtonNewProject->ImageTransparentColor = System::Drawing::Color::Magenta;
+				this->toolStripButtonNewProject->Name = L"toolStripButtonNewProject";
+				this->toolStripButtonNewProject->Size = System::Drawing::Size(23, 22);
+				this->toolStripButtonNewProject->Text = L"Create New Project";
+				// 
 				// toolStripButtonOpen
 				// 
 				this->toolStripButtonOpen->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
@@ -535,11 +631,96 @@ namespace simUI {
 				this->toolStripButtonOpen->Name = L"toolStripButtonOpen";
 				this->toolStripButtonOpen->Size = System::Drawing::Size(23, 22);
 				this->toolStripButtonOpen->Text = L"Open a single assembly source file";
+				this->toolStripButtonOpen->Click += gcnew System::EventHandler(this, &Form_simUI::assemblySourceToolStripMenuItem_Click);
+				// 
+				// toolStripButtonOpenProject
+				// 
+				this->toolStripButtonOpenProject->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				this->toolStripButtonOpenProject->Enabled = false;
+				this->toolStripButtonOpenProject->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonOpenProject.Image")));
+				this->toolStripButtonOpenProject->ImageTransparentColor = System::Drawing::Color::Magenta;
+				this->toolStripButtonOpenProject->Name = L"toolStripButtonOpenProject";
+				this->toolStripButtonOpenProject->Size = System::Drawing::Size(23, 22);
+				this->toolStripButtonOpenProject->Text = L"Open a Project";
+				// 
+				// toolStripButtonSave
+				// 
+				this->toolStripButtonSave->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				this->toolStripButtonSave->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonSave.Image")));
+				this->toolStripButtonSave->ImageTransparentColor = System::Drawing::Color::Magenta;
+				this->toolStripButtonSave->Name = L"toolStripButtonSave";
+				this->toolStripButtonSave->Size = System::Drawing::Size(23, 22);
+				this->toolStripButtonSave->Text = L"Save";
+				// 
+				// toolStripButtonSaveProject
+				// 
+				this->toolStripButtonSaveProject->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				this->toolStripButtonSaveProject->Enabled = false;
+				this->toolStripButtonSaveProject->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonSaveProject.Image")));
+				this->toolStripButtonSaveProject->ImageTransparentColor = System::Drawing::Color::Magenta;
+				this->toolStripButtonSaveProject->Name = L"toolStripButtonSaveProject";
+				this->toolStripButtonSaveProject->Size = System::Drawing::Size(23, 22);
+				this->toolStripButtonSaveProject->Text = L"Save Project";
 				// 
 				// toolStripSeparator3
 				// 
 				this->toolStripSeparator3->Name = L"toolStripSeparator3";
 				this->toolStripSeparator3->Size = System::Drawing::Size(6, 25);
+				// 
+				// toolStripButtonCut
+				// 
+				this->toolStripButtonCut->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				this->toolStripButtonCut->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonCut.Image")));
+				this->toolStripButtonCut->ImageTransparentColor = System::Drawing::Color::Magenta;
+				this->toolStripButtonCut->Name = L"toolStripButtonCut";
+				this->toolStripButtonCut->Size = System::Drawing::Size(23, 22);
+				this->toolStripButtonCut->Text = L"Cut";
+				this->toolStripButtonCut->Click += gcnew System::EventHandler(this, &Form_simUI::cutToolStripMenuItem_Click);
+				// 
+				// toolStripButtonCopy
+				// 
+				this->toolStripButtonCopy->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				this->toolStripButtonCopy->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonCopy.Image")));
+				this->toolStripButtonCopy->ImageTransparentColor = System::Drawing::Color::Magenta;
+				this->toolStripButtonCopy->Name = L"toolStripButtonCopy";
+				this->toolStripButtonCopy->Size = System::Drawing::Size(23, 22);
+				this->toolStripButtonCopy->Text = L"Copy";
+				this->toolStripButtonCopy->Click += gcnew System::EventHandler(this, &Form_simUI::copyToolStripMenuItem_Click);
+				// 
+				// toolStripButtonPaste
+				// 
+				this->toolStripButtonPaste->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				this->toolStripButtonPaste->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonPaste.Image")));
+				this->toolStripButtonPaste->ImageTransparentColor = System::Drawing::Color::Magenta;
+				this->toolStripButtonPaste->Name = L"toolStripButtonPaste";
+				this->toolStripButtonPaste->Size = System::Drawing::Size(23, 22);
+				this->toolStripButtonPaste->Text = L"Paste";
+				this->toolStripButtonPaste->Click += gcnew System::EventHandler(this, &Form_simUI::pasteToolStripMenuItem_Click);
+				// 
+				// toolStripSeparator4
+				// 
+				this->toolStripSeparator4->Name = L"toolStripSeparator4";
+				this->toolStripSeparator4->Size = System::Drawing::Size(6, 25);
+				// 
+				// toolStripButtonUndo
+				// 
+				this->toolStripButtonUndo->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				this->toolStripButtonUndo->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonUndo.Image")));
+				this->toolStripButtonUndo->ImageTransparentColor = System::Drawing::Color::Magenta;
+				this->toolStripButtonUndo->Name = L"toolStripButtonUndo";
+				this->toolStripButtonUndo->Size = System::Drawing::Size(23, 22);
+				this->toolStripButtonUndo->Text = L"Undo";
+				this->toolStripButtonUndo->Click += gcnew System::EventHandler(this, &Form_simUI::undoToolStripMenuItem_Click);
+				// 
+				// toolStripButtonRedo
+				// 
+				this->toolStripButtonRedo->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				this->toolStripButtonRedo->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonRedo.Image")));
+				this->toolStripButtonRedo->ImageTransparentColor = System::Drawing::Color::Magenta;
+				this->toolStripButtonRedo->Name = L"toolStripButtonRedo";
+				this->toolStripButtonRedo->Size = System::Drawing::Size(23, 22);
+				this->toolStripButtonRedo->Text = L"Redo";
+				this->toolStripButtonRedo->Click += gcnew System::EventHandler(this, &Form_simUI::redoToolStripMenuItem_Click);
 				// 
 				// splitContainerMain
 				// 
@@ -652,6 +833,8 @@ namespace simUI {
 				// 
 				// richTextBoxTextEditor
 				// 
+				this->richTextBoxTextEditor->AcceptsTab = true;
+				this->richTextBoxTextEditor->ContextMenuStrip = this->contextMenuStripTextEditor;
 				this->richTextBoxTextEditor->Dock = System::Windows::Forms::DockStyle::Fill;
 				this->richTextBoxTextEditor->Font = (gcnew System::Drawing::Font(L"Courier New", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					static_cast<System::Byte>(0)));
@@ -660,6 +843,34 @@ namespace simUI {
 				this->richTextBoxTextEditor->Size = System::Drawing::Size(826, 309);
 				this->richTextBoxTextEditor->TabIndex = 0;
 				this->richTextBoxTextEditor->Text = L"";
+				// 
+				// contextMenuStripTextEditor
+				// 
+				this->contextMenuStripTextEditor->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->toolStripMenuItemCut, 
+					this->toolStripMenuItemCopy, this->toolStripMenuItemPaste});
+				this->contextMenuStripTextEditor->Name = L"contextMenuStripTextEditor";
+				this->contextMenuStripTextEditor->Size = System::Drawing::Size(103, 70);
+				// 
+				// toolStripMenuItemCut
+				// 
+				this->toolStripMenuItemCut->Name = L"toolStripMenuItemCut";
+				this->toolStripMenuItemCut->Size = System::Drawing::Size(102, 22);
+				this->toolStripMenuItemCut->Text = L"Cut";
+				this->toolStripMenuItemCut->Click += gcnew System::EventHandler(this, &Form_simUI::cutToolStripMenuItem_Click);
+				// 
+				// toolStripMenuItemCopy
+				// 
+				this->toolStripMenuItemCopy->Name = L"toolStripMenuItemCopy";
+				this->toolStripMenuItemCopy->Size = System::Drawing::Size(102, 22);
+				this->toolStripMenuItemCopy->Text = L"Copy";
+				this->toolStripMenuItemCopy->Click += gcnew System::EventHandler(this, &Form_simUI::copyToolStripMenuItem_Click);
+				// 
+				// toolStripMenuItemPaste
+				// 
+				this->toolStripMenuItemPaste->Name = L"toolStripMenuItemPaste";
+				this->toolStripMenuItemPaste->Size = System::Drawing::Size(102, 22);
+				this->toolStripMenuItemPaste->Text = L"Paste";
+				this->toolStripMenuItemPaste->Click += gcnew System::EventHandler(this, &Form_simUI::pasteToolStripMenuItem_Click);
 				// 
 				// richTextBoxConsole
 				// 
@@ -689,92 +900,7 @@ namespace simUI {
 				// openFileDialogASMSource
 				// 
 				this->openFileDialogASMSource->FileName = L"openFileDialog";
-				// 
-				// toolStripButtonOpenProject
-				// 
-				this->toolStripButtonOpenProject->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				this->toolStripButtonOpenProject->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonOpenProject.Image")));
-				this->toolStripButtonOpenProject->ImageTransparentColor = System::Drawing::Color::Magenta;
-				this->toolStripButtonOpenProject->Name = L"toolStripButtonOpenProject";
-				this->toolStripButtonOpenProject->Size = System::Drawing::Size(23, 22);
-				this->toolStripButtonOpenProject->Text = L"Open a Project";
-				// 
-				// toolStripButtonNewProject
-				// 
-				this->toolStripButtonNewProject->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				this->toolStripButtonNewProject->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonNewProject.Image")));
-				this->toolStripButtonNewProject->ImageTransparentColor = System::Drawing::Color::Magenta;
-				this->toolStripButtonNewProject->Name = L"toolStripButtonNewProject";
-				this->toolStripButtonNewProject->Size = System::Drawing::Size(23, 22);
-				this->toolStripButtonNewProject->Text = L"Create New Project";
-				// 
-				// toolStripButtonSave
-				// 
-				this->toolStripButtonSave->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				this->toolStripButtonSave->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonSave.Image")));
-				this->toolStripButtonSave->ImageTransparentColor = System::Drawing::Color::Magenta;
-				this->toolStripButtonSave->Name = L"toolStripButtonSave";
-				this->toolStripButtonSave->Size = System::Drawing::Size(23, 22);
-				this->toolStripButtonSave->Text = L"Save";
-				// 
-				// toolStripButtonSaveProject
-				// 
-				this->toolStripButtonSaveProject->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				this->toolStripButtonSaveProject->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonSaveProject.Image")));
-				this->toolStripButtonSaveProject->ImageTransparentColor = System::Drawing::Color::Magenta;
-				this->toolStripButtonSaveProject->Name = L"toolStripButtonSaveProject";
-				this->toolStripButtonSaveProject->Size = System::Drawing::Size(23, 22);
-				this->toolStripButtonSaveProject->Text = L"Save Project";
-				// 
-				// toolStripButtonCut
-				// 
-				this->toolStripButtonCut->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				this->toolStripButtonCut->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonCut.Image")));
-				this->toolStripButtonCut->ImageTransparentColor = System::Drawing::Color::Magenta;
-				this->toolStripButtonCut->Name = L"toolStripButtonCut";
-				this->toolStripButtonCut->Size = System::Drawing::Size(23, 22);
-				this->toolStripButtonCut->Text = L"Cut";
-				// 
-				// toolStripButtonCopy
-				// 
-				this->toolStripButtonCopy->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				this->toolStripButtonCopy->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonCopy.Image")));
-				this->toolStripButtonCopy->ImageTransparentColor = System::Drawing::Color::Magenta;
-				this->toolStripButtonCopy->Name = L"toolStripButtonCopy";
-				this->toolStripButtonCopy->Size = System::Drawing::Size(23, 22);
-				this->toolStripButtonCopy->Text = L"Copy";
-				// 
-				// toolStripButtonPaste
-				// 
-				this->toolStripButtonPaste->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				this->toolStripButtonPaste->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonPaste.Image")));
-				this->toolStripButtonPaste->ImageTransparentColor = System::Drawing::Color::Magenta;
-				this->toolStripButtonPaste->Name = L"toolStripButtonPaste";
-				this->toolStripButtonPaste->Size = System::Drawing::Size(23, 22);
-				this->toolStripButtonPaste->Text = L"Paste";
-				// 
-				// toolStripSeparator4
-				// 
-				this->toolStripSeparator4->Name = L"toolStripSeparator4";
-				this->toolStripSeparator4->Size = System::Drawing::Size(6, 25);
-				// 
-				// toolStripButtonUndo
-				// 
-				this->toolStripButtonUndo->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				this->toolStripButtonUndo->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonUndo.Image")));
-				this->toolStripButtonUndo->ImageTransparentColor = System::Drawing::Color::Magenta;
-				this->toolStripButtonUndo->Name = L"toolStripButtonUndo";
-				this->toolStripButtonUndo->Size = System::Drawing::Size(23, 22);
-				this->toolStripButtonUndo->Text = L"Undo";
-				// 
-				// toolStripButtonRedo
-				// 
-				this->toolStripButtonRedo->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				this->toolStripButtonRedo->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"toolStripButtonRedo.Image")));
-				this->toolStripButtonRedo->ImageTransparentColor = System::Drawing::Color::Magenta;
-				this->toolStripButtonRedo->Name = L"toolStripButtonRedo";
-				this->toolStripButtonRedo->Size = System::Drawing::Size(23, 22);
-				this->toolStripButtonRedo->Text = L"Redo";
+				this->openFileDialogASMSource->Title = L"Open Assembly Source File...";
 				// 
 				// Form_simUI
 				// 
@@ -810,6 +936,7 @@ namespace simUI {
 				this->splitContainerTextConsole->ResumeLayout(false);
 				this->tabControlMain->ResumeLayout(false);
 				this->tabPageTextEdit->ResumeLayout(false);
+				this->contextMenuStripTextEditor->ResumeLayout(false);
 				this->ResumeLayout(false);
 				this->PerformLayout();
 
@@ -995,16 +1122,17 @@ namespace simUI {
 
 			private: System::Void copyToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
 			{
-			 
+				this->richTextBoxTextEditor->Copy();
 			}
 
 			private: System::Void cutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
 			{
-					 
+				this->richTextBoxTextEditor->Cut();
 			}
 
 			private: System::Void pasteToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
 			{
+				this->richTextBoxTextEditor->Paste();
 			}
 
 			private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
@@ -1023,6 +1151,19 @@ namespace simUI {
 				memsd->ShowDialog();
 				mem_bits = memsd->getMemoryBits();
 			}
-	};
+
+			private: System::Void undoToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
+			{
+				if(richTextBoxTextEditor->CanUndo)
+					richTextBoxTextEditor->Undo();
+
+			}
+
+			private: System::Void redoToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
+			{
+				if(richTextBoxTextEditor->CanRedo)
+					richTextBoxTextEditor->Redo();
+			}
+};
 }
 
