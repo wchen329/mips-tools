@@ -52,7 +52,7 @@ namespace mipsshell
 			{
 				if(all_whitespace_or_tab)
 				{
-					start_with_no_whitespace = ap.get() + step;
+					start_with_no_whitespace = ap.get() + step + 1;
 				}
 			}
 
