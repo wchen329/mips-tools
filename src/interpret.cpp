@@ -181,9 +181,9 @@ namespace mipsshell
 
 									else
 									{
-										op = mipsshell::SYMBOL_ASSIGNMENT;
-										round = round - 1;
-										
+										std::string w(working_set);
+										w.pop_back();
+										s_table.insert(w, dcpu->get_PC());
 									}
 
 									syms = true;

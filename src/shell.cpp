@@ -26,10 +26,13 @@ namespace mipsshell
 	 */
 	void Shell::Run()
 	{
+		bool quiet = false;
 		size_t argc = args.size();
 		mips_tools::cpu_t cp = mips_tools::STANDARD;
 		int mem_width = 16;
 		FILE * inst_file = NULL;
+
+		if(!isQuiet)
 		fprintf(stdout, "MIPS Tools 0.1 (developmental build)\n");
 
 		// First get the active file in which to get instructions from
@@ -50,7 +53,7 @@ namespace mipsshell
 
 				if(args[i] == "-a")
 				{
-					fprintf(stdout, "Assembler mode ENABLED.\n");
+					if(!isQuiet) fprintf(stdout, "Assembler mode ENABLED.\n");
 					mipsshell::ASM_MODE = true;
 					mipsshell::INTERACTIVE = false;
 				}
@@ -91,7 +94,7 @@ namespace mipsshell
 		{
 			if(!mipsshell::WIN_32_GUI)
 			{
-				fprintf(stdout, "Starting in batch mode...\n");
+				if(!isQuiet) fprintf(stdout, "Starting in batch mode...\n");
 				mipsshell::INTERACTIVE = false;
 			}
 
@@ -112,8 +115,8 @@ namespace mipsshell
 		{
 			mipsshell::INTERACTIVE = true;
 			inst_file = stdin;
-			fprintf(stdout, "Starting in interactive mode...\n");
-			fprintf(stdout, "Tip: system directives are preceded by a . (for example .help)\n");
+			if(!isQuiet) fprintf(stdout, "Starting in interactive mode...\n");
+			if(!isQuiet) fprintf(stdout, "Tip: system directives are preceded by a . (for example .help)\n");
 		}
 
 		if(mem_width <= 0)
@@ -128,26 +131,26 @@ namespace mipsshell
 			exit(1);
 		}
 
-		fprintf(stdout, "CPU Type: ");
+		if(!isQuiet) fprintf(stdout, "CPU Type: ");
 		switch(cp)
 		{
 			case mips_tools::STANDARD:
-				fprintf(stdout, "Single Cycle\n");
+				if(!isQuiet) fprintf(stdout, "Single Cycle\n");
 				break;
 			case mips_tools::FIVE_P:
-				fprintf(stdout, "Five Stage Pipeline\n");
+				if(!isQuiet)fprintf(stdout, "Five Stage Pipeline\n");
 				break;
 			default:
-				fprintf(stdout, "Invalid CPU type detected. Exiting...\n");
+				if(!isQuiet) fprintf(stdout, "Invalid CPU type detected. Exiting...\n");
 				exit(1);
 		}
 
-		mips_tools::mb motherboard(cp, mem_width, mipsshell::SUSPEND);
-		motherboard.reset();
-		mips_tools::mb * MB_IN_PTR = &motherboard;
+		this->motherboard = new mips_tools::mb(cp, mem_width, mipsshell::SUSPEND);
+		motherboard->reset();
+		mips_tools::mb * MB_IN_PTR = motherboard;
 		if(mipsshell::ASM_MODE) mipsshell::mtsstream::asmout = new mipsshell::asm_ostream("a.bin");
 
-		fprintf(stdout, "Main Memory size: %d bytes\n", motherboard.get_mmem_size());
+		if(!isQuiet) fprintf(stdout, "Main Memory size: %d bytes\n", motherboard->get_mmem_size());
 
 		while(!mipsshell::EXIT_COND)
 		{
@@ -174,7 +177,7 @@ namespace mipsshell
 						mipsshell::interpret(buf, MB_IN_PTR);
 					}
 
-					motherboard.get_cpu().rst();
+					motherboard->get_cpu().rst();
 				}
 
 				signal(SIGINT, mipsshell::Enter_Interactive);
@@ -183,7 +186,7 @@ namespace mipsshell
 					mipsshell::PRE_ASM = false;
 					try
 					{
-						mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard.get_cpu());
+						mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
 						mips_tools::BW_32 dpc = dcpu.get_PC();
 						std::string& runtime_call = mipsshell::debug_table.lookup_from_PC(dpc);
 						mipsshell::interpret(runtime_call.c_str(), MB_IN_PTR);
@@ -193,7 +196,7 @@ namespace mipsshell
 
 					}
 				
-					motherboard.get_cpu().cycle();
+					motherboard->get_cpu().cycle();
 				}
 			}
 		}

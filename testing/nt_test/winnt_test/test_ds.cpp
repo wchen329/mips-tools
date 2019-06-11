@@ -3,6 +3,7 @@
 
 using namespace System;
 using namespace System::Diagnostics;
+//using namespace System::Time;
 
 int test_collection::run_test(int index)
 {
@@ -17,12 +18,16 @@ int test_collection::run_test(int index)
 	running_test->StartInfo->FileName = "winnt_test.exe";
 	running_test->StartInfo->Arguments = "-t " + addr;
 	running_test->StartInfo->UseShellExecute = false;
-	running_test->StartInfo->CreateNoWindow = true;
 	running_test->StartInfo->RedirectStandardError = true;
 	running_test->Start();
 	running_test->WaitForExit();
 
 	int status = running_test->ExitCode;
+
+	//Timer^ t = gcnew Timer();
+	//t->Interval = 5;
+	//t->Elapsed() = gcnew(System::EventHandler(this, &Timer::Elapsed());
+	//t->Start();
 
 	if(status == 0)
 	{

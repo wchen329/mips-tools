@@ -15,10 +15,16 @@ namespace mipsshell
 		public:
 			void Run();
 			void SetArgs(std::vector<std::string> & args) { this->args = args; }
-			mips_tools::mb& GetMotherboard() { return this->motherboard; } // Call this **after** Run
+			mips_tools::mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
+			void SetQuiet() { isQuiet = true; }
+			Shell() : motherboard(nullptr), isQuiet(false) { }
+			~Shell() { delete motherboard; }
 		private:
+			Shell& operator=(const Shell&);
+			Shell(const Shell&);
 			std::vector<std::string> args;
-			mips_tools::mb motherboard;
+			mips_tools::mb * motherboard;
+			bool isQuiet;
 	};
 }
 
