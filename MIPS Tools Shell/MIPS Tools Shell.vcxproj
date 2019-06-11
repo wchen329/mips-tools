@@ -76,6 +76,7 @@
     <ClCompile Include="..\src\parser_err.cpp" />
     <ClCompile Include="..\src\runtime_call.cpp" />
     <ClCompile Include="..\src\shell.cpp" />
+    <ClCompile Include="..\src\shell_entry.cpp" />
     <ClCompile Include="..\src\states.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +87,7 @@
     <ClInclude Include="..\include\mtswriter.h" />
     <ClInclude Include="..\include\parser_err.h" />
     <ClInclude Include="..\include\runtime_call.h" />
+    <ClInclude Include="..\include\shell.h" />
     <ClInclude Include="..\include\states.h" />
   </ItemGroup>
   <ItemGroup>

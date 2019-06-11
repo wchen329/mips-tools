@@ -10,6 +10,7 @@
 #include "mtsstream.h"
 #include "interpret.h"
 #include "runtime_call.h"
+#include "shell.h"
 #include "states.h"
 
 /* Shell for MIPS Tools
@@ -20,8 +21,9 @@
  *
  * wchen329
  */
-int main(int argc, char ** argv)
+int shell(std::vector<std::string> & args)
 {
+	size_t argc = args.size();
 	mips_tools::cpu_t cp = mips_tools::STANDARD;
 	int mem_width = 16;
 	FILE * inst_file = NULL;
@@ -30,9 +32,9 @@ int main(int argc, char ** argv)
 	// First get the active file in which to get instructions from
 	if(argc >= 2)
 	{
-		for(int i = 1; i < argc; i++)
+		for(size_t i = 1; i < argc; i++)
 		{
-			if(!strcmp(argv[i], "-h"))
+			if(args[i] == "-h")
 			{
 				fprintf(stdout, "Usage options:\n");
 				fprintf(stdout, "-h (show this message)\n");
@@ -43,25 +45,25 @@ int main(int argc, char ** argv)
 				exit(0);
 			}
 
-			if(!strcmp(argv[i], "-a"))
+			if(args[i] == "-a")
 			{
 				fprintf(stdout, "Assembler mode ENABLED.\n");
 				mipsshell::ASM_MODE = true;
 				mipsshell::INTERACTIVE = false;
 			}
 
-			if(!strcmp(argv[i], "-i"))
+			if(args[i] == "-i")
 			{
 				mipsshell::INTERACTIVE = false;
 				mipsshell::HAS_INPUT = true;
 				if((i+1) < argc)
 				{
-					inst_file = fopen(argv[i+1], "r");
+					inst_file = fopen(args[i+1].c_str(), "r");
 					mipsshell::INPUT_SPECIFIED = true;
 				}
 			}
 
-			if(!strcmp(argv[i], "-WIN32_SHELL"))
+			if(args[i] == "-WIN32_SHELL")
 			{
 				mipsshell::INTERACTIVE = false;
 				mipsshell::HAS_INPUT = true;
@@ -70,14 +72,14 @@ int main(int argc, char ** argv)
 				mipsshell::WIN_32_GUI = true;
 			}
 
-			if(!strcmp(argv[i], "-m"))
+			if(args[i] == "-m")
 			{
-				if((i+1) < argc) mem_width = atoi(argv[i+1]);
+				if((i+1) < argc) mem_width = atoi(args[i+1].c_str());
 			}
 
-			if(!strcmp(argv[i], "-c"))
+			if(args[i] == "-c")
 			{
-				if((i+1) < argc) cp = static_cast<mips_tools::cpu_t>(atoi(argv[i+1]));
+				if((i+1) < argc) cp = static_cast<mips_tools::cpu_t>(atoi(args[i+1].c_str()));
 			}
 		}
 	}
