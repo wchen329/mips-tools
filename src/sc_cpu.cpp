@@ -257,15 +257,12 @@ namespace mips_tools
 
 	void sc_cpu::mem_req_write(char data, int index)
 	{
-		if(mm.get_size() <= index) throw new mt_exception;
-
-		this->mm[index] = data;
+		this->mm[index % this->mm.get_size()] = data;
 	}
 
 	char sc_cpu::mem_req_load(int index)
 	{
-		if(mm.get_size() <= index) throw new mt_exception;
-		return this->mm[index];
+		return this->mm[index % this->mm.get_size()];
 	}
 
 	void sc_cpu::ghost_cycle()
