@@ -14,61 +14,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\shell.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\interpret.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\states.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\messages.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\format_chk.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\parser_err.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\runtime_call.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\mtsstream.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\shell_entry.cpp">
       <Filter>src</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\interpret.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\states.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\messages.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\format_chk.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\parser_err.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\runtime_call.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\mtsstream.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\mtswriter.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\shell.h">
-      <Filter>include</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

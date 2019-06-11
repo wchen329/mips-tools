@@ -68,31 +68,48 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\format_chk.cpp" />
+    <ClCompile Include="..\src\interpret.cpp" />
     <ClCompile Include="..\src\mem.cpp" />
+    <ClCompile Include="..\src\messages.cpp" />
     <ClCompile Include="..\src\mips.cpp" />
+    <ClCompile Include="..\src\mtsstream.cpp" />
+    <ClCompile Include="..\src\parser_err.cpp" />
     <ClCompile Include="..\src\pipeline.cpp" />
     <ClCompile Include="..\src\primitives.cpp" />
     <ClCompile Include="..\src\reg_32.cpp" />
     <ClCompile Include="..\src\reg_pipeline.cpp" />
+    <ClCompile Include="..\src\runtime_call.cpp" />
     <ClCompile Include="..\src\sc_cpu.cpp" />
     <ClCompile Include="..\src\mb.cpp" />
     <ClCompile Include="..\src\mmem.cpp" />
+    <ClCompile Include="..\src\shell.cpp" />
+    <ClCompile Include="..\src\states.cpp" />
     <ClCompile Include="..\src\syms_table.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h" />
     <ClInclude Include="..\include\diag_cpu.h" />
+    <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\imageable.h" />
+    <ClInclude Include="..\include\interpret.h" />
     <ClInclude Include="..\include\mb.h" />
     <ClInclude Include="..\include\mem.h" />
+    <ClInclude Include="..\include\messages.h" />
     <ClInclude Include="..\include\mips.h" />
     <ClInclude Include="..\include\mmem.h" />
+    <ClInclude Include="..\include\mtsstream.h" />
+    <ClInclude Include="..\include\mtswriter.h" />
     <ClInclude Include="..\include\mt_exception.h" />
+    <ClInclude Include="..\include\parser_err.h" />
     <ClInclude Include="..\include\pipeline.h" />
     <ClInclude Include="..\include\primitives.h" />
     <ClInclude Include="..\include\reg_32.h" />
     <ClInclude Include="..\include\reg_pipeline.h" />
+    <ClInclude Include="..\include\runtime_call.h" />
     <ClInclude Include="..\include\sc_cpu.h" />
+    <ClInclude Include="..\include\shell.h" />
+    <ClInclude Include="..\include\states.h" />
     <ClInclude Include="..\include\superscalar.h" />
     <ClInclude Include="..\include\syms_table.h" />
   </ItemGroup>
