@@ -6,6 +6,11 @@
 
 namespace mipsshell
 {
+	/* Divides a string based on whitespace, tabs, commas and newlines
+	 * Acknowledges escaping \ and quotes
+	 */
+	std::vector<std::string> chop_string(std::string & input);
+
 	/* A single instance of a Shell
 	 * -
 	 * The shell allows easy and direct access to utilizing a processor.

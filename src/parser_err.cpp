@@ -20,6 +20,11 @@ namespace mipsshell
 		fprintf(stderr, BAD_FORMAT);
 	}
 
+	void bad_escape_err::err_pr()
+	{
+		fprintf(stderr, "Bad escaping (with \", \', and/or \\).\n");
+	}
+
 	void badimm_err::err_pr()
 	{
 		fprintf(stderr, "Immediate format is incorrect.\n");

@@ -9,6 +9,7 @@
 #include "mb.h"
 #include "mtsstream.h"
 #include "interpret.h"
+#include "parser_err.h"
 #include "runtime_call.h"
 #include "shell.h"
 #include "states.h"
@@ -16,6 +17,7 @@
 
 namespace mipsshell
 {
+
 	/* Shell for MIPS Tools
 	 *
 	 * The shell has two modes: Interative Mode and Batch Mode
@@ -203,5 +205,67 @@ namespace mipsshell
 
 		fclose(inst_file);
 		delete mipsshell::mtsstream::asmout;
+	}
+
+	/* Takes an input string and breaks that string into a vector of several
+	 * based off of whitespace and tab delineators
+	 * "Also acknowledges " " and ' ' and \ all used for escaping
+	 */
+	std::vector<std::string> chop_string(std::string & input)
+	{
+		std::vector<std::string> str_vec;
+
+		std::string built_string = "";
+
+		bool has_escaped = false;
+		bool in_quotes = false;
+
+		// Use a linear search
+		for(size_t ind = 0; ind < input.size(); ind++)
+		{
+			// If no escaping, then perform syntactical checks
+			if(!has_escaped)
+			{
+				// First acknowledge escaping
+				if(input[ind] == '\\')
+				{
+					has_escaped = true;
+					continue;
+				}
+
+				// Detect quotations
+				if(input[ind] == '\"' || input[ind] == '\'')
+				{
+					in_quotes = !in_quotes;
+					continue;
+				}
+
+				// Now if not quoted as well, then a comma, whitespace, tab, or newline delineates that argument is done parsing
+				if(!in_quotes)
+				{
+					if(input[ind] == ',' ||  input[ind] == ' ' || input[ind] == '\t' || input[ind] == '\n')
+					{
+						// Check: do not add empty strings
+						if(built_string != "")
+						{
+							str_vec.push_back(built_string);
+							built_string = "";
+						}
+
+						continue;
+					}
+				}
+			}
+
+			built_string += input[ind];
+			has_escaped = false; // no matter what, escaping only escapes one...
+		}
+
+		if(has_escaped || in_quotes)
+		{
+			throw bad_escape_err();
+		}
+
+		return str_vec;
 	}
 }

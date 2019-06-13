@@ -1,5 +1,6 @@
 #ifndef __PARSER_ERR_H__
 #define __PARSER_ERR_H__ 
+#include <string>
 namespace mipsshell
 {
 	// exception class
@@ -25,6 +26,13 @@ namespace mipsshell
 	{
 		public:
 			void err_pr();
+	};
+
+	class bad_escape_err : public parser_err
+	{
+		std::string err;
+		public:
+			void err_pr(); // print the error
 	};
 
 	class unexpected_err : public parser_err
