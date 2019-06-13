@@ -77,6 +77,7 @@
     <ClCompile Include="..\src\parser_err.cpp" />
     <ClCompile Include="..\src\pipeline.cpp" />
     <ClCompile Include="..\src\primitives.cpp" />
+    <ClCompile Include="..\src\range.cpp" />
     <ClCompile Include="..\src\reg_32.cpp" />
     <ClCompile Include="..\src\reg_pipeline.cpp" />
     <ClCompile Include="..\src\runtime_call.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="..\include\parser_err.h" />
     <ClInclude Include="..\include\pipeline.h" />
     <ClInclude Include="..\include\primitives.h" />
+    <ClInclude Include="..\include\range.h" />
     <ClInclude Include="..\include\reg_32.h" />
     <ClInclude Include="..\include\reg_pipeline.h" />
     <ClInclude Include="..\include\runtime_call.h" />

@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <map>
 #include "messages.h"
+#include "range.h"
 #include "runtime_call.h"
 #include "states.h"
 
@@ -112,6 +113,17 @@ namespace mipsshell
 		{
 			fprintf(stdout, "Main memory size: %d bytes\n", cmp.get_mmem_size());
 		}
+
+		// Otherwise print memory specific to indicies
+		for(size_t itr = 1; itr < args.size(); itr++)
+		{
+			mips_tools::range r = mips_tools::range(args[itr]);
+
+			for(mips_tools::range_iterator itr_2 = r.begin(); itr_2 != r.end(); itr_2++)
+			{
+				fprintf(stdout, "Mem[%d]: %d\n", *itr_2, inst.GetMotherboard().DMA_read(*itr_2));
+			}
+		}
 	}
 
 	void power(std::vector<std::string> & args, Shell& inst)
@@ -145,6 +157,19 @@ namespace mipsshell
 			for(int r = 0; r < reg_count; r++)
 			{
 				fprintf(stdout, "REG %d:\t%d\n", r, dcpu.get_reg_data(r));
+			}
+		}
+
+		else
+		{
+			for(size_t itr = 1; itr < args.size(); itr++)
+			{
+				mips_tools::range r(args[itr]);
+
+				for(mips_tools::range_iterator ritr = r.begin(); ritr != r.end(); ritr++)
+				{
+					fprintf(stdout, "REG %d:\t%d\n", *ritr, dcpu.get_reg_data(*ritr));
+				}
 			}
 		}
 	}

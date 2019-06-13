@@ -232,6 +232,22 @@ namespace mipsshell
 		{
 			mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
 			if(fgets(buf, 100, inst_file) == NULL) break;
+			
+			if(buf[0] == '.')
+			{
+				try
+				{
+					execute_runtime_directive(chop_string(std::string(buf)));
+					
+				}
+				catch(mips_tools::mt_exception & e)
+				{
+					fprintf(stdout, e.get_err().c_str());
+				}
+
+				continue;
+			}
+			
 			if(assemble(buf, MB_IN_PTR, dcpu.get_PC())) break;
 		}
 

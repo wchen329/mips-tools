@@ -322,7 +322,7 @@ namespace mipsshell
 				return false;
 			}
 
-			catch(mt_exception * e)
+			catch(mips_tools::mt_exception * e)
 			{
 				fprintf(stdout, "An internal system error has occurred...\n");
 				delete e;
