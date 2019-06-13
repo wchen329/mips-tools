@@ -16,13 +16,19 @@ namespace mips_tools
 	 */
 	class syms_table
 	{
+		/* There can be many symbols assigned to one PC
+		 * However, only one PC can be assigned to a symbol
+		 *
+		 */
 
 		public:
 			void insert(std::string key, BW_32 PC);
-			std::string& lookup_from_PC(BW_32 PC) { return this->PC_to_syms.at(PC); }
+			bool has(std::string key) { return this->syms_to_PC.count(key) > 0; };
+			bool has(BW_32 pc) { return this->PC_to_syms.count(pc) > 0; }
+			std::vector<std::string>& lookup_from_PC(BW_32 PC) { return this->PC_to_syms.at(PC); }
 			BW_32 lookup_from_sym(const std::string & sym) { return this->syms_to_PC.at(sym); }
 		private:
-			std::map<BW_32, std::string> PC_to_syms;
+			std::map<BW_32, std::vector<std::string>> PC_to_syms;
 			std::unordered_map<std::string, BW_32> syms_to_PC;
 			
 	};

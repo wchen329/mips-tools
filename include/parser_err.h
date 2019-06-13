@@ -7,7 +7,7 @@ namespace mipsshell
 	class parser_err
 	{
 		public:
-			virtual void err_pr() = 0; // print the error
+			virtual void err_pr(); // print the error
 	};
 
 	class badformat_err : public parser_err

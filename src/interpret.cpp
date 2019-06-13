@@ -22,11 +22,9 @@
 
 namespace mipsshell
 {
-	mips_tools::syms_table s_table;
-	mips_tools::syms_table debug_table;
 
 	// Main interpretation routine
-	bool interpret(const char * line, mips_tools::mb * mb_ptr)
+	bool Shell::assemble(const char * line, mips_tools::mb * mb_ptr, mips_tools::BW_32 baseAddress)
 	{
 
 		mips_tools::opcode current_op = mips_tools::SYS_RES;
@@ -106,33 +104,7 @@ namespace mipsshell
 				{
 				case 0:
 						// This comparison will be optimized and placed in a separate routine, ultimately
-
-						if(!strcmp(".exit", working_set))
-						{
-							if(!INTERACTIVE && HAS_INPUT && !ASM_MODE && PRE_ASM)
-								debug_table.insert(".exit", dcpu->get_PC());
-							else
-							{		
-								mipsshell::EXIT_COND = true;
-								return true;
-							}
-						}
-						else if(!strcmp(".cycle", working_set)){ mb_ptr -> step(); return false; }	// step the processor on the current PC an instruction
-						else if(!strcmp(".help", working_set)) { fprintf(stdout, HELP); }
-						else if(!strcmp(".mem", working_set)) { fprintf(stdout, "Main Memory Size: %d bytes\n", mb_ptr->get_mmem_size()); }
-						else if(!strcmp(".rst", working_set)) dot_rst(mb_ptr);
-						else if(!strcmp(".state", working_set))
-						{
-							if(!INTERACTIVE && HAS_INPUT && !ASM_MODE && PRE_ASM)
-								debug_table.insert(".state", dcpu->get_PC());
-							else
-							{
-								dot_state(dcpu);
-							}
-						}
-						else if(!strcmp(".time", working_set)) dot_time(mb_ptr);
-						else if(!strcmp(".run", working_set)) { fprintf(stdout, "Continuing...\n"); mipsshell::INTERACTIVE = false; mipsshell::SUSPEND = false;}
-						else if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
+						if(!strcmp("add", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
 						else if(!strcmp("addi", working_set)) { current_op = mips_tools::ADDI; }
 						else if(!strcmp("beq", working_set)) { current_op = mips_tools::BEQ; }
 						else if(!strcmp("bne", working_set)) { current_op = mips_tools::BNE; }
@@ -160,37 +132,8 @@ namespace mipsshell
 						else if(!strcmp("jr", working_set)) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::JR;}
 						else
 						{
-							bool syms = false;
-							int ws_len = strlen(working_set);
-
-							if(ws_len > 0)
-							{
-								if(working_set[ws_len-1] == ':')
-								{
-									//Interactive Address Assignment
-									if(working_set[0] == '.')
-									{
-										std::string w(working_set + 1);
-										w.pop_back();
-										fprintf(stdout, "Assigning symbol... %s <-> PC = %d\n", w.c_str(), dcpu->get_PC());
-										s_table.insert(w, dcpu->get_PC());
-
-									}
-
-									// Else non interactive
-
-									else
-									{
-										std::string w(working_set);
-										w.pop_back();
-										s_table.insert(w, dcpu->get_PC());
-									}
-
-									syms = true;
-								}
-							}
-
-							if(!syms) fprintf(stdout, BAD_COMMAND); return false;
+							fprintf(stdout, BAD_COMMAND);
+							return false;
 						}
 
 						break;
@@ -237,7 +180,7 @@ namespace mipsshell
 								// Otherwise, perceive as a label, try to convert
 								try
 								{
-									mips_tools::BW_32 label_PC = s_table.lookup_from_sym(std::string(working_set));
+									mips_tools::BW_32 label_PC = this->jump_syms.lookup_from_sym(std::string(working_set));
 									imm = (label_PC >> 2);
 								}
 
@@ -346,8 +289,8 @@ namespace mipsshell
 								// Otherwise, perceive as a label, try to convert
 								try
 								{
-									mips_tools::BW_32 label_PC = s_table.lookup_from_sym(std::string(working_set));
-									imm = mips_tools::offset_to_address_br(dcpu->get_PC(), label_PC);
+									mips_tools::BW_32 label_PC = this->jump_syms.lookup_from_sym(std::string(working_set));
+									imm = mips_tools::offset_to_address_br(baseAddress, label_PC);
 								}
 
 								catch(std::out_of_range&)
@@ -401,10 +344,10 @@ namespace mipsshell
 			mips_tools::BW_32 inst = dcpu -> encode(rs, rt, rd, f_code, imm, current_op);
 			mips_tools::BW_32_T inst_part = mips_tools::BW_32_T(inst);
 
-			mb_ptr->DMA_write(inst_part.b_0(), dcpu->get_PC());
-			mb_ptr->DMA_write(inst_part.b_1(), dcpu->get_PC() + 1);
-			mb_ptr->DMA_write(inst_part.b_2(), dcpu->get_PC() + 2);
-			mb_ptr->DMA_write(inst_part.b_3(), dcpu->get_PC() + 3);
+			mb_ptr->DMA_write(inst_part.b_0(), baseAddress);
+			mb_ptr->DMA_write(inst_part.b_1(), baseAddress + 1);
+			mb_ptr->DMA_write(inst_part.b_2(), baseAddress + 2);
+			mb_ptr->DMA_write(inst_part.b_3(), baseAddress + 3);
 
 			if(ASM_MODE && mtsstream::asmout != nullptr)
 			{
@@ -414,10 +357,6 @@ namespace mipsshell
 
 		// Call an execution routine explicity
 		if(INTERACTIVE) mb_ptr -> step();
-		else
-		{
-			dcpu->ghost_cycle();
-		}
 
 		return false;
 	}

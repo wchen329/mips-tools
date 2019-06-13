@@ -9,11 +9,6 @@ namespace mipsshell
 
 	void set_op_and_f(const char* mnemonic, mips_tools::opcode& op, mips_tools::funct& f);
 
-	/* A simple interpreter that
-	 * may continue cycling the CPU or gives access to some
-	 * system calls
-	 */
-	bool interpret(const char * line, mips_tools::mb * mb_ptr);
 }
 
 #endif
