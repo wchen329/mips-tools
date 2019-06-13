@@ -13,7 +13,7 @@ int test_collection::run_test(int index)
 
 	fprintf(stdout, "Running test [%d] : %s ", index, n.c_str());
 	size_t addr = (size_t)test_routine;
-
+	
 	Process^ running_test = gcnew Process();
 	running_test->StartInfo->FileName = "winnt_test.exe";
 	running_test->StartInfo->Arguments = "-t " + addr;

@@ -42,6 +42,7 @@ int main(int argc, char ** argv)
 	online_tests.add_test(test_sc_cpu_ops, "test_sc_cpu_ops");
 	online_tests.add_test(test_shell_comments, "test_shell_comments");
 	online_tests.add_test(test_sc_cpu_loop, "test_sc_cpu_loop");
+	online_tests.add_test(test_sc_cpu_subroutine, "test_sc_cpu_subroutine");
 
 	std::cout << "Found " << online_tests.get_test_count() << " tests." << std::endl;
 

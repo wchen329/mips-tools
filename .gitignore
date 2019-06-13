@@ -10,3 +10,6 @@ simUI/Release/*
 *.exe
 *.tlog
 testing/nt_test/winnt_test/Debug/*
+testing/tests/winnt_test.exe.metagen
+testing/tests/winnt_test.ilk
+testing/tests/winnt_test.pdb

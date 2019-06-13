@@ -191,7 +191,7 @@ namespace mipsshell
 							}
 						}
 	
-						else { fprintf(stdout, BAD_COMMAND); return false;}
+						else { fprintf(stdout, "%s:", working_set); fprintf(stdout, BAD_COMMAND); return false;}
 						break;
 					
 					case 2:
@@ -241,7 +241,7 @@ namespace mipsshell
 								rs = get_reg_num(working_set);
 							}
 						}
-
+						else if(j_inst(current_op)){}
 						else { fprintf(stdout, BAD_COMMAND); return false;}
 						break;
 			
@@ -332,7 +332,7 @@ namespace mipsshell
 
 		// Check for insufficient arguments
 		if( (!j_inst(current_op) && ((current_op != mips_tools::SYS_RES && round != 4 && !mem_inst(current_op) && f_code != mips_tools::JR)
-									|| (mem_inst(current_op) && round != 3))) || j_inst(current_op) && round != 2 || (f_code == mips_tools::JR && round != 2))
+									|| (mem_inst(current_op) && round != 3))) || j_inst(current_op) && round < 2 || (f_code == mips_tools::JR && round != 2))
 			{ fprintf(stdout, "Expected more arguments, specification incomplete.\n"); return false; }
 
 		// If system call, don't execute in CPU
