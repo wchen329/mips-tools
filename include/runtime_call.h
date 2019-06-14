@@ -11,6 +11,7 @@ namespace mipsshell
 {
 	void Enter_Interactive(int arg);
 	void breakpoint(std::vector<std::string> & args, Shell& inst);
+	void cycle(std::vector<std::string> & args, Shell& inst);
 	void cpuopts(std::vector<std::string> & args, Shell& inst);
 	void exit(std::vector<std::string> & args, Shell& inst);
 	void help(std::vector<std::string> & args, Shell& inst);
@@ -18,6 +19,7 @@ namespace mipsshell
 	void pci(std::vector<std::string> & args, Shell& inst);
 	void power(std::vector<std::string> & args, Shell& inst);
 	void rst(std::vector<std::string> & args, Shell& inst);
+	void run(std::vector<std::string> & args, Shell& inst);
 	void sound(std::vector<std::string> & args, Shell& inst);
 	void state(std::vector<std::string> & args, Shell& inst);
 	void time(std::vector<std::string> & args, Shell& inst);

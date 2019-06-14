@@ -171,15 +171,17 @@ namespace mipsshell
 			mips_tools::BW_32 equiv_pc = 0;
 			char input_f_stream[255];
 			memset(input_f_stream, 0, sizeof(input_f_stream));
+			unsigned long line_number = 0;
 			while(fgets(input_f_stream, 254, inst_file) != NULL)
 			{
+				line_number++;
 				std::string current_line = std::string(input_f_stream);
 				std::vector<std::string> parts = chop_string(current_line);
 	
 				// Remove strings that are just whitespace
 				if(parts.empty())
 					continue;
-					
+
 				// Symbol assignment: add the symbol to symbol table
 					
 				if(parts[0][parts[0].size() - 1] == ':')
@@ -194,8 +196,11 @@ namespace mipsshell
 					continue;
 				}
 
+				this->line_number_to_PC.insert(std::pair<unsigned long, mips_tools::BW_32>(line_number, equiv_pc));
+				this->PC_to_line_number.insert(std::pair<mips_tools::BW_32, unsigned long>(equiv_pc, line_number));
+				this->PC_to_line_string.insert((std::pair<mips_tools::BW_32, std::string>(equiv_pc, current_line)));
 				equiv_pc = equiv_pc + 4;
-				lines.push_back(current_line);
+				lines.push_back(current_line);		
 			}
 
 			mips_tools::BW_32 asm_pc = 0;
@@ -209,6 +214,8 @@ namespace mipsshell
 			
 			this->state = SLEEPING;
 		}
+
+		inst_file = stdin;
 
 		while(this->state != KILLED)
 		{
@@ -255,7 +262,7 @@ namespace mipsshell
 		{
 
 			signal(SIGINT, mipsshell::Enter_Interactive);
-			while(this->state != KILLED)
+			while(this->state != KILLED && !mipsshell::SUSPEND)
 			{
 				mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
 				mips_tools::BW_32 dpc = dcpu.get_PC();
@@ -268,7 +275,24 @@ namespace mipsshell
 						execute_runtime_directive(chop_string(cmds[cmdcount]));
 				}
 
-				motherboard->get_cpu().cycle();
+				if(this->has_prog_break_at(dcpu.get_PC()))
+				{
+					mipsshell::SUSPEND = true;
+					mipsshell::INTERACTIVE = true;
+					unsigned long line_number = this->PC_to_line_number.at(dcpu.get_PC());
+					std::string line_str = this->PC_to_line_string.at(dcpu.get_PC());
+					fprintf(stdout, "Breakpoint at line %d hit.\n", line_number);
+					fprintf(stdout, "line %d:\n\t%s\n", line_number, line_str.c_str());
+				}
+
+				if(this->has_ma_break_at(motherboard->get_cycles()))
+				{
+					mipsshell::SUSPEND = true;
+					mipsshell::INTERACTIVE = true;
+					fprintf(stdout, "Breakpoint at cycle %d hit.\n", motherboard->get_cycles());
+				}
+
+				motherboard->step();
 			}
 		}
 	}
@@ -360,6 +384,7 @@ namespace mipsshell
 
 		// Set up jump table for runtime directives
 		this->directives.insert(directive_pair(".breakpoint", mipsshell::breakpoint));
+		this->directives.insert(directive_pair(".cycle", mipsshell::cycle));
 		this->directives.insert(directive_pair(".exit", mipsshell::exit));
 		this->directives.insert(directive_pair(".help", mipsshell::help));
 		this->directives.insert(directive_pair(".mem", mipsshell::mem));
@@ -367,10 +392,25 @@ namespace mipsshell
 		this->directives.insert(directive_pair(".cpuopts", mipsshell::cpuopts));
 		this->directives.insert(directive_pair(".power", mipsshell::power));
 		this->directives.insert(directive_pair(".rst", mipsshell::rst));
+		this->directives.insert(directive_pair(".run", mipsshell::run));
 		this->directives.insert(directive_pair(".sound", mipsshell::sound));
 		this->directives.insert(directive_pair(".state", mipsshell::state));
 		this->directives.insert(directive_pair(".trace", mipsshell::trace));
 		this->directives.insert(directive_pair(".time", mipsshell::time));
 		this->directives.insert(directive_pair(".vga", mipsshell::vga));
+	}
+	void Shell::add_program_breakpoint(unsigned long line)
+	{
+		if(this->line_number_to_PC.count(line) > 0)
+		{
+			mips_tools::BW_32 line_pc = this->line_number_to_PC.at(line);
+			this->program_breakpoints.insert(std::pair<mips_tools::BW_32, unsigned long>(line_pc, line));
+			fprintf(stdout, "Breakpoint set at line %ld\n", line);
+		}
+
+		else
+		{
+			fprintf(stderr, "Invalid line number. The line number may not be associated with an instruction or may not be in the file.\n");
+		}
 	}
 }

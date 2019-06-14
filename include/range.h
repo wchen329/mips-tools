@@ -19,7 +19,7 @@ namespace mips_tools
 
 		// Constructs a range using a string specified
 		// Ranges are constructed using MATLAB syntax, that is:
-		// begin (inclusive):end (exclusive):step
+		// begin (inclusive):end (inclusive):step
 		// i.e. 0:4:2 would look like 0, 2 (4 is out of range)
 		// the step can be omitted which then would look like 0:4 (0, 1, 2, 3)
 		public:

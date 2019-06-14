@@ -94,6 +94,7 @@
     <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\imageable.h" />
     <ClInclude Include="..\include\interpret.h" />
+    <ClInclude Include="..\include\ISA.h" />
     <ClInclude Include="..\include\mb.h" />
     <ClInclude Include="..\include\mem.h" />
     <ClInclude Include="..\include\messages.h" />

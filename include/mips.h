@@ -13,6 +13,7 @@
  *
  * wchen329
  */
+#include "ISA.h"
 #include "mt_exception.h"
 #include "primitives.h"
 #include "reg_32.h"
@@ -248,6 +249,26 @@ namespace mips_tools
 	/* For calculating a label offset in branches
 	 */
 	BW_32 offset_to_address_br(BW_32 current, BW_32 target);
+
+	/* MIPS_32 ISA
+	 *
+	 */
+	class MIPS_32 : public ISA
+	{
+		
+		public:
+			unsigned get_reg_count() { return REG_COUNT; }
+			virtual unsigned get_address_bit_width() { return PC_BIT_WIDTH; }
+			virtual std::string get_reg_name(int id);
+			virtual int get_reg_id(std::string& fr) { return friendly_to_numerical(fr.c_str()); }
+			virtual int get_register_bit_width(int id) { return UNIVERSAL_REG_BW; }
+			virtual addrmode get_addressing_mode() { return ISA::BYTE; }
+			virtual endian get_endian() { return ISA::LITTLE_ENDIAN; }
+		private:
+			static const unsigned REG_COUNT = 32;
+			static const unsigned PC_BIT_WIDTH = 32;
+			static const unsigned UNIVERSAL_REG_BW = 32;
+	};
 }
 
 #endif

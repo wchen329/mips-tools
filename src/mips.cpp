@@ -69,6 +69,50 @@ namespace mips_tools
 		return reg_val;
 	}
 
+	std::string MIPS_32::get_reg_name(int id)
+	{
+		std::string name =
+			id == 0 ? "$zero" :
+			id == 1 ? "$at" :
+			id == 2 ? "$v0" :
+			id == 3 ? "$v1" :
+			id == 4 ? "$a0" :
+			id == 5 ? "$a1" :
+			id == 6 ? "$a2" :
+			id == 7 ? "$a3" :
+			id == 8 ? "$t0" :
+			id == 9 ? "$t1" :
+			id == 10 ? "$t2" :
+			id == 11 ? "$t3" :
+			id == 12 ? "$t4" :
+			id == 13 ? "$t5" :
+			id == 14 ? "$t6" :
+			id == 15 ? "$t7" :
+			id == 16 ? "$s0" :
+			id == 17 ? "$s1" :
+			id == 18 ? "$s2" :
+			id == 19 ? "$s3" :
+			id == 20 ? "$s4" :
+			id == 21 ? "$s5" :
+			id == 22 ? "$s6" :
+			id == 23 ? "$s7" :
+			id == 24 ? "$t8" :
+			id == 25 ? "$t9" :
+			id == 26 ? "$k0" :
+			id == 27 ? "$k1" :
+			id == 28 ? "$gp" :
+			id == 29 ? "$sp" :
+			id == 30 ? "$fp" :
+			id == 31 ? "$ra" : "";
+		
+		if(name == "")
+		{
+			throw reg_oob_exception();
+		}
+		
+		return name;
+	}
+
 	bool r_inst(opcode operation)
 	{
 		return
@@ -199,41 +243,6 @@ namespace mips_tools
 		ret = (ret >> 2);
 		return ret;
 	}
-
-	/*BW_32 mips_alu::execute(ALU::ALUOp op, BW_32 arg1, BW_32 arg2, bool unsigned_op)
-	{
-		BW_32 ret;
-
-		switch(op)
-		{
-			case ALU::ADD:
-				ret = arg1 + arg2;
-				break;
-			case ALU::SUB:
-				ret = arg1 - arg2;
-				break;
-			case ALU::SLL:
-				ret = arg1 << arg2;
-				break;
-			case ALU::SRL:
-				ret = ((arg1 >> arg2) & ((1 << (32 - arg2)) - 1));
-				break;
-			case ALU::OR:
-				ret = (arg1 | arg2);
-				break;
-			case ALU::AND:
-				ret = (arg1 & arg2);
-				break;
-			case ALU::XOR:
-				ret = (arg1 ^ arg2);
-				break;
-
-			default:
-				throw new mt_exception();
-		}
-
-		return ret;
-	}*/
 
 	void mips_decoding_unit_32::decode(	const BW_32 inst_word,
 										format& fm,

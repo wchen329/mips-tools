@@ -32,9 +32,9 @@ namespace mips_tools
 		}
 
 		// Now evaluate. We have exactly two or three fields?
-		if(string_list.size() != 2 && string_list.size() != 3)
+		if(string_list.size() != 1 & string_list.size() != 2 && string_list.size() != 3)
 		{
-			throw mips_tools::mt_invalid_range("Must have either 2 or 3 parameters in the format begin:end:step.");
+			throw mips_tools::mt_invalid_range("Must have either 1 - 3 parameters in the format index, begin:end, or begin:end:step.");
 		}
 		
 		// Then just convert. If zero, check that it's REALLY zero
@@ -51,8 +51,8 @@ namespace mips_tools
 		}
 
 		long begin = bound_list[0];
-		long end = bound_list[1];
-		long step = bound_list.size() == 2 ? 1 : bound_list[2];
+		long end = bound_list.size() <= 1 ? bound_list[0] : bound_list[1];
+		long step = bound_list.size() <= 2 ? 1 : bound_list[2];
 
 		// Check for sensical stepping
 		if(step == 0)
@@ -69,7 +69,7 @@ namespace mips_tools
 		}
 
 		// Now evaluate the range
-		while((end - begin > 0 && step > 0) || (end - begin < 0 && step < 0))
+		while((end - begin >= 0 && step > 0) || (end - begin <= 0 && step < 0))
 		{
 			numbers.push_back(begin);
 			begin += step;

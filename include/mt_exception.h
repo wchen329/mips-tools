@@ -24,7 +24,7 @@ namespace mips_tools
 	class mt_exception
 	{
 		public:
-			int number() { return this->except_num; }		// get exception number
+			int number() { return this->except_num; } // get exception number
 			std::string& get_err() { std::string & msg = message; msg = msg + '\n'; return this->message; }	// get full exception name
 			mt_exception() : except_num(exception_nums::GENERAL), message("An error has occurred.") {}
 
@@ -36,15 +36,24 @@ namespace mips_tools
 	// Register Out of Bounds Exception
 	class reg_oob_exception : public mt_exception
 	{
-		reg_oob_exception();
-		~reg_oob_exception();
+		public:
+			reg_oob_exception()
+			{
+				mt_exception::except_num = exception_nums::REGISTER_OOB;
+				mt_exception::message = "Invalid registry index given : out of bounds.";
+			
+			}
 	};
 
 	// Memory Out of Bounds Exception
 	class mem_oob_exception : public mt_exception
 	{
-		mem_oob_exception();
-		~mem_oob_exception();
+		public:
+			mem_oob_exception()
+			{
+				mt_exception::except_num = exception_nums::MEMORY_OOB;
+				mt_exception::message = "Invalid memory index given: out of bounds";
+			}
 	};
 
 	// Invalid Range Specifier Exception

@@ -145,5 +145,8 @@
     <ClInclude Include="..\include\range.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ISA.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

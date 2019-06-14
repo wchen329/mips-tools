@@ -36,7 +36,56 @@ namespace mipsshell
 	void breakpoint(std::vector<std::string> & args, Shell& inst)
 	{
 		fprintf(stdout, "[Breakpoint]\n");
-		fprintf(stdout, "Not yet implemented\n");
+		bool HAS_SPECIFIER = false;
+		for(size_t a = 0; a < args.size(); a++)
+		{
+			if(args[a] == "-l")
+			{
+				HAS_SPECIFIER = true;
+				if(args.size() > (a + 1))
+				{
+					errno = 0;
+					long n = strtol(args[a + 1].c_str(), nullptr, 10);
+					if(errno != 0)
+					{
+						throw mips_tools::mt_exception();
+					}
+					
+					inst.add_program_breakpoint(n);
+				}
+
+				else throw mips_tools::mt_exception();
+			}
+
+			if(args[a] == "-c")
+			{
+				HAS_SPECIFIER = true;
+				if(args.size() > (a + 1))
+				{
+					errno = 0;
+					long n = strtol(args[a + 1].c_str(), nullptr, 10);
+					if(errno != 0)
+					{
+						throw mips_tools::mt_exception();
+					}
+
+					inst.add_microarch_breakpoint(n);
+					fprintf(stdout, "Breakpoint set at cycle %ld\n", n);
+				}
+
+				else throw mips_tools::mt_exception();
+			}
+		}
+
+		if(!HAS_SPECIFIER)
+		{
+			fprintf(stdout, "Usage: .breakpoint -c [cycle_number] or .breakpoint -l [line_number]\n");
+		}
+	}
+
+	void cycle(std::vector<std::string> & args, Shell& inst)
+	{
+		inst.GetMotherboard().step();
 	}
 
 	void cpuopts(std::vector<std::string> & args, Shell& inst)
@@ -54,7 +103,39 @@ namespace mipsshell
 	void help(std::vector<std::string> & args, Shell& inst)
 	{
 		fprintf(stdout, "[Help]\n");
-		fprintf(stdout, HELP);
+
+		if(args.size() <= 1)
+		{
+			fprintf(stdout, HELP.c_str());
+			return;
+		}
+
+		else
+		{
+			std::string msg = "Unknown help topic. The command may not exist, or may be undocumented.\n";
+
+			if(args[1] == ".breakpoint")
+			{
+				msg = HELP_BREAKPOINT;
+			}
+
+			if(args[1] == ".exit")
+			{
+				msg = HELP_EXIT;
+			}
+			
+			if(args[1] == ".rst")
+			{
+				msg = HELP_RST;
+			}
+
+			if(args[1] == ".time")
+			{
+				msg = HELP_TIME;
+			}
+
+			fprintf(stdout, msg.c_str());
+		}
 	}
 
 	void pci(std::vector<std::string> & args, Shell& inst)
@@ -121,6 +202,11 @@ namespace mipsshell
 
 			for(mips_tools::range_iterator itr_2 = r.begin(); itr_2 != r.end(); itr_2++)
 			{
+				if(*itr_2 >= inst.GetMotherboard().get_mmem_size() || *itr_2 < 0)
+				{
+					throw mips_tools::mem_oob_exception();
+				}
+
 				fprintf(stdout, "Mem[%d]: %d\n", *itr_2, inst.GetMotherboard().DMA_read(*itr_2));
 			}
 		}
@@ -130,6 +216,12 @@ namespace mipsshell
 	{
 		fprintf(stdout, "[Power Usage Statistics]\n");
 		fprintf(stdout, "Not yet implemented\n");
+	}
+
+	void run(std::vector<std::string> & args, Shell& inst)
+	{
+		INTERACTIVE = false;
+		SUSPEND = false;
 	}
 
 	void sound(std::vector<std::string> & args, Shell& inst)
@@ -148,7 +240,8 @@ namespace mipsshell
 		int reg_count = dcpu.get_reg_count();
 		mips_tools::BW_32 pc_val = dcpu.get_PC();
 		
-
+		ISA& isa = dcpu.get_ISA();
+		
 		// No args specified print out every register
 		if(args.size() <= 1)
 		{
@@ -156,7 +249,7 @@ namespace mipsshell
 
 			for(int r = 0; r < reg_count; r++)
 			{
-				fprintf(stdout, "REG %d:\t%d\n", r, dcpu.get_reg_data(r));
+				fprintf(stdout, "%s:\t%d\n", isa.get_reg_name(r).c_str(), dcpu.get_reg_data(r));
 			}
 		}
 
@@ -168,7 +261,11 @@ namespace mipsshell
 
 				for(mips_tools::range_iterator ritr = r.begin(); ritr != r.end(); ritr++)
 				{
-					fprintf(stdout, "REG %d:\t%d\n", *ritr, dcpu.get_reg_data(*ritr));
+					if(*ritr < 0 || *ritr >= dcpu.get_reg_count())
+					{
+						throw mips_tools::reg_oob_exception();
+					}
+					fprintf(stdout, "%s:\t%d\n", isa.get_reg_name(*ritr).c_str(), dcpu.get_reg_data(*ritr));
 				}
 			}
 		}
@@ -177,7 +274,8 @@ namespace mipsshell
 	void time(std::vector<std::string> & args, Shell& inst)
 	{
 		fprintf(stdout, "[Processor Timing Information]\n");
-		fprintf(stdout, "Not yet implemented\n");
+		unsigned long n = inst.GetMotherboard().get_cycles();
+		fprintf(stdout, "Cycle Count: %d cycles\n", n);
 	}
 
 	void trace(std::vector<std::string> & args, Shell& inst)

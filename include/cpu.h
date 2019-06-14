@@ -1,5 +1,6 @@
 #ifndef __CPU_H__
 #define __CPU_H__
+#include "ISA.h"
 
 namespace mips_tools
 {
@@ -16,6 +17,7 @@ namespace mips_tools
 			virtual bool cycle() = 0;	// advance clock period by one cycle 
 										// returns a boolean TRUE if HLT has been fetched, FALSE if HLT has not (or an EOF)
 			virtual double get_clk_T() = 0; // get clock period in seconds
+			virtual ISA& get_ISA() = 0;		// get ISA
 	};
 
 }
