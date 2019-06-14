@@ -6,7 +6,8 @@
  */
 namespace mipsshell
 {
-	const std::string HELP =	std::string(".cycle - advance the processor a cycle given the current PC\n") +
+	const std::string HELP =	std::string(".breakpoint - set breakpoints which will bring up the interactive prompt, that can be used for debugging\n") +
+								std::string(".cycle - advance the processor a cycle given the current PC\n") +
 								std::string(".exit - exit\n") +
 								std::string(".help - show this help message or get help with commands\n") +
 								std::string(".rst - reset CPU state and mem state\n") +
