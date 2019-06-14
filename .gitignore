@@ -2,6 +2,7 @@ bin/*
 build/*
 lib/*
 MIPS Tools/Debug/*
+MIPS Tools/Release/*
 MIPS Tools/ipch/*
 MIPS Tools Shell/Debug/*
 MIPS Tools Shell/Release/*
@@ -10,6 +11,7 @@ simUI/Release/*
 *.exe
 *.tlog
 testing/nt_test/winnt_test/Debug/*
+testing/nt_test/winnt_test/Release/*
 testing/tests/winnt_test.exe.metagen
 testing/tests/winnt_test.ilk
 testing/tests/winnt_test.pdb
