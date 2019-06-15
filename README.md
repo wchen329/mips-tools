@@ -1,7 +1,7 @@
 # MIPS-Tools
 MIPS-Tools is a collection of tools that may be useful in the aid of computer architecture study, particularly for the MIPS architecture. It is intended to be fully functional on both Windows and UNIX-like systems upon its completion.
 
-# Milestone 1
+## Milestone 1
 This specific branch is a snapshot of the last version of Milestone 1. It is here for historic purposes (in case something from M1 needs to brought back again in later releases). It is not intended for actual use and will not be maintained going forward.
 
 ## Build Instructions
