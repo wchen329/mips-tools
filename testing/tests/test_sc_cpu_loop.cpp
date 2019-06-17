@@ -6,10 +6,6 @@
 #include "mb.h"
 #include "shell.h"
 
-#ifndef WIN32
-int main()
-{
-#else
 void test_sc_cpu_loop()
 {
 	using namespace mips_tools;
@@ -32,4 +28,3 @@ void test_sc_cpu_loop()
 	assertEquals(reg_check_s0, 1000);
 	assertEquals(reg_check_s1, 1000);
 }
-#endif

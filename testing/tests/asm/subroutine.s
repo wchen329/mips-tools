@@ -11,6 +11,5 @@ MAIN:  #calculates $s0 <- 5 * 4 = 20
 	addi $t1, $zero, 4
 	jal MULTI
 	sll $zero, $zero, 0
-	.state
 	sll $zero, $zero, 0
 	.exit

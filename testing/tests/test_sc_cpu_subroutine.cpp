@@ -6,13 +6,8 @@
 #include "mb.h"
 #include "shell.h"
 
-#ifndef WIN32
-int main()
-{
-#else
 void test_sc_cpu_subroutine()
 {
-#endif
 	using namespace mips_tools;
 	std::string prog_name = "mtshell";
 	std::string flag_i = "-i";

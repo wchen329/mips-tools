@@ -6,10 +6,6 @@
 #include "mb.h"
 #include "shell.h"
 
-#ifndef WIN32
-int main()
-{
-#else
 void test_shell_comments()
 {
 	using namespace mips_tools;
@@ -30,4 +26,3 @@ void test_shell_comments()
 	BW_32 reg_check = single_cycle.get_reg_data(16);
 	assertEquals(reg_check, 100);
 }
-#endif

@@ -1,13 +1,8 @@
 #include <memory>
 #include "basic_assert.h"
 
-#ifndef WIN32
-int main()
-{
-#else
 void test_assert()
 {
-#endif
 	assertEquals(6, 6);
 	assertNotEquals(7, 5);
 	assertGreaterThan(8, 1);

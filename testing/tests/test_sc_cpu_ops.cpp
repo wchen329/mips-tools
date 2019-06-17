@@ -3,13 +3,8 @@
 #include "sc_cpu.h"
 #include <cstdio>
 
-#ifndef WIN32
-int main()
-{
-#else
 void test_sc_cpu_ops()
 {
-#endif
 	using namespace mips_tools;
 	mmem cpu_mem;
 	sc_cpu cpu(cpu_mem);

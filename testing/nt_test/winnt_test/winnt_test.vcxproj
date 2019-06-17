@@ -41,7 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);../../../include/;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);../../../include/;../../common;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)../../tests</OutDir>
     <CustomBuildBeforeTargets>BuildCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
@@ -86,11 +86,11 @@
     <None Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\test_list.h" />
     <ClInclude Include="..\..\include\basic_assert.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="test_ds.h" />
-    <ClInclude Include="test_list.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />

@@ -32,10 +32,10 @@
     <ClInclude Include="..\..\include\basic_assert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test_list.h">
+    <ClInclude Include="test_ds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test_ds.h">
+    <ClInclude Include="..\..\common\test_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -30,7 +30,7 @@ int main(int argc, char ** argv)
 	/* Main execution path
 	 *
 	 */
-    Console::WriteLine(L"MIPS Tools Testing Suite for Windows NT");
+    Console::WriteLine(L"PRISCAS Testing Suite for Windows NT");
 	Console::WriteLine(L"---------------------------------------");
 	Console::WriteLine(L"Collecting tests...");
 
