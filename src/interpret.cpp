@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstring>
 #include <exception>
+#include <memory>
 #include <string>
 #include "states.h"
 #include "diag_cpu.h"
@@ -29,7 +30,7 @@ namespace mipsshell
 
 		mips_tools::opcode current_op = mips_tools::SYS_RES;
 		mips_tools::funct f_code = mips_tools::NONE;
-		std::auto_ptr<char> ap(new char [strlen(line) + 1]);
+		std::unique_ptr<char> ap(new char [strlen(line) + 1]);
 		strcpy(ap.get(), line);
 
 		int length = strlen(ap.get());
@@ -359,10 +360,5 @@ namespace mipsshell
 		if(INTERACTIVE) mb_ptr -> step();
 
 		return false;
-	}
-
-	void mipsshell::set_op_and_f(const char* mnemonic, mips_tools::opcode& op, mips_tools::funct& f)
-	{
-
 	}
 }

@@ -240,7 +240,7 @@ namespace mipsshell
 		int reg_count = dcpu.get_reg_count();
 		mips_tools::BW_32 pc_val = dcpu.get_PC();
 		
-		ISA& isa = dcpu.get_ISA();
+		mips_tools::ISA& isa = dcpu.get_ISA();
 		
 		// No args specified print out every register
 		if(args.size() <= 1)

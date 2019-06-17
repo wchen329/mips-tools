@@ -37,7 +37,7 @@ namespace mipsshell
 		FILE * inst_file = NULL;
 
 		if(!isQuiet)
-		fprintf(stdout, "MIPS Tools 0.1 (developmental build)\n");
+		fprintf(stdout, "MIPS Tools 0.2 (developmental build)\n");
 
 		// First get the active file in which to get instructions from
 		if(argc >= 2)
@@ -244,8 +244,9 @@ namespace mipsshell
 			{
 				try
 				{
-					execute_runtime_directive(chop_string(std::string(buf)));
-					
+					std::string str_buf(buf);
+					std::vector<std::string> chopped = chop_string(str_buf);
+					execute_runtime_directive(chopped);
 				}
 				catch(mips_tools::mt_exception & e)
 				{
@@ -272,7 +273,10 @@ namespace mipsshell
 					std::vector<std::string> cmds = this->directive_syms.lookup_from_PC(dpc);
 					
 					for(size_t cmdcount = 0; cmdcount < cmds.size(); cmdcount++)
-						execute_runtime_directive(chop_string(cmds[cmdcount]));
+					{
+						std::vector<std::string> chopped = chop_string(cmds[cmdcount]);
+						execute_runtime_directive(chopped);
+					}
 				}
 
 				if(this->has_prog_break_at(dcpu.get_PC()))

@@ -121,7 +121,7 @@ namespace mips_tools
 	
 	namespace ALU
 	{
-		static enum ALUOp
+		enum ALUOp
 		{
 					ADD = 0,
 					SUB = 1,
@@ -140,7 +140,7 @@ namespace mips_tools
 	{
 
 		public:
-		in_t mips_alu::execute(ALU::ALUOp op, in_t arg1, in_t arg2, bool unsigned_op)
+		in_t execute(ALU::ALUOp op, in_t arg1, in_t arg2, bool unsigned_op)
 		{
 			in_t ret;
 
@@ -262,8 +262,8 @@ namespace mips_tools
 			virtual std::string get_reg_name(int id);
 			virtual int get_reg_id(std::string& fr) { return friendly_to_numerical(fr.c_str()); }
 			virtual int get_register_bit_width(int id) { return UNIVERSAL_REG_BW; }
-			virtual addrmode get_addressing_mode() { return ISA::BYTE; }
-			virtual endian get_endian() { return ISA::LITTLE_ENDIAN; }
+			virtual ISA_Attrib::addrmode get_addressing_mode() { return ISA_Attrib::ADDR_BYTE; }
+			virtual ISA_Attrib::endian get_endian() { return ISA_Attrib::CPU_LITTLE_ENDIAN; }
 		private:
 			static const unsigned REG_COUNT = 32;
 			static const unsigned PC_BIT_WIDTH = 32;

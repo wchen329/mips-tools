@@ -6,9 +6,6 @@
 namespace mipsshell
 {
 	extern mips_tools::syms_table debug_table;
-
-	void set_op_and_f(const char* mnemonic, mips_tools::opcode& op, mips_tools::funct& f);
-
 }
 
 #endif
