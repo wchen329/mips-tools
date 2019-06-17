@@ -46,6 +46,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -89,6 +90,7 @@
     <ClCompile Include="..\src\syms_table.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\branding.h" />
     <ClInclude Include="..\include\cpu.h" />
     <ClInclude Include="..\include\diag_cpu.h" />
     <ClInclude Include="..\include\format_chk.h" />

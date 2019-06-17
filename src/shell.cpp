@@ -4,7 +4,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <cstdarg>
+#include <string>
 #include <memory>
+#include "branding.h"
 #include "cpu.h"
 #include "diag_cpu.h"
 #include "mb.h"
@@ -36,8 +38,13 @@ namespace mipsshell
 		int mem_width = 16;
 		FILE * inst_file = NULL;
 
+		std::string app_brand = branding::APPLICATION_NAME + " " + branding::APPLICATION_VERSION + " " + branding::APPLICATION_DBG;
+
 		if(!isQuiet)
-		fprintf(output, "MIPS Tools 0.2 (developmental build)\n");
+		{
+			fprintf(output, "%s\n", app_brand.c_str());
+			fprintf(output, "%s\n", branding::APPLICATION_DESC.c_str());
+		}
 
 		// First get the active file in which to get instructions from
 		if(argc >= 2)

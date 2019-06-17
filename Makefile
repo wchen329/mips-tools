@@ -3,7 +3,7 @@ CC = g++
 VPATH = src build
 BIN_DIR = bin
 LIB_DIR = build
-CFLAGS = -g -I"$(INCLUDE)" 
+CFLAGS = -g -I"$(INCLUDE)" $(RELEASE)
 OBJS = format_chk.o interpret.o mb.o mem.o messages.o mips.o mmem.o mtsstream.o \
 	parser_err.o pipeline.o primitives.o range.o reg_32.o reg_pipeline.o runtime_call.o sc_cpu.o \
 	shell.o shell_entry.o states.o syms_table.o
