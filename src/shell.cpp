@@ -215,7 +215,8 @@ namespace mipsshell
 			// Now assemble the rest
 			for(size_t itr = 0; itr < lines.size(); itr++)
 			{
-				assemble(lines[itr].c_str(), MB_IN_PTR, asm_pc);
+				std::vector<std::string> asm_args = chop_string(lines[itr]);
+				assemble(asm_args, MB_IN_PTR, asm_pc);
 				asm_pc += 4;
 			}
 			
@@ -262,8 +263,10 @@ namespace mipsshell
 
 				continue;
 			}
-			
-			if(assemble(buf, MB_IN_PTR, dcpu.get_PC())) break;
+
+			std::string buf_str(buf);
+			std::vector<std::string> asm_args = chop_string(buf_str);
+			if(assemble(asm_args, MB_IN_PTR, dcpu.get_PC())) break;
 		}
 
 		if(!mipsshell::INTERACTIVE && !mipsshell::ASM_MODE)

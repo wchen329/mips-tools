@@ -29,5 +29,7 @@ void test_sc_cpu_ops()
 	cpu_mem[pc + 3] = bbb.b_3();
 	cpu.cycle();
 	BW_32_T bbb_2 = BW_32_T(cpu_mem[16], cpu_mem[17], cpu_mem[18], cpu_mem[19]);
-	assertEquals(bbb_2.as_BW_32(), 100);
+	BW_32 cmp = 100;
+	fflush(stdout);
+	assertEquals(bbb_2.as_BW_32(), cmp);
 }
