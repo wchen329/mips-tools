@@ -15,7 +15,7 @@ testing/nt_test/winnt_test/Release/*
 testing/tests/winnt_test.exe.metagen
 testing/tests/winnt_test.ilk
 testing/tests/winnt_test.pdb
-testing/unix_test/unix_test
+testing/tests/unix_test
 testing/unix_test/*.o
 *.un~
 *~
