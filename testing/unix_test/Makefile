@@ -17,4 +17,4 @@ clean:
 	rm *.o
 	rm ../tests/unix_test
 run:
-	../tests/unix_test
+	cd ../tests; ./unix_test

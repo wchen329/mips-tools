@@ -362,7 +362,7 @@ namespace mipsshell
 				// Now if not quoted as well, then a comma, whitespace, tab, or newline delineates that argument is done parsing
 				if(!in_quotes)
 				{
-					if(commentless_input[ind] == ',' ||  commentless_input[ind] == ' ' || commentless_input[ind] == '\t' || commentless_input[ind] == '\n')
+					if(commentless_input[ind] == ',' ||  commentless_input[ind] == ' ' || commentless_input[ind] == '\t' || commentless_input[ind] == '\n' || commentless_input[ind] == '\r')
 					{
 						// Check: do not add empty strings
 						if(built_string != "")
