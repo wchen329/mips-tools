@@ -18,6 +18,7 @@ namespace mips_tools
 			bool cycle();
 			void rst();
 			fsp_cpu(mmem & m);
+			void exec_CPU_option(std::vector<std::string> &);
 		private:
 			reg_32 fetch_plr;
 			decode_ex_plr de_plr;

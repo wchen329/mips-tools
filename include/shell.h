@@ -26,6 +26,7 @@ namespace mipsshell
 			void SetArgs(std::vector<std::string> & args) { this->args = args; }
 			mips_tools::mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
 			void SetQuiet() { isQuiet = true; }
+			FILE* getOutputStream() { return this->output; }
 			void add_program_breakpoint(unsigned long line);
 			void add_microarch_breakpoint(unsigned long cycle) { this->microarch_breakpoints.insert(std::pair<unsigned long, bool>(cycle, true)); }
 			~Shell() { delete motherboard; }
@@ -53,6 +54,10 @@ namespace mipsshell
 
 			Shell_State state;
 			
+			// File streams
+			FILE* output;
+			FILE* input;
+			FILE* error;
 
 			// Runtime Directives, run through the shell
 			std::map<mips_tools::BW_32, unsigned long> program_breakpoints;

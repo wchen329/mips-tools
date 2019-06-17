@@ -37,7 +37,7 @@ namespace mipsshell
 		FILE * inst_file = NULL;
 
 		if(!isQuiet)
-		fprintf(stdout, "MIPS Tools 0.2 (developmental build)\n");
+		fprintf(output, "MIPS Tools 0.2 (developmental build)\n");
 
 		// First get the active file in which to get instructions from
 		if(argc >= 2)
@@ -46,18 +46,18 @@ namespace mipsshell
 			{
 				if(args[i] == "-h")
 				{
-					fprintf(stdout, "Usage options:\n");
-					fprintf(stdout, "-h (show this message)\n");
-					fprintf(stdout, "-i [file] (execute a text file with MIPS Tools commands and assembly directly using JIT compiling)\n");
-					fprintf(stdout, "-m [width] (specify a memory bit width; the total memory available will be 2^[width]\n");
-					fprintf(stdout, "-a (active assembler mode, requires the -i option):\n");
-					fprintf(stdout, "-c (select a CPU type 0: for single cycle (default) or 1: for Five Stage Pipeline)\n");
+					fprintf(output, "Usage options:\n");
+					fprintf(output, "-h (show this message)\n");
+					fprintf(output, "-i [file] (execute a text file with MIPS Tools commands and assembly directly using JIT compiling)\n");
+					fprintf(output, "-m [width] (specify a memory bit width; the total memory available will be 2^[width]\n");
+					fprintf(output, "-a (active assembler mode, requires the -i option):\n");
+					fprintf(output, "-c (select a CPU type 0: for single cycle (default) or 1: for Five Stage Pipeline)\n");
 					::exit(0);
 				}
 
 				if(args[i] == "-a")
 				{
-					if(!isQuiet) fprintf(stdout, "Assembler mode ENABLED.\n");
+					if(!isQuiet) fprintf(output, "Assembler mode ENABLED.\n");
 					mipsshell::ASM_MODE = true;
 					mipsshell::INTERACTIVE = false;
 				}
@@ -98,7 +98,7 @@ namespace mipsshell
 		{
 			if(!mipsshell::WIN_32_GUI)
 			{
-				if(!isQuiet) fprintf(stdout, "Starting in batch mode...\n");
+				if(!isQuiet) fprintf(output, "Starting in batch mode...\n");
 				mipsshell::INTERACTIVE = false;
 			}
 
@@ -119,8 +119,8 @@ namespace mipsshell
 		{
 			mipsshell::INTERACTIVE = true;
 			inst_file = stdin;
-			if(!isQuiet) fprintf(stdout, "Starting in interactive mode...\n");
-			if(!isQuiet) fprintf(stdout, "Tip: system directives are preceded by a . (for example .help)\n");
+			if(!isQuiet) fprintf(output, "Starting in interactive mode...\n");
+			if(!isQuiet) fprintf(output, "Tip: system directives are preceded by a . (for example .help)\n");
 		}
 
 		if(mem_width <= 0)
@@ -135,17 +135,17 @@ namespace mipsshell
 			::exit(1);
 		}
 
-		if(!isQuiet) fprintf(stdout, "CPU Type: ");
+		if(!isQuiet) fprintf(output, "CPU Type: ");
 		switch(cp)
 		{
 			case mips_tools::STANDARD:
-				if(!isQuiet) fprintf(stdout, "Single Cycle\n");
+				if(!isQuiet) fprintf(output, "Single Cycle\n");
 				break;
 			case mips_tools::FIVE_P:
-				if(!isQuiet)fprintf(stdout, "Five Stage Pipeline\n");
+				if(!isQuiet)fprintf(output, "Five Stage Pipeline\n");
 				break;
 			default:
-				if(!isQuiet) fprintf(stdout, "Invalid CPU type detected. Exiting...\n");
+				if(!isQuiet) fprintf(output, "Invalid CPU type detected. Exiting...\n");
 				::exit(1);
 		}
 
@@ -154,7 +154,7 @@ namespace mipsshell
 		mips_tools::mb * MB_IN_PTR = motherboard;
 		if(mipsshell::ASM_MODE) mipsshell::mtsstream::asmout = new mipsshell::asm_ostream("a.bin");
 
-		if(!isQuiet) fprintf(stdout, "Main Memory size: %d bytes\n", motherboard->get_mmem_size());
+		if(!isQuiet) fprintf(output, "Main Memory size: %d bytes\n", motherboard->get_mmem_size());
 
 		/* Actual Execution Portion
 		 */
@@ -232,7 +232,7 @@ namespace mipsshell
 		char buf[100];
 		if(mipsshell::INTERACTIVE)
 		{
-			fprintf(stdout, ">> ");
+			fprintf(output, ">> ");
 		}
 
 		if(mipsshell::INTERACTIVE || mipsshell::ASM_MODE)
@@ -250,7 +250,7 @@ namespace mipsshell
 				}
 				catch(mips_tools::mt_exception & e)
 				{
-					fprintf(stdout, e.get_err().c_str());
+					fprintf(output, e.get_err().c_str());
 				}
 
 				continue;
@@ -285,15 +285,15 @@ namespace mipsshell
 					mipsshell::INTERACTIVE = true;
 					unsigned long line_number = this->PC_to_line_number.at(dcpu.get_PC());
 					std::string line_str = this->PC_to_line_string.at(dcpu.get_PC());
-					fprintf(stdout, "Breakpoint at line %d hit.\n", line_number);
-					fprintf(stdout, "line %d:\n\t%s\n", line_number, line_str.c_str());
+					fprintf(output, "Breakpoint at line %d hit.\n", line_number);
+					fprintf(output, "line %d:\n\t%s\n", line_number, line_str.c_str());
 				}
 
 				if(this->has_ma_break_at(motherboard->get_cycles()))
 				{
 					mipsshell::SUSPEND = true;
 					mipsshell::INTERACTIVE = true;
-					fprintf(stdout, "Breakpoint at cycle %d hit.\n", motherboard->get_cycles());
+					fprintf(output, "Breakpoint at cycle %d hit.\n", motherboard->get_cycles());
 				}
 
 				motherboard->step();
@@ -385,6 +385,8 @@ namespace mipsshell
 	Shell::Shell() : motherboard(nullptr), isQuiet(false)
 	{
 		this->state = EMBRYO;
+		this->output = stdout;
+		this->input = stdin;
 
 		// Set up jump table for runtime directives
 		this->directives.insert(directive_pair(".breakpoint", mipsshell::breakpoint));

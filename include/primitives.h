@@ -1,6 +1,7 @@
 #ifndef __PRIMITIVES_H__
 #define __PRIMITIVES_H__
 #include <cctype>
+#include <string>
 /* Various byte long
  * primitives such as a 32-bitlong word
  * or a 64-bitlong one.
@@ -26,6 +27,21 @@ namespace mips_tools
 		private:
 			char * w_addr() { return (char*)&w; }
 			BW_32 w;
+	};
+
+	/* Just a collection of two strings
+	 * Name - the name of this object
+	 * Description - description of this object
+	 */
+	class NameDescPair
+	{
+		public:
+			std::string& getName() { return this->name; }
+			std::string& getDescription() { return this->desc; }
+			NameDescPair(std::string name_of, std::string desc_of) : name(name_of), desc(desc_of) {}
+		private:
+			std::string name;
+			std::string desc;
 	};
 }
 

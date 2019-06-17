@@ -383,6 +383,26 @@ namespace mips_tools
 	fsp_cpu::fsp_cpu(mmem & m) : sc_cpu(m)
 	{
 		sc_cpu::clk_T = 0.00000004;
+		sc_cpu::cpu_opts.push_back(NameDescPair("--IFID", "print out the current instruction at this register"));
+		sc_cpu::cpu_opts.push_back(NameDescPair("--IDEX", "print out control signals set at this register"));
+		sc_cpu::cpu_opts.push_back(NameDescPair("--EXMEM", "print out control signals set at this register"));
+		sc_cpu::cpu_opts.push_back(NameDescPair("--MEMWB", "print out control signals set at this register"));
+		sc_cpu::cpu_opts.push_back(NameDescPair("--ASCII", "print out a ASCII representation of the pipeline registers"));
 	}
 
+	void fsp_cpu::exec_CPU_option(std::vector<std::string>& args)
+	{
+		for(size_t s = 1; s < args.size(); s++)
+		{
+			if(args[s] == "--IFID")
+			{
+				fprintf(stdout, "Instruction: 0x%x\n", this->fetch_plr.get_data());
+			}
+
+			else
+			{
+				
+			}
+		}
+	}
 }

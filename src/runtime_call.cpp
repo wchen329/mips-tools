@@ -35,7 +35,7 @@ namespace mipsshell
 
 	void breakpoint(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[Breakpoint]\n");
+		fprintf(inst.getOutputStream(), "[Breakpoint]\n");
 		bool HAS_SPECIFIER = false;
 		for(size_t a = 0; a < args.size(); a++)
 		{
@@ -70,7 +70,7 @@ namespace mipsshell
 					}
 
 					inst.add_microarch_breakpoint(n);
-					fprintf(stdout, "Breakpoint set at cycle %ld\n", n);
+					fprintf(inst.getOutputStream(), "Breakpoint set at cycle %ld\n", n);
 				}
 
 				else throw mips_tools::mt_exception();
@@ -79,7 +79,7 @@ namespace mipsshell
 
 		if(!HAS_SPECIFIER)
 		{
-			fprintf(stdout, "Usage: .breakpoint -c [cycle_number] or .breakpoint -l [line_number]\n");
+			fprintf(inst.getOutputStream(), "Usage: .breakpoint -c [cycle_number] or .breakpoint -l [line_number]\n");
 		}
 	}
 
@@ -90,23 +90,49 @@ namespace mipsshell
 
 	void cpuopts(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[CPU Specific Options]\n");
-		fprintf(stdout, "Not yet implemented\n");
+		mips_tools::cpu& c = inst.GetMotherboard().get_cpu();
+		mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(c);
+		
+		std::vector<mips_tools::NameDescPair>& v = dcpu.get_CPU_options();
+
+		if(args.size() <= 1)
+		{
+			fprintf(inst.getOutputStream(), "[CPU Specific Options]\n");
+			if(v.empty())
+			{
+				fprintf(inst.getOutputStream(), "No CPU options found.\n");
+			}
+
+			else
+			{
+				for(size_t s = 0; s < v.size(); s++)
+				{
+					fprintf(inst.getOutputStream(), "%s - %s\n", v[s].getName().c_str(), v[s].getDescription().c_str());
+				}
+			}
+
+			fprintf(inst.getOutputStream(), "To execute an option just enter .cpuopts [option 1] ... [option n] into the shell\n");
+		}
+
+		else
+		{
+			dcpu.exec_CPU_option(args);
+		}
 	}
 
 	void exit(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "Simulation terminating...\n");
+		fprintf(inst.getOutputStream(), "Simulation terminating...\n");
 		inst.SetState(Shell::KILLED);
 	}
 
 	void help(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[Help]\n");
+		fprintf(inst.getOutputStream(), "[Help]\n");
 
 		if(args.size() <= 1)
 		{
-			fprintf(stdout, HELP.c_str());
+			fprintf(inst.getOutputStream(), HELP.c_str());
 			return;
 		}
 
@@ -134,14 +160,14 @@ namespace mipsshell
 				msg = HELP_TIME;
 			}
 
-			fprintf(stdout, msg.c_str());
+			fprintf(inst.getOutputStream(), msg.c_str());
 		}
 	}
 
 	void pci(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[PCI Bus Emulation]\n");
-		fprintf(stdout, "Not yet implemented\n");
+		fprintf(inst.getOutputStream(), "[PCI Bus Emulation]\n");
+		fprintf(inst.getOutputStream(), "Not yet implemented\n");
 	}
 
 	void rst(std::vector<std::string> & args, Shell& inst)
@@ -184,7 +210,7 @@ namespace mipsshell
 
 	void mem(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[Memory Information]\n");
+		fprintf(inst.getOutputStream(), "[Memory Information]\n");
 
 		mips_tools::mb& cmp = inst.GetMotherboard();
 		
@@ -192,7 +218,7 @@ namespace mipsshell
 		// No args specified just print the memory size (in bytes)
 		if(args.size() <= 1)
 		{
-			fprintf(stdout, "Main memory size: %d bytes\n", cmp.get_mmem_size());
+			fprintf(inst.getOutputStream(), "Main memory size: %d bytes\n", cmp.get_mmem_size());
 		}
 
 		// Otherwise print memory specific to indicies
@@ -207,15 +233,15 @@ namespace mipsshell
 					throw mips_tools::mem_oob_exception();
 				}
 
-				fprintf(stdout, "Mem[%d]: %d\n", *itr_2, inst.GetMotherboard().DMA_read(*itr_2));
+				fprintf(inst.getOutputStream(), "Mem[%d]: %d\n", *itr_2, inst.GetMotherboard().DMA_read(*itr_2));
 			}
 		}
 	}
 
 	void power(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[Power Usage Statistics]\n");
-		fprintf(stdout, "Not yet implemented\n");
+		fprintf(inst.getOutputStream(), "[Power Usage Statistics]\n");
+		fprintf(inst.getOutputStream(), "Not yet implemented\n");
 	}
 
 	void run(std::vector<std::string> & args, Shell& inst)
@@ -226,14 +252,14 @@ namespace mipsshell
 
 	void sound(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[Soundcard Emulation]\n");
-		fprintf(stdout, "Not yet implemented\n");
+		fprintf(inst.getOutputStream(), "[Soundcard Emulation]\n");
+		fprintf(inst.getOutputStream(), "Not yet implemented\n");
 	}
 
 	void state(std::vector<std::string> & args, Shell& inst)
 	{
 		
-		fprintf(stdout, "[Register State Information]\n");
+		fprintf(inst.getOutputStream(), "[Register State Information]\n");
 
 		mips_tools::mb& cmp = inst.GetMotherboard();
 		mips_tools::diag_cpu& dcpu = dynamic_cast<mips_tools::diag_cpu&>(cmp.get_cpu());
@@ -245,11 +271,11 @@ namespace mipsshell
 		// No args specified print out every register
 		if(args.size() <= 1)
 		{
-			fprintf(stdout, "PC: %d\n", pc_val);
+			fprintf(inst.getOutputStream(), "PC: %d\n", pc_val);
 
 			for(int r = 0; r < reg_count; r++)
 			{
-				fprintf(stdout, "%s:\t%d\n", isa.get_reg_name(r).c_str(), dcpu.get_reg_data(r));
+				fprintf(inst.getOutputStream(), "%s:\t%d\n", isa.get_reg_name(r).c_str(), dcpu.get_reg_data(r));
 			}
 		}
 
@@ -265,7 +291,7 @@ namespace mipsshell
 					{
 						throw mips_tools::reg_oob_exception();
 					}
-					fprintf(stdout, "%s:\t%d\n", isa.get_reg_name(*ritr).c_str(), dcpu.get_reg_data(*ritr));
+					fprintf(inst.getOutputStream(), "%s:\t%d\n", isa.get_reg_name(*ritr).c_str(), dcpu.get_reg_data(*ritr));
 				}
 			}
 		}
@@ -273,20 +299,20 @@ namespace mipsshell
 
 	void time(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[Processor Timing Information]\n");
+		fprintf(inst.getOutputStream(), "[Processor Timing Information]\n");
 		unsigned long n = inst.GetMotherboard().get_cycles();
-		fprintf(stdout, "Cycle Count: %d cycles\n", n);
+		fprintf(inst.getOutputStream(), "Cycle Count: %d cycles\n", n);
 	}
 
 	void trace(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[Special Tracing Options]\n");
-		fprintf(stdout, "Not yet implemented\n");
+		fprintf(inst.getOutputStream(), "[Special Tracing Options]\n");
+		fprintf(inst.getOutputStream(), "Not yet implemented\n");
 	}
 
 	void vga(std::vector<std::string> & args, Shell& inst)
 	{
-		fprintf(stdout, "[VGA Emulation]\n");
-		fprintf(stdout, "Not yet implemented\n");
+		fprintf(inst.getOutputStream(), "[VGA Emulation]\n");
+		fprintf(inst.getOutputStream(), "Not yet implemented\n");
 	}
 }
