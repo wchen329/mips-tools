@@ -277,4 +277,6 @@ namespace mips_tools
 		else if(j_inst(static_cast<opcode>(op))) fm = J;
 		else fm = I;
 	}
+
+
 }

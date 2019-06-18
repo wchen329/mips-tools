@@ -216,7 +216,14 @@ namespace mipsshell
 			for(size_t itr = 0; itr < lines.size(); itr++)
 			{
 				std::vector<std::string> asm_args = chop_string(lines[itr]);
-				assemble(asm_args, MB_IN_PTR, asm_pc);
+				mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
+				mips_tools::ISA& dcpuisa = dcpu.get_ISA();
+				mips_tools::BW inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
+				mips_tools::BW_32_T thirty_two = inst.as_BW_32();
+				motherboard->DMA_write(thirty_two.b_0(), asm_pc);
+				motherboard->DMA_write(thirty_two.b_1(), asm_pc + 1);
+				motherboard->DMA_write(thirty_two.b_2(), asm_pc + 2);
+				motherboard->DMA_write(thirty_two.b_3(), asm_pc + 3);
 				asm_pc += 4;
 			}
 			
@@ -266,7 +273,15 @@ namespace mipsshell
 
 			std::string buf_str(buf);
 			std::vector<std::string> asm_args = chop_string(buf_str);
-			if(assemble(asm_args, MB_IN_PTR, dcpu.get_PC())) break;
+			mips_tools::ISA & dcpuisa = dcpu.get_ISA();
+			mips_tools::BW_32 asm_pc = dcpu.get_PC();
+			mips_tools::BW inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
+			mips_tools::BW_32_T thirty_two = inst.as_BW_32();
+			motherboard->DMA_write(thirty_two.b_0(), asm_pc);
+			motherboard->DMA_write(thirty_two.b_1(), asm_pc + 1);
+			motherboard->DMA_write(thirty_two.b_2(), asm_pc + 2);
+			motherboard->DMA_write(thirty_two.b_3(), asm_pc + 3);
+			motherboard->step();
 		}
 
 		if(!mipsshell::INTERACTIVE && !mipsshell::ASM_MODE)

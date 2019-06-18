@@ -11,7 +11,24 @@
 
 namespace mips_tools
 {
+
+	typedef long long BW_64;
 	typedef long BW_32;	// bitword 32, will be changed to uint_32 or something of the like
+	typedef int BW_16;
+
+	// general "bit word class"
+	class BW
+	{
+		public:
+			BW_64 as_BW_64() { return representation; }
+			BW_32 as_BW_32() { return (static_cast<BW_32>(representation)); }
+			BW_16 as_BW_16() { return (representation & ((1 << 16)  - 1)); }
+			BW(BW_64 w) { this->representation = w ; }
+			BW(BW_32 w) { this->representation = (0 + w); }
+			BW(BW_16 w) { this->representation = (0 + w); }
+		private:
+			long long representation; // 64 bit representation
+	};
 
 	class BW_32_T
 	{

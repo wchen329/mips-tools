@@ -21,14 +21,14 @@
 #include "runtime_call.h"
 #include "syms_table.h"
 
-namespace mipsshell
+namespace mips_tools
 {
 
 	// Main interpretation routine
-	bool Shell::assemble(std::vector<std::string> args, mips_tools::mb * mb_ptr, mips_tools::BW_32 baseAddress)
+	BW MIPS_32::assemble(std::vector<std::string>& args, BW baseAddress, syms_table& jump_syms)
 	{
 		if(args.size() < 1)
-			return true;
+			return BW(0);
 
 		mips_tools::opcode current_op = mips_tools::SYS_RES;
 		mips_tools::funct f_code = mips_tools::NONE;
@@ -37,18 +37,6 @@ namespace mipsshell
 		int rt = -1;
 		int rd = -1;
 		int imm = -1;
-
-		mips_tools::diag_cpu * dcpu;
-		
-		try
-		{
-			dcpu = dynamic_cast<mips_tools::diag_cpu *>(&(mb_ptr -> get_cpu())); // IMPORTANT: check for and catch bad_cast, still needed	
-		}
-		catch(std::exception)	// will change to bad_cast
-		{
-			dcpu = nullptr;
-			fprintf(stderr, NON_DIAG_CPU);
-		}
 
 		// Mnemonic resolution
 		
@@ -80,8 +68,8 @@ namespace mipsshell
 		else if("jr" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::JR;}
 		else
 		{
-			fprintf(stdout, BAD_COMMAND);
-			throw badformat_err();
+			fprintf(stdout, mipsshell::BAD_COMMAND);
+			throw mipsshell::badformat_err();
 		}
 
 		// Check for insufficient arguments
@@ -97,13 +85,13 @@ namespace mipsshell
 					if(f_code == mips_tools::JR)
 					{
 						if((rs = mips_tools::friendly_to_numerical(args[1].c_str())) <= mips_tools::INVALID)
-						rs = get_reg_num(args[1].c_str());
+						rs = mipsshell::get_reg_num(args[1].c_str());
 					}
 
 					else
 					{
 						if((rd = mips_tools::friendly_to_numerical(args[1].c_str())) <= mips_tools::INVALID)
-						rd = get_reg_num(args[1].c_str());
+						rd = mipsshell::get_reg_num(args[1].c_str());
 					}
 			}
 
@@ -111,17 +99,17 @@ namespace mipsshell
 			{
 				// later, check for branches
 				if((rt = mips_tools::friendly_to_numerical(args[1].c_str())) <= mips_tools::INVALID)
-				rt = get_reg_num(args[1].c_str());
+				rt = mipsshell::get_reg_num(args[1].c_str());
 			}
 
 			else if(j_inst(current_op))
 			{
 				try
 				{
-					imm = get_imm(args[1].c_str());
+					imm = mipsshell::get_imm(args[1].c_str());
 				}
 
-				catch(parser_err * e)
+				catch(mipsshell::parser_err * e)
 				{
 					if(!jorb_inst(current_op))
 					{
@@ -133,18 +121,18 @@ namespace mipsshell
 					// Otherwise, perceive as a label, try to convert
 					try
 					{
-						mips_tools::BW_32 label_PC = this->jump_syms.lookup_from_sym(std::string(args[1].c_str()));
+						mips_tools::BW_32 label_PC = jump_syms.lookup_from_sym(std::string(args[1].c_str()));
 						imm = (label_PC >> 2);
 					}
 
 					catch(std::out_of_range&)
 					{
-						throw new badformat_err();
+						throw new mipsshell::badformat_err();
 					}
 				}
 			}
 	
-			else { fprintf(stdout, "%s:", args[1].c_str()); fprintf(stdout, BAD_COMMAND); return false;}
+			else { fprintf(stdout, "%s:", args[1].c_str()); fprintf(stdout, mipsshell::BAD_COMMAND); return false;}
 		}
 
 		// Second Argument Parsing
@@ -156,7 +144,7 @@ namespace mipsshell
 				if (f_code != mips_tools::JR)
 				{
 					if((rs = mips_tools::friendly_to_numerical(args[2].c_str())) <= mips_tools::INVALID)
-						rs = get_reg_num(args[2].c_str());
+						rs = mipsshell::get_reg_num(args[2].c_str());
 				}
 			}
 						
@@ -184,9 +172,9 @@ namespace mipsshell
 						}
 					}
 
-					if(!right_parenth || !left_parenth) throw new badformat_err();
-					if((rs = mips_tools::friendly_to_numerical(reg.c_str())) <= mips_tools::INVALID) rs = get_reg_num(reg.c_str());
-					imm = get_imm(imm_s.c_str());
+					if(!right_parenth || !left_parenth) throw new mipsshell::badformat_err();
+					if((rs = mips_tools::friendly_to_numerical(reg.c_str())) <= mips_tools::INVALID) rs = mipsshell::get_reg_num(reg.c_str());
+					imm = mipsshell::get_imm(imm_s.c_str());
 								
 				}
 
@@ -194,12 +182,11 @@ namespace mipsshell
 				{
 					// later, MUST check for branches
 					if((rs = mips_tools::friendly_to_numerical(args[2].c_str())) <= mips_tools::INVALID)
-					rs = get_reg_num(args[2].c_str());
+					rs = mipsshell::get_reg_num(args[2].c_str());
 				}
 			}
 
 			else if(j_inst(current_op)){}
-			else { fprintf(stdout, BAD_COMMAND); return false;}
 		}
 
 		if(args.size() > 3)
@@ -211,13 +198,13 @@ namespace mipsshell
 				{
 					if(shift_inst(f_code))
 					{
-						imm = get_imm(args[3].c_str());
+						imm = mipsshell::get_imm(args[3].c_str());
 					}
 
 					else
 					{	
 						if((rt = mips_tools::friendly_to_numerical(args[3].c_str())) <= mips_tools::INVALID)
-							rt = get_reg_num(args[3].c_str());
+							rt = mipsshell::get_reg_num(args[3].c_str());
 					}
 				}
 			}
@@ -227,15 +214,15 @@ namespace mipsshell
 							
 				if(mem_inst(current_op))
 				{
-					throw new badformat_err();
+					throw new mipsshell::badformat_err();
 				}
 
 				try
 				{
-					imm = get_imm(args[3].c_str());
+					imm = mipsshell::get_imm(args[3].c_str());
 				}
 
-				catch(parser_err * e)
+				catch(mipsshell::parser_err * e)
 				{
 					if(!jorb_inst(current_op))
 					{
@@ -247,45 +234,28 @@ namespace mipsshell
 					// Otherwise, perceive as a label, try to convert
 					try
 					{
-						mips_tools::BW_32 label_PC = this->jump_syms.lookup_from_sym(std::string(args[3].c_str()));
-						imm = mips_tools::offset_to_address_br(baseAddress, label_PC);
+						mips_tools::BW_32 label_PC = jump_syms.lookup_from_sym(std::string(args[3].c_str()));
+						imm = mips_tools::offset_to_address_br(baseAddress.as_BW_32(), label_PC);
 					}
 
 					catch(std::out_of_range&)
 					{
-						throw new badformat_err();
+						throw new mipsshell::badformat_err();
 					}
 				}
 			}
 
 			else if(j_inst(current_op)){}
 
-			else { throw new badformat_err(); }
+			else { throw new mipsshell::badformat_err(); }
 		}
 
 		// If system call, don't execute in CPU
 		if(current_op == mips_tools::SYS_RES) return false;
 		
 		// Pass the values of rs, rt, rd to the processor's encoding function
-		if(dcpu != nullptr)
-		{
-			mips_tools::BW_32 inst = dcpu -> encode(rs, rt, rd, f_code, imm, current_op);
-			mips_tools::BW_32_T inst_part = mips_tools::BW_32_T(inst);
+		BW_32 inst = generic_mips32_encode(rs, rt, rd, f_code, imm, current_op);
 
-			mb_ptr->DMA_write(inst_part.b_0(), baseAddress);
-			mb_ptr->DMA_write(inst_part.b_1(), baseAddress + 1);
-			mb_ptr->DMA_write(inst_part.b_2(), baseAddress + 2);
-			mb_ptr->DMA_write(inst_part.b_3(), baseAddress + 3);
-
-			if(ASM_MODE && mtsstream::asmout != nullptr)
-			{
-				mtsstream::asmout->append(inst);
-			}
-		}
-
-		// Call an execution routine explicity
-		if(INTERACTIVE) mb_ptr -> step();
-
-		return false;
+		return inst;
 	}
 }

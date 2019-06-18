@@ -17,6 +17,7 @@
 #include "mt_exception.h"
 #include "primitives.h"
 #include "reg_32.h"
+#include "syms_table.h"
 
 namespace mips_tools
 {
@@ -264,6 +265,7 @@ namespace mips_tools
 			virtual int get_register_bit_width(int id) { return UNIVERSAL_REG_BW; }
 			virtual ISA_Attrib::addrmode get_addressing_mode() { return ISA_Attrib::ADDR_BYTE; }
 			virtual ISA_Attrib::endian get_endian() { return ISA_Attrib::CPU_LITTLE_ENDIAN; }
+			virtual BW assemble(std::vector<std::string>& args, BW baseAddress, syms_table& jump_syms);
 		private:
 			static const unsigned REG_COUNT = 32;
 			static const unsigned PC_BIT_WIDTH = 32;

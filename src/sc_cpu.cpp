@@ -240,11 +240,6 @@ namespace mips_tools
 		return true;
 	}
 
-	BW_32 sc_cpu::encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op)
-	{
-		return generic_mips32_encode(rs, rt, rd, funct, imm_shamt_jaddr, op);
-	}
-
 	void sc_cpu::rst()
 	{
 		for(int i = 0; i < 32; i++)

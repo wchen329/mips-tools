@@ -19,7 +19,6 @@ namespace mips_tools
 			BW_32 get_reg_data(int index) { return this->registers[index].get_data(); }
 			int get_reg_count() { return REG_COUNT; }
 			BW_32 get_PC() { return this->pc.get_data(); }
-			BW_32 encode(int rs, int rt, int rd, int funct, int imm, opcode op);
 			double get_clk_T() { return this -> clk_T ; }
 			void ghost_cycle();
 			sc_cpu(mmem & m) : mm(m), clk_T(0.0000002) {  }
