@@ -24,7 +24,7 @@ namespace mips_tools
 	void mb::reset()
 	{
 		this->cycle_ct = 0;
-		this->sim_time = 0;
+		this->sim_time = CPUTime();
 		this->mb_cpu->rst();
 		memset(this->mb_mmem->begin(), 0, this->get_mmem_size());
 	}
@@ -53,7 +53,7 @@ namespace mips_tools
 		return *(this->mb_cpu);
 	}
 
-	mb::mb(cpu_t ct, int mt, const bool& suspend) : cpu_type(ct), mmem_type(mt), sim_time(0), cycle_ct(0), suspend(suspend)
+	mb::mb(cpu_t ct, int mt, const bool& suspend) : cpu_type(ct), mmem_type(mt), sim_time(CPUTime()), cycle_ct(0), suspend(suspend)
 	{
 		size_t s = 1 << mt;
 		this->mb_mmem = new mmem(s);

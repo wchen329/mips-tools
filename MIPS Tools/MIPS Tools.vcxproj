@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\cpu_time.cpp" />
     <ClCompile Include="..\src\format_chk.cpp" />
     <ClCompile Include="..\src\interpret.cpp" />
     <ClCompile Include="..\src\mem.cpp" />
@@ -92,6 +93,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\branding.h" />
     <ClInclude Include="..\include\cpu.h" />
+    <ClInclude Include="..\include\cpu_time.h" />
     <ClInclude Include="..\include\diag_cpu.h" />
     <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\imageable.h" />

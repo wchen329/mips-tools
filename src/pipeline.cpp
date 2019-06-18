@@ -382,7 +382,7 @@ namespace mips_tools
 
 	fsp_cpu::fsp_cpu(mmem & m) : sc_cpu(m)
 	{
-		sc_cpu::clk_T = 0.00000004;
+		sc_cpu::clk_T = 40000;
 		sc_cpu::cpu_opts.push_back(NameDescPair("--IFID", "print out the current instruction at this register"));
 		sc_cpu::cpu_opts.push_back(NameDescPair("--IDEX", "print out control signals set at this register"));
 		sc_cpu::cpu_opts.push_back(NameDescPair("--EXMEM", "print out control signals set at this register"));

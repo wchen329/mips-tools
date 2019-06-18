@@ -302,6 +302,76 @@ namespace mipsshell
 		fprintf(inst.getOutputStream(), "[Processor Timing Information]\n");
 		unsigned long n = inst.GetMotherboard().get_cycles();
 		fprintf(inst.getOutputStream(), "Cycle Count: %d cycles\n", n);
+
+		// Print it out in terms of smallest units
+		fprintf(inst.getOutputStream(), "Time Elapsed:\n");
+		unsigned long long total_time = inst.GetMotherboard().get_time().getPS();
+		unsigned long long total_days = inst.GetMotherboard().get_time().getDays();
+		
+		if(total_time == 0)
+		{
+			fprintf(inst.getOutputStream(), "0s\n");
+		}
+		
+		unsigned short picoseconds = (total_time) % 1000;
+		total_time = total_time / 1000;
+
+		unsigned short nanoseconds = (total_time) % 1000;
+		total_time = total_time / 1000;
+
+		unsigned short microseconds = (total_time) % 1000;
+		total_time = total_time / 1000;
+
+		unsigned short milliseconds = (total_time) % 1000;
+		total_time = total_time / 1000;
+
+		unsigned short seconds = (total_time) % 60;
+		total_time = total_time / 60;
+
+		unsigned short minutes = (total_time) % 60;
+		total_time = total_time / 60;
+
+		unsigned short hours = total_time;
+
+		if(total_days > 0)
+		{
+			fprintf(inst.getOutputStream(), "%lld days\n", total_days);
+		}
+
+		if(hours > 0)
+		{
+			fprintf(inst.getOutputStream(), "%d hrs\n", hours);
+		}
+
+		if(minutes > 0)
+		{
+			fprintf(inst.getOutputStream(), "%d min\n", minutes);
+		}
+
+		if(seconds > 0)
+		{
+			fprintf(inst.getOutputStream(), "%d s\n", seconds);
+		}
+
+		if(milliseconds > 0)
+		{
+			fprintf(inst.getOutputStream(), "%d ms\n", milliseconds);
+		}
+
+		if(microseconds > 0)
+		{
+			fprintf(inst.getOutputStream(), "%d micros\n", microseconds);
+		}
+
+		if(nanoseconds > 0)
+		{
+			fprintf(inst.getOutputStream(), "%d ns\n", nanoseconds);
+		}
+
+		if(picoseconds > 0)
+		{
+			fprintf(inst.getOutputStream(), "%d ps\n", picoseconds);
+		}
 	}
 
 	void trace(std::vector<std::string> & args, Shell& inst)

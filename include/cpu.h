@@ -16,7 +16,7 @@ namespace mips_tools
 			virtual void rst() = 0;		// zeroes out the processor state
 			virtual bool cycle() = 0;	// advance clock period by one cycle 
 										// returns a boolean TRUE if HLT has been fetched, FALSE if HLT has not (or an EOF)
-			virtual double get_clk_T() = 0; // get clock period in seconds
+			virtual long get_clk_T() = 0; // get clock period in picoseconds
 			virtual ISA& get_ISA() = 0;		// get ISA
 	};
 
