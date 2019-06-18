@@ -6,6 +6,7 @@
 #include <cstdarg>
 #include <string>
 #include <memory>
+#include "asm_exception.h"
 #include "branding.h"
 #include "cpu.h"
 #include "diag_cpu.h"
@@ -218,7 +219,21 @@ namespace mipsshell
 				std::vector<std::string> asm_args = chop_string(lines[itr]);
 				mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
 				mips_tools::ISA& dcpuisa = dcpu.get_ISA();
-				mips_tools::BW inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
+				mips_tools::BW inst = 0;
+				try
+				{
+					inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
+				}
+
+				catch(mips_tools::asm_exception& e)
+				{
+					fprintf(output, "An error occurred while assembling the program.\n");
+					fprintf(output, "Error information: %s\n", e.get_err_msg());
+					fprintf(output, "Line of error:\n");
+					fprintf(output, "\t%s\n", lines[itr].c_str());
+					return;
+				}
+
 				mips_tools::BW_32_T thirty_two = inst.as_BW_32();
 				motherboard->DMA_write(thirty_two.b_0(), asm_pc);
 				motherboard->DMA_write(thirty_two.b_1(), asm_pc + 1);
@@ -275,7 +290,20 @@ namespace mipsshell
 			std::vector<std::string> asm_args = chop_string(buf_str);
 			mips_tools::ISA & dcpuisa = dcpu.get_ISA();
 			mips_tools::BW_32 asm_pc = dcpu.get_PC();
-			mips_tools::BW inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
+			mips_tools::BW inst = 0;
+			
+			try
+			{
+				inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
+			}
+
+			catch(mips_tools::asm_exception& e)
+			{
+				fprintf(output, "An error occurred while assembling the inputted instruction.\n");
+				fprintf(output, "Error information: %s\n", e.get_err_msg());
+				continue;
+			}
+
 			mips_tools::BW_32_T thirty_two = inst.as_BW_32();
 			motherboard->DMA_write(thirty_two.b_0(), asm_pc);
 			motherboard->DMA_write(thirty_two.b_1(), asm_pc + 1);

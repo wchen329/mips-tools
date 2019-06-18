@@ -7,6 +7,7 @@
 #include <exception>
 #include <memory>
 #include <string>
+#include "asm_exception.h"
 #include "states.h"
 #include "diag_cpu.h"
 #include "format_chk.h"
@@ -68,8 +69,7 @@ namespace mips_tools
 		else if("jr" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::JR;}
 		else
 		{
-			fprintf(stdout, mipsshell::BAD_COMMAND);
-			throw mipsshell::badformat_err();
+			throw asm_exception();
 		}
 
 		// Check for insufficient arguments
@@ -127,7 +127,7 @@ namespace mips_tools
 
 					catch(std::out_of_range&)
 					{
-						throw new mipsshell::badformat_err();
+						throw asm_exception();
 					}
 				}
 			}
@@ -172,7 +172,7 @@ namespace mips_tools
 						}
 					}
 
-					if(!right_parenth || !left_parenth) throw new mipsshell::badformat_err();
+					if(!right_parenth || !left_parenth) throw asm_exception();
 					if((rs = mips_tools::friendly_to_numerical(reg.c_str())) <= mips_tools::INVALID) rs = mipsshell::get_reg_num(reg.c_str());
 					imm = mipsshell::get_imm(imm_s.c_str());
 								
@@ -214,7 +214,7 @@ namespace mips_tools
 							
 				if(mem_inst(current_op))
 				{
-					throw new mipsshell::badformat_err();
+					throw asm_exception();
 				}
 
 				try
@@ -240,14 +240,14 @@ namespace mips_tools
 
 					catch(std::out_of_range&)
 					{
-						throw new mipsshell::badformat_err();
+						throw asm_exception();
 					}
 				}
 			}
 
 			else if(j_inst(current_op)){}
 
-			else { throw new mipsshell::badformat_err(); }
+			else { throw asm_exception(); }
 		}
 
 		// If system call, don't execute in CPU

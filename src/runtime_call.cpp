@@ -29,7 +29,11 @@ namespace mipsshell
 		
 		else
 		{
-			return;
+			if(args_list.size() > 0)
+			{
+				fprintf(output, "The specified runtime directive could not be ran. It may not exist.\n");
+				fprintf(output, "\tCould not run: %s\n", args_list[0].c_str());
+			}
 		}
 	}
 
@@ -145,14 +149,44 @@ namespace mipsshell
 				msg = HELP_BREAKPOINT;
 			}
 
+			if(args[1] == ".cpuopts")
+			{
+				msg = HELP_CPUOPTS;
+			}
+
+			if(args[1] == ".cycle")
+			{
+				msg = HELP_CYCLE;
+			}
+
 			if(args[1] == ".exit")
 			{
 				msg = HELP_EXIT;
 			}
 			
+			if(args[1] == ".help")
+			{
+				msg = HELP_HELP;
+			}
+
+			if(args[1] == ".mem")
+			{
+				msg = HELP_MEM;
+			}
+
 			if(args[1] == ".rst")
 			{
 				msg = HELP_RST;
+			}
+
+			if(args[1] == ".run")
+			{
+				msg = HELP_RUN;
+			}
+
+			if(args[1] == ".state")
+			{
+				msg = HELP_STATE;
 			}
 
 			if(args[1] == ".time")

@@ -157,5 +157,8 @@
     <ClInclude Include="..\include\cpu_time.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\asm_exception.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
