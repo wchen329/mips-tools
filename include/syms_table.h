@@ -4,9 +4,7 @@
 #include <cstring>
 #include <map>
 #include <string>
-#include <unordered_map>
 #include <vector>
-#include <hash_set>
 #include "primitives.h"
 
 namespace mips_tools
@@ -29,7 +27,7 @@ namespace mips_tools
 			BW_32 lookup_from_sym(const std::string & sym) { return this->syms_to_PC.at(sym); }
 		private:
 			std::map<BW_32, std::vector<std::string>> PC_to_syms;
-			std::unordered_map<std::string, BW_32> syms_to_PC;
+			std::map<std::string, BW_32> syms_to_PC;
 			
 	};
 }
