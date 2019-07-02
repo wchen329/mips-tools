@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>simUI</class>
+ <widget class="QMainWindow" name="simUI">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>simUI</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>240</y>
+      <width>160</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout"/>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_Simulation_Source"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout_simUI"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionCPU_Specific_Debugging_Information"/>
+    <addaction name="actionRegister_Inspector"/>
+    <addaction name="actionMemory_Inspector"/>
+   </widget>
+   <widget class="QMenu" name="menuSimulation">
+    <property name="title">
+     <string>Simulation</string>
+    </property>
+    <widget class="QMenu" name="menuBreakpoints">
+     <property name="title">
+      <string>Breakpoints</string>
+     </property>
+     <addaction name="actionAdd_Breakpoint"/>
+     <addaction name="actionList_Current_Breakpoints"/>
+    </widget>
+    <addaction name="actionStart_Simulation"/>
+    <addaction name="actionStop_Simulation"/>
+    <addaction name="separator"/>
+    <addaction name="menuBreakpoints"/>
+    <addaction name="actionBreak_Execution"/>
+    <addaction name="actionRuntime_Directive"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuSimulation"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string/>
+   </property>
+  </action>
+  <action name="actionAbout_simUI">
+   <property name="text">
+    <string>About simUI...</string>
+   </property>
+  </action>
+  <action name="actionRegister_Inspector">
+   <property name="text">
+    <string>Register Inspector</string>
+   </property>
+  </action>
+  <action name="actionMemory_Inspector">
+   <property name="text">
+    <string>Memory Inspector</string>
+   </property>
+  </action>
+  <action name="actionCPU_Specific_Debugging_Information">
+   <property name="text">
+    <string>CPU Specific Debugging Information</string>
+   </property>
+  </action>
+  <action name="actionStart_Simulation">
+   <property name="text">
+    <string>Start Simulation</string>
+   </property>
+  </action>
+  <action name="actionStop_Simulation">
+   <property name="text">
+    <string>Stop Simulation</string>
+   </property>
+  </action>
+  <action name="actionBreak_Execution">
+   <property name="text">
+    <string>Break Execution</string>
+   </property>
+  </action>
+  <action name="actionRuntime_Directive">
+   <property name="text">
+    <string>Runtime Directive</string>
+   </property>
+  </action>
+  <action name="actionOpen_Simulation_Assembly_File">
+   <property name="text">
+    <string>Open Simulation Assembly File</string>
+   </property>
+  </action>
+  <action name="actionSet_Simulation_Source">
+   <property name="text">
+    <string>Set Simulation Source</string>
+   </property>
+  </action>
+  <action name="actionArchitecture_Breakpoints">
+   <property name="text">
+    <string>Architecture Breakpoints</string>
+   </property>
+  </action>
+  <action name="actionAdd_Breakpoint">
+   <property name="text">
+    <string>Add Breakpoint</string>
+   </property>
+  </action>
+  <action name="actionList_Current_Breakpoints">
+   <property name="text">
+    <string>List Current Breakpoints</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
