@@ -13,7 +13,31 @@
   <property name="windowTitle">
    <string>simUI</string>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QTextEdit" name="consoleScreen">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>30</y>
+      <width>104</width>
+      <height>70</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Courier</family>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
+     <string>simUI Console</string>
+    </property>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -64,6 +88,8 @@
     <addaction name="menuBreakpoints"/>
     <addaction name="actionBreak_Execution"/>
     <addaction name="actionRuntime_Directive"/>
+    <addaction name="separator"/>
+    <addaction name="actionCPU_Options"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSimulation"/>
@@ -183,6 +209,11 @@
   <action name="actionMemory_Size_Selection">
    <property name="text">
     <string>Memory Size Selection</string>
+   </property>
+  </action>
+  <action name="actionCPU_Options">
+   <property name="text">
+    <string>Simulation Options</string>
    </property>
   </action>
  </widget>

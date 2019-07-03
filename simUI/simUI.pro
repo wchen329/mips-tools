@@ -23,4 +23,5 @@ FORMS    += simui.ui \
     aboutdialog.ui
 
 RESOURCES += \
-    simUIart.qrc
+    simUIart.qrc \
+    simUIlocalization.qrc

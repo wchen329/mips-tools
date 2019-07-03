@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/en-us" lang="English (United States)"/>
+    <qresource prefix="/zh-CN" lang="Chinese (People's Republic of China)"/>
+    <qresource prefix="/fr-FR" lang="French (France)"/>
+</RCC>
