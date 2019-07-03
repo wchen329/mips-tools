@@ -21,3 +21,6 @@ HEADERS  += simui.h \
 
 FORMS    += simui.ui \
     aboutdialog.ui
+
+RESOURCES += \
+    simUIart.qrc

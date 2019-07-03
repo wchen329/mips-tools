@@ -6,32 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>simUI</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>240</y>
-      <width>160</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout"/>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>800</width>
      <height>20</height>
     </rect>
    </property>
@@ -83,12 +71,25 @@
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="windowTitle">
+    <string>Simulation Toolbar</string>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionStart_Simulation"/>
+   <addaction name="actionStop_Simulation"/>
+   <addaction name="actionBreak_Execution"/>
+   <addaction name="actionRuntime_Directive"/>
+   <addaction name="separator"/>
+   <addaction name="actionAdd_Breakpoint"/>
+   <addaction name="actionList_Current_Breakpoints"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
@@ -120,38 +121,44 @@
    </property>
   </action>
   <action name="actionStart_Simulation">
+   <property name="icon">
+    <iconset resource="simUIart.qrc">
+     <normaloff>:/icons/art/media-playback-start.png</normaloff>:/icons/art/media-playback-start.png</iconset>
+   </property>
    <property name="text">
     <string>Start Simulation</string>
    </property>
   </action>
   <action name="actionStop_Simulation">
+   <property name="icon">
+    <iconset resource="simUIart.qrc">
+     <normaloff>:/icons/art/media-playback-stop.png</normaloff>:/icons/art/media-playback-stop.png</iconset>
+   </property>
    <property name="text">
     <string>Stop Simulation</string>
    </property>
   </action>
   <action name="actionBreak_Execution">
+   <property name="icon">
+    <iconset resource="simUIart.qrc">
+     <normaloff>:/icons/art/media-playback-pause.png</normaloff>:/icons/art/media-playback-pause.png</iconset>
+   </property>
    <property name="text">
     <string>Break Execution</string>
    </property>
   </action>
   <action name="actionRuntime_Directive">
+   <property name="icon">
+    <iconset resource="simUIart.qrc">
+     <normaloff>:/icons/art/debug-run.png</normaloff>:/icons/art/debug-run.png</iconset>
+   </property>
    <property name="text">
     <string>Runtime Directive</string>
-   </property>
-  </action>
-  <action name="actionOpen_Simulation_Assembly_File">
-   <property name="text">
-    <string>Open Simulation Assembly File</string>
    </property>
   </action>
   <action name="actionSet_Simulation_Source">
    <property name="text">
     <string>Set Simulation Source</string>
-   </property>
-  </action>
-  <action name="actionArchitecture_Breakpoints">
-   <property name="text">
-    <string>Architecture Breakpoints</string>
    </property>
   </action>
   <action name="actionAdd_Breakpoint">
@@ -160,12 +167,28 @@
    </property>
   </action>
   <action name="actionList_Current_Breakpoints">
+   <property name="icon">
+    <iconset resource="simUIart.qrc">
+     <normaloff>:/icons/art/flag-red.png</normaloff>:/icons/art/flag-red.png</iconset>
+   </property>
    <property name="text">
     <string>List Current Breakpoints</string>
    </property>
   </action>
+  <action name="actionCPU_Type_Selection">
+   <property name="text">
+    <string>CPU Type Selection</string>
+   </property>
+  </action>
+  <action name="actionMemory_Size_Selection">
+   <property name="text">
+    <string>Memory Size Selection</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="simUIart.qrc"/>
+ </resources>
  <connections/>
 </ui>
