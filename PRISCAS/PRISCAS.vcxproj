@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9C1D372F-1761-437C-A7EC-27A79BB967B6}</ProjectGuid>
+    <RootNamespace>MIPSTools</RootNamespace>
+    <ProjectName>PRISCAS</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>../include/;$(IncludePath)</IncludePath>
+    <TargetExt>.lib</TargetExt>
+    <TargetName>mtcore</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\cpu_time.cpp" />
+    <ClCompile Include="..\src\format_chk.cpp" />
+    <ClCompile Include="..\src\interpret.cpp" />
+    <ClCompile Include="..\src\mem.cpp" />
+    <ClCompile Include="..\src\messages.cpp" />
+    <ClCompile Include="..\src\mips.cpp" />
+    <ClCompile Include="..\src\mtsstream.cpp" />
+    <ClCompile Include="..\src\parser_err.cpp" />
+    <ClCompile Include="..\src\pipeline.cpp" />
+    <ClCompile Include="..\src\primitives.cpp" />
+    <ClCompile Include="..\src\range.cpp" />
+    <ClCompile Include="..\src\reg_32.cpp" />
+    <ClCompile Include="..\src\reg_pipeline.cpp" />
+    <ClCompile Include="..\src\runtime_call.cpp" />
+    <ClCompile Include="..\src\sc_cpu.cpp" />
+    <ClCompile Include="..\src\mb.cpp" />
+    <ClCompile Include="..\src\mmem.cpp" />
+    <ClCompile Include="..\src\shell.cpp" />
+    <ClCompile Include="..\src\states.cpp" />
+    <ClCompile Include="..\src\superscalar.cpp" />
+    <ClCompile Include="..\src\syms_table.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\asm_exception.h" />
+    <ClInclude Include="..\include\branding.h" />
+    <ClInclude Include="..\include\cpu.h" />
+    <ClInclude Include="..\include\cpu_time.h" />
+    <ClInclude Include="..\include\diag_cpu.h" />
+    <ClInclude Include="..\include\format_chk.h" />
+    <ClInclude Include="..\include\imageable.h" />
+    <ClInclude Include="..\include\interpret.h" />
+    <ClInclude Include="..\include\ISA.h" />
+    <ClInclude Include="..\include\mb.h" />
+    <ClInclude Include="..\include\mem.h" />
+    <ClInclude Include="..\include\messages.h" />
+    <ClInclude Include="..\include\mips.h" />
+    <ClInclude Include="..\include\mmem.h" />
+    <ClInclude Include="..\include\mtsstream.h" />
+    <ClInclude Include="..\include\mtswriter.h" />
+    <ClInclude Include="..\include\mt_exception.h" />
+    <ClInclude Include="..\include\parser_err.h" />
+    <ClInclude Include="..\include\pipeline.h" />
+    <ClInclude Include="..\include\primitives.h" />
+    <ClInclude Include="..\include\range.h" />
+    <ClInclude Include="..\include\reg_32.h" />
+    <ClInclude Include="..\include\reg_pipeline.h" />
+    <ClInclude Include="..\include\runtime_call.h" />
+    <ClInclude Include="..\include\sc_cpu.h" />
+    <ClInclude Include="..\include\shell.h" />
+    <ClInclude Include="..\include\states.h" />
+    <ClInclude Include="..\include\superscalar.h" />
+    <ClInclude Include="..\include\syms_table.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

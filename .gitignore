@@ -2,13 +2,11 @@ bin/*
 build/*
 build-*
 lib/*
-MIPS Tools/Debug/*
-MIPS Tools/Release/*
-MIPS Tools/ipch/*
-MIPS Tools Shell/Debug/*
-MIPS Tools Shell/Release/*
-simUI/Debug/*
-simUI/Release/*
+PRISCAS/Debug/*
+PRISCAS/Release/*
+PRISCAS/ipch/*
+PRISCAS_Shell/Debug/*
+PRISCAS_Shell/Release/*
 *.exe
 *.tlog
 testing/nt_test/winnt_test/Debug/*

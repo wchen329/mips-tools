@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\mmem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mb.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sc_cpu.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mips.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\reg_32.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\syms_table.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pipeline.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\reg_pipeline.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\primitives.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\shell.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\format_chk.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interpret.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\messages.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mtsstream.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\parser_err.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\runtime_call.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\states.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\range.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cpu_time.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\superscalar.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\cpu.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mmem.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\superscalar.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pipeline.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mb.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mem.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sc_cpu.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mips.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\primitives.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\reg_32.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mt_exception.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\diag_cpu.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\syms_table.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imageable.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\reg_pipeline.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\format_chk.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\states.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\interpret.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\messages.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mtsstream.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mtswriter.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\parser_err.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\runtime_call.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\shell.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\range.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ISA.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\branding.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cpu_time.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\asm_exception.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

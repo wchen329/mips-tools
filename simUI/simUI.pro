@@ -25,3 +25,14 @@ FORMS    += simui.ui \
 RESOURCES += \
     simUIart.qrc \
     simUIlocalization.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../PRISCAS/release/ -lmtcore
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../PRISCAS/debug/ -lmtcore
+
+INCLUDEPATH += $$PWD/../include
+DEPENDPATH += $$PWD/../include
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../PRISCAS/release/libmtcore.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../PRISCAS/debug/libmtcore.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../PRISCAS/release/mtcore.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../PRISCAS/debug/mtcore.lib

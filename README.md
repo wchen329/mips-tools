@@ -1,5 +1,5 @@
-# MIPS-Tools
-MIPS-Tools is a collection of tools that may be useful in the aid of computer architecture study, particularly for the MIPS architecture. It is intended to be fully functional on both Windows and UNIX-like systems upon its completion.
+# PRISCAS
+PRISCAS (*formerly MIPS Tools*) is a collection of tools that may be useful in the aid of computer architecture study, particularly for the MIPS architecture. It is intended to be fully functional on both Windows and UNIX-like systems upon its completion.
 
 ## Build Instructions
 ### Windows

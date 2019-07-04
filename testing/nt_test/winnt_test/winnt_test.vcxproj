@@ -61,9 +61,6 @@
       <AdditionalDependencies>
       </AdditionalDependencies>
     </Link>
-    <CustomBuildStep>
-      <Command>copy -r $(ProjectDir)../../tests/asm ../../../MIPS Tools/Debug</Command>
-    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -147,10 +144,10 @@
     <ClCompile Include="winnt_test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MIPS Tools Shell\MIPS Tools Shell.vcxproj">
+    <ProjectReference Include="..\..\..\PRISCAS_Shell\PRISCAS_Shell.vcxproj">
       <Project>{fb9ccee4-76b7-4a56-baea-f1709c4de126}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MIPS Tools\MIPS Tools.vcxproj">
+    <ProjectReference Include="..\..\..\PRISCAS\PRISCAS.vcxproj">
       <Project>{9c1d372f-1761-437c-a7ec-27a79bb967b6}</Project>
     </ProjectReference>
   </ItemGroup>
