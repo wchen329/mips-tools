@@ -18,9 +18,9 @@ namespace mipsshell
 								std::string(".time - show simulation timing information\n") +
 								std::string("[assembly instruction] - execute that instruction, write it to the PC location and cycle\n") +
 								std::string("For more help on specific commands use \"help [command]\" (for example .help .rst)\n");
-	char * BAD_COMMAND = "Unknown command. For more information on acceptable commands type \".help\".\n" ;  // bad command message
-	char * BAD_FORMAT = "Bad or unsupported register format.\n";
-	char * NON_DIAG_CPU = "Warning: The CPU used does not have diagnostic capabilities, such CPUs are unable to receive fetches from interactive mode...\n";
+	const char * BAD_COMMAND = "Unknown command. For more information on acceptable commands type \".help\".\n" ;  // bad command message
+	const char * BAD_FORMAT = "Bad or unsupported register format.\n";
+	const char * NON_DIAG_CPU = "Warning: The CPU used does not have diagnostic capabilities, such CPUs are unable to receive fetches from interactive mode...\n";
 	const std::string HELP_BREAKPOINT =	std::string(".breakpoint\n") +
 										std::string("Insert a breakpoint into the program corresponding to a line number or a cycle\n") +
 										std::string("Execution will be stopped before the corresponding cycle has passed in execution.\n") +

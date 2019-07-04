@@ -160,7 +160,6 @@ namespace mipsshell
 		this->motherboard = new mips_tools::mb(cp, mem_width, mipsshell::SUSPEND);
 		motherboard->reset();
 		mips_tools::mb * MB_IN_PTR = motherboard;
-		if(mipsshell::ASM_MODE) mipsshell::mtsstream::asmout = new mipsshell::asm_ostream("a.bin");
 
 		if(!isQuiet) fprintf(output, "Main Memory size: %d bytes\n", motherboard->get_mmem_size());
 

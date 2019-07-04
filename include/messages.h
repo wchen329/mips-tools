@@ -15,9 +15,9 @@ namespace mipsshell
 	extern const std::string HELP_STATE;
 	extern const std::string HELP_TIME;
 	extern const std::string HELP_RUN;
-	extern char * BAD_COMMAND;  // bad command message
-	extern char * BAD_FORMAT;	// bad format
-	extern char * NON_DIAG_CPU;	// non diagnostic cpu warning
+	extern const char * BAD_COMMAND;  	// bad command message
+	extern const char * BAD_FORMAT;		// bad format
+	extern const char * NON_DIAG_CPU;	// non diagnostic cpu warning
 }
 
 #endif
