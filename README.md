@@ -11,6 +11,7 @@ Output executables for the shell and simUI will be in `MIPS Tools\Debug` (if bui
 Compilation on UNIX systems can be done using one of the many make utilities. gmake is known to work. To make all applications available to UNIX systems in the MIPS Tools suite (currently the MIPS Tools Shell), just type in the following command: `make` And the make application should do the rest. After make is finished, just go to the `bin` directory (which will be created if it doesn't already exist) and run the `mtshell` application created.
 #### 
 Other useful targets:
-#### `all` - the default target, builds the `mtshell` executable
+#### `all` - the default target, builds the `mtshell` executable with debugging symbols and no optimization (debug)
 #### `clean` - clean the solution, remove executables and objects
+#### `release` - build the project as a release (that is, without debugging symbols and with optimization on)
 #### `test` - build and run the unit test package
