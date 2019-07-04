@@ -11,7 +11,7 @@ SHELL_MAIN = shell_entry.o
 INCLUDE = include
 
 all: $(BIN_DIR)/mtshell
-$(BIN_DIR)/mtshell: $(OBJS) $(SHELL_MAIN)
+$(BIN_DIR)/mtshell: $(OBJS) $(SHELL_MAIN) $(INCLUDE)
 	@ echo "Looking for bin directory..."
 	@ if \
 		ls $(BIN_DIR); \
