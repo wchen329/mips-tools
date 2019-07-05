@@ -1,6 +1,8 @@
 #ifndef SIMUI_H
 #define SIMUI_H
 
+#include <QFileDialog>
+#include <QFontDialog>
 #include <QThread>
 #include <QMainWindow>
 #include <string>
@@ -49,8 +51,12 @@ private slots:
 
     void on_actionClear_Console_Window_triggered();
 
-private:
+    void on_actionFont_triggered();
 
+    void on_actionSet_Simulation_Source_triggered();
+
+private:
+    QString sourcefile;
     void signifySimOn();
     void signifySimOff();
     Ui::simUI *ui;

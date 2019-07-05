@@ -7,7 +7,6 @@ aboutDialog::aboutDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->pushButton->setDefault(true);
-    //ui->plainTextEdit_Info->setPlaceholderText(msg);
 }
 
 aboutDialog::~aboutDialog()

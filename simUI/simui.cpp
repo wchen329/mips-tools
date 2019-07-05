@@ -78,9 +78,21 @@ void simUI::on_actionAbout_simUI_triggered()
 
 void simUI::on_actionStart_Simulation_triggered()
 {
-    std::vector<std::string> args; args.push_back("mtshell"); args.push_back("-h");
+    if(this->sourcefile == "")
+    {
+        this->ui->consoleScreen->append("A assembly source file must be first selected before simulation can begin.\n");
+        return;
+    }
+
+    // Set arguments
+    std::vector<std::string> args;
+    args.push_back("mtshell");
+    args.push_back("-i");
+    args.push_back(this->sourcefile.toStdString());
     simulation::sh.SetArgs(args);
-    simulation::sh.Run();
+
+    // Start Simulation!
+    simulation::startSim();
     this->signifySimOn();
     this->signifySimOff();
 }
@@ -93,4 +105,40 @@ QTextEdit& simUI::getConsoleWindowRef()
 void simUI::on_actionClear_Console_Window_triggered()
 {
     this->ui->consoleScreen->setText("");
+}
+
+void simUI::on_actionFont_triggered()
+{
+    QFontDialog qfd;
+    bool okToGet;
+    QFont & f = qfd.getFont(&okToGet);
+    if(okToGet)
+    {
+        this->ui->consoleScreen->setFont(f);
+    }
+}
+
+void simUI::on_actionSet_Simulation_Source_triggered()
+{
+    QFileDialog qfd;
+    QString filter = "Visual C ASM (*.asm);; UNIX Assembly (*.s)";
+    QString URL;
+#ifdef WIN32
+    URL = "%userprofile%";
+#else
+    URL = "~";
+#endif
+    qfd.setDirectory(URL);
+    qfd.setNameFilter(filter);
+    qfd.setFileMode(QFileDialog::ExistingFile);
+
+    if(qfd.exec())
+    {
+        QStringList& qst = qfd.selectedFiles();
+
+        for(int s = 0; s < qst.size() || s < 1; s++)
+        {
+            this->sourcefile = qst[s];
+        }
+    }
 }
