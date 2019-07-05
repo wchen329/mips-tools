@@ -17,17 +17,21 @@ SOURCES += main.cpp\
     aboutdialog.cpp \
     integration.cpp \
     simoptionsdialog.cpp \
-    qbufferreadyevent.cpp
+    listbreak.cpp \
+    addbreak.cpp
 
 HEADERS  += simui.h \
     aboutdialog.h \
     integration.h \
     simoptionsdialog.h \
-    qbufferreadyevent.h
+    listbreak.h \
+    addbreak.h
 
 FORMS    += simui.ui \
     aboutdialog.ui \
-    simoptionsdialog.ui
+    simoptionsdialog.ui \
+    addbreak.ui \
+    listbreak.ui
 
 RESOURCES += \
     simUIart.qrc \

@@ -4,10 +4,9 @@ namespace priscas_io
 {
     void QtPTextWriter::operator<<(std::string& input)
     {
-        QString in = input.c_str();
-        QBufferReadyEvent* qbre;
-
-        //QCoreApplication::sendEvent(progInst, qbre);
+        simulation::obuf_mutex.lock();
+        simulation::output_buffer += input;
+        simulation::obuf_mutex.unlock();
     }
 
 }

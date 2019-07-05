@@ -1,13 +1,14 @@
 #ifndef SIMUI_H
 #define SIMUI_H
 
+#include <QTimer>
+#include <QThread>
 #include <QFileDialog>
 #include <QFontDialog>
-#include <QThread>
 #include <QMainWindow>
 #include <string>
+#include <vector>
 #include "integration.h"
-#include "qbufferreadyevent.h"
 #include "shell.h"
 
 // simUI: simulation related
@@ -15,16 +16,27 @@
 namespace simulation
 {
     using namespace mipsshell;
-    extern Shell sh;
+    extern Shell * sh;
+    extern std::string output_buffer;
+    extern std::string error_buffer;
+    extern QMutex obuf_mutex;
+    extern QMutex ebuf_mutex;
 }
 
 class SimCntrlRun : public QThread
 {
+    public:
 
-    void run() override
-    {
-        simulation::sh.Run();
-    }
+        void run() override
+        {
+            shell_ptr->Run();
+            this->exit();
+        }
+
+        void set_shell_ptr(mipsshell::Shell* s) { this->shell_ptr = s; }
+
+    private:
+        mipsshell::Shell* shell_ptr;
 
 };
 
@@ -40,7 +52,6 @@ class simUI : public QMainWindow
 
 public:
     explicit simUI(QWidget *parent = 0);
-    bool event(QEvent *event) override;
     QTextEdit& getConsoleWindowRef();
     ~simUI();
 
@@ -61,11 +72,25 @@ private slots:
 
     void on_actionCPU_Options_triggered();
 
+    void bufferUpdate_Timer_Triggered();
+
+    void cleanUpSim();
+
+    void on_actionAdd_Breakpoint_triggered();
+
+    void on_actionList_Current_Breakpoints_triggered();
+
+    void on_actionBreak_Execution_triggered();
+
 private:
+    QTimer * buf_poller;
     QString sourcefile;
     void signifySimOn();
+    void signifySimSuspended();
     void signifySimOff();
     Ui::simUI *ui;
+    std::vector<unsigned long> programBreakpoints;
+    std::vector<unsigned long> archBreakPoints;
 };
 
 #endif // SIMUI_H

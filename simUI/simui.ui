@@ -133,6 +133,7 @@
    <addaction name="actionStart_Simulation"/>
    <addaction name="actionStop_Simulation"/>
    <addaction name="actionBreak_Execution"/>
+   <addaction name="actionContinue"/>
    <addaction name="actionRuntime_Directive"/>
    <addaction name="separator"/>
    <addaction name="actionAdd_Breakpoint"/>
@@ -205,12 +206,12 @@
   </action>
   <action name="actionSet_Simulation_Source">
    <property name="text">
-    <string>Set Simulation Source</string>
+    <string>Set Simulation Source...</string>
    </property>
   </action>
   <action name="actionAdd_Breakpoint">
    <property name="text">
-    <string>Add Breakpoint</string>
+    <string>Add Breakpoint...</string>
    </property>
   </action>
   <action name="actionList_Current_Breakpoints">
@@ -219,22 +220,12 @@
      <normaloff>:/icons/art/flag-red.png</normaloff>:/icons/art/flag-red.png</iconset>
    </property>
    <property name="text">
-    <string>List Current Breakpoints</string>
-   </property>
-  </action>
-  <action name="actionCPU_Type_Selection">
-   <property name="text">
-    <string>CPU Type Selection</string>
-   </property>
-  </action>
-  <action name="actionMemory_Size_Selection">
-   <property name="text">
-    <string>Memory Size Selection</string>
+    <string>List Current Breakpoints...</string>
    </property>
   </action>
   <action name="actionCPU_Options">
    <property name="text">
-    <string>Simulation Options</string>
+    <string>Simulation Options...</string>
    </property>
   </action>
   <action name="actionClear_Console_Window">
@@ -245,6 +236,15 @@
   <action name="actionFont">
    <property name="text">
     <string>Font...</string>
+   </property>
+  </action>
+  <action name="actionContinue">
+   <property name="icon">
+    <iconset resource="simUIart.qrc">
+     <normaloff>:/icons/art/flag-green.png</normaloff>:/icons/art/flag-green.png</iconset>
+   </property>
+   <property name="text">
+    <string>Continue</string>
    </property>
   </action>
  </widget>

@@ -5,7 +5,6 @@
 #include <QTextEdit>
 #include <string>
 #include <iostream>
-#include "qbufferreadyevent.h"
 #include "simui.h"
 #include "streams.h"
 
@@ -31,6 +30,7 @@ namespace priscas_io
             QtPTextWriter(QTextEdit& qte)
                 : qte(&qte)
             {
+
             }
     };
 }
