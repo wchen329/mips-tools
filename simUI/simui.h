@@ -7,6 +7,7 @@
 #include <QMainWindow>
 #include <string>
 #include "integration.h"
+#include "qbufferreadyevent.h"
 #include "shell.h"
 
 // simUI: simulation related
@@ -39,6 +40,7 @@ class simUI : public QMainWindow
 
 public:
     explicit simUI(QWidget *parent = 0);
+    bool event(QEvent *event) override;
     QTextEdit& getConsoleWindowRef();
     ~simUI();
 
@@ -54,6 +56,10 @@ private slots:
     void on_actionFont_triggered();
 
     void on_actionSet_Simulation_Source_triggered();
+
+    void on_actionStop_Simulation_triggered();
+
+    void on_actionCPU_Options_triggered();
 
 private:
     QString sourcefile;

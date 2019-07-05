@@ -15,14 +15,19 @@ TEMPLATE = app
 SOURCES += main.cpp\
         simui.cpp \
     aboutdialog.cpp \
-    integration.cpp
+    integration.cpp \
+    simoptionsdialog.cpp \
+    qbufferreadyevent.cpp
 
 HEADERS  += simui.h \
     aboutdialog.h \
-    integration.h
+    integration.h \
+    simoptionsdialog.h \
+    qbufferreadyevent.h
 
 FORMS    += simui.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    simoptionsdialog.ui
 
 RESOURCES += \
     simUIart.qrc \

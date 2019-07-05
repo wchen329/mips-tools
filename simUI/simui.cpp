@@ -3,10 +3,17 @@
 #include "aboutdialog.h"
 #include "shell.h"
 #include "integration.h"
+#include "simoptionsdialog.h"
 
 namespace simulation
 {
     SimCntrlRun simThread;
+    std::string output_buffer;
+    std::string error_buffer;
+    QMutex obuf_mutex;
+    QMutex ebuf_mutex;
+    int mem_bits = 16;
+    int cpu_type = 0;
     mipsshell::Shell sh;
     priscas_io::QtPTextWriter * err_str = nullptr;
     priscas_io::QtPTextWriter * out_str = nullptr;
@@ -14,11 +21,6 @@ namespace simulation
     void startSim()
     {
         sh.Run();
-    }
-
-    void endSim()
-    {
-        //sh = mipsshell::Shell();
     }
 
     void breakSim()
@@ -38,7 +40,7 @@ simUI::simUI(QWidget *parent) :
     simulation::sh.setErrorTextStream(*simulation::err_str);
     simulation::sh.setOutputTextStream(*simulation::out_str);
     simulation::sh.setNoConsoleOutput(true);
-
+    QEvent::registerEventType(QEventReady);
     this->signifySimOff();
 
     this->setCentralWidget(ui->consoleScreen);
@@ -89,10 +91,14 @@ void simUI::on_actionStart_Simulation_triggered()
     args.push_back("mtshell");
     args.push_back("-i");
     args.push_back(this->sourcefile.toStdString());
+    args.push_back("-m");
+    args.push_back(priscas_io::StrTypes::IntToStr(simulation::mem_bits));
+    args.push_back("-c");
+    args.push_back(priscas_io::StrTypes::IntToStr(simulation::cpu_type));
     simulation::sh.SetArgs(args);
 
     // Start Simulation!
-    simulation::startSim();
+    simulation::simThread.start();
     this->signifySimOn();
     this->signifySimOff();
 }
@@ -141,4 +147,30 @@ void simUI::on_actionSet_Simulation_Source_triggered()
             this->sourcefile = qst[s];
         }
     }
+}
+
+void simUI::on_actionCPU_Options_triggered()
+{
+    simoptionsdialog sod;
+    sod.exec();
+    simulation::mem_bits = sod.getMemBitWidth();
+    simulation::cpu_type = sod.getSelectedCPUID();
+}
+
+bool simUI::event(QEvent * qev)
+{
+
+    if(qev->type() == QEventReady)
+    {
+        QBufferReadyEvent* qbre = dynamic_cast<QBufferReadyEvent*>(qev);
+        std::string& cont = qbre->getContent();
+        this->ui->consoleScreen->append(cont.c_str());
+    }
+
+    return QMainWindow::event(qev);
+}
+
+void simUI::on_actionStop_Simulation_triggered()
+{
+    simulation::simThread.exit(0);
 }

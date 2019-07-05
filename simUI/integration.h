@@ -1,13 +1,18 @@
 #ifndef INTEGRATION_H
 #define INTEGRATION_H
+#include <QCoreApplication>
 #include <QString>
 #include <QTextEdit>
 #include <string>
-#include "streams.h"
 #include <iostream>
+#include "qbufferreadyevent.h"
+#include "simui.h"
+#include "streams.h"
 
 namespace priscas_io
 {
+
+
     enum stream_type
     {
         ST_OUTPUT,
@@ -16,16 +21,11 @@ namespace priscas_io
 
     class QtPTextWriter : public text_stream
     {
-        QTextEdit * qte;
+        QTextEdit* qte;
 
         // disable constructors
 
-        void operator<<(std::string& input) override
-        {
-            QString in = input.c_str();
-            qte->append(in);
-            qte->repaint();
-        }
+        void operator<<(std::string& input) override;
 
         public:
             QtPTextWriter(QTextEdit& qte)
