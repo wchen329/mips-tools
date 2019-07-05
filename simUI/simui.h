@@ -4,6 +4,7 @@
 #include <QThread>
 #include <QMainWindow>
 #include <string>
+#include "integration.h"
 #include "shell.h"
 
 // simUI: simulation related
@@ -19,10 +20,6 @@ class SimCntrlRun : public QThread
 
     void run() override
     {
-        std::vector<std::string> args;
-        args.push_back("-i");
-        args.push_back("s2.txt");
-        simulation::sh.SetArgs(args);
         simulation::sh.Run();
     }
 
@@ -40,6 +37,7 @@ class simUI : public QMainWindow
 
 public:
     explicit simUI(QWidget *parent = 0);
+    QTextEdit& getConsoleWindowRef();
     ~simUI();
 
 private slots:
@@ -49,7 +47,10 @@ private slots:
 
     void on_actionStart_Simulation_triggered();
 
+    void on_actionClear_Console_Window_triggered();
+
 private:
+
     void signifySimOn();
     void signifySimOff();
     Ui::simUI *ui;

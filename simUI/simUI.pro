@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         simui.cpp \
-    aboutdialog.cpp
+    aboutdialog.cpp \
+    integration.cpp
 
 HEADERS  += simui.h \
-    aboutdialog.h
+    aboutdialog.h \
+    integration.h
 
 FORMS    += simui.ui \
     aboutdialog.ui

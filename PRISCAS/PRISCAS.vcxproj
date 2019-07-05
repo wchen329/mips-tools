@@ -88,12 +88,14 @@
     <ClCompile Include="..\src\mmem.cpp" />
     <ClCompile Include="..\src\shell.cpp" />
     <ClCompile Include="..\src\states.cpp" />
+    <ClCompile Include="..\src\streams.cpp" />
     <ClCompile Include="..\src\superscalar.cpp" />
     <ClCompile Include="..\src\syms_table.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\asm_exception.h" />
     <ClInclude Include="..\include\branding.h" />
+    <ClInclude Include="..\include\buffer_events.h" />
     <ClInclude Include="..\include\cpu.h" />
     <ClInclude Include="..\include\cpu_time.h" />
     <ClInclude Include="..\include\diag_cpu.h" />
@@ -119,6 +121,7 @@
     <ClInclude Include="..\include\sc_cpu.h" />
     <ClInclude Include="..\include\shell.h" />
     <ClInclude Include="..\include\states.h" />
+    <ClInclude Include="..\include\streams.h" />
     <ClInclude Include="..\include\superscalar.h" />
     <ClInclude Include="..\include\syms_table.h" />
   </ItemGroup>

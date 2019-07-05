@@ -37,6 +37,19 @@
      <string>simUI Console</string>
     </property>
    </widget>
+   <widget class="QLabel" name="statusLabel">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>500</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -44,7 +57,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -91,9 +104,16 @@
     <addaction name="separator"/>
     <addaction name="actionCPU_Options"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionClear_Console_Window"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSimulation"/>
    <addaction name="menuTools"/>
+   <addaction name="menuView"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -214,6 +234,11 @@
   <action name="actionCPU_Options">
    <property name="text">
     <string>Simulation Options</string>
+   </property>
+  </action>
+  <action name="actionClear_Console_Window">
+   <property name="text">
+    <string>Clear Console Window</string>
    </property>
   </action>
  </widget>

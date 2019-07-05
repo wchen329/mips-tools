@@ -6,6 +6,7 @@
 #include <vector>
 #include "mb.h"
 #include "syms_table.h"
+#include "streams.h"
 
 namespace mipsshell
 {
@@ -21,14 +22,19 @@ namespace mipsshell
 	 */
 	class Shell
 	{
+
 		public:
 			void Run();
 			void SetArgs(std::vector<std::string> & args) { this->args = args; }
 			mips_tools::mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
 			void SetQuiet() { isQuiet = true; }
-			FILE* getOutputStream() { return this->output; }
+			void WriteToOutput(std::string& o);
+			void WriteToError(std::string& e);
 			void add_program_breakpoint(unsigned long line);
 			void add_microarch_breakpoint(unsigned long cycle) { this->microarch_breakpoints.insert(std::pair<unsigned long, bool>(cycle, true)); }
+			void setOutputTextStream(priscas_io::text_stream & ts) { this->tw_output = &ts; }
+			void setErrorTextStream(priscas_io::text_stream & ts) { this->tw_error = &ts; }
+			void setNoConsoleOutput(bool torf) { this->NoConsoleOutput = torf; }
 			~Shell() { delete motherboard; }
 			Shell();
 
@@ -46,6 +52,9 @@ namespace mipsshell
 			void SetState(Shell_State s){ this->state = s; }
 
 		private:
+			bool NoConsoleOutput;
+			priscas_io::text_stream * tw_error;
+			priscas_io::text_stream * tw_output;
 			Shell& operator=(const Shell&);
 			Shell(const Shell&);
 			std::vector<std::string> args;
@@ -53,11 +62,6 @@ namespace mipsshell
 			bool isQuiet;
 
 			Shell_State state;
-			
-			// File streams
-			FILE* output;
-			FILE* input;
-			FILE* error;
 
 			// Runtime Directives, run through the shell
 			std::map<mips_tools::BW_32, unsigned long> program_breakpoints;

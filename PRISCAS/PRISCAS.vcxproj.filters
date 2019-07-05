@@ -74,6 +74,9 @@
     <ClCompile Include="..\src\superscalar.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\streams.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -161,6 +164,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\asm_exception.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\buffer_events.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\streams.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
