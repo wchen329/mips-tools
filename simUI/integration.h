@@ -1,16 +1,15 @@
 #ifndef INTEGRATION_H
 #define INTEGRATION_H
 #include <QCoreApplication>
+#include <QMutex>
 #include <QString>
 #include <QTextEdit>
 #include <string>
 #include <iostream>
-#include "simui.h"
 #include "streams.h"
 
 namespace priscas_io
 {
-
 
     enum stream_type
     {
@@ -20,18 +19,13 @@ namespace priscas_io
 
     class QtPTextWriter : public text_stream
     {
-        QTextEdit* qte;
+        std::string rep;
+        QMutex qm;
 
         // disable constructors
-
-        void operator<<(std::string& input) override;
-
-        public:
-            QtPTextWriter(QTextEdit& qte)
-                : qte(&qte)
-            {
-
-            }
+       public:
+            void operator<<(std::string& input) override;
+            void operator>>(std::string& output) override;
     };
 }
 

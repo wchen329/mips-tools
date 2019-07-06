@@ -17,10 +17,6 @@ namespace simulation
 {
     using namespace mipsshell;
     extern Shell * sh;
-    extern std::string output_buffer;
-    extern std::string error_buffer;
-    extern QMutex obuf_mutex;
-    extern QMutex ebuf_mutex;
 }
 
 class SimCntrlRun : public QThread
@@ -82,6 +78,8 @@ private slots:
 
     void on_actionBreak_Execution_triggered();
 
+    void on_actionRegister_Inspector_triggered();
+
 private:
     QTimer * buf_poller;
     QString sourcefile;
@@ -91,6 +89,7 @@ private:
     Ui::simUI *ui;
     std::vector<unsigned long> programBreakpoints;
     std::vector<unsigned long> archBreakPoints;
+    priscas_io::QtPTextWriter simTextIO;
 };
 
 #endif // SIMUI_H

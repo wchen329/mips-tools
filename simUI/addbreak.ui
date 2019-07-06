@@ -81,7 +81,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Architecture breakpoints are set according to PC number, and are activated when the PC reaches that number.</string>
+    <string>Architecture breakpoints are set according to cycle number.</string>
    </property>
   </widget>
   <widget class="QLabel" name="labelAboutArch_2">
@@ -117,7 +117,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>PC or Line Number:</string>
+    <string>Cycle or Line Number:</string>
    </property>
   </widget>
  </widget>

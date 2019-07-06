@@ -11,15 +11,9 @@
 namespace simulation
 {
     SimCntrlRun runner;
-    std::string output_buffer;
-    std::string error_buffer;
-    QMutex obuf_mutex;
-    QMutex ebuf_mutex;
     int mem_bits = 16;
     int cpu_type = 0;
     mipsshell::Shell* sh = nullptr;
-    priscas_io::QtPTextWriter * err_str = nullptr;
-    priscas_io::QtPTextWriter * out_str = nullptr;
 }
 
 simUI::simUI(QWidget *parent) :
@@ -29,8 +23,6 @@ simUI::simUI(QWidget *parent) :
     this->buf_poller = new QTimer(this);
     ui->setupUi(this);
     ui->consoleScreen->append("sim UI Runtime Console\n---------------\n");
-    simulation::err_str = new priscas_io::QtPTextWriter(*this->ui->consoleScreen);
-    simulation::out_str = new priscas_io::QtPTextWriter(*this->ui->consoleScreen);
     this->signifySimOff();
     this->setCentralWidget(ui->consoleScreen);
     this->buf_poller->setInterval(5);
@@ -45,10 +37,9 @@ simUI::~simUI()
 
 void simUI::bufferUpdate_Timer_Triggered()
 {
-    simulation::obuf_mutex.lock();
-    this->ui->consoleScreen->append(simulation::output_buffer.c_str());
-    simulation::output_buffer = "";
-    simulation::obuf_mutex.unlock();
+    std::string buf;
+    this->simTextIO >> buf;
+    this->ui->consoleScreen->append(buf.c_str());
 }
 
 void simUI::signifySimOn()
@@ -82,11 +73,14 @@ void simUI::signifySimOff()
     this->ui->actionRuntime_Directive->setEnabled(false);
     this->ui->actionStart_Simulation->setEnabled(true);
     this->buf_poller->stop();
-    this->ui->consoleScreen->append(simulation::output_buffer.c_str());
     this->ui->actionContinue->setEnabled(false);
     this->ui->actionAdd_Breakpoint->setEnabled(true);
     this->ui->actionList_Current_Breakpoints->setEnabled(true);
-    simulation::output_buffer = "";
+
+    // Clear buffer
+    std::string buf;
+    this->simTextIO >> buf;
+    this->ui->consoleScreen->append(buf.c_str());
 }
 
 void simUI::cleanUpSim()
@@ -128,8 +122,8 @@ void simUI::on_actionStart_Simulation_triggered()
     this->signifySimOn();
     simulation::sh = new mipsshell::Shell();
     simulation::sh->SetArgs(args);
-    simulation::sh->setErrorTextStream(*simulation::err_str);
-    simulation::sh->setOutputTextStream(*simulation::out_str);
+    simulation::sh->setErrorTextStream(this->simTextIO);
+    simulation::sh->setOutputTextStream(this->simTextIO);
     simulation::sh->setNoConsoleOutput(true);
 
     for(size_t abp_i = 0; abp_i < this->archBreakPoints.size(); abp_i++)
@@ -241,4 +235,9 @@ void simUI::on_actionBreak_Execution_triggered()
     mipsshell::INTERACTIVE = true;
     mipsshell::SUSPEND = true;
     this->signifySimSuspended();
+}
+
+void simUI::on_actionRegister_Inspector_triggered()
+{
+
 }

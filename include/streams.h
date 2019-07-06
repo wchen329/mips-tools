@@ -15,6 +15,7 @@ namespace priscas_io
 	{
 		public:
 			virtual void operator<<(std::string& input) = 0;
+			virtual void operator>>(std::string& output) = 0;
 			virtual bool isNull() { return false; }
 	};
 
@@ -25,6 +26,7 @@ namespace priscas_io
 	{
 		public:
 			void operator<<(std::string& input) { }
+			void operator>>(std::string& output) { }
 			bool isNull() { return true; }
 	};
 
