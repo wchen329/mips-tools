@@ -80,6 +80,8 @@ private slots:
 
     void on_actionRegister_Inspector_triggered();
 
+    void on_actionContinue_triggered();
+
 private:
     QTimer * buf_poller;
     QString sourcefile;
@@ -89,7 +91,8 @@ private:
     Ui::simUI *ui;
     std::vector<unsigned long> programBreakpoints;
     std::vector<unsigned long> archBreakPoints;
-    priscas_io::QtPTextWriter simTextIO;
+    priscas_io::QtPTextWriter simTextI;
+    priscas_io::QtPTextWriter simTextO;
 };
 
 #endif // SIMUI_H

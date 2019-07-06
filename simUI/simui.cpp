@@ -38,8 +38,16 @@ simUI::~simUI()
 void simUI::bufferUpdate_Timer_Triggered()
 {
     std::string buf;
-    this->simTextIO >> buf;
-    this->ui->consoleScreen->append(buf.c_str());
+    this->simTextO >> buf;
+
+    if(buf != "")
+        this->ui->consoleScreen->append(buf.c_str());
+
+    // Check state
+    if(mipsshell::INTERACTIVE && mipsshell::SUSPEND)
+    {
+        this->signifySimSuspended();
+    }
 }
 
 void simUI::signifySimOn()
@@ -79,8 +87,9 @@ void simUI::signifySimOff()
 
     // Clear buffer
     std::string buf;
-    this->simTextIO >> buf;
-    this->ui->consoleScreen->append(buf.c_str());
+    this->simTextO >> buf;
+    if(buf != "")
+        this->ui->consoleScreen->append(buf.c_str());
 }
 
 void simUI::cleanUpSim()
@@ -122,8 +131,9 @@ void simUI::on_actionStart_Simulation_triggered()
     this->signifySimOn();
     simulation::sh = new mipsshell::Shell();
     simulation::sh->SetArgs(args);
-    simulation::sh->setErrorTextStream(this->simTextIO);
-    simulation::sh->setOutputTextStream(this->simTextIO);
+    simulation::sh->setErrorTextStream(this->simTextO);
+    simulation::sh->setOutputTextStream(this->simTextO);
+    simulation::sh->setInputTextStream(this->simTextI);
     simulation::sh->setNoConsoleOutput(true);
 
     for(size_t abp_i = 0; abp_i < this->archBreakPoints.size(); abp_i++)
@@ -199,8 +209,10 @@ void simUI::on_actionCPU_Options_triggered()
 
 void simUI::on_actionStop_Simulation_triggered()
 {
+    mipsshell::INTERACTIVE = false;
     simulation::sh->SetState(mipsshell::Shell::KILLED);
-    simulation::runner.wait(1);
+    while(!simulation::runner.isFinished())
+        simulation::runner.wait(1);
     this->signifySimOff();
 }
 
@@ -240,4 +252,11 @@ void simUI::on_actionBreak_Execution_triggered()
 void simUI::on_actionRegister_Inspector_triggered()
 {
 
+}
+
+void simUI::on_actionContinue_triggered()
+{
+    mipsshell::INTERACTIVE = false;
+    mipsshell::SUSPEND = false;
+    this->signifySimOn();
 }

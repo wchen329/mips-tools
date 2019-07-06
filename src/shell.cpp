@@ -268,6 +268,11 @@ namespace mipsshell
 			mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
 			std::string& val = this->ReadFromInput();
 			
+			if(val.size() == 0)
+			{
+				continue;
+			}
+
 			if(val[0] == '.')
 			{
 				try
@@ -526,7 +531,11 @@ namespace mipsshell
 			}
 		}
 
-		*tw_input >> rd_buffer;
+
+		do
+		{
+			*tw_input >> rd_buffer;
+		} while(rd_buffer == "" && mipsshell::INTERACTIVE);
 
 		return this->rd_buffer;
 	}

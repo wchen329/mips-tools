@@ -37,6 +37,7 @@ namespace mipsshell
 			void add_microarch_breakpoint(unsigned long cycle) { this->microarch_breakpoints.insert(std::pair<unsigned long, bool>(cycle, true)); }
 			void setOutputTextStream(priscas_io::text_stream & ts) { this->tw_output = &ts; }
 			void setErrorTextStream(priscas_io::text_stream & ts) { this->tw_error = &ts; }
+			void setInputTextStream(priscas_io::text_stream & ts) { this->tw_input = &ts; }
 			void setNoConsoleOutput(bool torf) { this->NoConsoleOutput = torf; }
 			~Shell() { delete motherboard; }
 			Shell();
