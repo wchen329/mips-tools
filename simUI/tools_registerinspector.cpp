@@ -17,6 +17,12 @@ void tools_registerInspector::addCPU(mips_tools::diag_cpu &dcpu)
     cpu_count++;
     this->cpuNode_allocList.push_back(cpu_node);
 
+    QTreeWidgetItem * register_node = new QTreeWidgetItem();
+    register_node->setText(0, QString("PC: ") +
+                           QString(priscas_io::StrTypes::Int32ToStr(dcpu.get_PC()).c_str()));
+    cpu_node->addChild(register_node);
+    this->regNode_allocList.push_back(register_node);
+
     for(int itr = 0; itr < dcpu.get_reg_count(); itr++)
     {
         QTreeWidgetItem * register_node = new QTreeWidgetItem();
