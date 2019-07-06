@@ -258,7 +258,6 @@ namespace mipsshell
 		 *
 		 */
 
-		char buf[100];
 		if(mipsshell::INTERACTIVE)
 		{
 			WriteToOutput(std::string(">> "));
@@ -267,14 +266,13 @@ namespace mipsshell
 		if(mipsshell::INTERACTIVE || mipsshell::ASM_MODE)
 		{
 			mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
-			if(fgets(buf, 100, inst_file) == NULL) break;
+			std::string& val = this->ReadFromInput();
 			
-			if(buf[0] == '.')
+			if(val[0] == '.')
 			{
 				try
 				{
-					std::string str_buf(buf);
-					std::vector<std::string> chopped = chop_string(str_buf);
+					std::vector<std::string> chopped = chop_string(val);
 					execute_runtime_directive(chopped);
 				}
 				catch(mips_tools::mt_exception & e)
@@ -285,8 +283,7 @@ namespace mipsshell
 				continue;
 			}
 
-			std::string buf_str(buf);
-			std::vector<std::string> asm_args = chop_string(buf_str);
+			std::vector<std::string> asm_args = chop_string(val);
 			mips_tools::ISA & dcpuisa = dcpu.get_ISA();
 			mips_tools::BW_32 asm_pc = dcpu.get_PC();
 			mips_tools::BW inst = 0;
@@ -430,12 +427,15 @@ namespace mipsshell
 			throw bad_escape_err();
 		}
 
+		if(built_string != "")
+			str_vec.push_back(built_string);
+
 		return str_vec;
 	}
 
 	// Set up list of runtime directives
 	Shell::Shell() : motherboard(nullptr), isQuiet(false),  tw_error(&priscas_io::null_tstream),
-		tw_output(&priscas_io::null_tstream), NoConsoleOutput(false)
+		tw_output(&priscas_io::null_tstream), tw_input(&priscas_io::null_tstream), NoConsoleOutput(false)
 	{
 		this->state = EMBRYO;
 
@@ -490,5 +490,44 @@ namespace mipsshell
 		}
 
 		*tw_output << o;
+	}
+
+	std::string& Shell::ReadFromInput()
+	{
+		this->rd_buffer.clear();
+
+		bool QUOTES = false;
+		bool ESCAPED = false;
+
+		if(!NoConsoleOutput)
+		{
+			char in;
+			while((in = fgetc(stdin)) != EOF)
+			{
+				if(in == '\\' && !QUOTES)
+				{
+					ESCAPED = true;
+					continue;
+				}
+
+				if(in == '\"'|| in == '\'')
+				{
+					QUOTES = (!QUOTES);
+				}
+
+				if((in == '\n' || in == '\r' ) && !ESCAPED && !QUOTES)
+				{
+					this->rd_buffer += in;
+					break;
+				}
+
+				this->rd_buffer += in;
+				ESCAPED = false;
+			}
+		}
+
+		*tw_input >> rd_buffer;
+
+		return this->rd_buffer;
 	}
 }

@@ -28,8 +28,11 @@ namespace mipsshell
 			void SetArgs(std::vector<std::string> & args) { this->args = args; }
 			mips_tools::mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
 			void SetQuiet() { isQuiet = true; }
+			
 			void WriteToOutput(std::string& o);
 			void WriteToError(std::string& e);
+			std::string& ReadFromInput();
+
 			void add_program_breakpoint(unsigned long line);
 			void add_microarch_breakpoint(unsigned long cycle) { this->microarch_breakpoints.insert(std::pair<unsigned long, bool>(cycle, true)); }
 			void setOutputTextStream(priscas_io::text_stream & ts) { this->tw_output = &ts; }
@@ -55,6 +58,8 @@ namespace mipsshell
 			bool NoConsoleOutput;
 			priscas_io::text_stream * tw_error;
 			priscas_io::text_stream * tw_output;
+			priscas_io::text_stream * tw_input;
+			std::string rd_buffer;
 			Shell& operator=(const Shell&);
 			Shell(const Shell&);
 			std::vector<std::string> args;
