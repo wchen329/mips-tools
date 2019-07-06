@@ -7,6 +7,7 @@
 #include "states.h"
 #include "integration.h"
 #include "simoptionsdialog.h"
+#include "tools_registerinspector.h"
 
 namespace simulation
 {
@@ -254,7 +255,19 @@ void simUI::on_actionBreak_Execution_triggered()
 
 void simUI::on_actionRegister_Inspector_triggered()
 {
+    tools_registerInspector tri;
+    try
+    {
+        if(simulation::sh != nullptr)
+            tri.addCPU(dynamic_cast<mips_tools::diag_cpu&>(simulation::sh->GetMotherboard().get_cpu()));
+    }
 
+    catch(std::bad_cast)
+    {
+
+    }
+
+    tri.exec();
 }
 
 void simUI::on_actionContinue_triggered()

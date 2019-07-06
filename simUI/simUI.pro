@@ -18,20 +18,23 @@ SOURCES += main.cpp\
     integration.cpp \
     simoptionsdialog.cpp \
     listbreak.cpp \
-    addbreak.cpp
+    addbreak.cpp \
+    tools_registerinspector.cpp
 
 HEADERS  += simui.h \
     aboutdialog.h \
     integration.h \
     simoptionsdialog.h \
     listbreak.h \
-    addbreak.h
+    addbreak.h \
+    tools_registerinspector.h
 
 FORMS    += simui.ui \
     aboutdialog.ui \
     simoptionsdialog.ui \
     addbreak.ui \
-    listbreak.ui
+    listbreak.ui \
+    tools_registerinspector.ui
 
 RESOURCES += \
     simUIart.qrc \
