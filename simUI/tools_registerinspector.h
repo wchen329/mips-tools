@@ -24,6 +24,7 @@ private:
     std::vector<QTreeWidgetItem*> regNode_allocList;
     std::vector<QTreeWidgetItem*> cpuNode_allocList;
     int cpu_count;
+    bool accepted;
 };
 
 #endif // TOOLS_REGISTERINSPECTOR_H

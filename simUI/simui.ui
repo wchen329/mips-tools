@@ -65,7 +65,6 @@
      <string>File</string>
     </property>
     <addaction name="separator"/>
-    <addaction name="separator"/>
     <addaction name="actionSet_Simulation_Source"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -203,7 +202,7 @@
      <normaloff>:/icons/art/debug-run.png</normaloff>:/icons/art/debug-run.png</iconset>
    </property>
    <property name="text">
-    <string>Runtime Directive</string>
+    <string>Runtime Directive / Debug Assembler</string>
    </property>
   </action>
   <action name="actionSet_Simulation_Source">

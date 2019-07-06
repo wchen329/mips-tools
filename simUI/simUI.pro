@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     simoptionsdialog.cpp \
     listbreak.cpp \
     addbreak.cpp \
-    tools_registerinspector.cpp
+    tools_registerinspector.cpp \
+    tools_runtimedirective.cpp
 
 HEADERS  += simui.h \
     aboutdialog.h \
@@ -27,14 +28,16 @@ HEADERS  += simui.h \
     simoptionsdialog.h \
     listbreak.h \
     addbreak.h \
-    tools_registerinspector.h
+    tools_registerinspector.h \
+    tools_runtimedirective.h
 
 FORMS    += simui.ui \
     aboutdialog.ui \
     simoptionsdialog.ui \
     addbreak.ui \
     listbreak.ui \
-    tools_registerinspector.ui
+    tools_registerinspector.ui \
+    tools_runtimedirective.ui
 
 RESOURCES += \
     simUIart.qrc \

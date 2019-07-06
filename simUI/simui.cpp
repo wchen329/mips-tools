@@ -8,6 +8,7 @@
 #include "integration.h"
 #include "simoptionsdialog.h"
 #include "tools_registerinspector.h"
+#include "tools_runtimedirective.h"
 
 namespace simulation
 {
@@ -280,4 +281,15 @@ void simUI::on_actionContinue_triggered()
 void simUI::on_actionCycle_triggered()
 {
     this->simTextI << std::string(".cycle\n");
+}
+
+void simUI::on_actionRuntime_Directive_triggered()
+{
+    tools_runtimeDirective trd;
+    if(trd.exec())
+    {
+        std::string val = trd.getTextValue().toStdString() + priscas_io::newLine;
+        this->simTextO << val;
+        this->simTextI << val;
+    }
 }
