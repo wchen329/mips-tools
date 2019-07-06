@@ -16,6 +16,11 @@ public:
     ~simoptionsdialog();
     int getSelectedCPUID();
     int getMemBitWidth();
+    void setSelectedCPUID(int);
+    void setMemBitWidth(int);
+
+private slots:
+    void on_horizontalSliderMemBits_valueChanged(int value);
 
 private:
     Ui::simoptionsdialog *ui;

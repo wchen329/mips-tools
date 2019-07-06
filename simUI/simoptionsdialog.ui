@@ -29,7 +29,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>30</y>
+      <y>50</y>
       <width>481</width>
       <height>20</height>
      </rect>
@@ -50,6 +50,58 @@
      <enum>QSlider::TicksBelow</enum>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>80</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>4 bits</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>80</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>20 bits</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_BitWidth">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>30</y>
+      <width>151</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Addressable Memory Bitwidth</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_TotalSize">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>371</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Total Size:</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="groupBoxCPUSelect">
    <property name="geometry">
@@ -57,7 +109,7 @@
      <x>10</x>
      <y>170</y>
      <width>271</width>
-     <height>291</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">

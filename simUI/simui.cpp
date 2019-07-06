@@ -207,6 +207,8 @@ void simUI::on_actionSet_Simulation_Source_triggered()
 void simUI::on_actionCPU_Options_triggered()
 {
     simoptionsdialog sod;
+    sod.setMemBitWidth(simulation::mem_bits);
+    sod.setSelectedCPUID(simulation::cpu_type);
     sod.exec();
     simulation::mem_bits = sod.getMemBitWidth();
     simulation::cpu_type = sod.getSelectedCPUID();
