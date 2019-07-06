@@ -536,6 +536,7 @@ namespace mipsshell
 		{
 			*tw_input >> rd_buffer;
 		} while(rd_buffer == "" && mipsshell::INTERACTIVE);
+		// wildly inefficient: todo make it sleep (platform independent)!
 
 		return this->rd_buffer;
 	}

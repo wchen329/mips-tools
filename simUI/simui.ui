@@ -133,7 +133,9 @@
    <addaction name="actionStart_Simulation"/>
    <addaction name="actionStop_Simulation"/>
    <addaction name="actionBreak_Execution"/>
+   <addaction name="separator"/>
    <addaction name="actionContinue"/>
+   <addaction name="actionCycle"/>
    <addaction name="actionRuntime_Directive"/>
    <addaction name="separator"/>
    <addaction name="actionAdd_Breakpoint"/>
@@ -241,10 +243,19 @@
   <action name="actionContinue">
    <property name="icon">
     <iconset resource="simUIart.qrc">
-     <normaloff>:/icons/art/flag-green.png</normaloff>:/icons/art/flag-green.png</iconset>
+     <normaloff>:/icons/art/arrow-right-double.png</normaloff>:/icons/art/arrow-right-double.png</iconset>
    </property>
    <property name="text">
     <string>Continue</string>
+   </property>
+  </action>
+  <action name="actionCycle">
+   <property name="icon">
+    <iconset resource="simUIart.qrc">
+     <normaloff>:/icons/art/arrow-right.png</normaloff>:/icons/art/arrow-right.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cycle</string>
    </property>
   </action>
  </widget>

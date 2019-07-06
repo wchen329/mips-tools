@@ -6,5 +6,7 @@
         <file>art/debug-run.png</file>
         <file>art/flag-red.png</file>
         <file>art/flag-green.png</file>
+        <file>art/arrow-right.png</file>
+        <file>art/arrow-right-double.png</file>
     </qresource>
 </RCC>

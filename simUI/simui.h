@@ -82,6 +82,8 @@ private slots:
 
     void on_actionContinue_triggered();
 
+    void on_actionCycle_triggered();
+
 private:
     QTimer * buf_poller;
     QString sourcefile;

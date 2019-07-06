@@ -32,6 +32,7 @@ simUI::simUI(QWidget *parent) :
 
 simUI::~simUI()
 {
+    simulation::runner.terminate();
     delete ui;
 }
 
@@ -60,7 +61,7 @@ void simUI::signifySimOn()
     this->ui->actionAdd_Breakpoint->setEnabled(false);
     this->ui->actionList_Current_Breakpoints->setEnabled(false);
     this->buf_poller->start();
-
+    this->ui->actionCycle->setEnabled(false);
 }
 
 void simUI::signifySimSuspended()
@@ -72,6 +73,7 @@ void simUI::signifySimSuspended()
     this->ui->actionContinue->setEnabled(true);
     this->ui->actionAdd_Breakpoint->setEnabled(false);
     this->ui->actionList_Current_Breakpoints->setEnabled(false);
+    this->ui->actionCycle->setEnabled(true);
 }
 
 void simUI::signifySimOff()
@@ -84,6 +86,7 @@ void simUI::signifySimOff()
     this->ui->actionContinue->setEnabled(false);
     this->ui->actionAdd_Breakpoint->setEnabled(true);
     this->ui->actionList_Current_Breakpoints->setEnabled(true);
+    this->ui->actionCycle->setEnabled(false);
 
     // Clear buffer
     std::string buf;
@@ -259,4 +262,9 @@ void simUI::on_actionContinue_triggered()
     mipsshell::INTERACTIVE = false;
     mipsshell::SUSPEND = false;
     this->signifySimOn();
+}
+
+void simUI::on_actionCycle_triggered()
+{
+    this->simTextI << std::string(".cycle\n");
 }
