@@ -248,7 +248,7 @@ namespace mipsshell
 					WriteToError(msg_1);
 					WriteToError(("Line of error:\n"));
 					std::string msg_2 = 
-						(std::string("\t%s\n") + lines[itr]);
+						(std::string("\t") + lines[itr] + std::string("\n"));
 					WriteToError(msg_2);
 					return;
 				}
@@ -365,7 +365,7 @@ namespace mipsshell
 
 					std::string o = (std::string("Breakpoint at line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(" hit.\n"));
 					WriteToOutput(o);
-					std::string p = (std::string("line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(":\n\t") + std::string("%s\n") + line_str);
+					std::string p = (std::string("line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(":\n\t") + line_str + std::string("\n"));
 					WriteToOutput(p);
 				}
 
