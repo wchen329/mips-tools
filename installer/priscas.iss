@@ -15,10 +15,11 @@ VersionInfoProductVersion=0.2.2019.7
 VersionInfoProductTextVersion="0.2.2019.7"
 DefaultDirName={autopf}\Priscas
 DefaultGroupName=Priscas
+DisableWelcomePage=no
 
 [Components]
-Name: "shell"; Description: "Priscas Shell"
-Name: "simUI"; Description: "Priscas simUI"
+Name: "shell"; Description: "Priscas Shell"; Types: full compact custom
+Name: "simUI"; Description: "Priscas simUI"; Types: full
 
 [Files]
 Source: "..\external\lib\winNT\qt\Qt5Core.dll"; DestDir: "{app}"; Components: simUI
