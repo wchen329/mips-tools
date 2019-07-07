@@ -1,6 +1,7 @@
 #ifndef __STREAMS_H__
 #define __STREAMS_H__
 
+#include <cstdint>
 #include <string>
 
 namespace priscas_io

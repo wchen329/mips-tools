@@ -1,6 +1,7 @@
 #ifndef __PRIMITIVES_H__
 #define __PRIMITIVES_H__
 #include <cctype>
+#include <cstdint>
 #include <string>
 /* Various byte long
  * primitives such as a 32-bitlong word
@@ -12,9 +13,9 @@
 namespace mips_tools
 {
 
-	typedef long long BW_64;
-	typedef long BW_32;	// bitword 32, will be changed to uint_32 or something of the like
-	typedef int BW_16;
+	typedef int64_t BW_64;
+	typedef int32_t BW_32;
+	typedef int16_t BW_16;
 
 	// general "bit word class"
 	class BW

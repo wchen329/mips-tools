@@ -7,6 +7,7 @@
 #include "states.h"
 #include "integration.h"
 #include "simoptionsdialog.h"
+#include "tools_meminspector.h"
 #include "tools_registerinspector.h"
 #include "tools_runtimedirective.h"
 
@@ -346,4 +347,13 @@ void simUI::on_actionRuntime_Directive_triggered()
         this->simTextO << val;
         this->simTextI << val;
     }
+}
+
+void simUI::on_actionMemory_Inspector_triggered()
+{
+    tools_meminspector tmi;
+
+    if(simulation::sh != nullptr)
+        tmi.addMemoryChannel(&(simulation::sh->GetMotherboard().get_mmem()));
+    tmi.exec();
 }

@@ -32,6 +32,7 @@ namespace mips_tools
 			void DMA_write(char data, int addr);	// direct memory access write
 			char DMA_read(int addr);	// direct memory access read
 			cpu & get_cpu();		// return cpu reference
+			mmem & get_mmem() { return *this->mb_mmem; }		// return main memory reference
 			unsigned long get_cycles() { return this->cycle_ct; };		// return current simulation cycles elapsed
 			CPUTime get_time() { return this->sim_time; } // return the current simulation time elapsed
 			size_t get_mmem_size();	// get main memory size in BYTES

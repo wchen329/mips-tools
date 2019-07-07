@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     listbreak.cpp \
     addbreak.cpp \
     tools_registerinspector.cpp \
-    tools_runtimedirective.cpp
+    tools_runtimedirective.cpp \
+    tools_meminspector.cpp
 
 HEADERS  += simui.h \
     aboutdialog.h \
@@ -29,7 +30,8 @@ HEADERS  += simui.h \
     listbreak.h \
     addbreak.h \
     tools_registerinspector.h \
-    tools_runtimedirective.h
+    tools_runtimedirective.h \
+    tools_meminspector.h
 
 FORMS    += simui.ui \
     aboutdialog.ui \
@@ -37,7 +39,8 @@ FORMS    += simui.ui \
     addbreak.ui \
     listbreak.ui \
     tools_registerinspector.ui \
-    tools_runtimedirective.ui
+    tools_runtimedirective.ui \
+    tools_meminspector.ui
 
 RESOURCES += \
     simUIart.qrc \
