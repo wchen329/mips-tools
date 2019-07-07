@@ -10,7 +10,7 @@ OBJS = format_chk.o cpu_time.o interpret.o mb.o mem.o messages.o mips.o mmem.o m
 SHELL_MAIN = shell_entry.o
 INCLUDE = include
 
-all: build/libmtcore.a $(BIN_DIR)/mtshell
+all: build/libmtcore.a $(BIN_DIR)/simUI $(BIN_DIR)/mtshell
 
 build/libmtcore.a: $(OBJS)
 	cd build; ar r libmtcore.a $(OBJS)
@@ -26,6 +26,21 @@ $(BIN_DIR)/mtshell: $(OBJS) $(SHELL_MAIN) $(INCLUDE)
 		mkdir $(BIN_DIR); \
 	fi
 	cd build; $(CC) $(OBJS) $(SHELL_MAIN) -g -o ../$(BIN_DIR)/mtshell
+$(BIN_DIR)/simUI: build/libmtcore.a
+	@ echo "Building simUI..."
+	@ if \
+		test $(QMAKE); \
+	then \
+		cd simUI && \
+		qmake simUI.pro -r -spec linux-g++ CONFIG+=debug && \
+		cd ../build-* && \
+		make && \
+		cp simUI ../bin; \
+	else \
+		echo "Could not find qmake. Please specify the path of the qmake executable by defining macro or env. var QMAKE." && \
+		exit 1; \
+	fi
+
 .cpp.o:
 	$(CC) $(CFLAGS) -c $<
 	mv $*.o build 
