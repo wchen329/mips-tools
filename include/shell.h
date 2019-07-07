@@ -1,6 +1,7 @@
 #ifndef __SHELL_H__
 #define __SHELL_H__
 #include <set>
+#include <queue>
 #include <map>
 #include <string>
 #include <vector>
@@ -33,7 +34,8 @@ namespace mipsshell
 			void WriteToError(std::string& e);
 			std::string& ReadFromInput();
 
-			void add_program_breakpoint(unsigned long line);
+			void add_program_breakpoint(unsigned long line); // sets the program breakpoint directly, CANNOT be used be external sources (yet!)
+			void declare_program_breakpoint(unsigned long line); // queues the breakpoint to be added, but doesn't set it
 			void add_microarch_breakpoint(unsigned long cycle) { this->microarch_breakpoints.insert(std::pair<unsigned long, bool>(cycle, true)); }
 			void setOutputTextStream(priscas_io::text_stream & ts) { this->tw_output = &ts; }
 			void setErrorTextStream(priscas_io::text_stream & ts) { this->tw_error = &ts; }
@@ -75,6 +77,7 @@ namespace mipsshell
 			std::map<unsigned long, mips_tools::BW_32> line_number_to_PC;
 			std::map<mips_tools::BW_32, std::string> PC_to_line_string;
 			std::map<unsigned long, bool> microarch_breakpoints;
+			std::queue<unsigned long> queued_prog_breakpoints;
 			std::map<std::string, void(*)(std::vector<std::string>&, Shell& shell)> directives;
 			mips_tools::syms_table jump_syms;
 			mips_tools::syms_table directive_syms;

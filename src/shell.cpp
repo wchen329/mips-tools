@@ -210,6 +210,13 @@ namespace mipsshell
 				lines.push_back(current_line);		
 			}
 
+			// Add pre-declared program breakpoints, if any
+			while(!this->queued_prog_breakpoints.empty())
+			{
+				this->add_program_breakpoint(this->queued_prog_breakpoints.front());
+				this->queued_prog_breakpoints.pop();
+			}
+
 			mips_tools::BW_32 asm_pc = 0;
 
 			// Now assemble the rest
@@ -460,6 +467,11 @@ namespace mipsshell
 		this->directives.insert(directive_pair(".trace", mipsshell::trace));
 		this->directives.insert(directive_pair(".time", mipsshell::time));
 		this->directives.insert(directive_pair(".vga", mipsshell::vga));
+	}
+
+	void Shell::declare_program_breakpoint(unsigned long line)
+	{
+		this->queued_prog_breakpoints.push(line);
 	}
 
 	void Shell::add_program_breakpoint(unsigned long line)

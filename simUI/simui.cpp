@@ -20,14 +20,20 @@ namespace simulation
 
 simUI::simUI(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::simUI)
+    ui(new Ui::simUI),
+    simStart_Txt("(Simulation Running)"),
+    simStop_Txt("(Simulation Stopped)"),
+    simBreak_Txt("(Simulation Paused)")
 {
     this->buf_poller = new QTimer(this);
     ui->setupUi(this);
     ui->consoleScreen->append("sim UI Runtime Console\n---------------\n");
     this->signifySimOff();
+    this->curFileHeader = "Current File: ";
     this->setCentralWidget(ui->consoleScreen);
     this->buf_poller->setInterval(5);
+    this->ui->statusLabel->setText(this->curFileHeader + "None" + " " + this->simStop_Txt);
+    this->ui->statusBar->addPermanentWidget(this->ui->statusLabel);
     connect(buf_poller, SIGNAL(timeout()), this, SLOT(bufferUpdate_Timer_Triggered()));
     connect(&simulation::runner, SIGNAL(finished()), this, SLOT(cleanUpSim()));
 }
@@ -62,8 +68,12 @@ void simUI::signifySimOn()
     this->ui->actionContinue->setEnabled(false);
     this->ui->actionAdd_Breakpoint->setEnabled(false);
     this->ui->actionList_Current_Breakpoints->setEnabled(false);
+    this->ui->actionSet_Simulation_Source->setEnabled(false);
+    this->ui->actionMemory_Inspector->setEnabled(false);
+    this->ui->actionRegister_Inspector->setEnabled(false);
     this->buf_poller->start();
     this->ui->actionCycle->setEnabled(false);
+    this->ui->statusLabel->setText(this->curFileHeader + sourcefile + " " + this->simStart_Txt);
 }
 
 void simUI::signifySimSuspended()
@@ -75,7 +85,11 @@ void simUI::signifySimSuspended()
     this->ui->actionContinue->setEnabled(true);
     this->ui->actionAdd_Breakpoint->setEnabled(false);
     this->ui->actionList_Current_Breakpoints->setEnabled(false);
+    this->ui->actionSet_Simulation_Source->setEnabled(false);
+    this->ui->actionMemory_Inspector->setEnabled(true);
+    this->ui->actionRegister_Inspector->setEnabled(true);
     this->ui->actionCycle->setEnabled(true);
+    this->ui->statusLabel->setText(this->curFileHeader + sourcefile + " " + this->simBreak_Txt);
 }
 
 void simUI::signifySimOff()
@@ -88,7 +102,13 @@ void simUI::signifySimOff()
     this->ui->actionContinue->setEnabled(false);
     this->ui->actionAdd_Breakpoint->setEnabled(true);
     this->ui->actionList_Current_Breakpoints->setEnabled(true);
+    this->ui->actionSet_Simulation_Source->setEnabled(true);
+    this->ui->actionMemory_Inspector->setEnabled(true);
+    this->ui->actionRegister_Inspector->setEnabled(true);
     this->ui->actionCycle->setEnabled(false);
+    this->ui->statusLabel->setText(this->curFileHeader + sourcefile + " " + this->simStop_Txt);
+    mipsshell::INTERACTIVE = false;
+    mipsshell::SUSPEND = false;
 
     // Clear buffer
     std::string buf;
@@ -144,13 +164,13 @@ void simUI::on_actionStart_Simulation_triggered()
     for(size_t abp_i = 0; abp_i < this->archBreakPoints.size(); abp_i++)
     {
         //if(!simulation::sh->has_ma_break_at(abp_i))
-            simulation::sh->add_microarch_breakpoint(abp_i);
+            simulation::sh->add_microarch_breakpoint(archBreakPoints[abp_i]);
     }
 
     for(size_t pbp_i = 0; pbp_i < this->programBreakpoints.size(); pbp_i++)
     {
         //if(!simulation::sh->has_prog_break_at(abp_i))
-            simulation::sh->add_program_breakpoint(pbp_i);
+            simulation::sh->declare_program_breakpoint(programBreakpoints[pbp_i]);
     }
 
     simulation::runner.set_shell_ptr(simulation::sh);
@@ -201,6 +221,8 @@ void simUI::on_actionSet_Simulation_Source_triggered()
         {
             this->sourcefile = qst[s];
         }
+
+        this->ui->statusLabel->setText(this->curFileHeader + this->sourcefile + " " + this->simStop_Txt);
     }
 }
 

@@ -89,6 +89,11 @@ private slots:
 private:
     QTimer * buf_poller;
     QString sourcefile;
+    QString curFileHeader;
+    QString simStatusTxt;
+    const char * simStop_Txt;
+    const char * simStart_Txt;
+    const char * simBreak_Txt;
     void signifySimOn();
     void signifySimSuspended();
     void signifySimOff();
