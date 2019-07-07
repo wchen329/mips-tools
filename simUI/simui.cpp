@@ -193,7 +193,7 @@ void simUI::on_actionFont_triggered()
 {
     QFontDialog qfd;
     bool okToGet;
-    QFont & f = qfd.getFont(&okToGet);
+    QFont f = qfd.getFont(&okToGet);
     if(okToGet)
     {
         this->ui->consoleScreen->setFont(f);
@@ -216,7 +216,7 @@ void simUI::on_actionSet_Simulation_Source_triggered()
 
     if(qfd.exec())
     {
-        QStringList& qst = qfd.selectedFiles();
+        QStringList qst = qfd.selectedFiles();
 
         for(int s = 0; s < qst.size() || s < 1; s++)
         {
@@ -335,7 +335,8 @@ void simUI::on_actionContinue_triggered()
 
 void simUI::on_actionCycle_triggered()
 {
-    this->simTextI << std::string(".cycle\n");
+    std::string cycle_cmd = ".cycle\n";
+    this->simTextI << cycle_cmd;
 }
 
 void simUI::on_actionRuntime_Directive_triggered()

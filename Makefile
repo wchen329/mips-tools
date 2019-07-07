@@ -6,11 +6,15 @@ LIB_DIR = build
 CFLAGS = -g -I"$(INCLUDE)"
 OBJS = format_chk.o cpu_time.o interpret.o mb.o mem.o messages.o mips.o mmem.o mtsstream.o \
 	parser_err.o pipeline.o primitives.o range.o reg_32.o reg_pipeline.o runtime_call.o sc_cpu.o \
-	shell.o states.o syms_table.o
+	shell.o streams.o states.o superscalar.o syms_table.o
 SHELL_MAIN = shell_entry.o
 INCLUDE = include
 
-all: $(BIN_DIR)/mtshell
+all: build/libmtcore.a $(BIN_DIR)/mtshell
+
+build/libmtcore.a: $(OBJS)
+	cd build; ar r libmtcore.a $(OBJS)
+
 $(BIN_DIR)/mtshell: $(OBJS) $(SHELL_MAIN) $(INCLUDE)
 	@ echo "Looking for bin directory..."
 	@ if \
@@ -29,6 +33,7 @@ release:
 	make all CFLAGS="-O2 -I\"$(INCLUDE)\" -DP_RELEASE"
 clean:
 	rm build/*.o
+	rm build/*.a
 	rm bin/*
 test: $(BIN_DIR)/mtshell
 	cd testing/unix_test; $(MAKE) "P_LIB=$(OBJS)"; $(MAKE) run

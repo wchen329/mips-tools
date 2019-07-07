@@ -31,15 +31,16 @@ namespace mipsshell
 		{
 			if(args_list.size() > 0)
 			{
-				WriteToOutput(std::string("The specified runtime directive could not be ran. It may not exist.\n"));
-				WriteToOutput(std::string("\tCould not run: ") + args_list[0] + std::string("\n"));
+				std::string put1 = (std::string("The specified runtime directive could not be ran. It may not exist.\n"));
+				std::string put2 = (std::string("\tCould not run: ") + args_list[0] + std::string("\n"));
+				WriteToOutput(put1); WriteToOutput(put2);
 			}
 		}
 	}
 
 	void breakpoint(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("[Breakpoint]\n"));
+		inst.WriteToOutput(("[Breakpoint]\n"));
 		bool HAS_SPECIFIER = false;
 		for(size_t a = 0; a < args.size(); a++)
 		{
@@ -74,7 +75,8 @@ namespace mipsshell
 					}
 
 					inst.add_microarch_breakpoint(n);
-					inst.WriteToOutput(std::string("Breakpoint set at cycle ") + priscas_io::StrTypes::Int32ToStr(n) + std::string("\n"));
+					std::string o = (std::string("Breakpoint set at cycle ") + priscas_io::StrTypes::Int32ToStr(n) + std::string("\n"));
+					inst.WriteToOutput(o);
 				}
 
 				else throw mips_tools::mt_exception();
@@ -83,7 +85,7 @@ namespace mipsshell
 
 		if(!HAS_SPECIFIER)
 		{
-			inst.WriteToOutput(std::string("Usage: .breakpoint -c [cycle_number] or .breakpoint -l [line_number]\n"));
+			inst.WriteToOutput(("Usage: .breakpoint -c [cycle_number] or .breakpoint -l [line_number]\n"));
 		}
 	}
 
@@ -101,21 +103,22 @@ namespace mipsshell
 
 		if(args.size() <= 1)
 		{
-			inst.WriteToOutput(std::string("[CPU Specific Options]\n"));
+			inst.WriteToOutput(("[CPU Specific Options]\n"));
 			if(v.empty())
 			{
-				inst.WriteToOutput(std::string("No CPU options found.\n"));
+				inst.WriteToOutput(("No CPU options found.\n"));
 			}
 
 			else
 			{
 				for(size_t s = 0; s < v.size(); s++)
 				{
-					inst.WriteToOutput(v[s].getName() + " - " + v[s].getDescription() + priscas_io::newLine);
+					std::string o = (v[s].getName() + " - " + v[s].getDescription() + priscas_io::newLine);
+					inst.WriteToOutput(o);
 				}
 			}
 
-			inst.WriteToOutput(std::string("To execute an option just enter .cpuopts [option 1] ... [option n] into the shell\n"));
+			inst.WriteToOutput(("To execute an option just enter .cpuopts [option 1] ... [option n] into the shell\n"));
 		}
 
 		else
@@ -126,17 +129,17 @@ namespace mipsshell
 
 	void exit(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("Simulation terminating...\n"));
+		inst.WriteToOutput(("Simulation terminating...\n"));
 		inst.SetState(Shell::KILLED);
 	}
 
 	void help(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("[Help]\n"));
+		inst.WriteToOutput(("[Help]\n"));
 
 		if(args.size() <= 1)
 		{
-			inst.WriteToOutput(std::string(HELP.c_str()));
+			inst.WriteToOutput(HELP.c_str());
 			return;
 		}
 
@@ -194,14 +197,14 @@ namespace mipsshell
 				msg = HELP_TIME;
 			}
 
-			inst.WriteToOutput(std::string(msg.c_str()));
+			inst.WriteToOutput(msg.c_str());
 		}
 	}
 
 	void pci(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("[PCI Bus Emulation]\n"));
-		inst.WriteToOutput(std::string("Not yet implemented\n"));
+		inst.WriteToOutput(("[PCI Bus Emulation]\n"));
+		inst.WriteToOutput(("Not yet implemented\n"));
 	}
 
 	void rst(std::vector<std::string> & args, Shell& inst)
@@ -244,7 +247,7 @@ namespace mipsshell
 
 	void mem(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("[Memory Information]\n"));
+		inst.WriteToOutput(("[Memory Information]\n"));
 
 		mips_tools::mb& cmp = inst.GetMotherboard();
 		
@@ -252,7 +255,8 @@ namespace mipsshell
 		// No args specified just print the memory size (in bytes)
 		if(args.size() <= 1)
 		{
-			inst.WriteToOutput(std::string("Main memory Size: " + priscas_io::StrTypes::SizeToStr(cmp.get_mmem_size()) + std::string(" bytes\n")));
+			std::string o = (std::string("Main memory Size: " + priscas_io::StrTypes::SizeToStr(cmp.get_mmem_size()) + std::string(" bytes\n")));
+			inst.WriteToOutput(o);
 		}
 
 		// Otherwise print memory specific to indicies
@@ -267,16 +271,17 @@ namespace mipsshell
 					throw mips_tools::mem_oob_exception();
 				}
 
-				inst.WriteToOutput(std::string("Mem[") + priscas_io::StrTypes::SizeToStr(*itr_2) + std::string("]: ") + 
+				std::string o = (std::string("Mem[") + priscas_io::StrTypes::SizeToStr(*itr_2) + std::string("]: ") + 
 					priscas_io::StrTypes::IntToStr(inst.GetMotherboard().DMA_read(*itr_2)) + priscas_io::newLine);
+				inst.WriteToOutput(o);
 			}
 		}
 	}
 
 	void power(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("[Power Usage Statistics]\n"));
-		inst.WriteToOutput(std::string("Not yet implemented\n"));
+		inst.WriteToOutput(("[Power Usage Statistics]\n"));
+		inst.WriteToOutput(("Not yet implemented\n"));
 	}
 
 	void run(std::vector<std::string> & args, Shell& inst)
@@ -287,14 +292,14 @@ namespace mipsshell
 
 	void sound(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("[Soundcard Emulation]\n"));
-		inst.WriteToOutput(std::string("Not yet implemented\n"));
+		inst.WriteToOutput(("[Soundcard Emulation]\n"));
+		inst.WriteToOutput(("Not yet implemented\n"));
 	}
 
 	void state(std::vector<std::string> & args, Shell& inst)
 	{
 		
-		inst.WriteToOutput(std::string("[Register State Information]\n"));
+		inst.WriteToOutput("[Register State Information]\n");
 
 		mips_tools::mb& cmp = inst.GetMotherboard();
 		mips_tools::diag_cpu& dcpu = dynamic_cast<mips_tools::diag_cpu&>(cmp.get_cpu());
@@ -306,11 +311,13 @@ namespace mipsshell
 		// No args specified print out every register
 		if(args.size() <= 1)
 		{
-			inst.WriteToOutput(std::string("PC: ") + priscas_io::StrTypes::Int32ToStr(pc_val) + std::string("\n"));
+			std::string o = (std::string("PC: ") + priscas_io::StrTypes::Int32ToStr(pc_val) + std::string("\n"));
+			inst.WriteToOutput(o);
 
 			for(int r = 0; r < reg_count; r++)
 			{
-				inst.WriteToOutput(isa.get_reg_name(r) + std::string(":\t") + priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(r)) + priscas_io::newLine);
+				std::string o = isa.get_reg_name(r) + std::string(":\t") + priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(r)) + priscas_io::newLine;
+				inst.WriteToOutput(o);
 			}
 		}
 
@@ -327,8 +334,9 @@ namespace mipsshell
 						throw mips_tools::reg_oob_exception();
 					}
 
-					inst.WriteToOutput(isa.get_reg_name(*ritr) + std::string(":\t") +
+					std::string o = std::string(isa.get_reg_name(*ritr) + std::string(":\t") +
 						priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(*ritr)) + priscas_io::newLine);
+					inst.WriteToOutput(o);
 				}
 			}
 		}
@@ -336,18 +344,19 @@ namespace mipsshell
 
 	void time(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("[Processor Timing Information]\n"));
+		inst.WriteToOutput("[Processor Timing Information]\n");
 		unsigned long n = inst.GetMotherboard().get_cycles();
-		inst.WriteToOutput(std::string("Cycle Count: ") + priscas_io::StrTypes::UInt32ToStr(n) + std::string(" cycles\n"));
+		std::string cc = "Cycle Count: " + priscas_io::StrTypes::UInt32ToStr(n) + " cycles\n";
+		inst.WriteToOutput(cc);
 
 		// Print it out in terms of smallest units
-		inst.WriteToOutput(std::string("Time Elapsed:\n"));
+		inst.WriteToOutput("Time Elapsed:\n");
 		unsigned long long total_time = inst.GetMotherboard().get_time().getPS();
 		unsigned long long total_days = inst.GetMotherboard().get_time().getDays();
 		
 		if(total_time == 0)
 		{
-			inst.WriteToOutput(std::string("0s\n"));
+			inst.WriteToOutput("0s\n");
 		}
 		
 		unsigned short picoseconds = (total_time) % 1000;
@@ -372,54 +381,62 @@ namespace mipsshell
 
 		if(total_days > 0)
 		{
-			inst.WriteToOutput(priscas_io::StrTypes::UInt64ToStr(total_days) + std::string(" days\n"));
+			std::string t = priscas_io::StrTypes::UInt64ToStr(total_days) + " days\n";
+			inst.WriteToOutput(t);
 		}
 
 		if(hours > 0)
 		{
-			inst.WriteToOutput(priscas_io::StrTypes::UIntToStr(hours) + std::string(" hours\n"));
+			std::string t = priscas_io::StrTypes::UIntToStr(hours); + " hours\n";
+			inst.WriteToOutput(t);
 		}
 
 		if(minutes > 0)
 		{
-			inst.WriteToOutput(priscas_io::StrTypes::UIntToStr(minutes) + std::string(" minutes\n"));
+			std::string t = priscas_io::StrTypes::UIntToStr(minutes) + " minutes\n";
+			inst.WriteToOutput(t);
 		}
 
 		if(seconds > 0)
 		{
-			inst.WriteToOutput(priscas_io::StrTypes::UIntToStr(seconds) + std::string(" seconds\n"));
+			std::string t = priscas_io::StrTypes::UIntToStr(seconds) + " seconds\n";
+			inst.WriteToOutput(t);
 		}
 
 		if(milliseconds > 0)
 		{
-			inst.WriteToOutput(priscas_io::StrTypes::UIntToStr(milliseconds) + std::string(" ms\n"));
+			std::string t = priscas_io::StrTypes::UIntToStr(milliseconds) + " ms\n";
+			inst.WriteToOutput(t);
 		}
 
 		if(microseconds > 0)
 		{
-			inst.WriteToOutput(priscas_io::StrTypes::UIntToStr(microseconds) + std::string(" micros\n"));
+			std::string t = priscas_io::StrTypes::UIntToStr(microseconds) + " micros\n";
+			inst.WriteToOutput(t);
 		}
 
 		if(nanoseconds > 0)
 		{
-			inst.WriteToOutput(priscas_io::StrTypes::UIntToStr(nanoseconds) + std::string(" ns\n"));
+			std::string t = priscas_io::StrTypes::UIntToStr(nanoseconds) + " ns\n";
+			inst.WriteToOutput(t);
 		}
 
 		if(picoseconds > 0)
 		{
-			inst.WriteToOutput(priscas_io::StrTypes::UIntToStr(picoseconds) + std::string(" ps\n"));
+			std::string t = priscas_io::StrTypes::UIntToStr(picoseconds) + " ps\n";
+			inst.WriteToOutput(t);
 		}
 	}
 
 	void trace(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("[Special Tracing Options]\n"));
-		inst.WriteToOutput(std::string("Not yet implemented\n"));
+		inst.WriteToOutput("[Special Tracing Options]\n");
+		inst.WriteToOutput("Not yet implemented\n");
 	}
 
 	void vga(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(std::string("[VGA Emulation]\n"));
-		inst.WriteToOutput(std::string("Not yet implemented\n"));
+		inst.WriteToOutput("[VGA Emulation]\n");
+		inst.WriteToOutput("Not yet implemented\n");
 	}
 }

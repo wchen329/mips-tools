@@ -43,8 +43,11 @@ namespace mipsshell
 
 		if(!isQuiet)
 		{
-			WriteToOutput(app_brand + priscas_io::newLine);
-			WriteToOutput(branding::APPLICATION_DESC + priscas_io::newLine);
+			std::string header = 
+			app_brand + priscas_io::newLine +
+			branding::APPLICATION_DESC + priscas_io::newLine;
+			
+			WriteToOutput(header);
 		}
 
 		// First get the active file in which to get instructions from
@@ -54,18 +57,18 @@ namespace mipsshell
 			{
 				if(args[i] == "-h")
 				{
-					WriteToOutput(std::string("Usage options:\n"));
-					WriteToOutput(std::string("-h (show this message)\n"));
-					WriteToOutput(std::string("-i [file] (execute a text file with by assembling and running the program)\n"));
-					WriteToOutput(std::string("-m [width] (specify a memory bit width; the total memory available will be 2^[width]\n"));
-					WriteToOutput(std::string( "-a (active assembler mode, requires the -i option):\n"));
-					WriteToOutput(std::string("-c (select a CPU type 0: for single cycle (default) or 1: for Five Stage Pipeline)\n"));
+					WriteToOutput(("Usage options:\n"));
+					WriteToOutput(("-h (show this message)\n"));
+					WriteToOutput(("-i [file] (execute a text file with by assembling and running the program)\n"));
+					WriteToOutput(("-m [width] (specify a memory bit width; the total memory available will be 2^[width]\n"));
+					WriteToOutput(( "-a (active assembler mode, requires the -i option):\n"));
+					WriteToOutput(("-c (select a CPU type 0: for single cycle (default) or 1: for Five Stage Pipeline)\n"));
 					return;
 				}
 
 				if(args[i] == "-a")
 				{
-					if(!isQuiet) WriteToOutput(std::string("Assembler mode ENABLED.\n"));
+					if(!isQuiet) WriteToOutput(("Assembler mode ENABLED.\n"));
 					mipsshell::ASM_MODE = true;
 					mipsshell::INTERACTIVE = false;
 				}
@@ -106,19 +109,19 @@ namespace mipsshell
 		{
 			if(!mipsshell::WIN_32_GUI)
 			{
-				if(!isQuiet) WriteToOutput(std::string("Starting in machine mode...\n"));
+				if(!isQuiet) WriteToOutput(("Starting in machine mode...\n"));
 				mipsshell::INTERACTIVE = false;
 			}
 
 			if(!mipsshell::INPUT_SPECIFIED)
 			{
-				WriteToError(std::string("Error: An input file is required (specified through -i [input file] ) in order to run in batch mode.\n"));
+				WriteToError(("Error: An input file is required (specified through -i [input file] ) in order to run in batch mode.\n"));
 				::exit(1);
 			}
 
 			if(inst_file == NULL)
 			{
-				WriteToError(std::string("Error: The file specified cannot be opened or doesn't exist.\n"));
+				WriteToError(("Error: The file specified cannot be opened or doesn't exist.\n"));
 				::exit(1);
 			}
 		}
@@ -127,33 +130,34 @@ namespace mipsshell
 		{
 			mipsshell::INTERACTIVE = true;
 			inst_file = stdin;
-			if(!isQuiet) WriteToOutput(std::string("Starting in interactive mode...\n"));
-			if(!isQuiet) WriteToOutput(std::string("Tip: system directives are preceded by a . (for example .help)\n"));
+			if(!isQuiet) WriteToOutput(("Starting in interactive mode...\n"));
+			if(!isQuiet) WriteToOutput(("Tip: system directives are preceded by a . (for example .help)\n"));
 		}
 
 		if(mem_width <= 0)
 		{
-			WriteToError(std::string("Error: An error occurred when trying to read memory width (must be larger than 0 and a natural number)."));
+			WriteToError(("Error: An error occurred when trying to read memory width (must be larger than 0 and a natural number)."));
 			::exit(1);
 		}
 
 		if(mem_width > 32)
 		{
-			WriteToError(std::string("Error: Memory size specified is too large (%d bits wide > 20 bits wide)", mem_width));
+			
+			WriteToError(("Error: Memory size specified is too large (must be less than or equal to 20 bits wide)"));
 			::exit(1);
 		}
 
-		if(!isQuiet) WriteToOutput(std::string("CPU Type: "));
+		if(!isQuiet) WriteToOutput(("CPU Type: "));
 		switch(cp)
 		{
 			case mips_tools::STANDARD:
-				if(!isQuiet) WriteToOutput(std::string("Single Cycle\n"));
+				if(!isQuiet) WriteToOutput(("Single Cycle\n"));
 				break;
 			case mips_tools::FIVE_P:
-				if(!isQuiet) WriteToOutput(std::string("Five Stage Pipeline\n"));
+				if(!isQuiet) WriteToOutput(("Five Stage Pipeline\n"));
 				break;
 			default:
-				if(!isQuiet) WriteToOutput(std::string("Invalid CPU type detected. Exiting...\n"));
+				if(!isQuiet) WriteToOutput(("Invalid CPU type detected. Exiting...\n"));
 				::exit(1);
 		}
 
@@ -161,7 +165,12 @@ namespace mipsshell
 		motherboard->reset();
 		mips_tools::mb * MB_IN_PTR = motherboard;
 
-		if(!isQuiet) WriteToOutput(std::string( "Main Memory size: " + priscas_io::StrTypes::SizeToStr(motherboard->get_mmem_size()) + " bytes\n"));
+		if(!isQuiet)
+		{
+			std::string msg = 
+			(std::string( "Main Memory size: " + priscas_io::StrTypes::SizeToStr(motherboard->get_mmem_size()) + " bytes\n"));
+			WriteToOutput(msg);
+		}
 
 		/* Actual Execution Portion
 		 */
@@ -233,10 +242,14 @@ namespace mipsshell
 
 				catch(mips_tools::asm_exception& e)
 				{
-					WriteToError(std::string("An error occurred while assembling the program.\n"));
-					WriteToError(std::string("Error information: %s\n") + std::string(e.get_err_msg()));
-					WriteToError(std::string("Line of error:\n"));
-					WriteToError(std::string("\t%s\n") + lines[itr]);
+					WriteToError(("An error occurred while assembling the program.\n"));
+					std::string msg_1 = 
+						(std::string("Error information: %s\n") + std::string(e.get_err_msg()));
+					WriteToError(msg_1);
+					WriteToError(("Line of error:\n"));
+					std::string msg_2 = 
+						(std::string("\t%s\n") + lines[itr]);
+					WriteToError(msg_2);
 					return;
 				}
 
@@ -267,7 +280,7 @@ namespace mipsshell
 
 		if(mipsshell::INTERACTIVE)
 		{
-			WriteToOutput(std::string(">> "));
+			WriteToOutput((">> "));
 		}
 
 		if(mipsshell::INTERACTIVE || mipsshell::ASM_MODE)
@@ -307,8 +320,10 @@ namespace mipsshell
 
 			catch(mips_tools::asm_exception& e)
 			{
-				WriteToError(std::string("An error occurred while assembling the inputted instruction.\n"));
-				WriteToError(std::string("Error information: %s\n") + std::string(e.get_err_msg()));
+				WriteToError(("An error occurred while assembling the inputted instruction.\n"));
+				std::string msg = (std::string("Error information: %s\n") + std::string(e.get_err_msg()));
+				WriteToError(msg);
+
 				continue;
 			}
 
@@ -346,15 +361,19 @@ namespace mipsshell
 					mipsshell::INTERACTIVE = true;
 					unsigned long line_number = this->PC_to_line_number.at(dcpu.get_PC());
 					std::string line_str = this->PC_to_line_string.at(dcpu.get_PC());
-					WriteToOutput(std::string("Breakpoint at line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(" hit.\n"));
-					WriteToOutput(std::string("line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(":\n\t") + std::string("%s\n") + line_str);
+
+					std::string o = (std::string("Breakpoint at line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(" hit.\n"));
+					WriteToOutput(o);
+					std::string p = (std::string("line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(":\n\t") + std::string("%s\n") + line_str);
+					WriteToOutput(p);
 				}
 
 				if(this->has_ma_break_at(motherboard->get_cycles()))
 				{
 					mipsshell::SUSPEND = true;
 					mipsshell::INTERACTIVE = true;
-					WriteToOutput(std::string("Breakpoint at cycle " + priscas_io::StrTypes::UInt32ToStr(motherboard->get_cycles()) + " hit.\n"));
+					std::string o = (std::string("Breakpoint at cycle " + priscas_io::StrTypes::UInt32ToStr(motherboard->get_cycles()) + " hit.\n"));
+					WriteToOutput(o);
 				}
 
 				motherboard->step();
@@ -480,12 +499,13 @@ namespace mipsshell
 		{
 			mips_tools::BW_32 line_pc = this->line_number_to_PC.at(line);
 			this->program_breakpoints.insert(std::pair<mips_tools::BW_32, unsigned long>(line_pc, line));
-			WriteToOutput(std::string("Breakpoint set at line ") + priscas_io::StrTypes::UInt32ToStr(line) + std::string("d\n"));
+			std::string o = (std::string("Breakpoint set at line ") + priscas_io::StrTypes::UInt32ToStr(line) + std::string("d\n"));
+			WriteToOutput(o);
 		}
 
 		else
 		{
-			WriteToError(std::string("Invalid line number. The line number may not be associated with an instruction or may not be in the file.\n"));
+			WriteToError(("Invalid line number. The line number may not be associated with an instruction or may not be in the file.\n"));
 		}
 	}
 

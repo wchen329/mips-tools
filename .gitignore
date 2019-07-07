@@ -19,3 +19,4 @@ testing/unix_test/*.o
 *.un~
 *~
 *.stackdump
+simUI/simUI.pro.user*
