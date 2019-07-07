@@ -88,6 +88,8 @@ private slots:
 
     void on_actionMemory_Inspector_triggered();
 
+    void on_actionCPU_Specific_Debugging_Information_triggered();
+
 private:
     QTimer * buf_poller;
     QString sourcefile;

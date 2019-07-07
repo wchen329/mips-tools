@@ -10,6 +10,7 @@
 #include "tools_meminspector.h"
 #include "tools_registerinspector.h"
 #include "tools_runtimedirective.h"
+#include "tools_specialdebug.h"
 
 namespace simulation
 {
@@ -357,4 +358,11 @@ void simUI::on_actionMemory_Inspector_triggered()
     if(simulation::sh != nullptr)
         tmi.addMemoryChannel(&(simulation::sh->GetMotherboard().get_mmem()));
     tmi.exec();
+}
+
+void simUI::on_actionCPU_Specific_Debugging_Information_triggered()
+{
+    tools_specialdebug tsd;
+
+    tsd.exec();
 }
