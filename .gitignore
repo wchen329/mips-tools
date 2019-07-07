@@ -20,3 +20,4 @@ testing/unix_test/*.o
 *~
 *.stackdump
 simUI/simUI.pro.user*
+simUI/Makefile
