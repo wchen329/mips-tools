@@ -244,7 +244,7 @@ namespace mipsshell
 				{
 					WriteToError(("An error occurred while assembling the program.\n"));
 					std::string msg_1 = 
-						(std::string("Error information: %s\n") + std::string(e.get_err_msg()));
+						(std::string("Error information: ") + std::string(e.get_err_msg()));
 					WriteToError(msg_1);
 					WriteToError(("Line of error:\n"));
 					std::string msg_2 = 
@@ -321,8 +321,9 @@ namespace mipsshell
 			catch(mips_tools::asm_exception& e)
 			{
 				WriteToError(("An error occurred while assembling the inputted instruction.\n"));
-				std::string msg = (std::string("Error information: %s\n") + std::string(e.get_err_msg()));
+				std::string msg = (std::string("Error information: ") + std::string(e.get_err_msg()));
 				WriteToError(msg);
+				WriteToError(priscas_io::newLine.c_str());
 
 				continue;
 			}
