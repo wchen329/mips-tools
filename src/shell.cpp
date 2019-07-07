@@ -499,6 +499,19 @@ namespace mipsshell
 		*tw_error << e;
 	}
 
+	void Shell::WriteToError(const char* e)
+	{
+		if(!NoConsoleOutput)
+		{
+			fprintf(stderr, e);
+		}
+
+		std::string err = std::string(e);
+
+		*tw_error << err;
+
+	}
+
 	void Shell::WriteToOutput(std::string& o)
 	{
 		if(!NoConsoleOutput)
@@ -507,6 +520,17 @@ namespace mipsshell
 		}
 
 		*tw_output << o;
+	}
+
+	void Shell::WriteToOutput(const char* o)
+	{
+		if(!NoConsoleOutput)
+		{
+			fprintf(stdout, o);
+		}
+
+		std::string out = std::string(o);
+		*tw_output << out;
 	}
 
 	std::string& Shell::ReadFromInput()

@@ -31,7 +31,9 @@ namespace mipsshell
 			void SetQuiet() { isQuiet = true; }
 			
 			void WriteToOutput(std::string& o);
+			void WriteToOutput(const char* e);
 			void WriteToError(std::string& e);
+			void WriteToError(const char* e);
 			std::string& ReadFromInput();
 
 			void add_program_breakpoint(unsigned long line); // sets the program breakpoint directly, CANNOT be used be external sources (yet!)
