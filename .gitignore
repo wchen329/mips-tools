@@ -4,6 +4,7 @@ build-*
 lib/*
 PRISCAS/Debug/*
 PRISCAS/Release/*
+PRISCAS/PRISCAS.opensdf
 PRISCAS/ipch/*
 PRISCAS_Shell/Debug/*
 PRISCAS_Shell/Release/*
