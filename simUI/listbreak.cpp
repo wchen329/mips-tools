@@ -36,14 +36,22 @@ listbreak::~listbreak()
 void listbreak::on_PBP_removeButton_clicked()
 {
     QList<QListWidgetItem*> w = this->ui->PBP_List->selectedItems();
-    if(w.empty())
-        return;
-    else
+    for(int ws = 0; ws < w.size(); ws++)
     {
-        for(int ws = 0; ws < w.size(); ws++)
-        {
+        int ww = this->ui->PBP_List->row(w[ws]);
+        this->ModelreplayQueue_prog.push(ww);
+        delete w[ws];
+    }
+}
 
-            delete w[ws];
-        }
+void listbreak::on_ABP_removeButton_clicked()
+{
+    QList<QListWidgetItem*> e = this->ui->ABP_List->selectedItems();
+
+    for(int es = 0; es < e.size(); es++)
+    {
+        int ee = this->ui->ABP_List->row(e[es]);
+        this->ModelreplayQueue_arch.push(ee);
+        delete e[es];
     }
 }

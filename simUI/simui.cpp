@@ -269,6 +269,36 @@ void simUI::on_actionList_Current_Breakpoints_triggered()
 {
     listbreak lb(this->archBreakPoints, this->programBreakpoints);
     lb.exec();
+
+    std::queue<int>& arm = lb.getRemoveReplay_arch();
+    std::queue<int>& prm = lb.getRemoveReplay_prog();
+
+    while(!arm.empty())
+    {
+        std::vector<unsigned long>::iterator erasable = this->archBreakPoints.begin();
+
+        for(int itr = 0; itr < arm.front(); itr++)
+        {
+           erasable++;
+        }
+
+        this->archBreakPoints.erase(erasable);
+
+        arm.pop();
+    }
+
+    while(!prm.empty())
+    {
+        std::vector<unsigned long>::iterator erasable = this->programBreakpoints.begin();
+
+        for(int itr = 0; itr < prm.front(); itr++)
+        {
+           erasable++;
+        }
+
+        this->programBreakpoints.erase(erasable);
+        prm.pop();
+    }
 }
 
 void simUI::on_actionBreak_Execution_triggered()

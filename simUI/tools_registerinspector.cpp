@@ -13,7 +13,7 @@ tools_registerInspector::tools_registerInspector(QWidget *parent) :
 void tools_registerInspector::addCPU(mips_tools::diag_cpu &dcpu)
 {
     QTreeWidgetItem * cpu_node = new QTreeWidgetItem();
-    cpu_node->setText(0, QString("CPU ") + QString(this->cpu_count));
+    cpu_node->setText(0, QString("CPU ") + priscas_io::StrTypes::IntToStr(cpu_count).c_str());
     cpu_count++;
     this->cpuNode_allocList.push_back(cpu_node);
 
