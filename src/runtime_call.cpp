@@ -312,12 +312,21 @@ namespace mipsshell
 		// No args specified print out every register
 		if(args.size() <= 1)
 		{
-			std::string o = (std::string("PC: ") + priscas_io::StrTypes::UInt32ToStr(pc_val.AsUInt32()) + std::string("\n"));
+			std::string o = (std::string("PC:\t") + priscas_io::StrTypes::Int32ToStr(pc_val.AsInt32()) + "\t"
+								+ priscas_io::StrTypes::UInt32ToStr(pc_val.AsUInt32()) + "\t"
+								+ pc_val.toHexString()
+								+ std::string("\n"));
 			inst.WriteToOutput(o);
 
 			for(int r = 0; r < reg_count; r++)
 			{
-				std::string o = isa.get_reg_name(r) + std::string(":\t") + priscas_io::StrTypes::UInt32ToStr(dcpu.get_reg_data(r).AsUInt32()) + priscas_io::newLine;
+				std::string o =
+					isa.get_reg_name(r)
+					+ std::string(":\t") 
+					+ priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(r).AsInt32()) + "\t"
+					+ priscas_io::StrTypes::UInt32ToStr(dcpu.get_reg_data(r).AsUInt32()) + "\t"
+					+ dcpu.get_reg_data(r).toHexString()
+					+ priscas_io::newLine;
 				inst.WriteToOutput(o);
 			}
 		}

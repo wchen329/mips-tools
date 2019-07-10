@@ -12,7 +12,7 @@ namespace mips_tools
 	{
 		public:
 			void set_data(BW_32 data) { this -> data = data; }
-			BW_32 get_data() { return this -> data; }
+			BW_32& get_data() { return this -> data; }
 
 		private:
 			BW_32 data;

@@ -13,31 +13,44 @@ tools_registerInspector::tools_registerInspector(QWidget *parent) :
     qsl->append("Signed Integer");
     qsl->append("Unsigned Integer");
     qsl->append("Floating Point");
-    qsl->append("Octal");
     qsl->append("Hex");
-    qsl->append("Binary");
     this->ui->treeViewRegisters->setHeaderLabels(*qsl);
 }
 
 void tools_registerInspector::addCPU(mips_tools::diag_cpu &dcpu)
 {
+
     QTreeWidgetItem * cpu_node = new QTreeWidgetItem();
     cpu_node->setText(0, QString("CPU ") + priscas_io::StrTypes::IntToStr(cpu_count).c_str());
     cpu_count++;
     this->cpuNode_allocList.push_back(cpu_node);
 
     QTreeWidgetItem * register_node = new QTreeWidgetItem();
-    register_node->setText(0, QString("PC: ") +
-                           QString(priscas_io::StrTypes::Int32ToStr(dcpu.get_PC()).c_str()));
+
+    QString spfpr;
+    spfpr.setNum(dcpu.get_PC().AsSPFloat(), 'g', 6);
+
+    register_node->setText(0, QString("PC"));
+    register_node->setText(1, QString(priscas_io::StrTypes::Int32ToStr(dcpu.get_PC().AsInt32()).c_str()));
+    register_node->setText(2, QString(priscas_io::StrTypes::UInt32ToStr(dcpu.get_PC().AsUInt32()).c_str()));
+    register_node->setText(3, spfpr);
+    register_node->setText(4, dcpu.get_PC().toHexString().c_str());
+
+
     cpu_node->addChild(register_node);
     this->regNode_allocList.push_back(register_node);
 
     for(int itr = 0; itr < dcpu.get_reg_count(); itr++)
     {
+
         QTreeWidgetItem * register_node = new QTreeWidgetItem();
+        QString spfpr;
+        spfpr.setNum(dcpu.get_reg_data(itr).AsSPFloat(), 'g', 6);
         register_node->setText(0, QString(dcpu.get_ISA().get_reg_name(itr).c_str()));
-        register_node->setText(1, QString(priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(itr)).c_str()));
-        register_node->setText(2, QString(priscas_io::StrTypes::UInt32ToStr(dcpu.get_reg_data(itr)).c_str()));
+        register_node->setText(1, QString(priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(itr).AsInt32()).c_str()));
+        register_node->setText(2, QString(priscas_io::StrTypes::UInt32ToStr(dcpu.get_reg_data(itr).AsUInt32()).c_str()));
+        register_node->setText(3, spfpr);
+        register_node->setText(4, dcpu.get_reg_data(itr).toHexString().c_str());
         cpu_node->addChild(register_node);
         this->regNode_allocList.push_back(register_node);
     }
