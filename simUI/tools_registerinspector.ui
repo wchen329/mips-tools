@@ -26,8 +26,11 @@
     <item row="0" column="0">
      <widget class="QTreeWidget" name="treeViewRegisters">
       <property name="headerHidden">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
+      <attribute name="headerVisible">
+       <bool>true</bool>
+      </attribute>
       <column>
        <property name="text">
         <string notr="true">1</string>

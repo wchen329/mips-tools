@@ -78,5 +78,8 @@
     <ClCompile Include="..\..\tests\test_sc_cpu_subroutine.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\tests\test_mips32fsp_load_to_use.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

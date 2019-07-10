@@ -50,6 +50,8 @@ namespace mipsshell
 			WriteToOutput(header);
 		}
 
+		mips_tools::HighLevelType t = mips_tools::getTypeGeneric<long>();
+
 		// First get the active file in which to get instructions from
 		if(argc >= 2)
 		{

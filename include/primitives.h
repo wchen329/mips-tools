@@ -61,6 +61,75 @@ namespace mips_tools
 			std::string name;
 			std::string desc;
 	};
+
+		enum HighLevelType
+	{
+		T_NONE,
+		T_BW16,
+		T_BW32,
+		T_BW64,
+		T_INT,
+		T_INT32,
+		T_UINT,
+		T_UINT32,
+		T_FLOAT,
+		T_DOUBLE,
+		T_STRING,
+		T_OTHER
+	};
+
+	template<class TC> HighLevelType getTypeGeneric()
+	{
+		if(typeid(TC) == typeid(int))
+		{
+			return T_INT;
+		}
+
+		else if(typeid(TC) == typeid(unsigned))
+		{
+			return T_UINT;
+		}
+			
+		else if(typeid(TC) == typeid(long) || typeid(TC) == typeid(int32_t))
+		{
+			return T_INT32;
+		}
+
+		else if(typeid(TC) == typeid(unsigned long) || typeid(TC) == typeid(uint32_t))
+		{
+			return T_UINT32;
+		}
+
+		else if(typeid(TC) == typeid(float))
+		{
+			return T_FLOAT;
+		}
+
+		else if(typeid(TC) == typeid(double))
+		{
+			return T_DOUBLE;
+		}
+
+		else if(typeid(T_STRING) == typeid(std::string))
+		{
+			return T_STRING;
+		}
+
+		else if(typeid(TC) == typeid(BW_16))
+		{
+			return T_BW16;
+		}
+
+		else if(typeid(TC) == typeid(BW_32))
+		{
+			return T_BW32;
+		}
+
+		else if(typeid(TC) == typeid(BW_64))
+		{
+			return T_BW64;
+		}
+	}
 }
 
 #endif

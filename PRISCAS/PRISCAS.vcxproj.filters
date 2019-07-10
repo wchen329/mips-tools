@@ -172,5 +172,8 @@
     <ClInclude Include="..\include\streams.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\debugview.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

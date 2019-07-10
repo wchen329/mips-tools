@@ -14,8 +14,8 @@ namespace mips_tools
 	{
 			STANDARD = 0,
 			FIVE_P = 1,
-			FIVE_P_SS = 2,
-			CUSTOM
+			SUPERSCALAR = 2,
+			CUSTOM = 3
 	};
 
 	/* Motherboard

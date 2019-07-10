@@ -7,5 +7,6 @@ void test_sc_cpu_loop();
 void test_sc_cpu_ops();
 void test_shell_comments();
 void test_sc_cpu_subroutine();
+void test_mips32fsp_load_to_user();
 
 #endif

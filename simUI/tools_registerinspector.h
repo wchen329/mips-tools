@@ -2,6 +2,7 @@
 #define TOOLS_REGISTERINSPECTOR_H
 
 #include <QDialog>
+#include <QHeaderView>
 #include <QTreeWidgetItem>
 #include <vector>
 #include "diag_cpu.h"

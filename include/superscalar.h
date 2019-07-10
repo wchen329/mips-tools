@@ -44,7 +44,7 @@ namespace mips_tools
 	/* MIPS R10K Superscalar Processor Clone
 	 *
 	 */
-	class r10k_superscalar : sc_cpu
+	class r10k_superscalar : public sc_cpu
 	{
 
 		public:
@@ -72,7 +72,7 @@ namespace mips_tools
 			 * reorder_buf_entries - reorder buffer size
 			 * (default): 5 entries
 			 */
-			r10k_superscalar(int inst_buffer_entries = 1, int phys_reg_count = 10,
+			r10k_superscalar(mmem& m, int inst_buffer_entries = 1, int phys_reg_count = 10,
 				int funit_count = 3, int dispatch_buffer_entries = 5, int reorder_buf_entries = 5); 
 		
 		private:

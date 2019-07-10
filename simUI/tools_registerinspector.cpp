@@ -8,6 +8,15 @@ tools_registerInspector::tools_registerInspector(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setLayout(this->ui->gridLayoutWidget->layout());
+    QStringList * qsl = new QStringList();
+    qsl->append("Name");
+    qsl->append("Signed Integer");
+    qsl->append("Unsigned Integer");
+    qsl->append("Floating Point");
+    qsl->append("Octal");
+    qsl->append("Hex");
+    qsl->append("Binary");
+    this->ui->treeViewRegisters->setHeaderLabels(*qsl);
 }
 
 void tools_registerInspector::addCPU(mips_tools::diag_cpu &dcpu)
@@ -26,9 +35,9 @@ void tools_registerInspector::addCPU(mips_tools::diag_cpu &dcpu)
     for(int itr = 0; itr < dcpu.get_reg_count(); itr++)
     {
         QTreeWidgetItem * register_node = new QTreeWidgetItem();
-        register_node->setText(0, QString(dcpu.get_ISA().get_reg_name(itr).c_str()) +
-                               QString(": ") +
-                               QString(priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(itr)).c_str()));
+        register_node->setText(0, QString(dcpu.get_ISA().get_reg_name(itr).c_str()));
+        register_node->setText(1, QString(priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(itr)).c_str()));
+        register_node->setText(2, QString(priscas_io::StrTypes::UInt32ToStr(dcpu.get_reg_data(itr)).c_str()));
         cpu_node->addChild(register_node);
         this->regNode_allocList.push_back(register_node);
     }

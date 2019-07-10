@@ -3,6 +3,7 @@
 #include "cpu.h"
 #include "pipeline.h"
 #include "sc_cpu.h"
+#include "superscalar.h"
 
 namespace mips_tools
 {
@@ -64,6 +65,9 @@ namespace mips_tools
 				break;
 			case FIVE_P:
 				this->mb_cpu = new fsp_cpu(*this->mb_mmem);
+				break;
+			case SUPERSCALAR:
+				this->mb_cpu = new r10k_superscalar(*this->mb_mmem);
 				break;
 		}
 	}

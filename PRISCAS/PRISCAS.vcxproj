@@ -103,6 +103,7 @@
     <ClInclude Include="..\include\buffer_events.h" />
     <ClInclude Include="..\include\cpu.h" />
     <ClInclude Include="..\include\cpu_time.h" />
+    <ClInclude Include="..\include\debugview.h" />
     <ClInclude Include="..\include\diag_cpu.h" />
     <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\imageable.h" />

@@ -9,6 +9,7 @@ simoptionsdialog::simoptionsdialog(QWidget *parent) :
     ui->setupUi(this);
     ui->comboBoxCPUs->addItem("MIPS32: Single Cycle");
     ui->comboBoxCPUs->addItem("MIPS32: Five Stage Pipeline");
+    ui->comboBoxCPUs->addItem("MIPS32: R10K Clone (Superscalar)");
 }
 
 simoptionsdialog::~simoptionsdialog()

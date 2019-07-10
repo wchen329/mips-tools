@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <map>
+#include "debugview.h"
 #include "messages.h"
 #include "range.h"
 #include "runtime_call.h"
