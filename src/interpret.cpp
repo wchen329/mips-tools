@@ -26,10 +26,10 @@ namespace mips_tools
 {
 
 	// Main interpretation routine
-	BW MIPS_32::assemble(std::vector<std::string>& args, BW baseAddress, syms_table& jump_syms)
+	std::shared_ptr<BW> MIPS_32::assemble(std::vector<std::string>& args, BW& baseAddress, syms_table& jump_syms)
 	{
 		if(args.size() < 1)
-			return BW(0);
+			return std::shared_ptr<BW>(new BW_32());
 
 		mips_tools::opcode current_op = mips_tools::SYS_RES;
 		mips_tools::funct f_code = mips_tools::NONE;
@@ -121,8 +121,8 @@ namespace mips_tools
 					// Otherwise, perceive as a label, try to convert
 					try
 					{
-						mips_tools::BW_32 label_PC = jump_syms.lookup_from_sym(std::string(args[1].c_str()));
-						imm = (label_PC >> 2);
+						mips_tools::BW_32 label_PC = static_cast<int32_t>(jump_syms.lookup_from_sym(std::string(args[1].c_str())));
+						imm = (label_PC.AsInt32() >> 2);
 					}
 
 					catch(std::out_of_range&)
@@ -234,8 +234,9 @@ namespace mips_tools
 					// Otherwise, perceive as a label, try to convert
 					try
 					{
-						mips_tools::BW_32 label_PC = jump_syms.lookup_from_sym(std::string(args[3].c_str()));
-						imm = mips_tools::offset_to_address_br(baseAddress.as_BW_32(), label_PC);
+						mips_tools::BW_32 addr = baseAddress.AsInt32();
+						mips_tools::BW_32 label_PC = static_cast<uint32_t>(jump_syms.lookup_from_sym(std::string(args[3].c_str())));
+						imm = mips_tools::offset_to_address_br(addr, label_PC).AsInt32();
 					}
 
 					catch(std::out_of_range&)
@@ -256,6 +257,6 @@ namespace mips_tools
 		// Pass the values of rs, rt, rd to the processor's encoding function
 		BW_32 inst = generic_mips32_encode(rs, rt, rd, f_code, imm, current_op);
 
-		return inst;
+		return std::shared_ptr<BW>(new BW_32(inst));
 	}
 }

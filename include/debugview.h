@@ -34,13 +34,23 @@ namespace mips_tools
 	{
 		public:
 			// Hierarchy related funcs.
-			void addChild(std::shared_ptr<DebugTreeNode> c) { this->childList.push_back(c); }
+			int getLevel() { return this->level; }
+			void addChild(std::shared_ptr<DebugTreeNode> c)
+			{
+				// Check: c must have no children and have level 0. Otherwise, throw an exception
+
+				c->setLevel(this->level + 1);
+				childList.push_back(c);
+			}
+
 			std::shared_ptr<DebugTreeNode> getParent();
 			const std::vector<std::shared_ptr<DebugTreeNode>> Children() { return this->childList; }
 			virtual HighLevelType getNType() { return T_NONE;}
-	
+			DebugTreeNode() : level(0) {}
 		private:
 			std::vector<std::shared_ptr<DebugTreeNode>> childList;
+			int level; // level i.e. count of nodes to shortest path to root
+			void setLevel(int newLevel) { this->level = level; }
 	};
 
 	/* A generic DebugTreeNode that can hold data members

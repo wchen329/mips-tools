@@ -74,10 +74,10 @@ namespace mipsshell
 			Shell_State state;
 
 			// Runtime Directives, run through the shell
-			std::map<mips_tools::BW_32, unsigned long> program_breakpoints;
-			std::map<mips_tools::BW_32, unsigned long> PC_to_line_number;
-			std::map<unsigned long, mips_tools::BW_32> line_number_to_PC;
-			std::map<mips_tools::BW_32, std::string> PC_to_line_string;
+			std::map<unsigned long, unsigned long> program_breakpoints;
+			std::map<unsigned long, unsigned long> PC_to_line_number;
+			std::map<unsigned long, unsigned long> line_number_to_PC;
+			std::map<unsigned long, std::string> PC_to_line_string;
 			std::map<unsigned long, bool> microarch_breakpoints;
 			std::queue<unsigned long> queued_prog_breakpoints;
 			std::map<std::string, void(*)(std::vector<std::string>&, Shell& shell)> directives;

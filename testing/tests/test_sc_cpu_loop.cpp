@@ -25,6 +25,6 @@ void test_sc_cpu_loop()
 	diag_cpu & single_cycle = dynamic_cast<diag_cpu&>(c);
 	BW_32 reg_check_s0 = single_cycle.get_reg_data(16);
 	BW_32 reg_check_s1 = single_cycle.get_reg_data(17);
-	assertEquals(reg_check_s0, 1000);
-	assertEquals(reg_check_s1, 1000);
+	assertEquals(reg_check_s0.AsInt32(), 1000);
+	assertEquals(reg_check_s1.AsInt32(), 1000);
 }

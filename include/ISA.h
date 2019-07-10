@@ -37,7 +37,7 @@ namespace mips_tools
 			virtual int get_register_bit_width(int id) = 0;	// get the bit width of register of ID
 			virtual ISA_Attrib::addrmode get_addressing_mode() = 0;		// get addressing mode
 			virtual ISA_Attrib::endian get_endian() = 0;				// get endian
-			virtual BW assemble(std::vector<std::string>& args, BW baseAddress, syms_table& jump_syms) = 0;
+			virtual std::shared_ptr<BW> assemble(std::vector<std::string>& args, BW& baseAddress, syms_table& jump_syms) = 0;
 	};
 }
 #endif

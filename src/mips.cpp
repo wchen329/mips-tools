@@ -1,4 +1,3 @@
-#include <cstring>
 #include "mips.h"
 
 namespace mips_tools
@@ -211,26 +210,26 @@ namespace mips_tools
 
 		if(r_inst(op))
 		{
-			w = (w | (funct & ((1 << 6) - 1)  ));
-			w = (w | ((imm_shamt_jaddr & ((1 << 5) - 1) ) << 6 ));
-			w = (w | ((rd & ((1 << 5) - 1) ) << 11 ));
-			w = (w | ((rt & ((1 << 5) - 1) ) << 16 ));
-			w = (w | ((rs & ((1 << 5) - 1) ) << 21 ));
-			w = (w | ((op & ((1 << 6) - 1) ) << 26 ));
+			w = (w.AsInt32() | (funct & ((1 << 6) - 1)  ));
+			w = (w.AsInt32() | ((imm_shamt_jaddr & ((1 << 5) - 1) ) << 6 ));
+			w = (w.AsInt32() | ((rd & ((1 << 5) - 1) ) << 11 ));
+			w = (w.AsInt32() | ((rt & ((1 << 5) - 1) ) << 16 ));
+			w = (w.AsInt32() | ((rs & ((1 << 5) - 1) ) << 21 ));
+			w = (w.AsInt32() | ((op & ((1 << 6) - 1) ) << 26 ));
 		}
 
 		if(i_inst(op))
 		{
-			w = (w | (imm_shamt_jaddr & ((1 << 16) - 1)));
-			w = (w | ((rt & ((1 << 5) - 1) ) << 16 ));
-			w = (w | ((rs & ((1 << 5) - 1) ) << 21 ));
-			w = (w | ((op & ((1 << 6) - 1) ) << 26 ));
+			w = (w.AsInt32() | (imm_shamt_jaddr & ((1 << 16) - 1)));
+			w = (w.AsInt32() | ((rt & ((1 << 5) - 1) ) << 16 ));
+			w = (w.AsInt32() | ((rs & ((1 << 5) - 1) ) << 21 ));
+			w = (w.AsInt32() | ((op & ((1 << 6) - 1) ) << 26 ));
 		}
 
 		if(j_inst(op))
 		{
-			w = (w | (imm_shamt_jaddr & ((1 << 26) - 1)));
-			w = (w | ((op & ((1 << 6) - 1) ) << 26 ));
+			w = (w.AsInt32() | (imm_shamt_jaddr & ((1 << 26) - 1)));
+			w = (w.AsInt32() | ((op & ((1 << 6) - 1) ) << 26 ));
 		}
 
 		return w;
@@ -238,31 +237,33 @@ namespace mips_tools
 
 	BW_32 offset_to_address_br(BW_32 current, BW_32 target)
 	{
-		BW_32 ret = target - current;
-		ret = ret - 4;
-		ret = (ret >> 2);
+		BW_32 ret = target.AsInt32() - current.AsInt32();
+		ret = ret.AsInt32() - 4;
+		ret = (ret.AsInt32() >> 2);
 		return ret;
 	}
 
-	void mips_decoding_unit_32::decode(	const BW_32 inst_word,
+	void mips_decoding_unit_32::decode(	BW_32 inst,
 										format& fm,
 										opcode& op,
 										int& rs,
 										int& rt,
 										int& rd,
 										funct& func,
-										BW_32& shamt,
-										BW_32& imm )
+										int32_t& shamt,
+										int32_t& imm )
 	{
+		int32_t inst_word = inst.AsInt32();
+
 		// -Masks-
-		BW_32 opcode_mask = (~(1 << 26)) + 1;
-		BW_32 rs_mask = ~( ((~(1 << 26)) + 1) | ((1 << 21) - 1));
-		BW_32 rt_mask = ~( ((~(1 << 21)) + 1) | ((1 << 16) - 1));
-		BW_32 rd_mask = ~( ((~(1 << 16)) + 1) | ((1 << 11) - 1));
-		BW_32 funct_mask = 63;
-		BW_32 shamt_mask = (1 << 11) - 1 - funct_mask;
-		BW_32 imm_mask = (1 << 16) - 1;
-		BW_32 addr_mask = (1 << 26) - 1;
+		int32_t opcode_mask = (~(1 << 26)) + 1;
+		int32_t rs_mask = ~( ((~(1 << 26)) + 1) | ((1 << 21) - 1));
+		int32_t rt_mask = ~( ((~(1 << 21)) + 1) | ((1 << 16) - 1));
+		int32_t rd_mask = ~( ((~(1 << 16)) + 1) | ((1 << 11) - 1));
+		int32_t funct_mask = 63;
+		int32_t shamt_mask = (1 << 11) - 1 - funct_mask;
+		int32_t imm_mask = (1 << 16) - 1;
+		int32_t addr_mask = (1 << 26) - 1;
 
 		// - Actual values
 		op = static_cast<opcode>(((opcode_mask & inst_word) >> 26) & ((1 << 6) - 1));

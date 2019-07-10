@@ -24,5 +24,5 @@ void test_sc_cpu_subroutine()
 	cpu & c = test_m.get_cpu();
 	diag_cpu & single_cycle = dynamic_cast<diag_cpu&>(c);
 	BW_32 reg_check = single_cycle.get_reg_data(16);
-	assertEquals(reg_check, 20);
+	assertEquals(reg_check.AsInt32(), 20);
 }

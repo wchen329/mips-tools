@@ -5,7 +5,7 @@
 
 namespace mips_tools
 {
-	void syms_table::insert(std::string key, BW_32 PC)
+	void syms_table::insert(std::string key, unsigned long PC)
 	{
 
 		// That symbol better not be assigned already...
@@ -19,7 +19,7 @@ namespace mips_tools
 		// case: not yet allocated, create a new entry
 		if(!this->has(PC))
 		{
-			std::pair<BW_32, std::vector<std::string>> in;
+			std::pair<unsigned long, std::vector<std::string>> in;
 			in.first = PC;
 			in.second = std::vector<std::string>();
 			in.second.push_back(key);
@@ -35,7 +35,7 @@ namespace mips_tools
 		}
 
 		// Allows lookup from symbol to PC
-		std::pair<std::string, BW_32> in_2;
+		std::pair<std::string, unsigned long> in_2;
 		in_2.first = key;
 		in_2.second = PC;
 		this->syms_to_PC.insert(in_2);

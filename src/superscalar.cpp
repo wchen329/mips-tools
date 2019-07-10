@@ -11,7 +11,6 @@ namespace mips_tools
 
 	void r10k_superscalar::rst()
 	{
-
 	}
 
 	void r10k_superscalar::exec_CPU_option(std::vector<std::string>& args)

@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS	// for MSVC
 #include <csignal>
 #include <cstdio>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <cstdarg>
@@ -186,7 +187,7 @@ namespace mipsshell
 		{
 			std::vector<std::string> lines;
 
-			mips_tools::BW_32 equiv_pc = 0;
+			uint32_t equiv_pc = 0;
 			char input_f_stream[255];
 			memset(input_f_stream, 0, sizeof(input_f_stream));
 			unsigned long line_number = 0;
@@ -214,9 +215,9 @@ namespace mipsshell
 					continue;
 				}
 
-				this->line_number_to_PC.insert(std::pair<unsigned long, mips_tools::BW_32>(line_number, equiv_pc));
-				this->PC_to_line_number.insert(std::pair<mips_tools::BW_32, unsigned long>(equiv_pc, line_number));
-				this->PC_to_line_string.insert((std::pair<mips_tools::BW_32, std::string>(equiv_pc, current_line)));
+				this->line_number_to_PC.insert(std::pair<unsigned long, unsigned long>(line_number, equiv_pc));
+				this->PC_to_line_number.insert(std::pair<unsigned long, unsigned long>(equiv_pc, line_number));
+				this->PC_to_line_string.insert((std::pair<unsigned long, std::string>(equiv_pc, current_line)));
 				equiv_pc = equiv_pc + 4;
 				lines.push_back(current_line);		
 			}
@@ -236,7 +237,7 @@ namespace mipsshell
 				std::vector<std::string> asm_args = chop_string(lines[itr]);
 				mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
 				mips_tools::ISA& dcpuisa = dcpu.get_ISA();
-				mips_tools::BW inst = 0;
+				std::shared_ptr<mips_tools::BW> inst;
 				try
 				{
 					inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
@@ -255,12 +256,12 @@ namespace mipsshell
 					return;
 				}
 
-				mips_tools::BW_32_T thirty_two = inst.as_BW_32();
-				motherboard->DMA_write(thirty_two.b_0(), asm_pc);
-				motherboard->DMA_write(thirty_two.b_1(), asm_pc + 1);
-				motherboard->DMA_write(thirty_two.b_2(), asm_pc + 2);
-				motherboard->DMA_write(thirty_two.b_3(), asm_pc + 3);
-				asm_pc += 4;
+				mips_tools::BW_32& thirty_two = dynamic_cast<mips_tools::BW_32&>(*inst);
+				motherboard->DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
+				motherboard->DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
+				motherboard->DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
+				motherboard->DMA_write(thirty_two.b_3(), asm_pc.AsUInt32() + 3);
+				asm_pc.AsUInt32() += 4;
 			}
 			
 			this->state = SLEEPING;
@@ -313,7 +314,7 @@ namespace mipsshell
 			std::vector<std::string> asm_args = chop_string(val);
 			mips_tools::ISA & dcpuisa = dcpu.get_ISA();
 			mips_tools::BW_32 asm_pc = dcpu.get_PC();
-			mips_tools::BW inst = 0;
+			std::shared_ptr<mips_tools::BW> inst;
 			
 			try
 			{
@@ -330,11 +331,11 @@ namespace mipsshell
 				continue;
 			}
 
-			mips_tools::BW_32_T thirty_two = inst.as_BW_32();
-			motherboard->DMA_write(thirty_two.b_0(), asm_pc);
-			motherboard->DMA_write(thirty_two.b_1(), asm_pc + 1);
-			motherboard->DMA_write(thirty_two.b_2(), asm_pc + 2);
-			motherboard->DMA_write(thirty_two.b_3(), asm_pc + 3);
+			mips_tools::BW_32& thirty_two = dynamic_cast<mips_tools::BW_32&>(*inst);
+			motherboard->DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
+			motherboard->DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
+			motherboard->DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
+			motherboard->DMA_write(thirty_two.b_3(), asm_pc.AsUInt32() + 3);
 			motherboard->step();
 		}
 
@@ -347,9 +348,9 @@ namespace mipsshell
 				mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
 				mips_tools::BW_32 dpc = dcpu.get_PC();
 				
-				if(this->directive_syms.has(dpc))
+				if(this->directive_syms.has(dpc.AsUInt32()))
 				{
-					std::vector<std::string> cmds = this->directive_syms.lookup_from_PC(dpc);
+					std::vector<std::string> cmds = this->directive_syms.lookup_from_PC(dpc.AsUInt32());
 					
 					for(size_t cmdcount = 0; cmdcount < cmds.size(); cmdcount++)
 					{
@@ -358,12 +359,12 @@ namespace mipsshell
 					}
 				}
 
-				if(this->has_prog_break_at(dcpu.get_PC()))
+				if(this->has_prog_break_at(dcpu.get_PC().AsUInt32()))
 				{
 					mipsshell::SUSPEND = true;
 					mipsshell::INTERACTIVE = true;
-					unsigned long line_number = this->PC_to_line_number.at(dcpu.get_PC());
-					std::string line_str = this->PC_to_line_string.at(dcpu.get_PC());
+					unsigned long line_number = this->PC_to_line_number.at(dcpu.get_PC().AsUInt32());
+					std::string line_str = this->PC_to_line_string.at(dcpu.get_PC().AsUInt32());
 
 					std::string o = (std::string("Breakpoint at line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(" hit.\n"));
 					WriteToOutput(o);
@@ -500,8 +501,8 @@ namespace mipsshell
 	{
 		if(this->line_number_to_PC.count(line) > 0)
 		{
-			mips_tools::BW_32 line_pc = this->line_number_to_PC.at(line);
-			this->program_breakpoints.insert(std::pair<mips_tools::BW_32, unsigned long>(line_pc, line));
+			unsigned long line_pc = this->line_number_to_PC.at(line);
+			this->program_breakpoints.insert(std::pair<unsigned long, unsigned long>(line_pc, line));
 			std::string o = (std::string("Breakpoint set at line ") + priscas_io::StrTypes::UInt32ToStr(line) + std::string("d\n"));
 			WriteToOutput(o);
 		}

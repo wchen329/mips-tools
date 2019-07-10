@@ -20,14 +20,14 @@ namespace mips_tools
 		 */
 
 		public:
-			void insert(std::string key, BW_32 PC);
+			void insert(std::string key, unsigned long PC);
 			bool has(std::string key) { return this->syms_to_PC.count(key) > 0; };
-			bool has(BW_32 pc) { return this->PC_to_syms.count(pc) > 0; }
-			std::vector<std::string>& lookup_from_PC(BW_32 PC) { return this->PC_to_syms.at(PC); }
-			BW_32 lookup_from_sym(const std::string & sym) { return this->syms_to_PC.at(sym); }
+			bool has(unsigned long pc) { return this->PC_to_syms.count(pc) > 0; }
+			std::vector<std::string>& lookup_from_PC(unsigned long PC) { return this->PC_to_syms.at(PC); }
+			unsigned long lookup_from_sym(const std::string & sym) { return this->syms_to_PC.at(sym); }
 		private:
-			std::map<BW_32, std::vector<std::string>> PC_to_syms;
-			std::map<std::string, BW_32> syms_to_PC;
+			std::map<uint32_t, std::vector<std::string>> PC_to_syms;
+			std::map<std::string, uint32_t> syms_to_PC;
 			
 	};
 }

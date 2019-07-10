@@ -312,12 +312,12 @@ namespace mipsshell
 		// No args specified print out every register
 		if(args.size() <= 1)
 		{
-			std::string o = (std::string("PC: ") + priscas_io::StrTypes::Int32ToStr(pc_val) + std::string("\n"));
+			std::string o = (std::string("PC: ") + priscas_io::StrTypes::UInt32ToStr(pc_val.AsUInt32()) + std::string("\n"));
 			inst.WriteToOutput(o);
 
 			for(int r = 0; r < reg_count; r++)
 			{
-				std::string o = isa.get_reg_name(r) + std::string(":\t") + priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(r)) + priscas_io::newLine;
+				std::string o = isa.get_reg_name(r) + std::string(":\t") + priscas_io::StrTypes::UInt32ToStr(dcpu.get_reg_data(r).AsUInt32()) + priscas_io::newLine;
 				inst.WriteToOutput(o);
 			}
 		}
@@ -336,7 +336,7 @@ namespace mipsshell
 					}
 
 					std::string o = std::string(isa.get_reg_name(*ritr) + std::string(":\t") +
-						priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(*ritr)) + priscas_io::newLine);
+						priscas_io::StrTypes::Int32ToStr(dcpu.get_reg_data(*ritr).AsInt32()) + priscas_io::newLine);
 					inst.WriteToOutput(o);
 				}
 			}
@@ -388,7 +388,7 @@ namespace mipsshell
 
 		if(hours > 0)
 		{
-			std::string t = priscas_io::StrTypes::UIntToStr(hours); + " hours\n";
+			std::string t = priscas_io::StrTypes::UIntToStr(hours) + " hours\n";
 			inst.WriteToOutput(t);
 		}
 

@@ -8,5 +8,5 @@ void test_register_32()
 	reg_32 r;
 	r.set_data(150);
 	BW_32 value = r.get_data();
-	assertEquals(value, 150);
+	assertEquals(value.AsInt32(), 150);
 }

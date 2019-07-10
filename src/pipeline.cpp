@@ -52,53 +52,53 @@ namespace mips_tools
 		// MEM->MEM forwarding
 		if(mem_write_inst(mem_op) && wb_regWE && wb_save_num != 0)
 		{
-			if(mem_data_rs == wb_save_num) mem_data_rs = wb_save_data;
-			if(mem_data_rt == wb_save_num) mem_data_rt = wb_save_data;
+			if(mem_data_rs.AsInt32() == wb_save_num) mem_data_rs = wb_save_data;
+			if(mem_data_rt.AsInt32() == wb_save_num) mem_data_rt = wb_save_data;
 		}
 
 		// Memory operations
-		BW_32_T lr_bbb(0,0,0,0);
+		BW_32 lr_bbb(0,0,0,0);
 		
 		switch(mem_op)
 		{
 			case LBU:
-				lr_bbb = BW_32_T(0,0,0,this->mem_req_load(mem_dataALU));
+				lr_bbb = BW_32(0,0,0,this->mem_req_load(mem_dataALU.AsUInt32()));
 				break;
 			case LHU:
-				lr_bbb = BW_32_T(	this->mem_req_load(mem_dataALU),
-									this->mem_req_load(mem_dataALU),
+				lr_bbb = BW_32(	this->mem_req_load(mem_dataALU.AsUInt32()),
+									this->mem_req_load(mem_dataALU.AsUInt32()),
 									0,
 									0								);
 				break;
 			case LW:
-				lr_bbb = BW_32_T(	this->mem_req_load(mem_dataALU),
-									this->mem_req_load(mem_dataALU + 1),
-									this->mem_req_load(mem_dataALU + 2),
-									this->mem_req_load(mem_dataALU + 3));
+				lr_bbb = BW_32(	this->mem_req_load(mem_dataALU.AsUInt32()),
+									this->mem_req_load(mem_dataALU.AsUInt32() + 1),
+									this->mem_req_load(mem_dataALU.AsUInt32() + 2),
+									this->mem_req_load(mem_dataALU.AsUInt32() + 3));
 				break;
 			case SB:
-				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
+				this->mem_req_write(BW_32(mem_data_rt).b_0(), mem_dataALU.AsUInt32());
 				break;
 			case SH:
-				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
-				this->mem_req_write(BW_32_T(mem_data_rt).b_1(), mem_dataALU + 1);
+				this->mem_req_write(BW_32(mem_data_rt).b_0(), mem_dataALU.AsUInt32());
+				this->mem_req_write(BW_32(mem_data_rt).b_1(), mem_dataALU.AsUInt32() + 1);
 				break;
 			case SW:
-				this->mem_req_write(BW_32_T(mem_data_rt).b_0(), mem_dataALU);
-				this->mem_req_write(BW_32_T(mem_data_rt).b_1(), mem_dataALU + 1);
-				this->mem_req_write(BW_32_T(mem_data_rt).b_2(), mem_dataALU + 2);
-				this->mem_req_write(BW_32_T(mem_data_rt).b_3(), mem_dataALU + 3);
+				this->mem_req_write(BW_32(mem_data_rt).b_0(), mem_dataALU.AsUInt32());
+				this->mem_req_write(BW_32(mem_data_rt).b_1(), mem_dataALU.AsUInt32() + 1);
+				this->mem_req_write(BW_32(mem_data_rt).b_2(), mem_dataALU.AsUInt32() + 2);
+				this->mem_req_write(BW_32(mem_data_rt).b_3(), mem_dataALU.AsUInt32() + 3);
 				break;
 		}
 
-		BW_32 load_result = lr_bbb.as_BW_32();
+		BW_32 load_result = lr_bbb;
 
 		// Registry writing settings
 		int mem_write_reg_num = r_inst(mem_op) ? mem_rd : mem_rt;
 		BW_32 mem_regWriteData = mem_read_inst(mem_op) ? load_result : mem_dataALU;
 
 		/* EXECUTE STAGE
-		 * Perform arithmetic through the provided ALU (mips_alu<BW_32> alu)
+		 * Perform arithmetic through the provided ALU (mips_alu<int_32t> alu)
 		 * Most operations will end up using the ALU, even if it's not used as a store
 		 * except branches and jumps
 		 */
@@ -115,7 +115,7 @@ namespace mips_tools
 		else if(j_inst(static_cast<opcode>(ex_op))) ex_fm = J;
 		else ex_fm = I;
 
-		mips_alu<BW_32> alu; 
+		mips_alu<int32_t> alu; 
 
 		BW_32 ex_aluResult = 0;
 
@@ -166,31 +166,31 @@ namespace mips_tools
 				switch(ex_funct)
 				{
 					case ADD:
-						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_data_rt, false);
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 					case OR:
-						ex_aluResult = alu.execute(ALU::OR, ex_data_rs, ex_data_rt, false);
+						ex_aluResult = alu.execute(ALU::OR, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 					case NOR:
-						ex_aluResult = ~alu.execute(ALU::OR, ex_data_rs, ex_data_rt, false);
+						ex_aluResult = alu.execute(ALU::OR, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 					case AND: 
-						ex_aluResult = alu.execute(ALU::AND, ex_data_rs, ex_data_rt, false);
+						ex_aluResult = alu.execute(ALU::AND, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 					case SLL:
-						ex_aluResult = alu.execute(ALU::SLL, ex_data_rs, ex_data_rt, false);
+						ex_aluResult = alu.execute(ALU::SLL, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 					case SRL:
-						ex_aluResult = alu.execute(ALU::SRL, ex_data_rs, ex_data_rt, false);
+						ex_aluResult = alu.execute(ALU::SRL, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 					case SLT:
-						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs, ex_data_rt, false) < 0 ? 1 : 0;
+						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false) < 0 ? 1 : 0;
 						break;
 					case SLTU:
-						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs, ex_data_rt, true) < 0 ? 1 : 0;
+						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsUInt32(), ex_data_rt.AsUInt32(), true) < 0 ? 1 : 0;
 						break;
 					case SUB:
-						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs, ex_data_rt, false);
+						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 				}
 
@@ -201,42 +201,42 @@ namespace mips_tools
 				{
 					// Arithmetic Operations that Store
 					case ADDI:
-						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;
 					case ORI:
-						ex_aluResult = alu.execute(ALU::OR, ex_data_rs, ex_imm, false);
+						ex_aluResult = alu.execute(ALU::OR, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;;
 					case ANDI:
-						ex_aluResult = alu.execute(ALU::AND, ex_data_rs, ex_imm, false);
+						ex_aluResult = alu.execute(ALU::AND, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;
 					case XORI:
-						ex_aluResult = alu.execute(ALU::XOR, ex_data_rs, ex_imm, false);
+						ex_aluResult = alu.execute(ALU::XOR, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;
 					case SLTI:
-						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs, ex_imm, false) < 0 ? 1 : 0;
+						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false) < 0 ? 1 : 0;
 						break;
 					case SLTIU:
-						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs, ex_imm, true) < 0 ? 1 : 0;
+						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsUInt32(), ex_imm.AsUInt32(), true) < 0 ? 1 : 0;
 						break;
 					
 					// Memory Operations- for now, calculate the offset only
 					case LBU:
-						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, true);
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), true);
 						break;
 					case LHU:
-						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, true);
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), true);
 						break;
 					case LW:
-						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;
 					case SB:
-						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;
 					case SH:
-						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;
 					case SW:
-						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs, ex_imm, false);
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;
 				}
 				break;
@@ -251,8 +251,8 @@ namespace mips_tools
 		opcode decode_op;
 		int decode_rs, decode_rt, decode_rd;
 		funct decode_funct;
-		BW_32 decode_shamt;
-		BW_32 decode_imm;
+		int32_t decode_shamt;
+		int32_t decode_imm;
 
 		decoding_unit.decode(fetch_plr.get_data(), decode_fm, decode_op, decode_rs, decode_rt,
 			decode_rd, decode_funct, decode_shamt, decode_imm);
@@ -314,7 +314,7 @@ namespace mips_tools
 						if(decode_rs_data == decode_rt_data)
 						{
 							BW_32 curr_pc = this->get_PC();
-							pc_next = curr_pc + branch_addr;
+							pc_next = curr_pc.AsUInt32() + branch_addr.AsUInt32();
 							branch_taken = true;
 						}
 
@@ -323,7 +323,7 @@ namespace mips_tools
 						if(decode_rs_data != decode_rt_data)
 						{
 							BW_32 curr_pc = this->get_PC();
-							pc_next = curr_pc + branch_addr;
+							pc_next = curr_pc.AsUInt32() + branch_addr.AsUInt32();
 							branch_taken = true;
 						}
 						break;
@@ -340,16 +340,16 @@ namespace mips_tools
 		 *
 		 */
 		BW_32 next_inst_addr = pc.get_data();
-		BW_32_T next_inst
+		BW_32 next_inst
 		(
-			this->mem_req_load(next_inst_addr),
-			this->mem_req_load(next_inst_addr + 1),
-			this->mem_req_load(next_inst_addr + 2),
-			this->mem_req_load(next_inst_addr + 3)
+			this->mem_req_load(next_inst_addr.AsUInt32()),
+			this->mem_req_load(next_inst_addr.AsUInt32() + 1),
+			this->mem_req_load(next_inst_addr.AsUInt32() + 2),
+			this->mem_req_load(next_inst_addr.AsUInt32() + 3)
 		);
 
 		if(!branch_taken)
-			pc_next = pc.get_data() + 4;
+			pc_next = pc.get_data().AsUInt32() + 4;
 		else
 			this->flush_fetch_plr();
 
@@ -358,7 +358,7 @@ namespace mips_tools
 		/* Commit Transactions
 		 */
 		if(we_plr_fetch)
-			this->fetch_plr.set_data(next_inst.as_BW_32());
+			this->fetch_plr.set_data(next_inst);
 		if(we_plr_de)
 			this->de_plr.load(decode_rs_data, decode_rt_data, decode_funct, decode_shamt, decode_imm,
 				decode_op, decode_regWE, decode_memWE, decode_memRE, decode_rs, decode_rt, decode_rd);

@@ -12,39 +12,122 @@
 
 namespace mips_tools
 {
+	template<class ConvType, int bitlength> std::string genericHexBuilder(ConvType c)
+	{
+		std::string ret = "0x";
+		int tbl = bitlength;
+		
+		std::string interm = "";
 
-	typedef int64_t BW_64;
-	typedef int32_t BW_32;
-	typedef int16_t BW_16;
+		while(tbl > 0)
+		{
+			char val = c & 0x0F;
+
+			switch(val)
+			{
+				case 0:
+					interm = "0" + interm;
+					break;
+				case 1:
+					interm = "1" + interm;
+					break;
+				case 2:
+					interm = "2" + interm;
+					break;
+				case 3:
+					interm = "3" + interm;
+					break;
+				case 4:
+					interm = "4" + interm;
+					break;
+				case 5:
+					interm = "5" + interm;
+					break;
+				case 6:
+					interm = "6" + interm;
+					break;
+				case 7:
+					interm = "7" + interm;
+					break;
+				case 8:
+					interm = "8" + interm;
+					break;
+				case 9:
+					interm = "9" + interm;
+					break;
+				case 10:
+					interm = "a" + interm;
+					break;
+				case 11:
+					interm = "b" + interm;
+					break;
+				case 12:
+					interm = "c" + interm;
+					break;
+				case 13:
+					interm = "d" + interm;
+					break;
+				case 14:
+					interm = "e" + interm;
+					break;
+				case 15:
+					interm = "f" + interm;
+					break;
+			};
+
+
+			c = (c >> 4);
+			tbl -= 4;
+		}
+
+		return ret + interm;
+	}
 
 	// general "bit word class"
 	class BW
 	{
 		public:
-			BW_64 as_BW_64() { return representation; }
-			BW_32 as_BW_32() { return (static_cast<BW_32>(representation)); }
-			BW_16 as_BW_16() { return (representation & ((1 << 16)  - 1)); }
-			BW(BW_64 w) { this->representation = w ; }
-			BW(BW_32 w) { this->representation = (0 + w); }
-			BW(BW_16 w) { this->representation = (0 + w); }
-		private:
-			long long representation; // 64 bit representation
+			virtual std::string toHexString() = 0;
+			virtual int32_t& AsInt32() = 0;
+			virtual uint32_t& AsUInt32() = 0;
+			virtual float& AsSPFloat() = 0;
+			virtual bool operator==(BW& bw2) = 0;
+			virtual bool operator!=(BW& bw2) = 0;
+
 	};
 
-	class BW_32_T
+	class BW_32 : public BW
 	{
 		public:
 			char b_0() { return *(w_addr());}
 			char b_1() { return *(w_addr() + 1);}
 			char b_2() { return *(w_addr() + 2);}
 			char b_3() { return *(w_addr() + 3);}
-			BW_32_T(BW_32 data) : w(data) {}
-			BW_32_T(char b_0, char b_1, char b_2, char b_3);
+			BW_32() { w.i32 = 0; }
+			BW_32(int32_t data){ w.i32 = data; }
+			BW_32(uint32_t data) { w.ui32 = data; }
+			BW_32(float data) { w.fp32 = data; }
+			BW_32(char b_0, char b_1, char b_2, char b_3);
 
-			BW_32 as_BW_32() { return this-> w; }
+			std::string toHexString() { return genericHexBuilder<int32_t, 32>(this->w.i32); }
+			int32_t& AsInt32() { return w.i32; }
+			uint32_t& AsUInt32() { return w.ui32; }
+			float& AsSPFloat() { return w.fp32; }
+
+			bool operator==(BW& bw2) { return (this->AsInt32() == bw2.AsInt32()); }
+			bool operator!=(BW& bw2) { return (this->AsInt32() != bw2.AsInt32()); }
+
 		private:
-			char * w_addr() { return (char*)&w; }
-			BW_32 w;
+			char * w_addr() { return (char*)&w.i32; }
+			
+			union BW_32_internal
+			{
+				int32_t i32;
+				uint32_t ui32;
+				float fp32;
+			};
+
+			BW_32_internal w;
 	};
 
 	/* Just a collection of two strings
@@ -62,12 +145,10 @@ namespace mips_tools
 			std::string desc;
 	};
 
-		enum HighLevelType
+	enum HighLevelType
 	{
 		T_NONE,
-		T_BW16,
 		T_BW32,
-		T_BW64,
 		T_INT,
 		T_INT32,
 		T_UINT,
@@ -114,20 +195,24 @@ namespace mips_tools
 		{
 			return T_STRING;
 		}
-
+		/*
 		else if(typeid(TC) == typeid(BW_16))
 		{
 			return T_BW16;
-		}
+		}*/
 
 		else if(typeid(TC) == typeid(BW_32))
 		{
 			return T_BW32;
 		}
-
+		/*
 		else if(typeid(TC) == typeid(BW_64))
 		{
 			return T_BW64;
+		}*/
+		else
+		{
+			return T_OTHER;
 		}
 	}
 }

@@ -24,5 +24,5 @@ void test_shell_comments()
 	cpu & c = test_m.get_cpu();
 	diag_cpu & single_cycle = dynamic_cast<diag_cpu&>(c);
 	BW_32 reg_check = single_cycle.get_reg_data(16);
-	assertEquals(reg_check, 100);
+	assertEquals(reg_check.AsUInt32(), 100);
 }
