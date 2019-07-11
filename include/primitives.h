@@ -88,11 +88,55 @@ namespace mips_tools
 	{
 		public:
 			virtual std::string toHexString() = 0;
+			virtual int16_t& AsInt16() = 0;
+			virtual uint16_t& AsUInt16() = 0;
 			virtual int32_t& AsInt32() = 0;
 			virtual uint32_t& AsUInt32() = 0;
 			virtual float& AsSPFloat() = 0;
 			virtual bool operator==(BW& bw2) = 0;
 			virtual bool operator!=(BW& bw2) = 0;
+
+	};
+
+	class BW_16 : public BW
+	{
+		public:
+			char b_0() { return *(w_addr());}
+			char b_1() { return *(w_addr() + 1);}
+			BW_16() { w.i16 = 0; }
+			BW_16(int16_t data){ w.i16 = data; }
+			BW_16(uint16_t data) { w.ui16 = data; }
+			BW_16(char b_0, char b_1);
+
+			std::string toHexString() { return genericHexBuilder<int16_t, 16>(this->w.i16); }
+			int16_t& AsInt16() { return w.i16; }
+			uint16_t& AsUInt16() { return w.ui16; }
+			int32_t& AsInt32() { signedTrunc(); return w.i32; } // Always truncate first (by sign extending), and return
+			uint32_t& AsUInt32() { signedTrunc(); return w.ui32; }
+			float& AsSPFloat() { signedTrunc(); return w.fp32; }
+
+			bool operator==(BW& bw2) { return (this->AsInt16() == bw2.AsInt16()); }
+			bool operator!=(BW& bw2) { return (this->AsInt16() != bw2.AsInt16()); }
+
+		private:
+			char * w_addr() { return (char*)&w.i16; }
+
+			union BW_16_internal
+			{
+				int16_t i16;
+				uint16_t ui16;
+				int32_t i32;
+				uint32_t ui32;
+				float fp32;
+			};
+
+			
+			BW_16_internal w;
+
+			void signedTrunc()
+			{
+				w.i32 = ((w.i32 << 15) >> 15);
+			}
 
 	};
 
@@ -109,7 +153,10 @@ namespace mips_tools
 			BW_32(float data) { w.fp32 = data; }
 			BW_32(char b_0, char b_1, char b_2, char b_3);
 
+
 			std::string toHexString() { return genericHexBuilder<int32_t, 32>(this->w.i32); }
+			int16_t& AsInt16() { return w.i16; }
+			uint16_t& AsUInt16() { return w.ui16; }
 			int32_t& AsInt32() { return w.i32; }
 			uint32_t& AsUInt32() { return w.ui32; }
 			float& AsSPFloat() { return w.fp32; }
@@ -122,6 +169,8 @@ namespace mips_tools
 			
 			union BW_32_internal
 			{
+				int16_t i16;
+				uint16_t ui16;
 				int32_t i32;
 				uint32_t ui32;
 				float fp32;

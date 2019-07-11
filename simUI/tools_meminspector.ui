@@ -43,7 +43,7 @@
     </rect>
    </property>
    <attribute name="headerVisible">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
    <column>
     <property name="text">
@@ -95,7 +95,7 @@
   </widget>
   <widget class="QRadioButton" name="radioButton_2B">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -111,7 +111,7 @@
   </widget>
   <widget class="QRadioButton" name="radioButton_4B">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>

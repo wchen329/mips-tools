@@ -7,7 +7,6 @@ aboutDialog::aboutDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->pushButton->setDefault(true);
-    ui->textEditAbout->setEnabled(false);
     ui->textEditAbout->
             append("WARNING: This software is currently in development and may have some bugs.\n---------\nCredits:wchen329@wisc.edu");
 }
