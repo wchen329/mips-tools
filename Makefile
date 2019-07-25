@@ -33,7 +33,6 @@ $(BIN_DIR)/simUI: build/libmtcore.a
 	then \
 		cd simUI && \
 		qmake simUI.pro -r -spec linux-g++ CONFIG+=debug && \
-		cd ../build-* && \
 		make && \
 		cp simUI ../bin; \
 	else \
@@ -49,6 +48,7 @@ release:
 clean:
 	rm build/*.o
 	rm build/*.a
+	rm simUI/*.o
 	rm bin/*
 test: $(BIN_DIR)/mtshell
 	cd testing/unix_test; $(MAKE) "P_LIB=$(OBJS)"; $(MAKE) run
