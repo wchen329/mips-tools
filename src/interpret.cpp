@@ -77,7 +77,8 @@ namespace mips_tools
 		{
 			if( (!j_inst(current_op) && ((current_op != mips_tools::SYS_RES && args.size() != 4 && !mem_inst(current_op) && f_code != mips_tools::JR)
 										|| (mem_inst(current_op) && args.size() != 3))) || j_inst(current_op) && args.size() < 2 || (f_code == mips_tools::JR && args.size() != 2))
-				{ fprintf(stdout, "Expected more arguments, specification incomplete.\n"); return false; }
+			{ // todo: this is an error condition, throw exception or something
+			}
 
 			// Now first argument parsing
 			if(r_inst(current_op))
@@ -132,7 +133,7 @@ namespace mips_tools
 				}
 			}
 	
-			else { fprintf(stdout, "%s:", args[1].c_str()); fprintf(stdout, mipsshell::BAD_COMMAND); return false;}
+			else { } //fprintf(stdout, "%s:", args[1].c_str()); fprintf(stdout, mipsshell::BAD_COMMAND); return false;}
 		}
 
 		// Second Argument Parsing
@@ -251,9 +252,6 @@ namespace mips_tools
 			else { throw asm_exception(); }
 		}
 
-		// If system call, don't execute in CPU
-		if(current_op == mips_tools::SYS_RES) return false;
-		
 		// Pass the values of rs, rt, rd to the processor's encoding function
 		BW_32 inst = generic_mips32_encode(rs, rt, rd, f_code, imm, current_op);
 

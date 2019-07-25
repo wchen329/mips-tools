@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <memory>
 #include <vector>
 #include "format_chk.h"
 #include "parser_err.h"

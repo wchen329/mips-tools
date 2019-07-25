@@ -1,5 +1,6 @@
 #ifndef __SC_CPU_H__
 #define __SC_CPU_H__
+#include <memory>
 #include "diag_cpu.h"
 #include "reg_32.h"
 #include "primitives.h"

@@ -115,8 +115,8 @@ namespace mips_tools
 		bool operator==(TablePoint& tp) { return (this->x == tp.x) && (this->y == tp.y); }
 		TablePoint operator-(TablePoint& tp) { return TablePoint(this->x - tp.x, this->y - tp.y); }
 		TablePoint operator+(TablePoint& tp) { return TablePoint(this->x + tp.x, this->y + tp.y); }
-		TablePoint operator-=(TablePoint& tp) { this->x = this->x - tp.x; this->y = this->y - tp.y; }
-		TablePoint operator+=(TablePoint& tp) { this->x = this->x + tp.x; this->y = this->y + tp.y; }
+		void operator-=(TablePoint& tp) { this->x = this->x - tp.x; this->y = this->y - tp.y; }
+		void operator+=(TablePoint& tp) { this->x = this->x + tp.x; this->y = this->y + tp.y; }
 	};
 
 	class DebugTable : public DebugView
@@ -142,7 +142,7 @@ namespace mips_tools
 	 * -
 	 * The specific DType MUST be listed under "HighLevelType" enum to be any useful.
 	 */
-	template <class DType> class DebugTableSingleType : public DebugType
+	template <class DType> class DebugTableSingleType
 	{
 		public:
 			HighLevelType getTableDataType() { return getTypeGeneric<DType>(); }
@@ -179,7 +179,7 @@ namespace mips_tools
 				}
 			}
 
-			const std::vector& getDefinedPtList() { return this->pts;}
+			const std::vector<TablePoint>& getDefinedPtList() { return this->pts;}
 
 			operator std::string() const
 			{

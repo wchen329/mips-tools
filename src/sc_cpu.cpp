@@ -13,7 +13,7 @@ namespace mips_tools
 		
 		int32_t inst_word = 0;
 		BW_32 inst_word_addr = this -> pc.get_data();
-		this -> pc.set_data((inst_word_addr.AsUInt32() + 4) % this->mm.get_size());
+		this -> pc.set_data(static_cast<uint32_t>((inst_word_addr.AsUInt32() + 4) % this->mm.get_size()));
 		BW_32 inst_part = BW_32(
 			this->mem_req_load(inst_word_addr.AsUInt32()),
 			this->mem_req_load(inst_word_addr.AsUInt32() + 1),

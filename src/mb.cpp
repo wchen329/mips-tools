@@ -1,4 +1,5 @@
 #include <cstring>
+#include <memory>
 #include "mb.h"
 #include "cpu.h"
 #include "pipeline.h"

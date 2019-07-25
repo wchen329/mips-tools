@@ -6,6 +6,7 @@
  *
  * wchen329
  */
+#include <memory>
 #include <string>
 #include <vector>
 #include "syms_table.h"

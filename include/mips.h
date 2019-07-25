@@ -15,6 +15,7 @@
  */
 #include <cstring>
 #include <cstddef>
+#include <memory>
 #include "ISA.h"
 #include "mt_exception.h"
 #include "primitives.h"
