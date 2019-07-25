@@ -38,7 +38,7 @@ $(BIN_DIR)/simUI: build/libmtcore.a
 		cp simUI ../bin; \
 	else \
 		echo "Could not find qmake. Please specify the path of the qmake executable by defining macro or env. var QMAKE." && \
-		exit 1; \
+		echo "Skipping simUI building..."; \
 	fi
 
 .cpp.o:
