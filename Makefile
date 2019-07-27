@@ -1,6 +1,6 @@
 .SUFFIXES: .o .cpp
 CC = g++
-VPATH = src build
+VPATH = src:build
 BIN_DIR = bin
 LIB_DIR = build
 CFLAGS = -g -I"$(INCLUDE)"
