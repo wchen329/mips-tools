@@ -12,6 +12,7 @@ tools_meminspector::tools_meminspector(QWidget *parent) :
 {
     ui->setupUi(this);
     QStringList * qsl = new QStringList();
+    this->setLayout(this->ui->verticalLayoutMemInspect);
     qsl->append("Name");
     qsl->append("Signed Integer");
     qsl->append("Unsigned Integer");

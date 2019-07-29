@@ -7,6 +7,7 @@ listbreak::listbreak(QWidget *parent) :
     ui(new Ui::listbreak)
 {
     ui->setupUi(this);
+    this->setLayout(this->ui->verticalLayoutBPList);
 }
 
 listbreak::listbreak(std::vector<unsigned long>& abps, std::vector<unsigned long>& pbps, QWidget *parent) :
@@ -14,6 +15,7 @@ listbreak::listbreak(std::vector<unsigned long>& abps, std::vector<unsigned long
     ui(new Ui::listbreak)
 {
     ui->setupUi(this);
+    this->setLayout(this->ui->verticalLayoutBPList);
 
     for(size_t abp_i = 0; abp_i < abps.size(); abp_i++)
     {

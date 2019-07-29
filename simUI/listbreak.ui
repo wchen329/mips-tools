@@ -13,77 +13,107 @@
   <property name="windowTitle">
    <string>List Breakpoints</string>
   </property>
-  <widget class="QGroupBox" name="ABP_groupBox">
+  <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>611</width>
-     <height>191</height>
+     <x>60</x>
+     <y>90</y>
+     <width>531</width>
+     <height>323</height>
     </rect>
    </property>
-   <property name="title">
-    <string>Architecture Breakpoints</string>
-   </property>
-   <widget class="QListWidget" name="ABP_List">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>591</width>
-      <height>131</height>
-     </rect>
+   <layout class="QVBoxLayout" name="verticalLayoutBPList">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetNoConstraint</enum>
     </property>
-   </widget>
-   <widget class="QPushButton" name="ABP_removeButton">
-    <property name="geometry">
-     <rect>
-      <x>424</x>
-      <y>160</y>
-      <width>181</width>
-      <height>23</height>
-     </rect>
+    <property name="leftMargin">
+     <number>8</number>
     </property>
-    <property name="text">
-     <string>Remove Selected Breakpoint</string>
+    <property name="topMargin">
+     <number>8</number>
     </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="PBP_groupBox">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>210</y>
-     <width>611</width>
-     <height>191</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Program Breakpoints</string>
-   </property>
-   <widget class="QListWidget" name="PBP_List">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>591</width>
-      <height>131</height>
-     </rect>
+    <property name="rightMargin">
+     <number>8</number>
     </property>
-   </widget>
-   <widget class="QPushButton" name="PBP_removeButton">
-    <property name="geometry">
-     <rect>
-      <x>424</x>
-      <y>160</y>
-      <width>181</width>
-      <height>23</height>
-     </rect>
+    <property name="bottomMargin">
+     <number>8</number>
     </property>
-    <property name="text">
-     <string>Remove Selected Breakpoint</string>
-    </property>
-   </widget>
+    <item>
+     <widget class="QLabel" name="ABP_Label">
+      <property name="text">
+       <string>Architecture Breakpoints</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QListWidget" name="ABP_List"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayoutRM_ABP">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="ABP_removeButton">
+        <property name="text">
+         <string>Remove Selected Breakpoint</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="PBP_Label">
+      <property name="text">
+       <string>Program Breakpoints</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QListWidget" name="PBP_List"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayoutRM_PBP">
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="PBP_removeButton">
+        <property name="text">
+         <string>Remove Selected Breakpoint</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

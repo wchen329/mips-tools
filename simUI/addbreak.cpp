@@ -6,6 +6,7 @@ addbreak::addbreak(QWidget *parent) :
     ui(new Ui::addbreak)
 {
     ui->setupUi(this);
+    this->setLayout(this->ui->verticalLayoutAddBreak);
 }
 
 bool addbreak::isArchBreakPoint()

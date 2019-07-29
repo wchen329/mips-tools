@@ -6,6 +6,7 @@ tools_specialdebug::tools_specialdebug(QWidget *parent) :
     ui(new Ui::tools_specialdebug)
 {
     ui->setupUi(this);
+    this->setLayout(ui->verticalLayoutSpecialDebug);
 }
 
 tools_specialdebug::~tools_specialdebug()
