@@ -32,7 +32,7 @@ $(BIN_DIR)/simUI: build/libmtcore.a
 		test $(QMAKE); \
 	then \
 		cd simUI && \
-		qmake simUI.pro -r -spec linux-g++ CONFIG+=debug && \
+		$(QMAKE) simUI.pro -r -spec linux-g++ CONFIG+=debug && \
 		make && \
 		cp simUI ../bin; \
 	else \
