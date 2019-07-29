@@ -7,6 +7,7 @@ tools_runtimeDirective::tools_runtimeDirective(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->Run_button->setDefault(true);
+    this->setLayout(this->ui->verticalLayoutRTD);
 }
 
 QString tools_runtimeDirective::getTextValue()
