@@ -57,7 +57,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -79,9 +79,9 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionCPU_Specific_Debugging_Information"/>
     <addaction name="actionRegister_Inspector"/>
     <addaction name="actionMemory_Inspector"/>
+    <addaction name="actionCPU_Specific_Debugging_Information"/>
    </widget>
    <widget class="QMenu" name="menuSimulation">
     <property name="title">
@@ -156,17 +156,17 @@
   </action>
   <action name="actionRegister_Inspector">
    <property name="text">
-    <string>Register Inspector</string>
+    <string>Register Inspector...</string>
    </property>
   </action>
   <action name="actionMemory_Inspector">
    <property name="text">
-    <string>Memory Inspector</string>
+    <string>Memory Inspector...</string>
    </property>
   </action>
   <action name="actionCPU_Specific_Debugging_Information">
    <property name="text">
-    <string>CPU Specific Debugging Information</string>
+    <string>Special Debugging...</string>
    </property>
   </action>
   <action name="actionStart_Simulation">
@@ -202,7 +202,7 @@
      <normaloff>:/icons/art/debug-run.png</normaloff>:/icons/art/debug-run.png</iconset>
    </property>
    <property name="text">
-    <string>Runtime Directive / Debug Assembler</string>
+    <string>Runtime Directive / Debug Assembler...</string>
    </property>
   </action>
   <action name="actionSet_Simulation_Source">
