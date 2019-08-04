@@ -31,10 +31,9 @@ addi $sp, $zero, 29
 addi $fp, $zero, 30
 addi $ra, $zero, 31
 
-# No ops for pipelined register
+# No ops for pipelined register test
 sll $zero $zero, 0
 sll $zero $zero, 0
 sll $zero $zero, 0
 sll $zero $zero, 0
-
 .exit

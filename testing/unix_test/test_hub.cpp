@@ -30,6 +30,7 @@ int main()
 	register_test("test_sc_cpu_subroutine", test_sc_cpu_subroutine);
 	register_test("test_mips32fsp_load_to_use", test_mips32fsp_load_to_use);
 	register_test("test_sc_cpu_registers", test_sc_cpu_registers);
+	register_test("test_mips32fsp_registers", test_mips32fsp_registers);
 
 	fprintf(stdout, "%ld tests detected...\n", runnable_tests.size());
 

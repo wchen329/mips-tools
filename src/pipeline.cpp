@@ -33,7 +33,7 @@ namespace mips_tools
 		bool wb_regWE;
 		this->mw_plr.get(wb_save_data, wb_regWE, wb_save_num);
 
-		if(wb_regWE)
+		if(wb_regWE && wb_save_num != 0)
 		{
 			this->registers[wb_save_num].set_data(wb_save_data); // Register-File bypassing
 		}
