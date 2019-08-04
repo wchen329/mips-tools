@@ -13,6 +13,7 @@
 #include "diag_cpu.h"
 #include "mb.h"
 #include "mtsstream.h"
+#include "osi.h"
 #include "interpret.h"
 #include "parser_err.h"
 #include "runtime_call.h"
@@ -595,6 +596,7 @@ namespace mipsshell
 		do
 		{
 			*tw_input >> rd_buffer;
+                        osi::sleep(10);
 		} while(rd_buffer == "" && mipsshell::INTERACTIVE);
 		// wildly inefficient: todo make it sleep (platform independent)!
 

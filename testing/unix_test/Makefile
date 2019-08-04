@@ -2,7 +2,8 @@
 
 CC = g++
 VPATH = ../tests ../src
-TESTS = test_assert.o test_register32.o test_sc_cpu_loop.o test_sc_cpu_ops.o test_sc_cpu_subroutine.o test_shell_comments.o
+TESTS = test_assert.o test_register32.o test_sc_cpu_loop.o test_sc_cpu_ops.o test_sc_cpu_subroutine.o test_shell_comments.o test_mips32fsp_load_to_use.o \
+        test_sc_cpu_registers.o
 MAIN = test_hub.o basic_assert.o
 INCLUDES = -I"../../include" -I"../include" -I"../common"
 CFLAGS = $(INCLUDES) -g

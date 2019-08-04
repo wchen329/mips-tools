@@ -8,6 +8,5 @@ sll $zero, $zero, 0
 sll $zero, $zero, 0
 sll $zero, $zero, 0
 sll $zero, $zero, 0
-.state
 sll $zero, $zero, 0
 .exit

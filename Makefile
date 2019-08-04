@@ -6,16 +6,16 @@ LIB_DIR = build
 CFLAGS = -g -I"$(INCLUDE)"
 OBJS = format_chk.o cpu_time.o interpret.o mb.o mem.o messages.o mips.o mmem.o mtsstream.o \
 	parser_err.o pipeline.o primitives.o range.o reg_32.o reg_pipeline.o runtime_call.o sc_cpu.o \
-	shell.o streams.o states.o superscalar.o syms_table.o
+	shell.o streams.o states.o superscalar.o syms_table.o osi.o
 SHELL_MAIN = shell_entry.o
 INCLUDE = include
 
-all: build/libmtcore.a $(BIN_DIR)/simUI $(BIN_DIR)/mtshell
+all: build/libmtcore.a $(BIN_DIR)/simUI $(BIN_DIR)/pshell
 
 build/libmtcore.a: $(OBJS)
 	cd build; ar r libmtcore.a $(OBJS)
 
-$(BIN_DIR)/mtshell: $(OBJS) $(SHELL_MAIN) $(INCLUDE)
+$(BIN_DIR)/pshell: $(OBJS) $(SHELL_MAIN) $(INCLUDE)
 	@ echo "Looking for bin directory..."
 	@ if \
 		ls $(BIN_DIR); \
@@ -25,7 +25,7 @@ $(BIN_DIR)/mtshell: $(OBJS) $(SHELL_MAIN) $(INCLUDE)
 		echo "bin doesn't exist, making bin..." && \
 		mkdir $(BIN_DIR); \
 	fi
-	cd build; $(CC) $(OBJS) $(SHELL_MAIN) -g -o ../$(BIN_DIR)/mtshell
+	cd build; $(CC) $(OBJS) $(SHELL_MAIN) -g -o ../$@
 $(BIN_DIR)/simUI: build/libmtcore.a
 	@ echo "Building simUI..."
 	@ if \
@@ -50,5 +50,5 @@ clean:
 	rm build/*.a
 	rm simUI/*.o
 	rm bin/*
-test: $(BIN_DIR)/mtshell
+test: $(BIN_DIR)/pshell
 	cd testing/unix_test; $(MAKE) "P_LIB=$(OBJS)"; $(MAKE) run

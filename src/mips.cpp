@@ -43,7 +43,8 @@ namespace mips_tools
 				!strcmp("$s4", fr_name) ? $s4 :
 				!strcmp("$s5", fr_name) ? $s5 :
 				!strcmp("$s6", fr_name) ? $s6 :
-				!strcmp("$s7", fr_name) ? $s7 : INVALID
+				!strcmp("$s7", fr_name) ? $s7 :
+				!strcmp("$sp", fr_name) ? $sp : INVALID
 			:
 
 			fr_name[1] == 't' ?
@@ -54,7 +55,9 @@ namespace mips_tools
 				!strcmp("$t4", fr_name) ? $t4 :
 				!strcmp("$t5", fr_name) ? $t5 :
 				!strcmp("$t6", fr_name) ? $t6 :
-				!strcmp("$t7", fr_name) ? $t7 : INVALID
+				!strcmp("$t7", fr_name) ? $t7 :
+				!strcmp("$t8", fr_name) ? $t8 :
+				!strcmp("$t9", fr_name) ? $t9 : INVALID
 			:
 
 			fr_name[1] == 'v' ?
