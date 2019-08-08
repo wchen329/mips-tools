@@ -406,7 +406,8 @@ namespace mipsshell
 			}
 		}
 	}
-
+		if(!this->isQuiet)
+			WriteToOutput(("Simulation terminating...\n"));
 		fclose(inst_file);
 		delete mipsshell::mtsstream::asmout;
 }

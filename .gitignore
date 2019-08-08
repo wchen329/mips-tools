@@ -22,3 +22,4 @@ testing/tests/unix_test
 *.stackdump
 simUI/simUI.pro.user*
 simUI/Makefile
+*.sdf

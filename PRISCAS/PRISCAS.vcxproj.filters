@@ -124,9 +124,6 @@
     <ClInclude Include="..\include\syms_table.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\imageable.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\reg_pipeline.h">
       <Filter>include</Filter>
     </ClInclude>

@@ -109,7 +109,6 @@
     <ClInclude Include="..\include\debugview.h" />
     <ClInclude Include="..\include\diag_cpu.h" />
     <ClInclude Include="..\include\format_chk.h" />
-    <ClInclude Include="..\include\imageable.h" />
     <ClInclude Include="..\include\interpret.h" />
     <ClInclude Include="..\include\ISA.h" />
     <ClInclude Include="..\include\mb.h" />

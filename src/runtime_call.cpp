@@ -182,7 +182,6 @@ namespace mipsshell
 
 	void exit(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.WriteToOutput(("Simulation terminating...\n"));
 		inst.SetState(Shell::KILLED);
 	}
 
