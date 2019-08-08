@@ -29,7 +29,7 @@ namespace priscas_io
 	template<class InputC> std::string GeneralConvToStr(InputC in)
 	{
 		std::string ret;
-
+		
 		std::strstream conv;
 		conv << in;
 
