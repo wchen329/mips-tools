@@ -56,7 +56,7 @@ namespace mips_tools
 		public:
 			int number() { return this->except_num; } // get exception number
 			std::string& get_err() { std::string & msg = message; msg = msg + '\n'; return this->message; }	// get full exception name
-			mt_exception() : except_num(exception_nums::GENERAL), message("An error has occurred.") {}
+			mt_exception() : except_num(exception_nums::GENERAL), message("An error has occurred") {}
 
 		protected:
 			exception_nums::exception_code except_num;
@@ -70,7 +70,7 @@ namespace mips_tools
 			reg_oob_exception()
 			{
 				mt_exception::except_num = exception_nums::REGISTER_OOB;
-				mt_exception::message = "Invalid registry index given : out of bounds.";
+				mt_exception::message = "Invalid registry index given : out of bounds";
 			
 			}
 	};
@@ -114,7 +114,7 @@ namespace mips_tools
 			mt_bad_escape()
 			{
 				mt_exception::except_num = exception_nums::BAD_ESCAPE;
-				mt_exception::message = "Bad escape sequence (or use of quotations).";
+				mt_exception::message = "Bad escape sequence (or use of quotations)";
 			}
 	};
 
@@ -124,7 +124,7 @@ namespace mips_tools
 			mt_multidef_symbol(const char* info)
 			{
 				mt_exception::except_num = exception_nums::BAD_ESCAPE;
-				mt_exception::message = "Multiple definition of symbol: " + std::string(info) + " is not allowed.";
+				mt_exception::message = "Multiple definition of symbol: " + std::string(info) + " is not allowed";
 			}
 	};
 
@@ -134,7 +134,7 @@ namespace mips_tools
 			mt_insuff_arg()
 			{
 				mt_exception::except_num = exception_nums::INSUFFICIENT_ARG;
-				mt_exception::message = "Insufficient amount of arguments provided.";
+				mt_exception::message = "Insufficient amount of arguments provided";
 			}
 	};
 
@@ -144,7 +144,7 @@ namespace mips_tools
 			mt_bad_imm()
 			{
 				mt_exception::except_num = exception_nums::BAD_IMM;
-				mt_exception::message = "Invalid immediate format.";
+				mt_exception::message = "Invalid immediate format";
 			}
 	};
 
@@ -174,7 +174,7 @@ namespace mips_tools
 			mt_asm_bad_arg_count()
 			{
 				mt_exception::except_num = exception_nums::ASM_BAD_ARG_COUNT;
-				mt_exception::message = "The instruction to be assembled does not have the correct amount of arguments.";
+				mt_exception::message = "The instruction to be assembled does not have the correct amount of arguments";
 			}
 	};
 
@@ -194,7 +194,7 @@ namespace mips_tools
 			mt_unmatched_parenthesis()
 			{
 				mt_exception::except_num = exception_nums::PARSER_UNMATCHED_PARENTHESIS;
-				mt_exception::message = "Unmatched parenthesis.";
+				mt_exception::message = "Unmatched or non-existent required parenthesis";
 			}
 	};
 }

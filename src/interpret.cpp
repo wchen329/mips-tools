@@ -88,10 +88,15 @@ namespace mips_tools
 		}
 
 		// Check for insufficient arguments
-		if(args.size() > 1)
+		if(args.size() >= 1)
 		{
-			if( (!j_inst(current_op) && ((current_op != mips_tools::SYS_RES && args.size() != 4 && !mem_inst(current_op) && f_code != mips_tools::JR)
-										|| (mem_inst(current_op) && args.size() != 3))) || j_inst(current_op) && args.size() < 2 || (f_code == mips_tools::JR && args.size() != 2))
+			if	(
+					(r_inst(current_op) && args.size() != 4 && f_code != mips_tools::JR) ||
+					(r_inst(current_op) && args.size() != 2 && f_code == mips_tools::JR) ||
+					(i_inst(current_op) && args.size() != 4 && !mem_inst(current_op)) ||
+					(i_inst(current_op) && args.size() != 3 && mem_inst(current_op)) ||
+					(j_inst(current_op) && args.size() != 2)				
+				)
 			{
 				throw mips_tools::mt_asm_bad_arg_count();
 			}

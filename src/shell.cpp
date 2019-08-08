@@ -84,17 +84,17 @@ namespace mipsshell
 					WriteToOutput(("-h (show this message)\n"));
 					WriteToOutput(("-i [file] (execute a text file with by assembling and running the program)\n"));
 					WriteToOutput(("-m [width] (specify a memory bit width; the total memory available will be 2^[width]\n"));
-					WriteToOutput(( "-a (active assembler mode, requires the -i option):\n"));
+					//WriteToOutput(( "-a (active assembler mode, requires the -i option):\n"));
 					WriteToOutput(("-c (select a CPU type 0: for single cycle (default) or 1: for Five Stage Pipeline)\n"));
 					return;
 				}
 
-				if(args[i] == "-a")
+				/*if(args[i] == "-a")
 				{
 					if(!isQuiet) WriteToOutput(("Assembler mode ENABLED.\n"));
 					mipsshell::ASM_MODE = true;
 					mipsshell::INTERACTIVE = false;
-				}
+				}*/
 
 				if(args[i] == "-i")
 				{
