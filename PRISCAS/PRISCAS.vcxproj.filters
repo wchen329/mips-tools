@@ -77,6 +77,9 @@
     <ClCompile Include="..\src\streams.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\osi.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -173,6 +176,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\debugview.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\osi.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

@@ -52,6 +52,8 @@ RESOURCES += \
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../PRISCAS/release/ -lmtcore
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../PRISCAS/debug/ -lmtcore
 
+win32:CONFIG(release, debug|release): DEFINES += WIN32
+
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
 
