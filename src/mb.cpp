@@ -18,13 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include <cstring>
-#include <memory>
 #include "mb.h"
-#include "cpu.h"
-#include "pipeline.h"
-#include "sc_cpu.h"
-#include "superscalar.h"
 
 namespace mips_tools
 {

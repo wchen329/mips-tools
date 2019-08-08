@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include "primitives.h"
+#include "mt_exception.h"
 
 namespace mips_tools
 {

@@ -26,6 +26,7 @@
 #include "primitives.h"
 #include "mmem.h"
 #include "mips.h"
+#include "mt_exception.h"
 
 /* Interface for the single cycle CPU implementation
  */

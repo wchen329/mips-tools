@@ -20,11 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __MB_H__
 #define __MB_H__
+#include <cstring>
+#include <memory>
 #include "cpu.h"
-#include "sc_cpu.h"
 #include "mmem.h"
 #include "primitives.h"
 #include "cpu_time.h"
+#include "pipeline.h"
+#include "sc_cpu.h"
+#include "superscalar.h"
 
 namespace mips_tools
 {

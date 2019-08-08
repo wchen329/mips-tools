@@ -21,10 +21,14 @@
 #ifndef __FORMAT_CHK_H__
 #define __FORMAT_CHK_H__
 
+#include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <memory>
+#include <vector>
 #include "interpret.h"
 #include "diag_cpu.h"
+#include "messages.h"
 
 namespace mipsshell
 {

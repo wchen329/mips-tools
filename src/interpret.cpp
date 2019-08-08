@@ -18,24 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#define _CRT_SECURE_NO_WARNINGS // MSVC
-#include <cstdio>
-#include <cstring>
-#include <exception>
-#include <memory>
-#include <string>
-#include "states.h"
-#include "diag_cpu.h"
-#include "format_chk.h"
-#include "mb.h"
-#include "messages.h"
-#include "mips.h"
-#include "mtsstream.h"
-#include "mt_exception.h"
 #include "interpret.h"
-#include "primitives.h"
-#include "runtime_call.h"
-#include "syms_table.h"
 
 namespace mips_tools
 {

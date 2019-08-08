@@ -20,11 +20,18 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __RUNTIME_CALL_H__
 #define __RUNTIME_CALL_H__
+
+#include <cstdio>
+#include <map>
 #include <vector>
 #include "diag_cpu.h"
+#include "debugview.h"
 #include "mem.h"
 #include "mb.h"
+#include "messages.h"
+#include "range.h"
 #include "shell.h"
+#include "states.h"
 
 namespace mipsshell
 {

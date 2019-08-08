@@ -18,13 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include <cstdio>
-#include <map>
-#include "debugview.h"
-#include "messages.h"
-#include "range.h"
+
 #include "runtime_call.h"
-#include "states.h"
 
 namespace mipsshell
 {

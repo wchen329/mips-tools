@@ -20,7 +20,22 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __INTERPRET_H__
 #define __INTERPRET_H__
+#define _CRT_SECURE_NO_WARNINGS // MSVC
+#include <cstdio>
+#include <cstring>
+#include <exception>
+#include <memory>
+#include <string>
+#include "states.h"
+#include "diag_cpu.h"
+#include "format_chk.h"
 #include "mb.h"
+#include "messages.h"
+#include "mips.h"
+#include "mtsstream.h"
+#include "mt_exception.h"
+#include "primitives.h"
+#include "runtime_call.h"
 #include "syms_table.h"
 
 namespace mipsshell
