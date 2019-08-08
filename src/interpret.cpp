@@ -24,7 +24,6 @@
 #include <exception>
 #include <memory>
 #include <string>
-#include "asm_exception.h"
 #include "states.h"
 #include "diag_cpu.h"
 #include "format_chk.h"
@@ -34,7 +33,6 @@
 #include "mtsstream.h"
 #include "mt_exception.h"
 #include "interpret.h"
-#include "parser_err.h"
 #include "primitives.h"
 #include "runtime_call.h"
 #include "syms_table.h"
@@ -86,7 +84,7 @@ namespace mips_tools
 		else if("jr" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::JR;}
 		else
 		{
-			throw asm_exception();
+			throw mt_bad_mnemonic();
 		}
 
 		// Check for insufficient arguments
@@ -94,7 +92,8 @@ namespace mips_tools
 		{
 			if( (!j_inst(current_op) && ((current_op != mips_tools::SYS_RES && args.size() != 4 && !mem_inst(current_op) && f_code != mips_tools::JR)
 										|| (mem_inst(current_op) && args.size() != 3))) || j_inst(current_op) && args.size() < 2 || (f_code == mips_tools::JR && args.size() != 2))
-			{ // todo: this is an error condition, throw exception or something
+			{
+				throw mips_tools::mt_asm_bad_arg_count();
 			}
 
 			// Now first argument parsing
@@ -122,35 +121,22 @@ namespace mips_tools
 
 			else if(j_inst(current_op))
 			{
-				try
+				if(jump_syms.has(args[1]))
+				{
+					mips_tools::BW_32 label_PC = static_cast<int32_t>(jump_syms.lookup_from_sym(std::string(args[1].c_str())));
+					imm = (label_PC.AsInt32() >> 2);
+				}
+
+				else
 				{
 					imm = mipsshell::get_imm(args[1].c_str());
 				}
-
-				catch(mipsshell::parser_err * e)
-				{
-					if(!jorb_inst(current_op))
-					{
-						throw;
-					}
-
-					delete e;
-
-					// Otherwise, perceive as a label, try to convert
-					try
-					{
-						mips_tools::BW_32 label_PC = static_cast<int32_t>(jump_syms.lookup_from_sym(std::string(args[1].c_str())));
-						imm = (label_PC.AsInt32() >> 2);
-					}
-
-					catch(std::out_of_range&)
-					{
-						throw asm_exception();
-					}
-				}
 			}
 	
-			else { } //fprintf(stdout, "%s:", args[1].c_str()); fprintf(stdout, mipsshell::BAD_COMMAND); return false;}
+			else
+			{
+				mips_tools::mt_bad_mnemonic();
+			} 
 		}
 
 		// Second Argument Parsing
@@ -190,7 +176,7 @@ namespace mips_tools
 						}
 					}
 
-					if(!right_parenth || !left_parenth) throw asm_exception();
+					if(!right_parenth || !left_parenth) throw mt_unmatched_parenthesis();
 					if((rs = mips_tools::friendly_to_numerical(reg.c_str())) <= mips_tools::INVALID) rs = mipsshell::get_reg_num(reg.c_str());
 					imm = mipsshell::get_imm(imm_s.c_str());
 								
@@ -229,44 +215,21 @@ namespace mips_tools
 						
 			else if(i_inst(current_op))
 			{
-							
-				if(mem_inst(current_op))
+
+				if(jump_syms.has(args[3]))
 				{
-					throw asm_exception();
+					mips_tools::BW_32 addr = baseAddress.AsInt32();
+					mips_tools::BW_32 label_PC = static_cast<uint32_t>(jump_syms.lookup_from_sym(std::string(args[3].c_str())));
+					imm = mips_tools::offset_to_address_br(addr, label_PC).AsInt32();
 				}
 
-				try
+				else
 				{
 					imm = mipsshell::get_imm(args[3].c_str());
-				}
-
-				catch(mipsshell::parser_err * e)
-				{
-					if(!jorb_inst(current_op))
-					{
-						throw;
-					}
-
-					delete e;
-
-					// Otherwise, perceive as a label, try to convert
-					try
-					{
-						mips_tools::BW_32 addr = baseAddress.AsInt32();
-						mips_tools::BW_32 label_PC = static_cast<uint32_t>(jump_syms.lookup_from_sym(std::string(args[3].c_str())));
-						imm = mips_tools::offset_to_address_br(addr, label_PC).AsInt32();
-					}
-
-					catch(std::out_of_range&)
-					{
-						throw asm_exception();
-					}
 				}
 			}
 
 			else if(j_inst(current_op)){}
-
-			else { throw asm_exception(); }
 		}
 
 		// Pass the values of rs, rt, rd to the processor's encoding function

@@ -32,11 +32,20 @@ namespace mips_tools
 	{
 		enum exception_code
 		{
-			GENERAL = 0,
-			REGISTER_OOB = 1,
-			MEMORY_OOB = 2,
-			INVALID_RANGE = 3,
-			INVALID_CPU_OPT = 4
+			GENERAL,
+			REGISTER_OOB,
+			MEMORY_OOB,
+			INVALID_RANGE,
+			INVALID_CPU_OPT,
+			BAD_ESCAPE,
+			INVALID_MULTIDEF,
+			INSUFFICIENT_ARG,
+			BAD_IMM,
+			BAD_INST_FORMAT,
+			BAD_MNEMONIC,
+			ASM_BAD_ARG_COUNT,
+			PARSER_UNEXPECTED,
+			PARSER_UNMATCHED_PARENTHESIS
 		};
 	}
 
@@ -96,6 +105,96 @@ namespace mips_tools
 			{
 				mt_exception::except_num = exception_nums::INVALID_CPU_OPT;
 				mt_exception::message = "Invalid CPU Option: " + std::string(info);
+			}
+	};
+
+	class mt_bad_escape : public mt_exception
+	{
+		public:
+			mt_bad_escape()
+			{
+				mt_exception::except_num = exception_nums::BAD_ESCAPE;
+				mt_exception::message = "Bad escape sequence (or use of quotations).";
+			}
+	};
+
+	class mt_multidef_symbol : public mt_exception
+	{
+		public:
+			mt_multidef_symbol(const char* info)
+			{
+				mt_exception::except_num = exception_nums::BAD_ESCAPE;
+				mt_exception::message = "Multiple definition of symbol: " + std::string(info) + " is not allowed.";
+			}
+	};
+
+	class mt_insuff_arg : public mt_exception
+	{
+		public:
+			mt_insuff_arg()
+			{
+				mt_exception::except_num = exception_nums::INSUFFICIENT_ARG;
+				mt_exception::message = "Insufficient amount of arguments provided.";
+			}
+	};
+
+	class mt_bad_imm : public mt_exception
+	{
+		public:
+			mt_bad_imm()
+			{
+				mt_exception::except_num = exception_nums::BAD_IMM;
+				mt_exception::message = "Invalid immediate format.";
+			}
+	};
+
+	class mt_bad_reg_format : public mt_exception
+	{
+		public:
+			mt_bad_reg_format()
+			{
+				mt_exception::except_num = exception_nums::BAD_INST_FORMAT;
+				mt_exception::message = "Bad or unsupported register format";
+			}
+	};
+
+	class mt_bad_mnemonic : public mt_exception
+	{
+		public:
+			mt_bad_mnemonic()
+			{
+				mt_exception::except_num = exception_nums::BAD_MNEMONIC;
+				mt_exception::message = "Unrecognized instruction mnemonic";
+			}
+	};
+
+	class mt_asm_bad_arg_count : public mt_exception
+	{
+		public:
+			mt_asm_bad_arg_count()
+			{
+				mt_exception::except_num = exception_nums::ASM_BAD_ARG_COUNT;
+				mt_exception::message = "The instruction to be assembled does not have the correct amount of arguments.";
+			}
+	};
+
+	class mt_parse_unexpected : public mt_exception
+	{
+		public:
+			mt_parse_unexpected(const char * expected, const char * unexpected)
+			{
+				mt_exception::except_num = exception_nums::PARSER_UNEXPECTED;
+				mt_exception::message = std::string(unexpected) + " was unexpected at this time. Expecting: " + std::string(expected);
+			}
+	};
+
+	class mt_unmatched_parenthesis : public mt_exception
+	{
+		public:
+			mt_unmatched_parenthesis()
+			{
+				mt_exception::except_num = exception_nums::PARSER_UNMATCHED_PARENTHESIS;
+				mt_exception::message = "Unmatched parenthesis.";
 			}
 	};
 }

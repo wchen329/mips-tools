@@ -24,7 +24,6 @@
 #include "diag_cpu.h"
 #include "mem.h"
 #include "mb.h"
-#include "parser_err.h"
 #include "shell.h"
 
 namespace mipsshell

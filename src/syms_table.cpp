@@ -19,7 +19,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 #include <exception>
-#include "parser_err.h"
 #include "mt_exception.h"
 #include "syms_table.h"
 
@@ -32,7 +31,9 @@ namespace mips_tools
 		bool already_def = this->syms_to_PC.count(key) > 0;
 			
 		if(already_def)
-			throw mipsshell::parser_err();
+		{
+			throw mt_multidef_symbol(key.c_str());
+		}
 
 		// Allows lookup from PC to symbol
 

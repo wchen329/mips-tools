@@ -39,7 +39,7 @@ namespace mipsshell
 	{
 		if(args_list.size() < 1)
 		{
-			throw parser_err();
+			throw mips_tools::mt_insuff_arg();
 		}
 		// Check first argument, and pass the rest as args for that call
 		

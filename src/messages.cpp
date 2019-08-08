@@ -75,7 +75,6 @@ namespace mipsshell
 									std::string("Options:\n") +
 									std::string("[no args] - reset both the CPU state and mem state. This is the same as -a (see below).\n") +
 									std::string("-c: reset the CPU state\n") +
-									std::string("-m: zero out main memory (not yet implemented)\n") +
 									std::string("-a: reset both the CPU state and mem state\n");
 	const std::string HELP_RUN =	std::string(".run\n") +
 									std::string("Using .run will cycle the CPU continuously without\n") +

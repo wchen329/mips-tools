@@ -18,8 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include <cstdio>
-#include "parser_err.h"
 #include "mtsstream.h"
 
 namespace mipsshell

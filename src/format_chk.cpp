@@ -22,7 +22,6 @@
 #include <memory>
 #include <vector>
 #include "format_chk.h"
-#include "parser_err.h"
 #include "messages.h"
 
 namespace mipsshell
@@ -34,8 +33,8 @@ namespace mipsshell
 	{
 		std::vector<char> numbers;
 		int len = strlen(reg_str);
-		if(len <= 1) throw new badformat_err();
-		if(reg_str[0] != '$') throw new unexpected_err("$", reg_str);
+		if(len <= 1) throw mips_tools::mt_bad_imm();
+		if(reg_str[0] != '$') throw mips_tools::mt_parse_unexpected("$", reg_str);
 		for(int i = 1; i < len; i++)
 		{
 			if(reg_str[i] >= '0' && reg_str[i] <= '9')
@@ -43,12 +42,12 @@ namespace mipsshell
 				numbers.push_back(reg_str[i]);
 			}
 
-			else throw new badformat_err();
+			else throw mips_tools::mt_bad_reg_format();
 		}
 
 		int num = -1;
 
-		if(numbers.empty()) throw new badformat_err();
+		if(numbers.empty()) throw mips_tools::mt_bad_reg_format();
 		else
 		{
 			char * num_str = new char[numbers.size()];
@@ -76,7 +75,7 @@ namespace mipsshell
 			if(str[i] < '0' || str[i] > '9')
 			{
 				if(i == 0 && str[i] != '-')
-					throw new badimm_err();
+					throw mips_tools::mt_bad_imm();
 			}
 		}
 

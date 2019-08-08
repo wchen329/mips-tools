@@ -20,6 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __MTSSTREAM_H__
 #define __MTSSTREAM_H__
+#include <cstdio>
 #include "primitives.h"
 
 namespace mipsshell

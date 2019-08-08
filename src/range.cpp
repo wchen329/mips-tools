@@ -52,7 +52,7 @@ namespace mips_tools
 		}
 
 		// Now evaluate. We have exactly two or three fields?
-		if(string_list.size() != 1 & string_list.size() != 2 && string_list.size() != 3)
+		if(string_list.size() != 1 && string_list.size() != 2 && string_list.size() != 3)
 		{
 			throw mips_tools::mt_invalid_range("Must have either 1 - 3 parameters in the format index, begin:end, or begin:end:step.");
 		}

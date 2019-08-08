@@ -83,7 +83,6 @@
     <ClCompile Include="..\src\mips.cpp" />
     <ClCompile Include="..\src\mtsstream.cpp" />
     <ClCompile Include="..\src\osi.cpp" />
-    <ClCompile Include="..\src\parser_err.cpp" />
     <ClCompile Include="..\src\pipeline.cpp" />
     <ClCompile Include="..\src\primitives.cpp" />
     <ClCompile Include="..\src\range.cpp" />
@@ -100,7 +99,6 @@
     <ClCompile Include="..\src\syms_table.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\asm_exception.h" />
     <ClInclude Include="..\include\branding.h" />
     <ClInclude Include="..\include\buffer_events.h" />
     <ClInclude Include="..\include\cpu.h" />
@@ -120,7 +118,6 @@
     <ClInclude Include="..\include\mtswriter.h" />
     <ClInclude Include="..\include\mt_exception.h" />
     <ClInclude Include="..\include\osi.h" />
-    <ClInclude Include="..\include\parser_err.h" />
     <ClInclude Include="..\include\pipeline.h" />
     <ClInclude Include="..\include\primitives.h" />
     <ClInclude Include="..\include\range.h" />

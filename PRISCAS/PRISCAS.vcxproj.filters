@@ -56,9 +56,6 @@
     <ClCompile Include="..\src\mtsstream.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\parser_err.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\runtime_call.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -145,9 +142,6 @@
     <ClInclude Include="..\include\mtswriter.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\parser_err.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\runtime_call.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -164,9 +158,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\cpu_time.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\asm_exception.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\buffer_events.h">

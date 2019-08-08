@@ -27,7 +27,6 @@
 #include <cstdarg>
 #include <string>
 #include <memory>
-#include "asm_exception.h"
 #include "branding.h"
 #include "cpu.h"
 #include "diag_cpu.h"
@@ -36,7 +35,6 @@
 #include "mtsstream.h"
 #include "osi.h"
 #include "interpret.h"
-#include "parser_err.h"
 #include "runtime_call.h"
 #include "shell.h"
 #include "states.h"
@@ -265,11 +263,11 @@ namespace mipsshell
 					inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
 				}
 
-				catch(mips_tools::asm_exception& e)
+				catch(mips_tools::mt_exception& e)
 				{
 					WriteToError(("An error occurred while assembling the program.\n"));
 					std::string msg_1 = 
-						(std::string("Error information: ") + std::string(e.get_err_msg()));
+						(std::string("Error information: ") + std::string(e.get_err()));
 					WriteToError(msg_1);
 					WriteToError(("Line of error:\n"));
 					std::string msg_2 = 
@@ -343,10 +341,10 @@ namespace mipsshell
 				inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
 			}
 
-			catch(mips_tools::asm_exception& e)
+			catch(mips_tools::mt_exception& e)
 			{
 				WriteToError(("An error occurred while assembling the inputted instruction.\n"));
-				std::string msg = (std::string("Error information: ") + std::string(e.get_err_msg()));
+				std::string msg = (std::string("Error information: ") + std::string(e.get_err()));
 				WriteToError(msg);
 				WriteToError(priscas_io::newLine.c_str());
 
@@ -482,7 +480,7 @@ namespace mipsshell
 
 		if(has_escaped || in_quotes)
 		{
-			throw bad_escape_err();
+			throw mips_tools::mt_bad_escape();
 		}
 
 		if(built_string != "")
