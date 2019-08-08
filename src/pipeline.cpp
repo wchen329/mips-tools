@@ -31,7 +31,6 @@ namespace mips_tools
 		bool we_plr_de = true;
 		bool we_plr_fetch = true;
 		BW_32 pc_next = this->pc.get_data();		
-		bool insertNoop = false;
 
 
 		/* Step 1: Execute but do not yet commit transactions
@@ -179,7 +178,7 @@ namespace mips_tools
 
 					else
 					{
-						insertNoop = true;
+						this->flush_em_plr();
 						we_plr_fetch = false;
 						we_plr_de = false;
 						we_pc = false;
@@ -319,7 +318,7 @@ namespace mips_tools
 					{
 						we_pc = false;
 						we_plr_fetch = false;
-						insertNoop = true;
+						this->flush_de_plr();
 					}
 				}
 			}
@@ -332,7 +331,7 @@ namespace mips_tools
 			{
 					we_pc = false;
 					we_plr_fetch = false;
-					insertNoop = true;
+					this->flush_de_plr();
 			}
 		}
 
@@ -386,30 +385,6 @@ namespace mips_tools
 		else
 			this->flush_fetch_plr();
 
-		// Basically part of "branch not taken" if not taken
-
-		// Do stalls accordingly, stall when the Read is at ID and the Write is at EX
-		if(sc_cpu::cpu_opts[EX_EX_INDEX].get_IntValue() == PATH_STALL_MODE)
-		{
-			// EX-EX is the most general, used for forwarding execution 
-		}
-
-		else if(sc_cpu::cpu_opts[MEM_EX_INDEX].get_IntValue() == PATH_STALL_MODE)
-		{
-			// MEM-EX replaces specific case of RAW for load-to-use scenarios.
-		}
-
-		else if(sc_cpu::cpu_opts[EX_ID_INDEX].get_IntValue() == PATH_STALL_MODE)
-		{
-			// EX-ID replaces specific case of RAW when writing from EX into ID in the case of a branch at ID (hazard)
-		}
-
-		else if(sc_cpu::cpu_opts[MEM_MEM_INDEX].get_IntValue() == PATH_STALL_MODE)
-		{
-			// MEM-MEM replaces specific load-to-use case of a Store following a Load
-			
-		}
-
 
 		/* Commit Transactions
 		 */
@@ -424,12 +399,6 @@ namespace mips_tools
 			this->mw_plr.load(mem_regWriteData, mem_regWE, mem_write_reg_num);
 		if(we_pc)
 			pc.set_data(pc_next);
-
-		// Now: Insert no-op if needed
-		if(insertNoop)
-		{
-			this->flush_de_plr();
-		}
 
 		return true;
 	}
@@ -452,22 +421,18 @@ namespace mips_tools
 		sc_cpu::clk_T = 40000;
 		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify ex-ex forwarding behavior"));
 		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 		
 		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_ID", "Specify ex-id forwarding behavior"));
 		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
 		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_EX", "Specify mem-ex forwarding behavior"));
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
 		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify mem-mem forwarding behavior"));
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 	}
 
