@@ -38,14 +38,22 @@ namespace mips_tools
 			bool cycle();
 			void rst();
 			fsp_cpu(mmem & m);
-			void exec_CPU_option(std::vector<std::string> &);
+			void exec_CPU_option(std::vector<NameValueStringPair> &);
 		private:
 			reg_32 fetch_plr;
 			decode_ex_plr de_plr;
 			ex_mem_plr em_plr;
 			mem_wb_plr mw_plr;
 			void flush_fetch_plr() { this->fetch_plr.set_data(0); }
+			void flush_de_plr() { this->de_plr.load(0,0,static_cast<funct>(0),0,0,static_cast<opcode>(0),0,0,0,0,0,0); }
 			void flush_em_plr() { this->em_plr.load(0,0,0,static_cast<opcode>(0),false,false,false,0,0,0); }
+			static const int PATH_FORWARD_MODE = 0;
+			static const int PATH_STALL_MODE = 1;
+			static const int PATH_GLITCH_MODE = 2;
+			static const int EX_EX_INDEX = 0;
+			static const int EX_ID_INDEX = 1;
+			static const int MEM_EX_INDEX = 2;
+			static const int MEM_MEM_INDEX = 3;
 	};
 }
 

@@ -32,6 +32,7 @@
 #include "cpu.h"
 #include "diag_cpu.h"
 #include "mb.h"
+#include "mt_exception.h"
 #include "mtsstream.h"
 #include "osi.h"
 #include "interpret.h"
@@ -590,13 +591,13 @@ namespace mipsshell
 			char in;
 			while((in = fgetc(stdin)) != EOF)
 			{
-				if(in == '\\' && !QUOTES)
+				if(in == '\\' && !QUOTES && !ESCAPED)
 				{
 					ESCAPED = true;
 					continue;
 				}
 
-				if(in == '\"'|| in == '\'')
+				if(in == '\"')
 				{
 					QUOTES = (!QUOTES);
 				}
@@ -616,10 +617,49 @@ namespace mipsshell
 		do
 		{
 			*tw_input >> rd_buffer;
-                        osi::sleep(10);
+			osi::sleep(10);
 		} while(rd_buffer == "" && mipsshell::INTERACTIVE);
-		// wildly inefficient: todo make it sleep (platform independent)!
 
 		return this->rd_buffer;
+	}
+
+	std::vector<mips_tools::NameValueStringPair> scan_for_values(std::vector<std::string>& input)
+	{
+		std::vector<mips_tools::NameValueStringPair> vals;
+
+		for(size_t sind = 0; sind < input.size(); sind++)
+		{
+			std::string& indc = input[sind];
+			size_t substr_where = indc.find_first_of('=');
+
+			// Case: not found, then just use the whole string as the name, with an empty value
+			if(substr_where == -1)
+			{
+				std::string first = input[sind];
+				std::string second = "";
+				mips_tools::NameValueStringPair nv(first, second);
+				vals.push_back(nv);
+			}
+
+			// Case: empty name. This is an error
+			else if(substr_where == 0)
+			{
+				throw mips_tools::mt_invalid_cpu_opt("Option specifier (lvalue of = may not be blank) requires name");
+			}
+
+			// Case: there is at least one equal sign
+			else
+			{
+				// Use the first equal sign
+				size_t last_where = indc.find_last_of('=');
+
+				std::string first = indc.substr(0, substr_where);
+				std::string second = indc.substr(substr_where + 1, indc.size());
+				mips_tools::NameValueStringPair nv(first, second);
+				vals.push_back(nv);
+			}
+		}
+
+		return vals;
 	}
 }

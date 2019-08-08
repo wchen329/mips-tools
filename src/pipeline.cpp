@@ -30,7 +30,8 @@ namespace mips_tools
 		bool we_plr_em = true;
 		bool we_plr_de = true;
 		bool we_plr_fetch = true;
-		BW_32 pc_next = this->pc.get_data();
+		BW_32 pc_next = this->pc.get_data();		
+		bool insertNoop = false;
 
 
 		/* Step 1: Execute but do not yet commit transactions
@@ -72,8 +73,11 @@ namespace mips_tools
 		// MEM->MEM forwarding
 		if(mem_write_inst(mem_op) && wb_regWE && wb_save_num != 0)
 		{
-			if(mem_data_rs.AsInt32() == wb_save_num) mem_data_rs = wb_save_data;
-			if(mem_data_rt.AsInt32() == wb_save_num) mem_data_rt = wb_save_data;
+			if(sc_cpu::cpu_opts[MEM_MEM_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			{	
+					if(mem_data_rs.AsInt32() == wb_save_num) mem_data_rs = wb_save_data;
+					if(mem_data_rt.AsInt32() == wb_save_num) mem_data_rt = wb_save_data;
+			}
 		}
 
 		// Memory operations
@@ -142,38 +146,44 @@ namespace mips_tools
 		// MEM->EX forwarding
 		if(wb_regWE && wb_save_num != 0)
 		{
-			if(ex_rs == wb_save_num) ex_data_rs = wb_save_data;
-			if(ex_rt == wb_save_num) ex_data_rt = wb_save_data;
+			if(sc_cpu::cpu_opts[MEM_EX_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			{	
+				if(ex_rs == wb_save_num) ex_data_rs = wb_save_data;
+				if(ex_rt == wb_save_num) ex_data_rt = wb_save_data;
+			}
 		}
 
 		// EX->EX forwarding
 		if(mem_regWE)
 		{
-			if(r_inst(mem_op))
-			{
-				// R instructions write to RD, and their results are saved directly
-				if(ex_rs == mem_rd && mem_rd != 0) ex_data_rs = mem_dataALU;
-				if(ex_rt == mem_rd && mem_rd != 0) ex_data_rt = mem_dataALU;
-
-			}
-
-			else
-			{
-				// Else, a little trickier
-				// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
-				// Otherwise, forward it!
-				if(!mem_inst(mem_op))
+			if(sc_cpu::cpu_opts[EX_EX_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			{	
+				if(r_inst(mem_op))
 				{
-					if(ex_rs == mem_rt && mem_rt != 0) ex_data_rs = mem_dataALU;
-					if(ex_rt == mem_rt && mem_rt != 0) ex_data_rt = mem_dataALU;
+					// R instructions write to RD, and their results are saved directly
+					if(ex_rs == mem_rd && mem_rd != 0) ex_data_rs = mem_dataALU;
+					if(ex_rt == mem_rd && mem_rd != 0) ex_data_rt = mem_dataALU;
+
 				}
 
 				else
 				{
-					this->flush_em_plr();
-					we_plr_fetch = false;
-					we_plr_de = false;
-					we_pc = false;
+					// Else, a little trickier
+					// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
+					// Otherwise, forward it!
+					if(!mem_inst(mem_op))
+					{
+						if(ex_rs == mem_rt && mem_rt != 0) ex_data_rs = mem_dataALU;
+						if(ex_rt == mem_rt && mem_rt != 0) ex_data_rt = mem_dataALU;
+					}
+
+					else
+					{
+						insertNoop = true;
+						we_plr_fetch = false;
+						we_plr_de = false;
+						we_pc = false;
+					}
 				}
 			}
 		}
@@ -285,29 +295,32 @@ namespace mips_tools
 		// EX-ID Forwarding Path, specifically for Control Hazards
 		if(mem_regWE && jorb_inst(decode_op))
 		{
-			if(r_inst(mem_op))
-			{
-				// R instructions write to RD, and their results are saved directly
-				if(decode_rs == mem_rd && decode_rs != 0) decode_rs_data = mem_dataALU;
-				if(decode_rt == mem_rd && decode_rt != 0) decode_rt_data = mem_dataALU;
-			}
-
-			else
-			{
-				// Else, a little trickier
-				// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
-				// Otherwise, forward it!
-				if(!mem_inst(ex_op))
+			if(sc_cpu::cpu_opts[EX_ID_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			{	
+				if(r_inst(mem_op))
 				{
+					// R instructions write to RD, and their results are saved directly
 					if(decode_rs == mem_rd && decode_rs != 0) decode_rs_data = mem_dataALU;
 					if(decode_rt == mem_rd && decode_rt != 0) decode_rt_data = mem_dataALU;
 				}
 
 				else
 				{
-					we_pc = false;
-					we_plr_fetch = false;
-					this->flush_em_plr();
+					// Else, a little trickier
+					// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
+					// Otherwise, forward it!
+					if(!mem_inst(ex_op))
+					{
+						if(decode_rs == mem_rd && decode_rs != 0) decode_rs_data = mem_dataALU;
+						if(decode_rt == mem_rd && decode_rt != 0) decode_rt_data = mem_dataALU;
+					}
+
+					else
+					{
+						we_pc = false;
+						we_plr_fetch = false;
+						insertNoop = true;
+					}
 				}
 			}
 		}
@@ -319,7 +332,7 @@ namespace mips_tools
 			{
 					we_pc = false;
 					we_plr_fetch = false;
-					this->flush_em_plr();
+					insertNoop = true;
 			}
 		}
 
@@ -375,6 +388,29 @@ namespace mips_tools
 
 		// Basically part of "branch not taken" if not taken
 
+		// Do stalls accordingly, stall when the Read is at ID and the Write is at EX
+		if(sc_cpu::cpu_opts[EX_EX_INDEX].get_IntValue() == PATH_STALL_MODE)
+		{
+			// EX-EX is the most general, used for forwarding execution 
+		}
+
+		else if(sc_cpu::cpu_opts[MEM_EX_INDEX].get_IntValue() == PATH_STALL_MODE)
+		{
+			// MEM-EX replaces specific case of RAW for load-to-use scenarios.
+		}
+
+		else if(sc_cpu::cpu_opts[EX_ID_INDEX].get_IntValue() == PATH_STALL_MODE)
+		{
+			// EX-ID replaces specific case of RAW when writing from EX into ID in the case of a branch at ID (hazard)
+		}
+
+		else if(sc_cpu::cpu_opts[MEM_MEM_INDEX].get_IntValue() == PATH_STALL_MODE)
+		{
+			// MEM-MEM replaces specific load-to-use case of a Store following a Load
+			
+		}
+
+
 		/* Commit Transactions
 		 */
 		if(we_plr_fetch)
@@ -388,6 +424,13 @@ namespace mips_tools
 			this->mw_plr.load(mem_regWriteData, mem_regWE, mem_write_reg_num);
 		if(we_pc)
 			pc.set_data(pc_next);
+
+		// Now: Insert no-op if needed
+		if(insertNoop)
+		{
+			this->flush_de_plr();
+		}
+
 		return true;
 	}
 
@@ -402,26 +445,62 @@ namespace mips_tools
 
 	fsp_cpu::fsp_cpu(mmem & m) : sc_cpu(m)
 	{
+		std::string FORWARD_VALUE_STRING = "FORWARD";
+		std::string STALL_VALUE_STRING = "STALL";
+		std::string GLITCH_VALUE_STRING = "GLITCH";
+
 		sc_cpu::clk_T = 40000;
-		sc_cpu::cpu_opts.push_back(NameDescPair("--IFID", "print out the current instruction at this register"));
-		sc_cpu::cpu_opts.push_back(NameDescPair("--IDEX", "print out control signals set at this register"));
-		sc_cpu::cpu_opts.push_back(NameDescPair("--EXMEM", "print out control signals set at this register"));
-		sc_cpu::cpu_opts.push_back(NameDescPair("--MEMWB", "print out control signals set at this register"));
-		sc_cpu::cpu_opts.push_back(NameDescPair("--ASCII", "print out a ASCII representation of the pipeline registers"));
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify ex-ex forwarding behavior"));
+		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
+		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
+		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
+		
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_ID", "Specify ex-id forwarding behavior"));
+		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
+		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
+		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
+
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_EX", "Specify mem-ex forwarding behavior"));
+		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
+		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
+		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
+
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify mem-mem forwarding behavior"));
+		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
+		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(STALL_VALUE_STRING, 1);
+		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 	}
 
-	void fsp_cpu::exec_CPU_option(std::vector<std::string>& args)
+	void fsp_cpu::exec_CPU_option(std::vector<NameValueStringPair>& args)
 	{
 		for(size_t s = 1; s < args.size(); s++)
 		{
-			if(args[s] == "--IFID")
+			NameValueStringPair& v = args[s];
+			std::string& whichval = v.getName();
+
+			if(whichval == "PATH_EX_EX")
 			{
-				fprintf(stdout, "Instruction: 0x%x\n", this->fetch_plr.get_data());
+				sc_cpu::cpu_opts[EX_EX_INDEX].set_Value(v.getValue());
+			}
+
+			else if(whichval == "PATH_MEM_EX")
+			{
+				sc_cpu::cpu_opts[MEM_EX_INDEX].set_Value(v.getValue());
+			}
+
+			else if(whichval == "PATH_EX_ID")
+			{
+				sc_cpu::cpu_opts[EX_ID_INDEX].set_Value(v.getValue());
+			}
+
+			else if(whichval == "PATH_MEM_MEM")
+			{
+				sc_cpu::cpu_opts[MEM_MEM_INDEX].set_Value(v.getValue());
 			}
 
 			else
 			{
-				
+				throw mt_invalid_cpu_opt("Option does not exist.");
 			}
 		}
 	}

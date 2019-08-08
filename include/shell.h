@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include "mb.h"
+#include "primitives.h"
 #include "syms_table.h"
 #include "streams.h"
 
@@ -36,6 +37,13 @@ namespace mipsshell
 	 * Acknowledges escaping \ and quotes
 	 */
 	std::vector<std::string> chop_string(std::string & input);
+
+	/* Searches a vector of strings
+	 * for value assignment pairs
+	 * These consist of string with EXACT format:
+	 * NAME=VALUE
+	 */
+	std::vector<mips_tools::NameValueStringPair> scan_for_values(std::vector<std::string>& input);
 
 	/* A single instance of a Shell
 	 * -

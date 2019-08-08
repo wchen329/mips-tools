@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\cpuoption.cpp" />
     <ClCompile Include="..\src\cpu_time.cpp" />
     <ClCompile Include="..\src\format_chk.cpp" />
     <ClCompile Include="..\src\interpret.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="..\include\branding.h" />
     <ClInclude Include="..\include\buffer_events.h" />
     <ClInclude Include="..\include\cpu.h" />
+    <ClInclude Include="..\include\cpuoption.h" />
     <ClInclude Include="..\include\cpu_time.h" />
     <ClInclude Include="..\include\debugview.h" />
     <ClInclude Include="..\include\diag_cpu.h" />

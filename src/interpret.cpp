@@ -51,10 +51,10 @@ namespace mips_tools
 		mips_tools::opcode current_op = mips_tools::SYS_RES;
 		mips_tools::funct f_code = mips_tools::NONE;
 
-		int rs = -1;
-		int rt = -1;
-		int rd = -1;
-		int imm = -1;
+		int rs = 0;
+		int rt = 0;
+		int rd = 0;
+		int imm = 0;
 
 		// Mnemonic resolution
 		

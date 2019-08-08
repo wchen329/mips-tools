@@ -35,7 +35,8 @@ namespace mips_tools
 			GENERAL = 0,
 			REGISTER_OOB = 1,
 			MEMORY_OOB = 2,
-			INVALID_RANGE = 3
+			INVALID_RANGE = 3,
+			INVALID_CPU_OPT = 4
 		};
 	}
 
@@ -84,6 +85,17 @@ namespace mips_tools
 			{
 				mt_exception::except_num = exception_nums::INVALID_RANGE;
 				mt_exception::message = "Invalid range specifer: " + std::string(info);
+			}
+	};
+
+	// Invalid CPU Option Error
+	class mt_invalid_cpu_opt : public mt_exception
+	{
+		public:
+			mt_invalid_cpu_opt(const char * info)
+			{
+				mt_exception::except_num = exception_nums::INVALID_CPU_OPT;
+				mt_exception::message = "Invalid CPU Option: " + std::string(info);
 			}
 	};
 }

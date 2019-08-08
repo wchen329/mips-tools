@@ -214,6 +214,21 @@ namespace mips_tools
 			std::string desc;
 	};
 
+	/* Just a collection of two strings
+	 * Name - the name of this object
+	 * Value - the string value of this object
+	 */
+	class NameValueStringPair
+	{
+		public:
+			std::string& getName() { return this->name; }
+			std::string& getValue() { return this->value; }
+			NameValueStringPair(std::string name_of, std::string value_of) : name(name_of), value(value_of) {}
+		private:
+			std::string name;
+			std::string value;
+	};
+
 	enum HighLevelType
 	{
 		T_NONE,

@@ -44,10 +44,10 @@ namespace mips_tools
 			void ghost_cycle();
 			sc_cpu(mmem & m) : mm(m), clk_T(200000) {  }
 			ISA& get_ISA() { return this->isa; }
-			std::vector<NameDescPair>& get_CPU_options() { return this->cpu_opts; }
-			void exec_CPU_option(std::vector<std::string> &) {}
+			std::vector<CPU_Option>& get_CPU_options() { return this->cpu_opts; }
+			void exec_CPU_option(std::vector<NameValueStringPair> &) {}
 		protected:
-			std::vector<NameDescPair> cpu_opts;
+			std::vector<CPU_Option> cpu_opts;
 			char mem_req_load(int index); // sends a load memory request from CPU to MMEM. The ind is the offset from address 0x0
 			void mem_req_write(char data, int index); // sends a write memory request from CPU To MMEM. The ind is the offset from address 0x0
 			static const int REG_COUNT = 32;

@@ -120,7 +120,7 @@ namespace mipsshell
 		mips_tools::cpu& c = inst.GetMotherboard().get_cpu();
 		mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(c);
 		
-		std::vector<mips_tools::NameDescPair>& v = dcpu.get_CPU_options();
+		std::vector<mips_tools::CPU_Option>& v = dcpu.get_CPU_options();
 
 		if(args.size() <= 1)
 		{
@@ -134,17 +134,49 @@ namespace mipsshell
 			{
 				for(size_t s = 0; s < v.size(); s++)
 				{
-					std::string o = (v[s].getName() + " - " + v[s].getDescription() + priscas_io::newLine);
+					std::string o = (v[s].getName() + "\n\t" + v[s].getDescription() + priscas_io::newLine);
 					inst.WriteToOutput(o);
-				}
-			}
+					std::vector<std::string>& posVal_vector = v[s].get_SValues();
 
-			inst.WriteToOutput(("To execute an option just enter .cpuopts [option 1] ... [option n] into the shell\n"));
+					if(posVal_vector.size() > 0)
+					{
+						std::string posVals = "\tPossible Values: ";
+
+						for(size_t vind = 0; vind < posVal_vector.size(); vind++)
+						{
+							posVals += (posVal_vector[vind] + " ");
+						}
+
+						posVals += priscas_io::newLine;
+						
+						inst.WriteToOutput(posVals);
+					}
+
+					std::string curVal = "Current Value: ";
+					curVal += v[s].getValueName();
+					curVal += priscas_io::newLine;
+					inst.WriteToOutput(curVal);
+				}
+
+				inst.WriteToOutput(("To execute an option just enter\n"));
+				inst.WriteToOutput(".cpuopts [option 1]=[value 1] ... into the shell\n");
+				inst.WriteToOutput("If no possible values are specified for an option, omit \'=\':\n");
+				inst.WriteToOutput(".cpuopts [option 1]\n");
+			}
 		}
 
 		else
 		{
-			dcpu.exec_CPU_option(args);
+			try
+			{
+				dcpu.exec_CPU_option(scan_for_values(args));
+			}
+
+			catch(mips_tools::mt_exception& mte)
+			{
+				inst.WriteToOutput("An error has occurred while processing CPU options\n");
+				inst.WriteToOutput(mte.get_err());
+			}
 		}
 	}
 
