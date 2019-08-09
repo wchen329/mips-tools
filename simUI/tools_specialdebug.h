@@ -5,6 +5,7 @@
 #include <QTreeView>
 #include <QTableView>
 #include <QTreeWidget>
+#include <vector>
 #include "diag_cpu.h"
 
 namespace Ui {
@@ -20,8 +21,16 @@ public:
     void setCPU(mips_tools::diag_cpu& dcpu);
     ~tools_specialdebug();
 
+
+private slots:
+    void on_comboBox_Views_currentIndexChanged(int index);
+
 private:
     Ui::tools_specialdebug *ui;
+    std::vector<QWidget*> views;
+    QWidget* foregroundWidget;
+    std::vector<QWidget*> wList;
+    void setWidgetInForeground(QWidget *);
 };
 
 #endif // TOOLS_SPECIALDEBUG_H
