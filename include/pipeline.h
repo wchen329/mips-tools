@@ -26,6 +26,7 @@
 #include "reg_32.h"
 #include "reg_pipeline.h"
 #include "sc_cpu.h"
+#include "streams.h"
 namespace mips_tools
 {
 	/* A 5-stage (FS)
@@ -55,11 +56,16 @@ namespace mips_tools
 			static const int EX_ID_INDEX = 1;
 			static const int MEM_EX_INDEX = 2;
 			static const int MEM_MEM_INDEX = 3;
-			const DebugTree_Simple* ifid_dbg;
-			const DebugTree_Simple* idex_dbg;
-			const DebugTree_Simple* exmem_dbg;
-			const DebugTree_Simple* memwb_dbg;
+			DebugTree_Simple* ifid_dbg;
+			DebugTree_Simple* idex_dbg;
+			DebugTree_Simple* exmem_dbg;
+			DebugTree_Simple* memwb_dbg;
 			
+			// Special names
+			const std::string DBG_INSTRUCTION_WORD;
+			const std::string DBG_MEMWB_REGWE;
+			const std::string DBG_MEMWB_WRITE_DATA;
+			const std::string DBG_MEMWB_TARGET_REG;
 	};
 }
 

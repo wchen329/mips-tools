@@ -27,6 +27,7 @@
 
 namespace mips_tools
 {
+
 	/* Simple DebugTreeNode
 	 * A tree node that has a name and a string value
 	 */
@@ -41,7 +42,7 @@ namespace mips_tools
 			// Child related functions
 			void addChild(DebugTreeNode_Simple * dtns); // Child is managed by the tree node itself
 			DebugTreeNode_Simple* findChild(const std::string& name);
-			std::list<DebugTreeNode> getAllChildren();
+			std::list<DebugTreeNode_Simple*> getAllChildren() { return this->children; }
 
 			DebugTreeNode_Simple() {}
 
@@ -70,9 +71,8 @@ namespace mips_tools
 	{
 		public:
 			DebugTreeNode_Simple& rootNode() { return root; }
-			DebugTreeNode_Simple& findChild(std::string name); // Find a NODE given a name
-			void addChild(std::string name, std::string value);	// Add a new child node to this tree.
-			std::list<DebugTreeNode_Simple> getChildren(); // Get all the children nodes of the root
+			DebugTreeNode_Simple* findChild(std::string name) { return root.findChild(name); } // Find a NODE given a name
+			void addChild(std::string name, std::string value) { root.addChild(new DebugTreeNode_Simple(name, value)); }	// Add a new child node to this tree.
 		private:
 			DebugTreeNode_Simple root;
 	};

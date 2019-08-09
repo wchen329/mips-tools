@@ -48,6 +48,7 @@ namespace mips_tools
 			std::vector<CPU_Option>& get_CPU_options() { return this->cpu_opts; }
 			void exec_CPU_option(std::vector<NameValueStringPair> &) {}
 			std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
+			~sc_cpu() { for(size_t w = 0; w < debug_views.size(); w++) delete debug_views[w]; }
 		protected:
 			std::vector<DebugView*> debug_views;
 			std::vector<CPU_Option> cpu_opts;

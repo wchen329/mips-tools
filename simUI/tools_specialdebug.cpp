@@ -45,6 +45,17 @@ void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
                         qtwi->setText(0, dbgsl->get_DebugTrees()[ind]->rootNode().getName().c_str());
                         qtw->addTopLevelItem(qtwi);
 
+                        std::list<mips_tools::DebugTreeNode_Simple*>& rc = dbgsl->get_DebugTrees()[ind]->rootNode().getAllChildren();
+                        if(!rc.empty())
+                        {
+                            for(std::list<mips_tools::DebugTreeNode_Simple*>::iterator ca = rc.begin(); ca != rc.end(); ca++)
+                            {
+                                mips_tools::DebugTreeNode_Simple* t = *ca;
+                                QTreeWidgetItem * qtwi_c = new QTreeWidgetItem();
+                                qtwi_c->setText(0, QString(t->getName().c_str()) + QString(": ") + QString(t->getValue().c_str()));
+                                qtwi->addChild(qtwi_c);
+                            }
+                        }
                     }
 
                     ui->comboBox_Views->addItem(viewName.c_str());
@@ -60,6 +71,11 @@ void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
 tools_specialdebug::~tools_specialdebug()
 {
     delete ui;
+
+    for(size_t w = 0; w < this->wList.size(); w++)
+    {
+        delete wList[w];
+    }
 }
 
 void tools_specialdebug::setWidgetInForeground(QWidget * fwidget)

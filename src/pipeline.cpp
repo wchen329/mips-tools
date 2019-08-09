@@ -400,6 +400,17 @@ namespace mips_tools
 		if(we_pc)
 			pc.set_data(pc_next);
 
+		// Set probes
+		this->ifid_dbg->findChild(DBG_INSTRUCTION_WORD)->setValue(fetch_plr.get_data().toHexString());
+
+		BW_32 db_mwdata;
+		bool db_mwRegWE;
+		int db_mwRNum;
+		this->mw_plr.get(db_mwdata, db_mwRegWE, db_mwRNum);
+		this->memwb_dbg->findChild(DBG_MEMWB_TARGET_REG)->setValue(priscas_io::StrTypes::Int32ToStr(db_mwRNum));
+		this->memwb_dbg->findChild(DBG_MEMWB_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(wb_regWE));
+		this->memwb_dbg->findChild(DBG_MEMWB_WRITE_DATA)->setValue(db_mwdata.toHexString());
+
 		return true;
 	}
 
@@ -412,7 +423,12 @@ namespace mips_tools
 		this->mw_plr.load(0,0,0);
 	}
 
-	fsp_cpu::fsp_cpu(mmem & m) : sc_cpu(m)
+	fsp_cpu::fsp_cpu(mmem & m) :
+		sc_cpu(m),
+		DBG_INSTRUCTION_WORD("Instruction Word"),
+		DBG_MEMWB_REGWE("Register Write Enable (RegWE)"),
+		DBG_MEMWB_WRITE_DATA("Write Data"),
+		DBG_MEMWB_TARGET_REG("Target Register Number")
 	{
 		std::string FORWARD_VALUE_STRING = "FORWARD";
 		std::string STALL_VALUE_STRING = "STALL";
@@ -441,6 +457,20 @@ namespace mips_tools
 		this->idex_dbg = pipeline_register_list_dbg->newTree("ID/EX Pipeline Register", "");
 		this->exmem_dbg = pipeline_register_list_dbg->newTree("EX/MEM Pipeline Register", "");
 		this->memwb_dbg = pipeline_register_list_dbg->newTree("MEM/WB Pipeline Register", "");
+
+		// Add probes for IF/ID
+		ifid_dbg->addChild(this->DBG_INSTRUCTION_WORD, "");
+
+		// Add probes for ID/EX
+
+		// Add probes for EX/MEM
+
+		// Add probes for MEM/WB
+		memwb_dbg->addChild(this->DBG_MEMWB_REGWE, "");
+		memwb_dbg->addChild(this->DBG_MEMWB_TARGET_REG, "");
+		memwb_dbg->addChild(this->DBG_MEMWB_WRITE_DATA, "");
+		
+		
 		sc_cpu::debug_views.push_back(pipeline_register_list_dbg);
 	}
 

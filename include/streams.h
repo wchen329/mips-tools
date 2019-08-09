@@ -61,6 +61,7 @@ namespace priscas_io
 	class StrTypes
 	{
 		public:
+			static std::string BoolToStr(bool in) { return in ? "true" : "false"; }
 			static std::string IntToStr(int in);
 			static std::string Int32ToStr(long in);
 			static std::string UIntToStr(unsigned in);

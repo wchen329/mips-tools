@@ -27,7 +27,6 @@ private slots:
 
 private:
     Ui::tools_specialdebug *ui;
-    std::vector<QWidget*> views;
     QWidget* foregroundWidget;
     std::vector<QWidget*> wList;
     void setWidgetInForeground(QWidget *);
