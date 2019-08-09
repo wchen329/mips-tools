@@ -40,6 +40,8 @@ namespace mips_tools
 		// Mnemonic resolution
 		
 		if("add" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADD; }
+		else if("addiu" == args[0]) { current_op = mips_tools::ADDIU; }
+		else if("addu" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::ADDU; }
 		else if("addi" == args[0]) { current_op = mips_tools::ADDI; }
 		else if("beq" == args[0]) { current_op = mips_tools::BEQ; }
 		else if("bne" == args[0]) { current_op = mips_tools::BNE; }

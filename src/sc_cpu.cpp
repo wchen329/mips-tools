@@ -80,6 +80,10 @@ namespace mips_tools
 						reg_wdata = (this->registers[rs].get_data().AsInt32() + this->registers[rt].get_data().AsInt32());
 						r_write = rd;
 						break;
+					case ADDU:
+						reg_wdata = (this->registers[rs].get_data().AsUInt32() + this->registers[rt].get_data().AsUInt32());
+						r_write = rd;
+						break;
 					case JR:
 						this->pc.set_data(this->registers[rs].get_data().AsInt32());
 						break;
@@ -125,6 +129,10 @@ namespace mips_tools
 				{
 					case ADDI:
 						reg_wdata = this->registers[rs].get_data().AsInt32() + imm;
+						r_write = rt;
+						break;
+					case ADDIU:
+						reg_wdata = this->registers[rs].get_data().AsUInt32() + static_cast<unsigned int>(imm);
 						r_write = rt;
 						break;
 					case BEQ:

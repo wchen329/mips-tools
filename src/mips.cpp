@@ -194,7 +194,7 @@ namespace mips_tools
 	bool mem_read_inst(opcode operation)
 	{
 		return
-			(operation == LW || operation == LB || operation == LH )?
+			(operation == LW || operation == LBU || operation == LHU )?
 			true : false;
 	}
 
