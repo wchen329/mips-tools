@@ -1,0 +1,32 @@
+#include <winver.h>
+#include <Windows.h>
+
+1 VERSIONINFO
+FILEVERSION     0,2,2019,7
+PRODUCTVERSION  0,2,2019,7
+FILEFLAGSMASK   0x3F
+FILEFLAGS       0x0
+FILEOS          VOS__WINDOWS32
+FILETYPE        VFT_APP
+FILESUBTYPE     0x0
+{
+		BLOCK "StringFileInfo"
+		{
+			BLOCK "040904B0"
+			{
+				VALUE "CompanyName", "Winor Chen"
+				VALUE "FileVersion", "0.2.2019.7"
+				Value "FileDescription", "PRISCAS simUI"
+				VALUE "InternalName", "PRISCAS_Shell"
+				VALUE "LegalCopyright", "Copyright (c) 2019 Winor Chen"
+				VALUE "OriginalFilename", "pshell.exe"
+				VALUE "ProductName", "PRISCAS Shell"
+				VALUE "ProductVersion", "0.2.2019.7"
+			}
+		}
+
+		BLOCK "VarFileInfo"
+		{
+			Value "Translation", 0x409, 1200
+		}
+}

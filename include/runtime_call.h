@@ -25,7 +25,6 @@
 #include <map>
 #include <vector>
 #include "diag_cpu.h"
-#include "debugview.h"
 #include "mem.h"
 #include "mb.h"
 #include "messages.h"

@@ -23,6 +23,7 @@
 #include <vector>
 #include "cpu.h"
 #include "cpuoption.h"
+#include "debug_view.h"
 #include "mips.h"
 #include "primitives.h"
 
@@ -39,6 +40,7 @@ namespace mips_tools
 				virtual void ghost_cycle() = 0;	// ghost cycle- essentially cycling with a NO-OP, advances the PC.
 				virtual BW_32& get_PC() = 0;	// get current PC value
 				virtual std::vector<CPU_Option>& get_CPU_options() = 0;
+				virtual std::vector<DebugView*>& get_DebugViews() = 0;
 				virtual void exec_CPU_option(std::vector<NameValueStringPair> &) = 0;	// execute a special CPU specific option
 	};
 }

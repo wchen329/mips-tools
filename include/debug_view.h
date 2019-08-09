@@ -39,12 +39,12 @@ namespace mips_tools
 	
 			enum DBGType
 			{
+				SIMPLE_TREE_LIST,
 				TREE,
 				TABLE
 			};
 
 			virtual DBGType getDBGType() = 0;
-			virtual operator std::string() const = 0;
 	};
 
 	/* A tree node

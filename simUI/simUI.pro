@@ -54,6 +54,9 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../PRISCAS/debug/ -lmtc
 
 win32:CONFIG(release, debug|release): DEFINES += WIN32
 
+RC_INCLUDEPATH = $$PWD/version.rc
+RC_ICONS = $$PWD/../art/icon/priscas_icon_big.ico $$PWD/../art/icon/priscas_icon_48.ico $$PWD/../art/icon/priscas_icon_64.ico
+
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
 

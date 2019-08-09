@@ -97,6 +97,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="..\PRISCAS\picon.rc" />
     <ResourceCompile Include="..\PRISCAS\version.rc">
       <FileType>Text</FileType>
     </ResourceCompile>

@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\cpuoption.cpp" />
     <ClCompile Include="..\src\cpu_time.cpp" />
+    <ClCompile Include="..\src\debug_view_simple.cpp" />
     <ClCompile Include="..\src\format_chk.cpp" />
     <ClCompile Include="..\src\interpret.cpp" />
     <ClCompile Include="..\src\mem.cpp" />
@@ -104,7 +105,8 @@
     <ClInclude Include="..\include\cpu.h" />
     <ClInclude Include="..\include\cpuoption.h" />
     <ClInclude Include="..\include\cpu_time.h" />
-    <ClInclude Include="..\include\debugview.h" />
+    <ClInclude Include="..\include\debug_view.h" />
+    <ClInclude Include="..\include\debug_view_simple.h" />
     <ClInclude Include="..\include\diag_cpu.h" />
     <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\interpret.h" />

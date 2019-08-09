@@ -80,6 +80,9 @@
     <ClCompile Include="..\src\cpuoption.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\debug_view_simple.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -166,13 +169,16 @@
     <ClInclude Include="..\include\streams.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\debugview.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\osi.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\cpuoption.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\debug_view_simple.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\debug_view.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

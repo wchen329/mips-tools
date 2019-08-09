@@ -434,6 +434,14 @@ namespace mips_tools
 		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify mem-mem forwarding behavior"));
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
+
+		DebugTree_Simple_List* pipeline_register_list_dbg = new DebugTree_Simple_List;
+		pipeline_register_list_dbg->setName("Pipeline Register Inspector");
+		this->ifid_dbg = pipeline_register_list_dbg->newTree("IF/ID Pipeline Register", "");
+		this->idex_dbg = pipeline_register_list_dbg->newTree("ID/EX Pipeline Register", "");
+		this->exmem_dbg = pipeline_register_list_dbg->newTree("EX/MEM Pipeline Register", "");
+		this->memwb_dbg = pipeline_register_list_dbg->newTree("MEM/WB Pipeline Register", "");
+		sc_cpu::debug_views.push_back(pipeline_register_list_dbg);
 	}
 
 	void fsp_cpu::exec_CPU_option(std::vector<NameValueStringPair>& args)
