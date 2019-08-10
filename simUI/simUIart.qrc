@@ -8,5 +8,6 @@
         <file>art/flag-green.png</file>
         <file>art/arrow-right.png</file>
         <file>art/arrow-right-double.png</file>
+        <file>art/priscas_icon_24.ico</file>
     </qresource>
 </RCC>
