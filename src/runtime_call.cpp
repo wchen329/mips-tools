@@ -164,7 +164,8 @@ namespace mipsshell
 		{
 			try
 			{
-				dcpu.exec_CPU_option(scan_for_values(args));
+				std::vector<mips_tools::NameValueStringPair> nvsp = scan_for_values(args);
+				dcpu.exec_CPU_option(nvsp);
 			}
 
 			catch(mips_tools::mt_exception& mte)
