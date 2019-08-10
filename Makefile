@@ -4,8 +4,8 @@ VPATH = src:build
 BIN_DIR = bin
 LIB_DIR = build
 CFLAGS = -g -I"$(INCLUDE)"
-OBJS = format_chk.o cpu_time.o interpret.o mb.o mem.o messages.o mips.o mmem.o mtsstream.o \
-	parser_err.o pipeline.o primitives.o range.o reg_32.o reg_pipeline.o runtime_call.o sc_cpu.o \
+OBJS = cpuoption.o debug_view_simple.o format_chk.o cpu_time.o interpret.o mb.o mem.o messages.o mips.o mmem.o mtsstream.o \
+	pipeline.o primitives.o range.o reg_32.o reg_pipeline.o runtime_call.o sc_cpu.o \
 	shell.o streams.o states.o superscalar.o syms_table.o osi.o
 SHELL_MAIN = shell_entry.o
 INCLUDE = include
