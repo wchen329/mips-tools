@@ -1,4 +1,5 @@
 #include "aboutdialog.h"
+#include "branding.h"
 #include "ui_aboutdialog.h"
 
 aboutDialog::aboutDialog(QWidget *parent) :
@@ -10,12 +11,14 @@ aboutDialog::aboutDialog(QWidget *parent) :
     ui->layoutAbout->addWidget(ui->textEditAbout);
     ui->layoutAbout->addWidget(ui->pushButton);
 
+    std::string VerNotice = std::string("Version ") + std::string(PRISCAS_BRANDING_FULL_VERSION_STRING) + std::string("\n\n");
+
     //ui->layoutAbout->addItem();
     this->setLayout(ui->layoutAbout);
     ui->textEditAbout->
             append("PRISCAS simUI - GUI frontend for PRISCAS\n");
     ui->textEditAbout->
-            append("Version 0.2.2019.7\n\n");
+            append(VerNotice.c_str());
     ui->textEditAbout->
             append("This software is licensed under the GNU General Public License (GPL) Version 2.\n");
     ui->textEditAbout->
