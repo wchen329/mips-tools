@@ -16,6 +16,7 @@ testing/tests/winnt_test.exe.metagen
 testing/tests/winnt_test.ilk
 testing/tests/winnt_test.pdb
 testing/tests/unix_test
+*.swp
 *.o
 *.un~
 *~
