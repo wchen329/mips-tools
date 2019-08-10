@@ -55,6 +55,7 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../PRISCAS/debug/ -lmtc
 win32:CONFIG(release, debug|release): DEFINES += WIN32
 
 RC_FILE = $$PWD/../simUI/version.rc
+RC_INCLUDEPATH += $$PWD/../include
 
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include

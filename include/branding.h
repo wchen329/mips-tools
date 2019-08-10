@@ -21,6 +21,12 @@
 #ifndef __BRANDING_H__
 #define __BRANDING_H__
 
+// These predefines are specifically used for Windows Resource Compiler
+#define PRISCAS_BRANDING_AUTHOR "Winor Chen"
+#define PRISCAS_BRANDING_FULL_VERSION_STRING "0.2.2019.8"
+#define PRISCAS_BRANDING_COPYRIGHT "Copyright (c) 2019 Winor Chen"
+#define PRISCAS_BRANDING_FULL_VERSION 0,2,2019,8
+
 /* Header that includes information about project name, description, and versioning, etc., etc.
  * wchen329
  */
