@@ -16,11 +16,11 @@ FILESUBTYPE     0x0
 			{
 				VALUE "CompanyName", "Winor Chen"
 				VALUE "FileVersion", "0.2.2019.7"
-				Value "FileDescription", "PRISCAS simUI"
-				VALUE "InternalName", "PRISCAS_Shell"
+				VALUE "FileDescription", "PRISCAS simUI"
+				VALUE "InternalName", "PRISCAS simUI"
 				VALUE "LegalCopyright", "Copyright (c) 2019 Winor Chen"
 				VALUE "OriginalFilename", "pshell.exe"
-				VALUE "ProductName", "PRISCAS Shell"
+				VALUE "ProductName", "PRISCAS simUI"
 				VALUE "ProductVersion", "0.2.2019.7"
 			}
 		}
@@ -30,3 +30,5 @@ FILESUBTYPE     0x0
 			Value "Translation", 0x409, 1200
 		}
 }
+
+1 ICON "../art/icon/priscas_icon_win32.ico"

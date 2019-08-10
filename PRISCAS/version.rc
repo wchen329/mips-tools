@@ -30,3 +30,5 @@ FILESUBTYPE     0x0
 			Value "Translation", 0x409, 1200
 		}
 }
+
+1 ICON "../art/icon/priscas_icon_win32.ico"

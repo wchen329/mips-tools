@@ -110,13 +110,6 @@ namespace mips_tools
 			void setRootNode(std::shared_ptr<DebugTreeNode> n) { this->root = n; }
 			DebugTree() : root(nullptr) { }
 
-			operator std::string() const
-			{
-				// todo
-				return "";
-			}
-
-
 		private:
 			std::shared_ptr<DebugTreeNode> root;
 	};
@@ -200,11 +193,6 @@ namespace mips_tools
 			}
 
 			const std::vector<TablePoint>& getDefinedPtList() { return this->pts;}
-
-			operator std::string() const
-			{
-				return "";// todo
-			}
 
 		private:
 			DType nullDType;

@@ -470,7 +470,6 @@ namespace mips_tools
 		memwb_dbg->addChild(this->DBG_MEMWB_TARGET_REG, "");
 		memwb_dbg->addChild(this->DBG_MEMWB_WRITE_DATA, "");
 		
-		
 		sc_cpu::debug_views.push_back(pipeline_register_list_dbg);
 	}
 

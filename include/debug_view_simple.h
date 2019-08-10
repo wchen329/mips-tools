@@ -96,6 +96,8 @@ namespace mips_tools
 		private:
 			std::vector<DebugTree_Simple*> trees;
 	};
+
+	typedef mips_tools::DebugTableSingleType<std::string> DebugTableStringValue;
 }
 
 #endif
