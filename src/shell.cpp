@@ -211,35 +211,44 @@ namespace mipsshell
 			char input_f_stream[255];
 			memset(input_f_stream, 0, sizeof(input_f_stream));
 			unsigned long line_number = 0;
-			while(fgets(input_f_stream, 254, inst_file) != NULL)
+			try
 			{
-				line_number++;
-				std::string current_line = std::string(input_f_stream);
-				std::vector<std::string> parts = chop_string(current_line);
+				while(fgets(input_f_stream, 254, inst_file) != NULL)
+				{
+					line_number++;
+					std::string current_line = std::string(input_f_stream);
+					std::vector<std::string> parts = chop_string(current_line);
 	
-				// Remove strings that are just whitespace
-				if(parts.empty())
-					continue;
+					// Remove strings that are just whitespace
+					if(parts.empty())
+						continue;
 
-				// Symbol assignment: add the symbol to symbol table
+					// Symbol assignment: add the symbol to symbol table
 					
-				if(parts[0][parts[0].size() - 1] == ':')
-				{
-					this->jump_syms.insert(parts[0].substr(0, parts[0].size() - 1), equiv_pc);
-					continue;
-				}
+					if(parts[0][parts[0].size() - 1] == ':')
+					{
+						this->jump_syms.insert(parts[0].substr(0, parts[0].size() - 1), equiv_pc);
+						continue;
+					}
 
-				if(parts[0][0] == '.')
-				{
-					this->directive_syms.insert(current_line, equiv_pc);
-					continue;
-				}
+					if(parts[0][0] == '.')
+					{
+						this->directive_syms.insert(current_line, equiv_pc);
+						continue;
+					}
 
-				this->line_number_to_PC.insert(std::pair<unsigned long, unsigned long>(line_number, equiv_pc));
-				this->PC_to_line_number.insert(std::pair<unsigned long, unsigned long>(equiv_pc, line_number));
-				this->PC_to_line_string.insert((std::pair<unsigned long, std::string>(equiv_pc, current_line)));
-				equiv_pc = equiv_pc + 4;
-				lines.push_back(current_line);		
+					this->line_number_to_PC.insert(std::pair<unsigned long, unsigned long>(line_number, equiv_pc));
+					this->PC_to_line_number.insert(std::pair<unsigned long, unsigned long>(equiv_pc, line_number));
+					this->PC_to_line_string.insert((std::pair<unsigned long, std::string>(equiv_pc, current_line)));
+					equiv_pc = equiv_pc + 4;
+					lines.push_back(current_line);		
+				}
+			}
+			catch(mips_tools::mt_exception& e)
+			{
+				WriteToOutput("An error has occurred when writing debugging symbols and assigning directives:\n\t");
+				WriteToOutput(e.get_err().c_str());
+				return;
 			}
 
 			// Add pre-declared program breakpoints, if any
@@ -379,6 +388,8 @@ namespace mipsshell
 					}
 				}
 
+				motherboard->step();
+
 				if(this->has_prog_break_at(dcpu.get_PC().AsUInt32()))
 				{
 					mipsshell::SUSPEND = true;
@@ -399,8 +410,6 @@ namespace mipsshell
 					std::string o = (std::string("Breakpoint at cycle " + priscas_io::StrTypes::UInt32ToStr(motherboard->get_cycles()) + " hit.\n"));
 					WriteToOutput(o);
 				}
-
-				motherboard->step();
 			}
 		}
 	}
