@@ -70,8 +70,8 @@ void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
                     mips_tools::DebugTableStringValue* dbs = dynamic_cast<mips_tools::DebugTableStringValue*>(dbg[w]);
                     ui->comboBox_Views->addItem("Pipeline Diagram");
                     wList.push_back(qtw);
-                    qtw->setRowCount(dbs->getMaxDefY());\
-                    qtw->setColumnCount(dbs->getMaxDefX());
+                    qtw->setRowCount(dbs->getMaxDefY() + 1);\
+                    qtw->setColumnCount(dbs->getMaxDefX() + 1);
                     const std::vector<mips_tools::TablePointStringV>& tbp = dbs->getDefinedPtList();
                     for(size_t tc = 0; tc < tbp.size(); tc++)
                     {

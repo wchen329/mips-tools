@@ -417,6 +417,7 @@ namespace mips_tools
 		// Set pipeline diagram instruction signatures
 		
 		// Instructions never stall at write back, if downstream stall causes stale data, don't record it
+		
 		if(this->wb_sig != this->mem_sig)
 		{
 			this->wb_sig = this->mem_sig;
@@ -426,17 +427,17 @@ namespace mips_tools
 			this->wb_sig = -1;
 		}
 
-		if(we_plr_mw)
+		if(we_plr_em)
 		{
 			this->mem_sig = this->ex_sig;
 		}
 
-		if(we_plr_em)
+		if(we_plr_de && !branch_taken)
 		{
 			this->ex_sig = this->id_sig;
 		}
 
-		if(we_plr_de && !branch_taken)
+		if(we_plr_fetch)
 		{
 			this->id_sig = this->if_sig;
 		}
