@@ -381,10 +381,13 @@ namespace mips_tools
 		);
 
 		if(!branch_taken)
+		{
 			pc_next = pc.get_data().AsUInt32() + 4;
+		}
 		else
+		{
 			this->flush_fetch_plr();
-
+		}
 
 		/* Commit Transactions
 		 */
@@ -411,6 +414,60 @@ namespace mips_tools
 		this->memwb_dbg->findChild(DBG_MEMWB_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(wb_regWE));
 		this->memwb_dbg->findChild(DBG_MEMWB_WRITE_DATA)->setValue(db_mwdata.toHexString());
 
+		// Set pipeline diagram instruction signatures
+		this->wb_sig = this->mem_sig;
+
+		if(we_plr_mw)
+		{
+			this->mem_sig = this->ex_sig;
+		}
+
+		if(we_plr_em)
+		{
+			this->ex_sig = this->id_sig;
+		}
+
+		if(we_plr_de && !branch_taken)
+		{
+			this->id_sig = this->if_sig;
+		}
+
+		if(we_plr_fetch)
+		{
+			this->if_sig = this->next_sig;
+			this->next_sig++;
+		}
+
+		int table_cycle = static_cast<int>(this->current_cycle_num);
+
+		// Write pipelining diagram entries
+		if(this->if_sig >= 0)
+		{
+			this->pipeline_diagram->setData(table_cycle, if_sig, "F");
+		}
+
+		if(this->id_sig >= 0)
+		{
+			this->pipeline_diagram->setData(table_cycle, id_sig, "D");
+		}
+
+		if(this->ex_sig >= 0)
+		{
+			this->pipeline_diagram->setData(table_cycle, ex_sig, "X");
+		}
+
+		if(this->mem_sig >= 0)
+		{
+			this->pipeline_diagram->setData(table_cycle, mem_sig, "M");
+		}
+
+		if(this->wb_sig >= 0)
+		{
+			this->pipeline_diagram->setData(table_cycle, wb_sig, "W");
+		}
+
+		this->current_cycle_num++;
+
 		return true;
 	}
 
@@ -428,7 +485,14 @@ namespace mips_tools
 		DBG_INSTRUCTION_WORD("Instruction Word"),
 		DBG_MEMWB_REGWE("Register Write Enable (RegWE)"),
 		DBG_MEMWB_WRITE_DATA("Write Data"),
-		DBG_MEMWB_TARGET_REG("Target Register Number")
+		DBG_MEMWB_TARGET_REG("Target Register Number"),
+		next_sig(0),
+		if_sig(-1),
+		id_sig(-1),
+		ex_sig(-1),
+		mem_sig(-1),
+		wb_sig(-1),
+		current_cycle_num(0)
 	{
 		std::string FORWARD_VALUE_STRING = "FORWARD";
 		std::string STALL_VALUE_STRING = "STALL";
@@ -452,6 +516,7 @@ namespace mips_tools
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
 		DebugTree_Simple_List* pipeline_register_list_dbg = new DebugTree_Simple_List;
+		this->pipeline_diagram = new DebugTableStringValue;
 		pipeline_register_list_dbg->setName("Pipeline Register Inspector");
 		this->ifid_dbg = pipeline_register_list_dbg->newTree("IF/ID Pipeline Register", "");
 		this->idex_dbg = pipeline_register_list_dbg->newTree("ID/EX Pipeline Register", "");
@@ -471,6 +536,7 @@ namespace mips_tools
 		memwb_dbg->addChild(this->DBG_MEMWB_WRITE_DATA, "");
 		
 		sc_cpu::debug_views.push_back(pipeline_register_list_dbg);
+		sc_cpu::debug_views.push_back(pipeline_diagram);
 	}
 
 	void fsp_cpu::exec_CPU_option(std::vector<NameValueStringPair>& args)

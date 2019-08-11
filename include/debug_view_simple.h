@@ -98,6 +98,7 @@ namespace mips_tools
 	};
 
 	typedef mips_tools::DebugTableSingleType<std::string> DebugTableStringValue;
+	typedef mips_tools::TablePoint<std::string> TablePointStringV;
 }
 
 #endif

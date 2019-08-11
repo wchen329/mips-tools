@@ -60,7 +60,17 @@ namespace mips_tools
 			DebugTree_Simple* idex_dbg;
 			DebugTree_Simple* exmem_dbg;
 			DebugTree_Simple* memwb_dbg;
+			DebugTableStringValue * pipeline_diagram;
 			
+			// Signatures of Instructions, for pipelining diagrams
+			int next_sig;
+			int if_sig;
+			int id_sig;
+			int ex_sig;
+			int mem_sig;
+			int wb_sig;
+			unsigned long long current_cycle_num;
+
 			// Special names
 			const std::string DBG_INSTRUCTION_WORD;
 			const std::string DBG_MEMWB_REGWE;

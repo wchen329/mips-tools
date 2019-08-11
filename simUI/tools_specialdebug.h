@@ -2,8 +2,7 @@
 #define TOOLS_SPECIALDEBUG_H
 
 #include <QDialog>
-#include <QTreeView>
-#include <QTableView>
+#include <QTableWidget>
 #include <QTreeWidget>
 #include <vector>
 #include "diag_cpu.h"

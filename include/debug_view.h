@@ -21,7 +21,6 @@
 #ifndef __DEBUGVIEW_H__
 #define __DEBUGVIEW_H__
 #include <cstdio>
-#include <map>
 #include <memory>
 #include <vector>
 #include <typeinfo>
@@ -40,6 +39,7 @@ namespace mips_tools
 			enum DBGType
 			{
 				SIMPLE_TREE_LIST,
+				SIMPLE_TABLE,
 				TREE,
 				TABLE
 			};
@@ -117,19 +117,26 @@ namespace mips_tools
 	/* 2D_Point 64*2 bits, both use (0,0) as an absolute reference
 	 * Used for table below.
 	 */
-	class TablePoint
+	template <class TPDType> class TablePoint
 	{
-		public:
+		private:
 			unsigned long long x;
 			unsigned long long y;
-
-		TablePoint() : x(0), y(0) {}
-		TablePoint(unsigned long long x_in, unsigned long long y_in) : x(x_in), y(y_in) {}
-		bool operator==(TablePoint& tp) { return (this->x == tp.x) && (this->y == tp.y); }
-		TablePoint operator-(TablePoint& tp) { return TablePoint(this->x - tp.x, this->y - tp.y); }
-		TablePoint operator+(TablePoint& tp) { return TablePoint(this->x + tp.x, this->y + tp.y); }
-		void operator-=(TablePoint& tp) { this->x = this->x - tp.x; this->y = this->y - tp.y; }
-		void operator+=(TablePoint& tp) { this->x = this->x + tp.x; this->y = this->y + tp.y; }
+			TPDType data;
+		public:
+			unsigned long long getX() { return x;}
+			unsigned long long getY() { return y;}
+			void setData(const TPDType dataIn) { this->data = dataIn;}
+			TPDType getData() { return data; }
+			void setX(unsigned long long xin) { this->x = xin; }
+			void setY(unsigned long long yin) { this->y = yin; }
+			TablePoint() : x(0), y(0) {}
+			TablePoint(unsigned long long x_in, unsigned long long y_in) : x(x_in), y(y_in) {}
+			bool operator==(const TablePoint tp) { return (this->x == tp.x) && (this->y == tp.y); }
+			TablePoint operator-(TablePoint& tp) { return TablePoint(this->x - tp.x, this->y - tp.y); }
+			TablePoint operator+(TablePoint& tp) { return TablePoint(this->x + tp.x, this->y + tp.y); }
+			void operator-=(TablePoint& tp) { this->x = this->x - tp.x; this->y = this->y - tp.y; }
+			void operator+=(TablePoint& tp) { this->x = this->x + tp.x; this->y = this->y + tp.y; }
 	};
 
 	class DebugTable : public DebugView
@@ -155,49 +162,58 @@ namespace mips_tools
 	 * -
 	 * The specific DType MUST be listed under "HighLevelType" enum to be any useful.
 	 */
-	template <class DType> class DebugTableSingleType
+	template <class DType> class DebugTableSingleType : public DebugView
 	{
 		public:
 			HighLevelType getTableDataType() { return getTypeGeneric<DType>(); }
-			DType& getData(unsigned long x, unsigned long y)
-			{
-				TablePoint pt(x,y);
-
-				if(ptDataMapping.count(pt) > 0)
-				{
-					return ptDataMapping[pt];
-				}
-
-				else
-				{
-					return nullDType;
-				}
-			}
+			DebugView::DBGType getDBGType() { return DebugView::TABLE; }
 
 			void setData(unsigned long x, unsigned long y, DType data)
 			{
-				TablePoint pt(x,y);
+				TablePoint<DType> pt(x,y);
 
-				// Redefinition, just set it in to map only.
-				if(ptDataMapping.count(pt) > 0)
+				if(x >= limit || y >= limit)
 				{
-					ptDataMapping[pt] = data;
+					return;
 				}
 
-				// New record definition
-				else
+				// New record definition, not checked for duplicates
+				pt.setData(data);
+				pts.push_back(pt);
+				
+				if(x > max_X)
 				{
-					pts.push_back(TablePoint(x,y));
-					ptDataMapping[pt] = data;
+					max_X = x;
+				}
+
+				if(y > max_Y)
+				{
+					max_Y = y;
 				}
 			}
+			
+			unsigned long long getMaxDefX()
+			{
+				return this->max_X;
+			}
 
-			const std::vector<TablePoint>& getDefinedPtList() { return this->pts;}
+			unsigned long long getMaxDefY()
+			{
+				return this->max_Y;
+			}
+
+			const std::vector<TablePoint<DType>>& getDefinedPtList() { return this->pts;}
+			DebugTableSingleType<DType>()
+				: max_X(0), max_Y(0), limit(100)
+			{
+			}
 
 		private:
 			DType nullDType;
-			std::vector<TablePoint> pts;
-			std::map<TablePoint, DType> ptDataMapping;
+			std::vector<TablePoint<DType>> pts;
+			unsigned long long max_X;
+			unsigned long long max_Y;
+			unsigned long long limit;
 	};
 
 

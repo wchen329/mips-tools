@@ -31,6 +31,7 @@ void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
             switch(dbg[w]->getDBGType())
             {
                 case mips_tools::DebugView::SIMPLE_TREE_LIST:
+                {
                     QStringList * qsl = new QStringList;
                     mips_tools::DebugTree_Simple_List * dbgsl = dynamic_cast<mips_tools::DebugTree_Simple_List*>(dbg[w]);
                     std::string viewName = dbgsl->getName();
@@ -61,6 +62,35 @@ void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
                     ui->comboBox_Views->addItem(viewName.c_str());
                     wList.push_back(qtw);
                     break;
+                }
+
+                case mips_tools::DebugView::TABLE:
+                {
+                    QTableWidget * qtw = new QTableWidget;
+                    mips_tools::DebugTableStringValue* dbs = dynamic_cast<mips_tools::DebugTableStringValue*>(dbg[w]);
+                    ui->comboBox_Views->addItem("Pipeline Diagram");
+                    wList.push_back(qtw);
+                    qtw->setRowCount(dbs->getMaxDefY());\
+                    qtw->setColumnCount(dbs->getMaxDefX());
+                    const std::vector<mips_tools::TablePointStringV>& tbp = dbs->getDefinedPtList();
+                    for(size_t tc = 0; tc < tbp.size(); tc++)
+                    {
+                        mips_tools::TablePointStringV pt = tbp[tc];
+                        int xcoord = static_cast<int>(pt.getX());
+                        int ycoord = static_cast<int>(pt.getY());
+
+                        // Make a QPoint out of this point to index into the actual table
+                        QTableWidgetItem * itm = new QTableWidgetItem();
+                        itm->setText(pt.getData().c_str());
+
+                        // Then place it there.
+                        qtw->setItem(ycoord, xcoord, itm);
+
+                    }
+
+
+                    break;
+                }
             }
         }
 
