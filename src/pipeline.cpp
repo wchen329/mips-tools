@@ -415,7 +415,16 @@ namespace mips_tools
 		this->memwb_dbg->findChild(DBG_MEMWB_WRITE_DATA)->setValue(db_mwdata.toHexString());
 
 		// Set pipeline diagram instruction signatures
-		this->wb_sig = this->mem_sig;
+		
+		// Instructions never stall at write back, if downstream stall causes stale data, don't record it
+		if(this->wb_sig != this->mem_sig)
+		{
+			this->wb_sig = this->mem_sig;
+		}
+		else
+		{
+			this->wb_sig = -1;
+		}
 
 		if(we_plr_mw)
 		{
@@ -438,7 +447,7 @@ namespace mips_tools
 			this->next_sig++;
 		}
 
-		int table_cycle = static_cast<int>(this->current_cycle_num);
+		unsigned long table_cycle = this->current_cycle_num;
 
 		// Write pipelining diagram entries
 		if(this->if_sig >= 0)

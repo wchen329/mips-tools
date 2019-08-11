@@ -88,7 +88,8 @@ void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
 
                     }
 
-
+                    qtw->resizeColumnsToContents();
+                    qtw->resizeRowsToContents();
                     break;
                 }
             }
