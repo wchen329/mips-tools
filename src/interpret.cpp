@@ -63,7 +63,8 @@ namespace mips_tools
 		else if("slt" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SLT; }	
 		else if("slti" == args[0]) { current_op = mips_tools::SLTI;}
 		else if("sltiu" == args[0]) { current_op = mips_tools::SLTIU; }	
-		else if("sltu" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SLTU; }	
+		else if("sltu" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SLTU; }
+		else if("subu" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::SUBU; }
 		else if("j" == args[0]) { current_op = mips_tools::JUMP;}
 		else if("jal" == args[0]) { current_op = mips_tools::JAL;}	
 		else if("jr" == args[0]) { current_op = mips_tools::R_FORMAT; f_code = mips_tools::JR;}

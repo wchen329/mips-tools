@@ -120,6 +120,10 @@ namespace mips_tools
 						reg_wdata = (this->registers[rs].get_data().AsInt32() - this->registers[rt].get_data().AsInt32());
 						r_write = rd;
 						break;
+					case SUBU:
+						reg_wdata = (this->registers[rs].get_data().AsUInt32() - this->registers[rt].get_data().AsUInt32());
+						r_write = rd;
+						break;
 				}
 
 				break;

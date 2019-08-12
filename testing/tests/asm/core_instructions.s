@@ -9,7 +9,7 @@ addiu $s1, $s0, 200 # $s1 = 300
 add $t0, $s0, $s1 # $to = $s0 + $s1 (400)
 addu $t9, $s1, $s0 # $t9 = 400
 sub $at, $s1, $s0 # $at = 200
-#subu $a3, $at, $s0 # $a3 = 100
+subu $a3, $at, $s0 # $a3 = 100
 
 # Ors and Ands (Basic Logic)
 ori $v0, $zero, 777 # $v0 = 777

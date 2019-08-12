@@ -197,6 +197,9 @@ namespace mips_tools
 					case ADD:
 						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
+					case ADDU:
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsUInt32(), ex_data_rt.AsUInt32(), false);
+						break;
 					case OR:
 						ex_aluResult = alu.execute(ALU::OR, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
@@ -221,6 +224,9 @@ namespace mips_tools
 					case SUB:
 						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
+					case SUBU:
+						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsUInt32(), ex_data_rt.AsUInt32(), false);
+						break;
 				}
 
 				break;
@@ -231,6 +237,9 @@ namespace mips_tools
 					// Arithmetic Operations that Store
 					case ADDI:
 						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
+						break;
+					case ADDIU:
+						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsUInt32(), ex_imm.AsUInt32(), false);
 						break;
 					case ORI:
 						ex_aluResult = alu.execute(ALU::OR, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
