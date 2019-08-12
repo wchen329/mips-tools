@@ -52,8 +52,8 @@ namespace mips_tools
 		protected:
 			std::vector<DebugView*> debug_views;
 			std::vector<CPU_Option> cpu_opts;
-			char mem_req_load(int index); // sends a load memory request from CPU to MMEM. The ind is the offset from address 0x0
-			void mem_req_write(char data, int index); // sends a write memory request from CPU To MMEM. The ind is the offset from address 0x0
+			byte_8b mem_req_load(int index); // sends a load memory request from CPU to MMEM. The ind is the offset from address 0x0
+			void mem_req_write(byte_8b data, int index); // sends a write memory request from CPU To MMEM. The ind is the offset from address 0x0
 			static const int REG_COUNT = 32;
 			long clk_T;
 			reg_32 registers[REG_COUNT];

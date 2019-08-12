@@ -24,7 +24,7 @@ namespace mips_tools
 {
 	mem::mem(size_t size)
 	{
-		this -> data = new char[size];
+		this -> data = new byte_8b[size];
 		this -> size = size;
 	}
 
@@ -39,7 +39,7 @@ namespace mips_tools
 		return m;
 	}
 
-	char& mem::operator[](int ind)
+	byte_8b& mem::operator[](int ind)
 	{
 
 		return data[ind];

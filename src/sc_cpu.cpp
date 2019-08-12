@@ -170,35 +170,35 @@ namespace mips_tools
 						break;
 					case LBU:
 						{
-						char l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
-						char load_write = 0;
-						load_write += l_word_p_1;
+						byte_8b l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
+						BW_32 load_write = 0;
+						load_write = load_write.AsUInt32() | (l_word_p_1);
 						reg_wdata = load_write;
 						r_write = rt;
 						}
 						break;
 					case LHU:
 						{
-						char l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
-						char l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 1);
-						char load_write = 0;
-						load_write += l_word_p_1;
-						load_write += (l_word_p_2 << 8);
+						byte_8b l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
+						byte_8b l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 1);
+						BW_32 load_write = 0;
+						load_write.AsUInt32() |= l_word_p_1;
+						load_write.AsUInt32() |= (l_word_p_2 << 8);
 						reg_wdata = load_write;
 						r_write = rt;
 						}
 						break;
 					case LW:
 						{
-						char l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
-						char l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 1);
-						char l_word_p_3 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 2);
-						char l_word_p_4 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 3);
+						byte_8b l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
+						byte_8b l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 1);
+						byte_8b l_word_p_3 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 2);
+						byte_8b l_word_p_4 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 3);
 						BW_32 load_write = 0;
-						load_write.AsInt32() += l_word_p_1;
-						load_write.AsInt32() += (l_word_p_2 << 8);
-						load_write.AsInt32() += (l_word_p_3 << 16);
-						load_write.AsInt32() += (l_word_p_4 << 24);
+						load_write.AsInt32() |= l_word_p_1;
+						load_write.AsInt32() |= (l_word_p_2 << 8);
+						load_write.AsInt32() |= (l_word_p_3 << 16);
+						load_write.AsInt32() |= (l_word_p_4 << 24);
 						reg_wdata = load_write;
 						r_write = rt;
 						}
@@ -221,7 +221,7 @@ namespace mips_tools
 					case SH:
 						{
 						char s_word_p_1 = (this->registers[rt].get_data().AsInt32() & ((1 << 8) - 1));
-						char s_word_p_2 = ((this->registers[rt].get_data().AsInt32() & ((1 << 16) - 1)) - s_word_p_1) >> 8;
+						char s_word_p_2 = ((this->registers[rt].get_data().AsInt32() >> 8) & ((1 << 8) - 1));
 						this->mem_req_write(s_word_p_1, this->registers[rs].get_data().AsInt32() + imm);
 						this->mem_req_write(s_word_p_2, this->registers[rs].get_data().AsInt32() + 1 + imm);
 						reg_we = false;
@@ -281,12 +281,12 @@ namespace mips_tools
 		this->pc.set_data(0);
 	}
 
-	void sc_cpu::mem_req_write(char data, int index)
+	void sc_cpu::mem_req_write(byte_8b data, int index)
 	{
 		this->mm[index % this->mm.get_size()] = data;
 	}
 
-	char sc_cpu::mem_req_load(int index)
+	byte_8b sc_cpu::mem_req_load(int index)
 	{
 		return this->mm[index % this->mm.get_size()];
 	}

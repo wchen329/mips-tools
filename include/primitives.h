@@ -32,6 +32,8 @@
 
 namespace mips_tools
 {
+	typedef unsigned char byte_8b;
+
 	template<class ConvType, int bitlength> std::string genericHexBuilder(ConvType c)
 	{
 		std::string ret = "0x";
