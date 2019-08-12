@@ -66,7 +66,7 @@ void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
                         qtwi->setText(0, dbgsl->get_DebugTrees()[ind]->rootNode().getName().c_str());
                         qtw->addTopLevelItem(qtwi);
 
-                        std::list<mips_tools::DebugTreeNode_Simple*>& rc = dbgsl->get_DebugTrees()[ind]->rootNode().getAllChildren();
+                        std::list<mips_tools::DebugTreeNode_Simple*> rc = dbgsl->get_DebugTrees()[ind]->rootNode().getAllChildren();
                         if(!rc.empty())
                         {
                             for(std::list<mips_tools::DebugTreeNode_Simple*>::iterator ca = rc.begin(); ca != rc.end(); ca++)
