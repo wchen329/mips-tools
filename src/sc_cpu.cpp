@@ -220,8 +220,8 @@ namespace mips_tools
 						break;
 					case SH:
 						{
-						char s_word_p_1 = (this->registers[rt].get_data().AsInt32() & ((1 << 8) - 1));
-						char s_word_p_2 = ((this->registers[rt].get_data().AsInt32() >> 8) & ((1 << 8) - 1));
+						byte_8b s_word_p_1 = (this->registers[rt].get_data().AsInt32() & ((1 << 8) - 1));
+						byte_8b s_word_p_2 = ((this->registers[rt].get_data().AsInt32() >> 8) & ((1 << 8) - 1));
 						this->mem_req_write(s_word_p_1, this->registers[rs].get_data().AsInt32() + imm);
 						this->mem_req_write(s_word_p_2, this->registers[rs].get_data().AsInt32() + 1 + imm);
 						reg_we = false;
@@ -229,10 +229,10 @@ namespace mips_tools
 						break;
 					case SW:
 						{
-						char s_word_p_1 = (this->registers[rt].get_data().AsInt32() & ((1 << 8) - 1));
-						char s_word_p_2 = ((this->registers[rt].get_data().AsInt32() >> 8) & ((1 << 8) - 1) );
-						char s_word_p_3 = ((this->registers[rt].get_data().AsInt32() >> 16) & ((1 << 8) - 1) );
-						char s_word_p_4 = ((this->registers[rt].get_data().AsInt32() >> 24) & ((1 << 8) - 1) );
+						byte_8b s_word_p_1 = (this->registers[rt].get_data().AsInt32() & ((1 << 8) - 1));
+						byte_8b s_word_p_2 = ((this->registers[rt].get_data().AsInt32() >> 8) & ((1 << 8) - 1) );
+						byte_8b s_word_p_3 = ((this->registers[rt].get_data().AsInt32() >> 16) & ((1 << 8) - 1) );
+						byte_8b s_word_p_4 = ((this->registers[rt].get_data().AsInt32() >> 24) & ((1 << 8) - 1) );
 						this->mem_req_write(s_word_p_1, this->registers[rs].get_data().AsInt32() + imm);
 						this->mem_req_write(s_word_p_2, this->registers[rs].get_data().AsInt32() + 1 + imm);
 						this->mem_req_write(s_word_p_3, this->registers[rs].get_data().AsInt32() + 2 + imm);
