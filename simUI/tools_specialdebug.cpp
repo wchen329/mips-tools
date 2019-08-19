@@ -29,6 +29,9 @@ tools_specialdebug::tools_specialdebug(QWidget *parent) :
     ui(new Ui::tools_specialdebug)
 {
     ui->setupUi(this);
+    ui->comboBox_Views->setVisible(false);
+    ui->labelDBGView->setVisible(false);
+
     this->setLayout(ui->verticalLayoutSpecialDebug);
 }
 
@@ -36,6 +39,8 @@ void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
 {
     if(dcpu.get_DebugViews().size() != 0)
     {
+        ui->comboBox_Views->setVisible(true);
+        ui->labelDBGView->setVisible(true);
         delete ui->label_Default;
         ui->verticalSpacer_LaD->changeSize(0,0);
         ui->verticalSpacer_LaU->changeSize(0,0);

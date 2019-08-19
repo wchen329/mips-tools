@@ -33,7 +33,7 @@
 namespace branding
 {
 	const std::string APPLICATION_NAME = std::string("PRISCAS");
-	const std::string APPLICATION_DESC = std::string("[PRISCAS: PRISCAS Really Is Simply a Computer Architecture Simulator]");
+	const std::string APPLICATION_DESC = std::string("[computer architecture simulator]");
 	const std::string APPLICATION_VERSION = std::string("0.2");
 
 	#ifdef P_RELEASE
