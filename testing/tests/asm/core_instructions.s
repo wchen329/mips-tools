@@ -56,6 +56,4 @@ ori $k0, $zero, -1
 SKIP_3:
 jal TMP
 sll $zero, $zero, 0 # No-op
-
-.state
 .exit

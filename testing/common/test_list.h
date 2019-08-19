@@ -10,5 +10,6 @@ void test_sc_cpu_subroutine();
 void test_mips32fsp_load_to_use();
 void test_sc_cpu_registers();
 void test_mips32fsp_registers();
+void test_sc_cpu_core_instructions();
 
 #endif

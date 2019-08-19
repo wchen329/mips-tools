@@ -113,7 +113,7 @@ namespace mips_tools
 						r_write = rd;
 						break;
 					case SLTU:
-						reg_wdata = this->registers[rs].get_data().AsInt32() < this->registers[rt].get_data().AsInt32() ? 1 : 0;
+						reg_wdata = this->registers[rs].get_data().AsUInt32() < this->registers[rt].get_data().AsUInt32() ? 1 : 0;
 						r_write = rd;
 						break;
 					case SUB:
