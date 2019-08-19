@@ -415,10 +415,60 @@ namespace mips_tools
 		// Set probes
 		this->ifid_dbg->findChild(DBG_INSTRUCTION_WORD)->setValue(fetch_plr.get_data().toHexString());
 
+		BW_32 de_rs_data_dbg;
+		BW_32 de_rt_data_dbg;
+		mips_tools::funct de_funct_dbg_raw;
+		BW_32 de_shamt_dbg;
+		BW_32 de_imm_dbg;
+		mips_tools::opcode de_op_dbg_raw;
+		bool de_regwe_dbg;
+		bool de_memwe_dbg;
+		bool de_memre_dbg;
+		int de_rs_dbg;
+		int de_rt_dbg;
+		int de_rd_dbg;
+		this->de_plr.get(de_rs_data_dbg, de_rt_data_dbg, de_funct_dbg_raw, de_shamt_dbg, de_imm_dbg, de_op_dbg_raw, de_regwe_dbg, de_memwe_dbg, de_memre_dbg, de_rs_dbg, de_rt_dbg, de_rd_dbg);
+		BW_32 de_op_dbg = de_op_dbg_raw;
+		BW_32 de_funct_dbg = de_funct_dbg_raw;
+
+		BW_32 em_dalu_dbg;
+		BW_32 em_rs_data_dbg;
+		BW_32 em_rt_data_dbg;
+		mips_tools::opcode em_op_dbg_raw;
+		bool em_regwe_dbg;
+		bool em_memwe_dbg;
+		bool em_memre_dbg;
+		int em_rs_dbg;
+		int em_rt_dbg;
+		int em_rd_dbg;
+		this->em_plr.get(em_dalu_dbg, em_rs_data_dbg, em_rt_data_dbg, em_op_dbg_raw, em_regwe_dbg, em_memwe_dbg, em_memre_dbg, em_rs_dbg, em_rt_dbg, em_rd_dbg);
+		BW_32 em_op_dbg = em_op_dbg_raw;
+
 		BW_32 db_mwdata;
 		bool db_mwRegWE;
 		int db_mwRNum;
 		this->mw_plr.get(db_mwdata, db_mwRegWE, db_mwRNum);
+		this->idex_dbg->findChild(DBG_IDEX_DATA_RS)->setValue(de_rs_data_dbg.toHexString());
+		this->idex_dbg->findChild(DBG_IDEX_DATA_RT)->setValue(de_rt_data_dbg.toHexString());
+		this->idex_dbg->findChild(DBG_IDEX_RS_N)->setValue(priscas_io::StrTypes::Int32ToStr(de_rs_dbg));
+		this->idex_dbg->findChild(DBG_IDEX_RT_N)->setValue(priscas_io::StrTypes::Int32ToStr(de_rt_dbg));
+		this->idex_dbg->findChild(DBG_IDEX_RD_N)->setValue(priscas_io::StrTypes::Int32ToStr(de_rd_dbg));
+		this->idex_dbg->findChild(DBG_IDEX_FUNCT)->setValue(de_funct_dbg.toHexString());
+		this->idex_dbg->findChild(DBG_IDEX_SHAMT)->setValue(de_shamt_dbg.toHexString());
+		this->idex_dbg->findChild(DBG_IDEX_IMM)->setValue(de_imm_dbg.toHexString());
+		this->idex_dbg->findChild(DBG_IDEX_OP)->setValue(de_op_dbg.toHexString());
+		this->idex_dbg->findChild(DBG_IDEX_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(de_regwe_dbg));
+		this->idex_dbg->findChild(DBG_IDEX_MEMWE)->setValue(priscas_io::StrTypes::BoolToStr(de_memwe_dbg));
+		this->idex_dbg->findChild(DBG_IDEX_MEMRE)->setValue(priscas_io::StrTypes::BoolToStr(de_memre_dbg));
+
+		this->exmem_dbg->findChild(this->DBG_EXMEM_DATA_ALU)->setValue(em_dalu_dbg.toHexString());
+		this->exmem_dbg->findChild(this->DBG_EXMEM_DATA_RS)->setValue(em_rs_data_dbg.toHexString());
+		this->exmem_dbg->findChild(this->DBG_EXMEM_DATA_RT)->setValue(em_rt_data_dbg.toHexString());
+		this->exmem_dbg->findChild(this->DBG_EXMEM_OPCODE)->setValue(em_op_dbg.toHexString());
+		this->exmem_dbg->findChild(this->DBG_EXMEM_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(em_regwe_dbg));
+		this->exmem_dbg->findChild(this->DBG_EXMEM_MEMWE)->setValue(priscas_io::StrTypes::BoolToStr(em_memwe_dbg));
+		this->exmem_dbg->findChild(this->DBG_EXMEM_MEMRE)->setValue(priscas_io::StrTypes::BoolToStr(em_memre_dbg));
+
 		this->memwb_dbg->findChild(DBG_MEMWB_TARGET_REG)->setValue(priscas_io::StrTypes::Int32ToStr(db_mwRNum));
 		this->memwb_dbg->findChild(DBG_MEMWB_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(wb_regWE));
 		this->memwb_dbg->findChild(DBG_MEMWB_WRITE_DATA)->setValue(db_mwdata.toHexString());
@@ -501,17 +551,36 @@ namespace mips_tools
 
 	fsp_cpu::fsp_cpu(mmem & m) :
 		sc_cpu(m),
-		DBG_INSTRUCTION_WORD("Instruction Word"),
-		DBG_MEMWB_REGWE("Register Write Enable (RegWE)"),
-		DBG_MEMWB_WRITE_DATA("Write Data"),
-		DBG_MEMWB_TARGET_REG("Target Register Number"),
 		next_sig(0),
 		if_sig(-1),
 		id_sig(-1),
 		ex_sig(-1),
 		mem_sig(-1),
 		wb_sig(-1),
-		current_cycle_num(0)
+		current_cycle_num(0),
+		DBG_INSTRUCTION_WORD("Instruction Word"),
+		DBG_MEMWB_REGWE("Register Write Enable (RegWE)"),
+		DBG_MEMWB_WRITE_DATA("Write Data"),
+		DBG_MEMWB_TARGET_REG("Target Register Number"),
+		DBG_IDEX_DATA_RS("Value in Register Rs"),
+		DBG_IDEX_DATA_RT("Value in Register Rt"),
+		DBG_IDEX_RS_N("Rs"),
+		DBG_IDEX_RT_N("Rt"),
+		DBG_IDEX_RD_N("Rd"),
+		DBG_IDEX_FUNCT("Funct"),
+		DBG_IDEX_SHAMT("Shamt"),
+		DBG_IDEX_IMM("Imm"),
+		DBG_IDEX_OP("Opcode"),
+		DBG_IDEX_REGWE("RegWE"),
+		DBG_IDEX_MEMWE("MemWE"),
+		DBG_IDEX_MEMRE("MemRE"),
+		DBG_EXMEM_DATA_ALU("ALU Data"),
+		DBG_EXMEM_DATA_RS("Rs"),
+		DBG_EXMEM_DATA_RT("Rt"),
+		DBG_EXMEM_OPCODE("Opcode"),
+		DBG_EXMEM_REGWE("RegWE"),
+		DBG_EXMEM_MEMWE("MemWE"),
+		DBG_EXMEM_MEMRE("MemRE")
 	{
 		std::string FORWARD_VALUE_STRING = "FORWARD";
 		std::string STALL_VALUE_STRING = "STALL";
@@ -546,8 +615,27 @@ namespace mips_tools
 		ifid_dbg->addChild(this->DBG_INSTRUCTION_WORD, "");
 
 		// Add probes for ID/EX
+		idex_dbg->addChild(this->DBG_IDEX_DATA_RS, "");
+		idex_dbg->addChild(this->DBG_IDEX_DATA_RT, "");
+		idex_dbg->addChild(this->DBG_IDEX_RS_N, "");
+		idex_dbg->addChild(this->DBG_IDEX_RT_N, "");
+		idex_dbg->addChild(this->DBG_IDEX_RD_N, "");
+		idex_dbg->addChild(this->DBG_IDEX_FUNCT, "");
+		idex_dbg->addChild(this->DBG_IDEX_SHAMT, "");
+		idex_dbg->addChild(this->DBG_IDEX_IMM, "");
+		idex_dbg->addChild(this->DBG_IDEX_OP, "");
+		idex_dbg->addChild(this->DBG_IDEX_REGWE, "");
+		idex_dbg->addChild(this->DBG_IDEX_MEMWE, "");
+		idex_dbg->addChild(this->DBG_IDEX_MEMRE, "");
 
 		// Add probes for EX/MEM
+		exmem_dbg->addChild(this->DBG_EXMEM_DATA_ALU, "");
+		exmem_dbg->addChild(this->DBG_EXMEM_DATA_RS, "");
+		exmem_dbg->addChild(this->DBG_EXMEM_DATA_RT, "");
+		exmem_dbg->addChild(this->DBG_EXMEM_OPCODE, "");
+		exmem_dbg->addChild(this->DBG_EXMEM_REGWE, "");
+		exmem_dbg->addChild(this->DBG_EXMEM_MEMWE, "");
+		exmem_dbg->addChild(this->DBG_EXMEM_MEMRE, "");
 
 		// Add probes for MEM/WB
 		memwb_dbg->addChild(this->DBG_MEMWB_REGWE, "");
