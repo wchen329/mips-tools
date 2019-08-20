@@ -90,11 +90,11 @@ namespace mips_tools
 		switch(mem_op)
 		{
 			case LBU:
-				lr_bbb = BW_32(0,0,0,this->mem_req_load(mem_dataALU.AsUInt32()));
+				lr_bbb = BW_32(this->mem_req_load(mem_dataALU.AsUInt32()),0,0,0);
 				break;
 			case LHU:
-				lr_bbb = BW_32(	this->mem_req_load(mem_dataALU.AsUInt32()),
-									this->mem_req_load(mem_dataALU.AsUInt32()),
+				lr_bbb = BW_32(		this->mem_req_load(mem_dataALU.AsUInt32()),
+									this->mem_req_load(mem_dataALU.AsUInt32() + 1),
 									0,
 									0								);
 				break;
@@ -225,7 +225,7 @@ namespace mips_tools
 						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false) < 0 ? 1 : 0;
 						break;
 					case SLTU:
-						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsUInt32(), ex_data_rt.AsUInt32(), true) < 0 ? 1 : 0;
+						ex_aluResult = ex_data_rs.AsUInt32() < ex_data_rt.AsUInt32() ? 1 : 0;
 						break;
 					case SUB:
 						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
@@ -260,7 +260,7 @@ namespace mips_tools
 						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false) < 0 ? 1 : 0;
 						break;
 					case SLTIU:
-						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsUInt32(), ex_imm.AsUInt32(), true) < 0 ? 1 : 0;
+						ex_aluResult = ex_data_rs.AsUInt32() < ex_imm.AsUInt32() ? 1 : 0;
 						break;
 					
 					// Memory Operations- for now, calculate the offset only
