@@ -263,7 +263,7 @@ namespace mips_tools
 	/* Check if a Jump or
 	 * Branch Instruction
 	 */
-	bool jorb_inst(opcode operation);
+	bool jorb_inst(opcode operation, funct fcode);
 
 	/* "Generic" MIPS-32 architecture
 	 * encoding function asm -> binary

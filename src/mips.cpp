@@ -202,7 +202,7 @@ namespace mips_tools
 	{
 		return
 			(mem_read_inst(operation)) || (operation == R_FORMAT && func != JR) || (operation == ADDI) || (operation == ORI)
-			|| (operation == ANDI) || (operation == XORI) || (operation == SLTI) || (operation == SLTIU) || (operation == ADDIU);
+			|| (operation == ANDI) || (operation == XORI) || (operation == SLTI) || (operation == SLTIU) || (operation == ADDIU) || (operation == JAL);
 	}
 
 	bool shift_inst(funct f)
@@ -213,10 +213,12 @@ namespace mips_tools
 			false;
 	}
 
-	bool jorb_inst(opcode operation)
+	bool jorb_inst(opcode operation, funct fcode)
 	{
 		// First check jumps
 		bool is_jump = j_inst(operation);
+
+		bool is_jr = operation == R_FORMAT && fcode == JR;
 
 		bool is_branch =
 			operation == BEQ ? true :
@@ -224,7 +226,7 @@ namespace mips_tools
 			operation == BLEZ ? true :
 			operation == BGTZ ? true : false;
 
-		return is_jump || is_branch;
+		return is_jump || is_branch || is_jr;
 	}
 
 	BW_32 generic_mips32_encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op)
@@ -285,22 +287,23 @@ namespace mips_tools
 		int32_t rd_mask = ~( ((~(1 << 16)) + 1) | ((1 << 11) - 1));
 		int32_t funct_mask = 63;
 		int32_t shamt_mask = (1 << 11) - 1 - funct_mask;
-		int32_t imm_mask = (1 << 16) - 1;
+		int32_t imm_mask_i = (1 << 16) - 1;
 		int32_t addr_mask = (1 << 26) - 1;
 
 		// - Actual values
 		op = static_cast<opcode>(((opcode_mask & inst_word) >> 26) & ((1 << 6) - 1));
+
+		// Set a mode based on OP
+		if(op == R_FORMAT) fm = R;
+		else if(j_inst(static_cast<opcode>(op))) fm = J;
+		else fm = I;
+
+		// Then decode!
 		rs = (rs_mask & inst_word) >> 21;
 		rt = (rt_mask & inst_word) >> 16;
 		rd = (rd_mask & inst_word) >> 11;
 		func = static_cast<funct>((funct_mask & inst_word));
 		shamt = (shamt_mask & inst_word) >> 6;
-		imm = (imm_mask & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
-
-		if(op == R_FORMAT) fm = R;
-		else if(j_inst(static_cast<opcode>(op))) fm = J;
-		else fm = I;
+		imm = (imm_mask_i & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
 	}
-
-
 }

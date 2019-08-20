@@ -282,6 +282,11 @@ namespace mips_tools
 					case SW:
 						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;
+
+					// Special case: JAL- use immediate addition
+					case JAL:
+						ex_aluResult = alu.execute(ALU::ADD, 0, ex_shamt.AsInt32(), false);
+						break;
 				}
 				break;
 		}
@@ -307,7 +312,7 @@ namespace mips_tools
 		bool EX_EX_ENABLED = false;
 
 		// EX-ID Forwarding Path, specifically for Control Hazards
-		if(mem_regWE && jorb_inst(decode_op))
+		if(mem_regWE && jorb_inst(decode_op, decode_funct))
 		{
 			if(sc_cpu::cpu_opts[EX_ID_INDEX].get_IntValue() == PATH_FORWARD_MODE)
 			{	
@@ -340,7 +345,7 @@ namespace mips_tools
 		}
 
 		// Check for EX dependency, a REQUIRED stall for branches
-		if(ex_regWE && jorb_inst(decode_op))
+		if(ex_regWE && jorb_inst(decode_op, decode_funct))
 		{
 			if(r_inst(mem_op))
 			{
@@ -368,13 +373,15 @@ namespace mips_tools
 		// Execute branch instruction
 		bool branch_taken = false;
 		BW_32 branch_addr = (decode_imm << 2);
+		BW_32 jump_mask = ((1 << 28) - 1);
+		BW_32 jump_addr = (fetch_plr.get_data().AsInt32() & jump_mask.AsInt32()) | (decode_imm << 2);
 		switch(decode_op)
 		{
 				case BEQ:
 						if(decode_rs_data == decode_rt_data)
 						{
 							BW_32 curr_pc = this->get_PC();
-							pc_next = curr_pc.AsUInt32() + branch_addr.AsUInt32();
+							pc_next = curr_pc.AsInt32() + branch_addr.AsInt32();
 							branch_taken = true;
 						}
 
@@ -383,7 +390,30 @@ namespace mips_tools
 						if(decode_rs_data != decode_rt_data)
 						{
 							BW_32 curr_pc = this->get_PC();
-							pc_next = curr_pc.AsUInt32() + branch_addr.AsUInt32();
+							pc_next = curr_pc.AsInt32() + jump_addr.AsInt32();
+							branch_taken = true;
+						}
+						break;
+				case JUMP:
+						{
+							BW_32 curr_pc = this->get_PC();
+							pc_next = curr_pc.AsInt32() + jump_addr.AsInt32();
+							branch_taken = true;
+						}
+						break;
+				case JAL:
+						{
+							BW_32 curr_pc = this->get_PC();
+							pc_next = curr_pc.AsInt32() + jump_addr.AsInt32();
+							decode_shamt = pc.get_data().AsInt32() + 8;
+							decode_rt = $ra; // treat the register save as a regular 
+							branch_taken = true;
+						}
+						break;
+				case R_FORMAT:
+						if(decode_funct == JR)
+						{
+							pc_next = this->registers[decode_rs].get_data();
 							branch_taken = true;
 						}
 						break;
@@ -458,7 +488,7 @@ namespace mips_tools
 			this->ex_sig = -1;
 		}
 
-		if(if_flush_cycle)// && !de_flush_cycle && !em_flush_cycle)
+		if(if_flush_cycle)
 		{
 			this->flush_fetch_plr();
 			this->id_sig = -1;
