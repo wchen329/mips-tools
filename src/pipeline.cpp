@@ -342,11 +342,24 @@ namespace mips_tools
 		// Check for EX dependency, a REQUIRED stall for branches
 		if(ex_regWE && jorb_inst(decode_op))
 		{
-			if((decode_rs == ex_rt && decode_rs != 0) || (decode_rt == ex_rt && decode_rt != 0))
+			if(r_inst(mem_op))
 			{
-					if_flush_cycle = true;
-					we_pc = false;
-					we_plr_fetch = false;
+				if((decode_rs == ex_rd && decode_rs != 0) || (decode_rt == ex_rd && decode_rt != 0))
+				{
+						de_flush_cycle = true;
+						we_pc = false;
+						we_plr_fetch = false;
+				}
+			}
+
+			else
+			{
+				if((decode_rs == ex_rt && decode_rs != 0) || (decode_rt == ex_rt && decode_rt != 0))
+				{
+						de_flush_cycle = true;
+						we_pc = false;
+						we_plr_fetch = false;
+				}
 			}
 		}
 
@@ -401,7 +414,7 @@ namespace mips_tools
 		}
 		else
 		{
-			this->flush_fetch_plr();
+			if_flush_cycle = true;
 		}
 
 		/* Commit Transactions
