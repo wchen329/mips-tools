@@ -111,6 +111,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="..\..\tests\test_mips32fsp_core_instructions.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_load_to_use.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_registers.cpp" />
     <ClCompile Include="..\..\tests\test_register32.cpp">

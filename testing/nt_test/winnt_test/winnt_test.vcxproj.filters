@@ -90,5 +90,8 @@
     <ClCompile Include="..\..\tests\test_sc_cpu_core_instructions.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\tests\test_mips32fsp_core_instructions.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
