@@ -216,10 +216,10 @@ namespace mips_tools
 						ex_aluResult = alu.execute(ALU::AND, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 					case SLL:
-						ex_aluResult = alu.execute(ALU::SLL, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
+						ex_aluResult = alu.execute(ALU::SLL, ex_data_rs.AsInt32(), ex_shamt.AsInt32(), false);
 						break;
 					case SRL:
-						ex_aluResult = alu.execute(ALU::SRL, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
+						ex_aluResult = alu.execute(ALU::SRL, ex_data_rs.AsInt32(), ex_shamt.AsInt32(), false);
 						break;
 					case SLT:
 						ex_aluResult = alu.execute(ALU::SUB, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false) < 0 ? 1 : 0;
@@ -407,16 +407,30 @@ namespace mips_tools
 		/* Commit Transactions
 		 */
 		if(we_plr_fetch)
+		{
 			this->fetch_plr.set_data(next_inst);
+		}
+
 		if(we_plr_de)
+		{
 			this->de_plr.load(decode_rs_data, decode_rt_data, decode_funct, decode_shamt, decode_imm,
 				decode_op, decode_regWE, decode_memWE, decode_memRE, decode_rs, decode_rt, decode_rd);
+		}
+
 		if(we_plr_em)
+		{
 			this->em_plr.load(ex_aluResult, ex_data_rs, ex_data_rt, ex_op, ex_regWE, ex_memWE, ex_memRE, ex_rs, ex_rt, ex_rd);
+		}
+
 		if(we_plr_mw)
+		{
 			this->mw_plr.load(mem_regWriteData, mem_regWE, mem_write_reg_num);
+		}
+		
 		if(we_pc)
+		{
 			pc.set_data(pc_next);
+		}
 
 		// Commit flushes as needed
 		if(em_flush_cycle)
@@ -428,13 +442,13 @@ namespace mips_tools
 		if(de_flush_cycle && !em_flush_cycle)
 		{
 			this->flush_de_plr();
-			this->id_sig = -1;
+			this->ex_sig = -1;
 		}
 
-		if(if_flush_cycle && !de_flush_cycle && !em_flush_cycle)
+		if(if_flush_cycle)// && !de_flush_cycle && !em_flush_cycle)
 		{
 			this->flush_fetch_plr();
-			this->if_sig = -1;
+			this->id_sig = -1;
 		}
 
 		// Set probes
@@ -657,6 +671,9 @@ namespace mips_tools
 		exmem_dbg->addChild(this->DBG_EXMEM_DATA_ALU, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_DATA_RS, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_DATA_RT, "");
+		//exmem_dbg->addChild(this->DBG_EXMEM_RS_N, "");
+		//exmem_dbg->addChild(this->DBG_EXMEM_RT_N, "");
+		//exmem_dbg->addChild(this->DBG_EXMEM_RD_N, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_OPCODE, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_REGWE, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_MEMWE, "");
