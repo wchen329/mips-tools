@@ -5,14 +5,14 @@
 [Setup]
 AppName=Priscas
 AppVerName=Priscas
-AppVersion=0.2
+AppVersion=0.3
 OutputBaseFilename="priscas_setup"
 VersionInfoProductName="Priscas Setup"
 VersionInfoDescription="Installs the Priscas computer architecture simulator."
-VersionInfoVersion=0.2.2019.7
-VersionInfoTextVersion="0.2.2019.7"
-VersionInfoProductVersion=0.2.2019.7
-VersionInfoProductTextVersion="0.2.2019.7"
+VersionInfoVersion=0.3.2019.9
+VersionInfoTextVersion="0.3.2019.9"
+VersionInfoProductVersion=0.3.2019.9
+VersionInfoProductTextVersion="0.3.2019.9"
 DefaultDirName={autopf}\Priscas
 DefaultGroupName=Priscas
 DisableWelcomePage=no
@@ -45,6 +45,7 @@ Source: "..\external\licenses\LICENSE.GPL"; DestDir: "{app}\qt-licenses"
 Source: "..\external\licenses\LICENSE.LGPL"; DestDir: "{app}\qt-licenses"
 Source: "..\external\licenses\ThirdPartySoftware_Listing.txt"; DestDir: "{app}\qt-licenses"
 Source: "..\external\lib\winNT\qt\plugins\platforms\qwindows.dll"; DestDir: "{app}\plugins\platforms\"
+Source: "..\external\lib\winNT\qt\plugins\imageformats\qico.dll"; DestDir: "{app}\plugins\imageformats\"
 Source: "..\PRISCAS\Release\pshell.exe"; DestDir: "{app}"
 Source: "..\build-simUI-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Release\release\simUI.exe"; DestDir: "{app}"
 

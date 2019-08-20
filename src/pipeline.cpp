@@ -32,6 +32,11 @@ namespace mips_tools
 		bool we_plr_fetch = true;
 		BW_32 pc_next = this->pc.get_data();		
 
+		// Current Cycle Flush Signals
+		bool if_flush_cycle = false;
+		bool em_flush_cycle = false;
+		bool de_flush_cycle = false;
+
 
 		/* Step 1: Execute but do not yet commit transactions
 		 * Save temporaries to be commited into pipeline registers
@@ -156,7 +161,8 @@ namespace mips_tools
 		if(mem_regWE)
 		{
 			if(sc_cpu::cpu_opts[EX_EX_INDEX].get_IntValue() == PATH_FORWARD_MODE)
-			{	
+			{
+
 				if(r_inst(mem_op))
 				{
 					// R instructions write to RD, and their results are saved directly
@@ -178,7 +184,7 @@ namespace mips_tools
 
 					else
 					{
-						this->flush_em_plr();
+						em_flush_cycle = true;
 						we_plr_fetch = false;
 						we_plr_de = false;
 						we_pc = false;
@@ -204,7 +210,7 @@ namespace mips_tools
 						ex_aluResult = alu.execute(ALU::OR, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 					case NOR:
-						ex_aluResult = alu.execute(ALU::OR, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
+						ex_aluResult = ~alu.execute(ALU::OR, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
 						break;
 					case AND: 
 						ex_aluResult = alu.execute(ALU::AND, ex_data_rs.AsInt32(), ex_data_rt.AsInt32(), false);
@@ -325,9 +331,9 @@ namespace mips_tools
 
 					else
 					{
+						de_flush_cycle = true;
 						we_pc = false;
 						we_plr_fetch = false;
-						this->flush_de_plr();
 					}
 				}
 			}
@@ -338,9 +344,9 @@ namespace mips_tools
 		{
 			if((decode_rs == ex_rt && decode_rs != 0) || (decode_rt == ex_rt && decode_rt != 0))
 			{
+					if_flush_cycle = true;
 					we_pc = false;
 					we_plr_fetch = false;
-					this->flush_de_plr();
 			}
 		}
 
@@ -389,7 +395,7 @@ namespace mips_tools
 			this->mem_req_load(next_inst_addr.AsUInt32() + 3)
 		);
 
-		if(!branch_taken)
+		if(!branch_taken && we_plr_fetch)
 		{
 			pc_next = pc.get_data().AsUInt32() + 4;
 		}
@@ -411,6 +417,25 @@ namespace mips_tools
 			this->mw_plr.load(mem_regWriteData, mem_regWE, mem_write_reg_num);
 		if(we_pc)
 			pc.set_data(pc_next);
+
+		// Commit flushes as needed
+		if(em_flush_cycle)
+		{
+			this->flush_em_plr();
+			this->mem_sig = -1;
+		}
+
+		if(de_flush_cycle && !em_flush_cycle)
+		{
+			this->flush_de_plr();
+			this->id_sig = -1;
+		}
+
+		if(if_flush_cycle && !de_flush_cycle && !em_flush_cycle)
+		{
+			this->flush_fetch_plr();
+			this->if_sig = -1;
+		}
 
 		// Set probes
 		this->ifid_dbg->findChild(DBG_INSTRUCTION_WORD)->setValue(fetch_plr.get_data().toHexString());
@@ -477,14 +502,14 @@ namespace mips_tools
 		
 		// Instructions never stall at write back, if downstream stall causes stale data, don't record it
 		
-		if(this->wb_sig != this->mem_sig)
-		{
-			this->wb_sig = this->mem_sig;
-		}
-		else
-		{
+		//if(this->wb_sig != this->mem_sig)
+		//{
+		//	this->wb_sig = this->mem_sig;
+		//}
+		//else
+		//{
 			this->wb_sig = -1;
-		}
+		//}
 
 		if(we_plr_em)
 		{

@@ -24,7 +24,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QIcon mainIco = QIcon(":/icons/art/priscas_icon_24.ico");
+    QIcon mainIco = QIcon(":/icons/art/priscas.ico");
     QApplication::setWindowIcon(mainIco);
     simUI w;
     w.show();
