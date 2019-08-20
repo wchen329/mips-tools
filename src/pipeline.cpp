@@ -283,12 +283,18 @@ namespace mips_tools
 						ex_aluResult = alu.execute(ALU::ADD, ex_data_rs.AsInt32(), ex_imm.AsInt32(), false);
 						break;
 
+
+				}
+				break;
+
+			case J:
+				switch(ex_op)
+				{
 					// Special case: JAL- use immediate addition
 					case JAL:
 						ex_aluResult = alu.execute(ALU::ADD, 0, ex_shamt.AsInt32(), false);
 						break;
 				}
-				break;
 		}
 
 		/* DECODE STAGE
@@ -330,8 +336,8 @@ namespace mips_tools
 					// Otherwise, forward it!
 					if(!mem_inst(ex_op))
 					{
-						if(decode_rs == mem_rd && decode_rs != 0) decode_rs_data = mem_dataALU;
-						if(decode_rt == mem_rd && decode_rt != 0) decode_rt_data = mem_dataALU;
+						if(decode_rs == mem_rt && decode_rs != 0) decode_rs_data = mem_dataALU;
+						if(decode_rt == mem_rt && decode_rt != 0) decode_rt_data = mem_dataALU;
 					}
 
 					else
@@ -347,7 +353,7 @@ namespace mips_tools
 		// Check for EX dependency, a REQUIRED stall for branches
 		if(ex_regWE && jorb_inst(decode_op, decode_funct))
 		{
-			if(r_inst(mem_op))
+			if(r_inst(ex_op))
 			{
 				if((decode_rs == ex_rd && decode_rs != 0) || (decode_rt == ex_rd && decode_rt != 0))
 				{
@@ -413,7 +419,7 @@ namespace mips_tools
 				case R_FORMAT:
 						if(decode_funct == JR)
 						{
-							pc_next = this->registers[decode_rs].get_data();
+							pc_next = decode_rs_data;
 							branch_taken = true;
 						}
 						break;
