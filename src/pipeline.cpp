@@ -99,7 +99,7 @@ namespace mips_tools
 									0								);
 				break;
 			case LW:
-				lr_bbb = BW_32(	this->mem_req_load(mem_dataALU.AsUInt32()),
+				lr_bbb = BW_32(		this->mem_req_load(mem_dataALU.AsUInt32()),
 									this->mem_req_load(mem_dataALU.AsUInt32() + 1),
 									this->mem_req_load(mem_dataALU.AsUInt32() + 2),
 									this->mem_req_load(mem_dataALU.AsUInt32() + 3));

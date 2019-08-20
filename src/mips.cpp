@@ -202,7 +202,7 @@ namespace mips_tools
 	{
 		return
 			(mem_read_inst(operation)) || (operation == R_FORMAT && func != JR) || (operation == ADDI) || (operation == ORI)
-			|| (operation == ANDI) || (operation == XORI) || (operation == SLTI) || (operation == SLTIU);
+			|| (operation == ANDI) || (operation == XORI) || (operation == SLTI) || (operation == SLTIU) || (operation == ADDIU);
 	}
 
 	bool shift_inst(funct f)
