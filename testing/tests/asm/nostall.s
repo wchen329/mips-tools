@@ -7,9 +7,9 @@ addi $v0, $zero, 700
 sw $v0, $zero(700)
 addi $s0, $zero, 500
 sw $s0, $zero(200)
-lw $s0, $zero(200)
+lw $s3, $zero(200)
 sll $zero, $zero, 0
-lw $s1, $s0(200)
+lw $s1, $s3(200)
 
 # Stores followed directly by a load
 addi $a0, $zero, 15
