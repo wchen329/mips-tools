@@ -24,8 +24,10 @@
 #include <QDialog>
 #include <QTableWidget>
 #include <QTreeWidget>
+#include <QStringList>
 #include <vector>
 #include "diag_cpu.h"
+#include "shell.h"
 
 namespace Ui {
 class tools_specialdebug;
@@ -37,7 +39,7 @@ class tools_specialdebug : public QDialog
 
 public:
     explicit tools_specialdebug(QWidget *parent = 0);
-    void setCPU(mips_tools::diag_cpu& dcpu);
+    void setCPU(mips_tools::diag_cpu& dcpu, mipsshell::Shell * sh);
     ~tools_specialdebug();
 
 
@@ -48,6 +50,7 @@ private:
     Ui::tools_specialdebug *ui;
     QWidget* foregroundWidget;
     std::vector<QWidget*> wList;
+    QStringList lineLabelList;
     void setWidgetInForeground(QWidget *);
 };
 

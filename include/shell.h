@@ -71,6 +71,7 @@ namespace mipsshell
 			void setErrorTextStream(priscas_io::text_stream & ts) { this->tw_error = &ts; }
 			void setInputTextStream(priscas_io::text_stream & ts) { this->tw_input = &ts; }
 			void setNoConsoleOutput(bool torf) { this->NoConsoleOutput = torf; }
+			std::string getLineAtPC(unsigned long pc) {return this->PC_to_line_string.count(pc) > 0 ? this->PC_to_line_string[pc] : "???";}
 			~Shell() { delete motherboard; }
 			Shell();
 

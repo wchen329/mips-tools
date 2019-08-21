@@ -30,6 +30,7 @@ namespace mips_tools
 		bool we_plr_em = true;
 		bool we_plr_de = true;
 		bool we_plr_fetch = true;
+		BW_32 pc_original_fetch =this->pc.get_data();
 		BW_32 pc_next = this->pc.get_data();		
 
 		// Current Cycle Flush Signals
@@ -568,14 +569,8 @@ namespace mips_tools
 		
 		// Instructions never stall at write back, if downstream stall causes stale data, don't record it
 		
-		//if(this->wb_sig != this->mem_sig)
-		//{
-			this->wb_sig = this->mem_sig;
-		//}
-		//else
-		//{
-		//	this->wb_sig = -1;
-		//}
+
+		this->wb_sig = this->mem_sig;
 
 		if(we_plr_em)
 		{
@@ -595,6 +590,9 @@ namespace mips_tools
 		if(we_plr_fetch)
 		{
 			this->if_sig = this->next_sig;
+
+			// Register the sig corresponding to the PC number
+			this->pipeline_diagram->registerPC(this->if_sig, pc_original_fetch.AsUInt32());
 			this->next_sig++;
 		}
 

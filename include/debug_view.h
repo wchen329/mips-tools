@@ -21,10 +21,13 @@
 #ifndef __DEBUGVIEW_H__
 #define __DEBUGVIEW_H__
 #include <cstdio>
+#include <list>
+#include <map>
 #include <memory>
 #include <vector>
 #include <typeinfo>
 #include "primitives.h"
+#include "mt_exception.h"
 
 /* Special debugging views
  * wchen329@wisc.edu
@@ -202,6 +205,25 @@ namespace mips_tools
 				return this->max_Y;
 			}
 
+			void registerPC(int sig, unsigned long pc)
+			{
+				if(this->sigToPC.count(sig) > 0)
+					return;
+				this->sigToPC.insert(std::pair<int, unsigned long>(sig, pc));
+			}
+
+			unsigned long getPC(int sig)
+			{
+				if(this->sigToPC.count(sig) > 0)
+				{
+					return sigToPC[sig];
+				}
+				else
+				{
+					return 0; // todo throw exception
+				}
+			}
+
 			const std::vector<TablePoint<DType>>& getDefinedPtList() { return this->pts;}
 			DebugTableSingleType<DType>()
 				: max_X(0), max_Y(0), limit(100)
@@ -211,6 +233,7 @@ namespace mips_tools
 		private:
 			DType nullDType;
 			std::vector<TablePoint<DType>> pts;
+			std::map<int, size_t> sigToPC;
 			unsigned long long max_X;
 			unsigned long long max_Y;
 			unsigned long long limit;

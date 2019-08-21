@@ -387,7 +387,7 @@ void simUI::on_actionCPU_Specific_Debugging_Information_triggered()
     if(simulation::sh != nullptr)
     {
         mips_tools::diag_cpu& dcpu = static_cast<mips_tools::diag_cpu&>(simulation::sh->GetMotherboard().get_cpu());
-        tsd.setCPU(dcpu);
+        tsd.setCPU(dcpu, simulation::sh);
     }
     tsd.exec();
 }

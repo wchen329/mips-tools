@@ -35,7 +35,7 @@ tools_specialdebug::tools_specialdebug(QWidget *parent) :
     this->setLayout(ui->verticalLayoutSpecialDebug);
 }
 
-void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
+void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu, mipsshell::Shell* sh = nullptr)
 {
     if(dcpu.get_DebugViews().size() != 0)
     {
@@ -97,6 +97,22 @@ void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu)
                     wList.push_back(qtw);
                     qtw->setRowCount(dbs->getMaxDefY() + 1);\
                     qtw->setColumnCount(dbs->getMaxDefX() + 1);
+
+                    // Set labels
+                    if(sh != nullptr)
+                    {
+                        for(int ltc = 0; ltc < qtw->rowCount(); ltc++)
+                        {
+                            // Find the PC corresponding to the fetch
+                            unsigned long label_pc = dbs->getPC(ltc);
+                            // Then find the string corresponding
+                            // Put it in the list
+                            lineLabelList.push_back(sh->getLineAtPC(label_pc).c_str());
+                        }
+
+                        qtw->setVerticalHeaderLabels(this->lineLabelList);
+                    }
+
                     const std::vector<mips_tools::TablePointStringV>& tbp = dbs->getDefinedPtList();
                     for(size_t tc = 0; tc < tbp.size(); tc++)
                     {
