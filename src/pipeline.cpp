@@ -459,49 +459,62 @@ namespace mips_tools
 
 		/* Commit Transactions
 		 */
-		if(we_plr_fetch)
+		if(we_plr_mw)
 		{
-			this->fetch_plr.set_data(next_inst);
+			this->wb_sig = this->mem_sig;
+			this->mw_plr.load(mem_regWriteData, mem_regWE, mem_write_reg_num);
+		}
+
+		if(we_plr_em)
+		{
+			this->mem_sig = this->ex_sig;
+			this->em_plr.load(ex_aluResult, ex_data_rs, ex_data_rt, ex_op, ex_regWE, ex_memWE, ex_memRE, ex_rs, ex_rt, ex_rd);
+
 		}
 
 		if(we_plr_de)
 		{
 			this->de_plr.load(decode_rs_data, decode_rt_data, decode_funct, decode_shamt, decode_imm,
 				decode_op, decode_regWE, decode_memWE, decode_memRE, decode_rs, decode_rt, decode_rd);
+			this->ex_sig = this->id_sig;
 		}
 
-		if(we_plr_em)
+		if(we_plr_fetch)
 		{
-			this->em_plr.load(ex_aluResult, ex_data_rs, ex_data_rt, ex_op, ex_regWE, ex_memWE, ex_memRE, ex_rs, ex_rt, ex_rd);
-		}
-
-		if(we_plr_mw)
-		{
-			this->mw_plr.load(mem_regWriteData, mem_regWE, mem_write_reg_num);
+			this->fetch_plr.set_data(next_inst);
+			this->id_sig = this->if_sig;
 		}
 		
 		if(we_pc)
 		{
 			pc.set_data(pc_next);
+			this->if_sig = this->next_sig;
+
+			// Register the sig corresponding to the PC number
+			if(!this->pipeline_diagram->hasSig(this->next_sig))
+			{
+				this->pipeline_diagram->registerPC(this->if_sig, pc_original_fetch.AsUInt32());
+				this->next_sig++;
+			}
 		}
 
 		// Commit flushes as needed
 		if(em_flush_cycle)
 		{
 			this->flush_em_plr();
-			this->mem_sig = -1;
+			this->ex_sig = -1;
 		}
 
 		if(de_flush_cycle && !em_flush_cycle)
 		{
 			this->flush_de_plr();
-			this->ex_sig = -1;
+			this->id_sig = -1;
 		}
 
 		if(if_flush_cycle && !de_flush_cycle && !em_flush_cycle)
 		{
 			this->flush_fetch_plr();
-			this->id_sig = -1;
+			this->if_sig = -1;
 		}
 
 		// Set probes
@@ -564,37 +577,6 @@ namespace mips_tools
 		this->memwb_dbg->findChild(DBG_MEMWB_TARGET_REG)->setValue(priscas_io::StrTypes::Int32ToStr(db_mwRNum));
 		this->memwb_dbg->findChild(DBG_MEMWB_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(wb_regWE));
 		this->memwb_dbg->findChild(DBG_MEMWB_WRITE_DATA)->setValue(db_mwdata.toHexString());
-
-		// Set pipeline diagram instruction signatures
-		
-		// Instructions never stall at write back, if downstream stall causes stale data, don't record it
-		
-
-		this->wb_sig = this->mem_sig;
-
-		if(we_plr_em)
-		{
-			this->mem_sig = this->ex_sig;
-		}
-
-		if(we_plr_de && !branch_taken)
-		{
-			this->ex_sig = this->id_sig;
-		}
-
-		if(we_plr_fetch)
-		{
-			this->id_sig = this->if_sig;
-		}
-
-		if(we_plr_fetch)
-		{
-			this->if_sig = this->next_sig;
-
-			// Register the sig corresponding to the PC number
-			this->pipeline_diagram->registerPC(this->if_sig, pc_original_fetch.AsUInt32());
-			this->next_sig++;
-		}
 
 		unsigned long table_cycle = this->current_cycle_num;
 

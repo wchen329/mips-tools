@@ -212,6 +212,11 @@ namespace mips_tools
 				this->sigToPC.insert(std::pair<int, unsigned long>(sig, pc));
 			}
 
+			bool hasSig(int sig)
+			{
+				return this->sigToPC.count(sig) > 0 ? true : false;
+			}
+
 			unsigned long getPC(int sig)
 			{
 				if(this->sigToPC.count(sig) > 0)
