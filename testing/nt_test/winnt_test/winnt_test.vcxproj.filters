@@ -102,5 +102,8 @@
     <ClCompile Include="..\..\tests\test_mips32fsp_nostall.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\tests\test_mips32fsp_forwarding_basic.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -20,5 +20,6 @@ void test_mips32fsp_registers();
 void test_mips32fsp_core_instructions();
 void test_mips32fsp_subroutine();
 void test_mips32fsp_nostall();
+void test_mips32fsp_forwarding_basic();
 
 #endif
