@@ -381,7 +381,32 @@ namespace mips_tools
 			}
 		}
 
+		// Check for MEM dependency, which is only needed if a load is present
+		if(mem_regWE && jorb_inst(decode_op, decode_funct) && mem_read_inst(mem_op))
+		{
+			if(r_inst(mem_op))
+			{
+				if((decode_rs == mem_rd && decode_rs != 0) || (decode_rt == mem_rd && decode_rt != 0))
+				{
+						em_flush_cycle = true;
+						we_plr_de = false;
+						we_pc = false;
+						we_plr_fetch = false;
+						
+				}
+			}
 
+			else
+			{
+				if((decode_rs == mem_rt && decode_rs != 0) || (decode_rt == mem_rt && decode_rt != 0))
+				{
+						em_flush_cycle = true;
+						we_plr_de = false;
+						we_pc = false;
+						we_plr_fetch = false;
+				}
+			}
+		}
 
 		// Execute branch instruction
 		bool branch_taken = false;
