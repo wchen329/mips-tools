@@ -185,10 +185,11 @@ namespace mips_tools
 
 					else
 					{
-						em_flush_cycle = true;
-						we_plr_fetch = false;
-						we_plr_de = false;
-						we_pc = false;
+							//TODO: Fix unnecessary stall here! (happens in the CORE_INSTRUCTIONS test case)
+							em_flush_cycle = true;
+							we_plr_fetch = false;
+							we_plr_de = false;
+							we_pc = false;
 					}
 				}
 			}
@@ -498,25 +499,6 @@ namespace mips_tools
 			}
 		}
 
-		// Commit flushes as needed
-		if(em_flush_cycle)
-		{
-			this->flush_em_plr();
-			this->ex_sig = -1;
-		}
-
-		if(de_flush_cycle && !em_flush_cycle)
-		{
-			this->flush_de_plr();
-			this->id_sig = -1;
-		}
-
-		if(if_flush_cycle && !de_flush_cycle && !em_flush_cycle)
-		{
-			this->flush_fetch_plr();
-			this->if_sig = -1;
-		}
-
 		// Set probes
 		this->ifid_dbg->findChild(DBG_INSTRUCTION_WORD)->setValue(fetch_plr.get_data().toHexString());
 
@@ -604,6 +586,25 @@ namespace mips_tools
 		if(this->wb_sig >= 0)
 		{
 			this->pipeline_diagram->setData(table_cycle, wb_sig, "W");
+		}
+
+		// Commit flushes as needed
+		if(em_flush_cycle)
+		{
+			this->flush_em_plr();
+			this->ex_sig = -1;
+		}
+
+		if(de_flush_cycle && !em_flush_cycle)
+		{
+			this->flush_de_plr();
+			this->id_sig = -1;
+		}
+
+		if(if_flush_cycle && !de_flush_cycle && !em_flush_cycle)
+		{
+			this->flush_fetch_plr();
+			this->if_sig = -1;
 		}
 
 		this->current_cycle_num++;
