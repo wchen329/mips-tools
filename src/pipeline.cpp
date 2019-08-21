@@ -378,6 +378,7 @@ namespace mips_tools
 
 		// Execute branch instruction
 		bool branch_taken = false;
+		bool branch_inst = true;
 		BW_32 branch_addr = (decode_imm << 2);
 		BW_32 jump_mask = ~((1 << 28) - 1);
 		BW_32 jump_addr = (fetch_plr.get_data().AsInt32() & jump_mask.AsInt32()) | (decode_imm << 2);
@@ -423,6 +424,8 @@ namespace mips_tools
 							branch_taken = true;
 						}
 						break;
+				default:
+						branch_inst = false;
 		}
 
 		// Write data to carry on
@@ -444,7 +447,7 @@ namespace mips_tools
 			this->mem_req_load(next_inst_addr.AsUInt32() + 3)
 		);
 
-		if(!branch_taken && we_plr_fetch)
+		if((!branch_taken && we_plr_fetch) || !branch_inst)
 		{
 			pc_next = pc.get_data().AsUInt32() + 4;
 		}
