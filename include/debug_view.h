@@ -207,7 +207,7 @@ namespace mips_tools
 
 			void registerPC(int sig, unsigned long pc)
 			{
-				if(this->sigToPC.count(sig) > 0)
+				if(this->sigToPC.count(sig) > 0 || sig >= limit)
 					return;
 				this->sigToPC.insert(std::pair<int, unsigned long>(sig, pc));
 			}

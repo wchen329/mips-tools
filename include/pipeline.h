@@ -81,6 +81,7 @@ namespace mips_tools
 			const std::string DBG_IDEX_RS_N;
 			const std::string DBG_IDEX_RT_N;
 			const std::string DBG_IDEX_RD_N;
+
 			const std::string DBG_IDEX_FUNCT;
 			const std::string DBG_IDEX_SHAMT;
 			const std::string DBG_IDEX_IMM;
@@ -95,6 +96,9 @@ namespace mips_tools
 			const std::string DBG_EXMEM_REGWE;
 			const std::string DBG_EXMEM_MEMWE;
 			const std::string DBG_EXMEM_MEMRE;
+			const std::string DBG_EXMEM_RS_N;
+			const std::string DBG_EXMEM_RT_N;
+			const std::string DBG_EXMEM_RD_N;
 	};
 }
 

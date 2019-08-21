@@ -560,6 +560,9 @@ namespace mips_tools
 		this->exmem_dbg->findChild(this->DBG_EXMEM_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(em_regwe_dbg));
 		this->exmem_dbg->findChild(this->DBG_EXMEM_MEMWE)->setValue(priscas_io::StrTypes::BoolToStr(em_memwe_dbg));
 		this->exmem_dbg->findChild(this->DBG_EXMEM_MEMRE)->setValue(priscas_io::StrTypes::BoolToStr(em_memre_dbg));
+		this->idex_dbg->findChild(DBG_EXMEM_RS_N)->setValue(priscas_io::StrTypes::Int32ToStr(em_rs_dbg));
+		this->idex_dbg->findChild(DBG_EXMEM_RT_N)->setValue(priscas_io::StrTypes::Int32ToStr(em_rt_dbg));
+		this->idex_dbg->findChild(DBG_EXMEM_RD_N)->setValue(priscas_io::StrTypes::Int32ToStr(em_rd_dbg));
 
 		this->memwb_dbg->findChild(DBG_MEMWB_TARGET_REG)->setValue(priscas_io::StrTypes::Int32ToStr(db_mwRNum));
 		this->memwb_dbg->findChild(DBG_MEMWB_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(wb_regWE));
@@ -657,7 +660,10 @@ namespace mips_tools
 		DBG_EXMEM_OPCODE("Opcode"),
 		DBG_EXMEM_REGWE("RegWE"),
 		DBG_EXMEM_MEMWE("MemWE"),
-		DBG_EXMEM_MEMRE("MemRE")
+		DBG_EXMEM_MEMRE("MemRE"),
+		DBG_EXMEM_RS_N("Rs"),
+		DBG_EXMEM_RT_N("Rt"),
+		DBG_EXMEM_RD_N("Rd")
 	{
 		std::string FORWARD_VALUE_STRING = "FORWARD";
 		std::string STALL_VALUE_STRING = "STALL";
@@ -709,9 +715,9 @@ namespace mips_tools
 		exmem_dbg->addChild(this->DBG_EXMEM_DATA_ALU, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_DATA_RS, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_DATA_RT, "");
-		//exmem_dbg->addChild(this->DBG_EXMEM_RS_N, "");
-		//exmem_dbg->addChild(this->DBG_EXMEM_RT_N, "");
-		//exmem_dbg->addChild(this->DBG_EXMEM_RD_N, "");
+		exmem_dbg->addChild(this->DBG_EXMEM_RS_N, "");
+		exmem_dbg->addChild(this->DBG_EXMEM_RT_N, "");
+		exmem_dbg->addChild(this->DBG_EXMEM_RD_N, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_OPCODE, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_REGWE, "");
 		exmem_dbg->addChild(this->DBG_EXMEM_MEMWE, "");
