@@ -40,6 +40,7 @@ int main(int argc, char ** argv)
 	online_tests.add_test(test_assert, "test_assert");
 	online_tests.add_test(test_register_32, "test_register_32");
 	online_tests.add_test(test_shell_comments, "test_shell_comments");
+	online_tests.add_test(test_shell_multidirectsymbol, "test_shell_multidirect_symbol");
 	online_tests.add_test(test_sc_cpu_core_instructions, "test_sc_cpu_core_instructions");
 	online_tests.add_test(test_sc_cpu_loop, "test_sc_cpu_loop");
 	online_tests.add_test(test_sc_cpu_ops, "test_sc_cpu_ops");

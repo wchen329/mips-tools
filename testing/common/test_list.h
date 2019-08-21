@@ -5,6 +5,7 @@
 void test_assert();
 void test_register_32();
 void test_shell_comments();
+void test_shell_multidirectsymbol();
 
 // Single CPU - MIPS32
 void test_sc_cpu_core_instructions();
