@@ -52,6 +52,7 @@ int main(int argc, char ** argv)
 	online_tests.add_test(test_mips32fsp_subroutine, "test_mips32fsp_subroutine");
 	online_tests.add_test(test_mips32fsp_nostall, "test_mips32fsp_nostall");
 	online_tests.add_test(test_mips32fsp_forwarding_basic, "test_mips32fsp_forwarding_basic");
+	online_tests.add_test(test_mips32fsp_forwarding_control, "test_mips32fsp_forwarding_control");
 
 	std::cout << "Found " << online_tests.get_test_count() << " tests." << std::endl;
 
