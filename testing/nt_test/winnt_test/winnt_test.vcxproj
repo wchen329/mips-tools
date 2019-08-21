@@ -114,6 +114,7 @@
     <ClCompile Include="..\..\tests\test_mips32fsp_core_instructions.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_load_to_use.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_registers.cpp" />
+    <ClCompile Include="..\..\tests\test_mips32fsp_subroutine.cpp" />
     <ClCompile Include="..\..\tests\test_register32.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
