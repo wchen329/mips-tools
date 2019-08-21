@@ -177,7 +177,7 @@ namespace mips_tools
 					// Else, a little trickier
 					// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
 					// Otherwise, forward it!
-					if(!mem_inst(mem_op))
+					if(!mem_read_inst(mem_op))
 					{
 						if(ex_rs == mem_rt && mem_rt != 0) ex_data_rs = mem_dataALU;
 						if(ex_rt == mem_rt && mem_rt != 0) ex_data_rt = mem_dataALU;
@@ -185,11 +185,13 @@ namespace mips_tools
 
 					else
 					{
-							//TODO: Fix unnecessary stall here! (happens in the CORE_INSTRUCTIONS test case)
+						if((ex_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(ex_op, ex_funct)) && (ex_rt == mem_rt && mem_rt != 0)))
+						{
 							em_flush_cycle = true;
 							we_plr_fetch = false;
 							we_plr_de = false;
 							we_pc = false;
+						}
 					}
 				}
 			}
@@ -336,7 +338,7 @@ namespace mips_tools
 					// Else, a little trickier
 					// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
 					// Otherwise, forward it!
-					if(!mem_inst(ex_op))
+					if(!mem_read_inst(ex_op))
 					{
 						if(decode_rs == mem_rt && decode_rs != 0) decode_rs_data = mem_dataALU;
 						if(decode_rt == mem_rt && decode_rt != 0) decode_rt_data = mem_dataALU;
@@ -344,9 +346,12 @@ namespace mips_tools
 
 					else
 					{
-						de_flush_cycle = true;
-						we_pc = false;
-						we_plr_fetch = false;
+						if((decode_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(decode_op, decode_funct)) && (decode_rt == mem_rt && mem_rt != 0)))
+						{
+							de_flush_cycle = true;
+							we_pc = false;
+							we_plr_fetch = false;
+						}
 					}
 				}
 			}
