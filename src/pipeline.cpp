@@ -570,11 +570,11 @@ namespace mips_tools
 		
 		//if(this->wb_sig != this->mem_sig)
 		//{
-		//	this->wb_sig = this->mem_sig;
+			this->wb_sig = this->mem_sig;
 		//}
 		//else
 		//{
-			this->wb_sig = -1;
+		//	this->wb_sig = -1;
 		//}
 
 		if(we_plr_em)
