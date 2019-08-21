@@ -447,7 +447,7 @@ namespace mips_tools
 			this->mem_req_load(next_inst_addr.AsUInt32() + 3)
 		);
 
-		if((!branch_taken && we_plr_fetch) || !branch_inst)
+		if((!branch_taken) || !branch_inst)
 		{
 			pc_next = pc.get_data().AsUInt32() + 4;
 		}
@@ -497,7 +497,7 @@ namespace mips_tools
 			this->ex_sig = -1;
 		}
 
-		if(if_flush_cycle)
+		if(if_flush_cycle && !de_flush_cycle && !em_flush_cycle)
 		{
 			this->flush_fetch_plr();
 			this->id_sig = -1;
