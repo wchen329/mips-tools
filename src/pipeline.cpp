@@ -38,6 +38,42 @@ namespace mips_tools
 		bool em_flush_cycle = false;
 		bool de_flush_cycle = false;
 
+		// Get a new id right away
+		this->if_sig = this->next_sig;
+
+		// Register the sig corresponding to the PC number
+		if(!this->pipeline_diagram->hasSig(this->next_sig))
+		{
+			this->pipeline_diagram->registerPC(this->if_sig, pc_original_fetch.AsUInt32());
+		}
+
+		unsigned long pipeline_cycle_32 = static_cast<unsigned long>(current_cycle_num);
+
+		// Write the pipeline state BEFORE anything has happened
+		if(this->if_sig >= 0)
+		{
+			this->pipeline_diagram->setData(pipeline_cycle_32, if_sig, "F");
+		}
+
+		if(this->id_sig >= 0)
+		{
+			this->pipeline_diagram->setData(pipeline_cycle_32, id_sig, "D");
+		}
+
+		if(this->ex_sig >= 0)
+		{
+			this->pipeline_diagram->setData(pipeline_cycle_32, ex_sig, "X");
+		}
+
+		if(this->mem_sig >= 0)
+		{
+			this->pipeline_diagram->setData(pipeline_cycle_32, mem_sig, "M");
+		}
+
+		if(this->wb_sig >= 0)
+		{
+			this->pipeline_diagram->setData(current_cycle_num, wb_sig, "W");
+		}
 
 		/* Step 1: Execute but do not yet commit transactions
 		 * Save temporaries to be commited into pipeline registers
@@ -519,14 +555,26 @@ namespace mips_tools
 		if(we_pc)
 		{
 			pc.set_data(pc_next);
-			this->if_sig = this->next_sig;
+			this->next_sig++;
+		}
 
-			// Register the sig corresponding to the PC number
-			if(!this->pipeline_diagram->hasSig(this->next_sig))
-			{
-				this->pipeline_diagram->registerPC(this->if_sig, pc_original_fetch.AsUInt32());
-				this->next_sig++;
-			}
+		// Commit flushes as needed
+		if(em_flush_cycle)
+		{
+			this->flush_em_plr();
+			this->mem_sig = -1;
+		}
+
+		if(de_flush_cycle && !em_flush_cycle)
+		{
+			this->flush_de_plr();
+			this->ex_sig = -1;
+		}
+
+		if(if_flush_cycle && !de_flush_cycle && !em_flush_cycle)
+		{
+			this->flush_fetch_plr();
+			this->id_sig = -1;
 		}
 
 		// Set probes
@@ -592,53 +640,6 @@ namespace mips_tools
 		this->memwb_dbg->findChild(DBG_MEMWB_TARGET_REG)->setValue(priscas_io::StrTypes::Int32ToStr(db_mwRNum));
 		this->memwb_dbg->findChild(DBG_MEMWB_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(wb_regWE));
 		this->memwb_dbg->findChild(DBG_MEMWB_WRITE_DATA)->setValue(db_mwdata.toHexString());
-
-		unsigned long table_cycle = this->current_cycle_num;
-
-		// Write pipelining diagram entries
-		if(this->if_sig >= 0)
-		{
-			this->pipeline_diagram->setData(table_cycle, if_sig, "F");
-		}
-
-		if(this->id_sig >= 0)
-		{
-			this->pipeline_diagram->setData(table_cycle, id_sig, "D");
-		}
-
-		if(this->ex_sig >= 0)
-		{
-			this->pipeline_diagram->setData(table_cycle, ex_sig, "X");
-		}
-
-		if(this->mem_sig >= 0)
-		{
-			this->pipeline_diagram->setData(table_cycle, mem_sig, "M");
-		}
-
-		if(this->wb_sig >= 0)
-		{
-			this->pipeline_diagram->setData(table_cycle, wb_sig, "W");
-		}
-
-		// Commit flushes as needed
-		if(em_flush_cycle)
-		{
-			this->flush_em_plr();
-			this->ex_sig = -1;
-		}
-
-		if(de_flush_cycle && !em_flush_cycle)
-		{
-			this->flush_de_plr();
-			this->id_sig = -1;
-		}
-
-		if(if_flush_cycle && !de_flush_cycle && !em_flush_cycle)
-		{
-			this->flush_fetch_plr();
-			this->if_sig = -1;
-		}
 
 		this->current_cycle_num++;
 
