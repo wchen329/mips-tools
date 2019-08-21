@@ -22,5 +22,6 @@ void test_mips32fsp_subroutine();
 void test_mips32fsp_nostall();
 void test_mips32fsp_forwarding_basic();
 void test_mips32fsp_forwarding_control();
+void test_mips32fsp_load_to_use_control();
 
 #endif

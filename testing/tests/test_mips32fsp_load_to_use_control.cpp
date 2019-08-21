@@ -6,12 +6,12 @@
 #include "mb.h"
 #include "shell.h"
 
-void test_mips32fsp_forwarding_control()
+void test_mips32fsp_load_to_use_control()
 {
 	using namespace mips_tools;
-	std::string prog_name = "mtshell";
+	std::string prog_name = "pshell";
 	std::string flag_i = "-i";
-	std::string file_name = "asm/forwarding_control.s";
+	std::string file_name = "asm/loadtouse_control.s";
 	std::string cpuspec = "-c";
 	std::string cpunum = "1";
 	std::vector<std::string> args;
@@ -27,12 +27,12 @@ void test_mips32fsp_forwarding_control()
 	mb & test_m = test_shell.GetMotherboard();
 	cpu & c = test_m.get_cpu();
 	diag_cpu & pipe = dynamic_cast<diag_cpu&>(c);
-	BW_32 reg_check_s1 = pipe.get_reg_data($s1);
-	BW_32 reg_check_s2 = pipe.get_reg_data($s2);
-	BW_32 reg_check_s3 = pipe.get_reg_data($s3);
+	BW_32 reg_check_s0 = pipe.get_reg_data(16);
+	BW_32 reg_check_s1 = pipe.get_reg_data(17);
 	BW_32 reg_check_k0 = pipe.get_reg_data($k0);
-	assertEquals(reg_check_s1.AsInt32(), 50);
-	assertEquals(reg_check_s2.AsInt32(), 0);
-	assertEquals(reg_check_s3.AsInt32(), 1);
-	assertNotEquals(reg_check_k0.AsInt32(), -1);
+	BW_32 reg_check_k1 = pipe.get_reg_data($k1);
+	assertEquals(reg_check_s0.AsInt32(), 2000);
+	assertEquals(reg_check_s1.AsInt32(), 2000);
+	assertNotEquals(reg_check_k0.AsInt32(), 15);
+	assertEquals(reg_check_k1.AsInt32(), 15);
 }

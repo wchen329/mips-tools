@@ -108,5 +108,8 @@
     <ClCompile Include="..\..\tests\test_mips32fsp_forwarding_control.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\tests\test_mips32fsp_load_to_use_control.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -18,6 +18,8 @@ void test_mips32fsp_load_to_use()
 	args.push_back(prog_name);
 	args.push_back(flag_i);
 	args.push_back(file_name);
+	args.push_back(cpuspec);
+	args.push_back(cpunum);
 	mipsshell::Shell test_shell;
 	test_shell.SetArgs(args);
 	test_shell.SetQuiet();
