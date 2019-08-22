@@ -32,5 +32,5 @@ void test_mips32fsp_bigstallforward()
 	assertEquals(pipe.get_reg_data($s2).AsInt32(), 0x0000FFFF);
 	assertEquals(pipe.get_reg_data($s3).AsInt32(), 0x0000FFFF);
 	assertEquals(pipe.get_reg_data($k0).AsInt32(), 999);
-	assertEquals(test_m.get_cycles(), 18);
+	assertEquals(test_m.get_cycles(), 17);
 }
