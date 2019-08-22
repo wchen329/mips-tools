@@ -93,21 +93,21 @@ namespace priscas
 			 * Return:	int
 			 *			if ID is valid register_bit_width of register
 			 */
-			virtual int get_register_bit_width(int id) = 0;	// get the bit width of register of ID
+			virtual int get_register_bit_width(int id) = 0;
 			
 			/* get_addressing_mode()
 			 * Get the addressing mode the ISA
 			 * Return:	ISA_Attrib::addrmode
 			 *			ISA addressing mode
 			 */
-			virtual ISA_Attrib::addrmode get_addressing_mode() = 0;		// get addressing mode
+			virtual ISA_Attrib::addrmode get_addressing_mode() = 0;
 			
 			/* get_endian()
 			 * Get the endian of the ISA
 			 * Return:	ISA_Attrib::endian
 			 *			ISA endian
 			 */
-			virtual ISA_Attrib::endian get_endian() = 0;				// get endian
+			virtual ISA_Attrib::endian get_endian() = 0;
 			
 			/* assemble(args ...)
 			 * Given a string of arguments, and some important parameters, assemble the instruction

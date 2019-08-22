@@ -40,7 +40,7 @@ namespace priscas
 			void rst(); // "async" reset
 			bool cycle(); // advance the processor a cycle
 			BW_32& get_reg_data(int index) { return this->registers[index].get_data(); }
-			int get_reg_count() { return REG_COUNT; }
+			unsigned get_reg_count() { return REG_COUNT; }
 			BW_32& get_PC() { return this->pc.get_data(); }
 			long get_clk_T() { return this -> clk_T ; }
 			void ghost_cycle();
