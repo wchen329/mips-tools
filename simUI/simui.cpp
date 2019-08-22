@@ -227,7 +227,7 @@ void simUI::on_actionFont_triggered()
 void simUI::on_actionSet_Simulation_Source_triggered()
 {
     QFileDialog qfd;
-    QString filter = "Assembly Source (*.asm | *.s)";
+    QString filter = "Assembly Source (*.asm *.s)";
     QString URL;
 #ifdef WIN32
     URL = "%userprofile%";
