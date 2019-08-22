@@ -9,6 +9,7 @@ PRISCAS/ipch/*
 PRISCAS_Shell/Debug/*
 PRISCAS_Shell/Release/*
 PDCUtil/Debug/*
+PDCUtil/Release/*
 *.exe
 *.tlog
 testing/nt_test/winnt_test/Debug/*
