@@ -23,5 +23,6 @@ void test_mips32fsp_nostall();
 void test_mips32fsp_forwarding_basic();
 void test_mips32fsp_forwarding_control();
 void test_mips32fsp_load_to_use_control();
+void test_mips32fsp_bigstallforward();
 
 #endif

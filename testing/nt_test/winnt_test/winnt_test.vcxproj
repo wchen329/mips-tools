@@ -111,6 +111,11 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="..\..\tests\test_mips32fsp_bigstallforward.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="..\..\tests\test_mips32fsp_core_instructions.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_forwarding_basic.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_forwarding_control.cpp" />
