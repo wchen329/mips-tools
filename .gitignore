@@ -8,6 +8,7 @@ PRISCAS/PRISCAS.opensdf
 PRISCAS/ipch/*
 PRISCAS_Shell/Debug/*
 PRISCAS_Shell/Release/*
+PDCUtil/Debug/*
 *.exe
 *.tlog
 testing/nt_test/winnt_test/Debug/*
