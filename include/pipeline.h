@@ -42,6 +42,7 @@ namespace priscas
 			void rst();
 			fsp_cpu(mmem & m);
 			void exec_CPU_option(std::vector<NameValueStringPair> &);
+			~fsp_cpu() { sc_cpu::~sc_cpu();};
 		private:
 			reg_32 fetch_plr;
 			decode_ex_plr de_plr;
