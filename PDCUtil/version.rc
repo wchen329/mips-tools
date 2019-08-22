@@ -1,0 +1,33 @@
+#include "branding.h"
+#include <winver.h>
+#include <Windows.h>
+
+1 VERSIONINFO
+FILEVERSION     PRISCAS_BRANDING_FULL_VERSION
+PRODUCTVERSION  PRISCAS_BRANDING_FULL_VERSION
+FILEFLAGSMASK   0x3F
+FILEFLAGS       0x0
+FILEOS          VOS__WINDOWS32
+FILETYPE        VFT_APP
+FILESUBTYPE     0x0
+{
+		BLOCK "StringFileInfo"
+		{
+			BLOCK "040904B0"
+			{
+				VALUE "CompanyName", PRISCAS_BRANDING_AUTHOR
+				VALUE "FileVersion", PRISCAS_BRANDING_FULL_VERSION_STRING
+				VALUE "FileDescription", "PRISCAS Disk Creation Utility"
+				VALUE "InternalName", "PDCUtil"
+				VALUE "LegalCopyright", PRISCAS_BRANDING_COPYRIGHT
+				VALUE "OriginalFilename", "pdcutil.exe"
+				VALUE "ProductName", "PRISCAS Disk Creation Utility"
+				VALUE "ProductVersion", PRISCAS_BRANDING_FULL_VERSION_STRING
+			}
+		}
+
+		BLOCK "VarFileInfo"
+		{
+			Value "Translation", 0x409, 1200
+		}
+}
