@@ -115,9 +115,8 @@ namespace mips_tools
 		if(mem_write_inst(mem_op) && wb_regWE && wb_save_num != 0)
 		{
 			if(sc_cpu::cpu_opts[MEM_MEM_INDEX].get_IntValue() == PATH_FORWARD_MODE)
-			{	
-					if(mem_data_rs.AsInt32() == wb_save_num) mem_data_rs = wb_save_data;
-					if(mem_data_rt.AsInt32() == wb_save_num) mem_data_rt = wb_save_data;
+			{
+				if(mem_rt == wb_save_num) mem_data_rt = wb_save_data;
 			}
 		}
 
@@ -211,12 +210,19 @@ namespace mips_tools
 				else
 				{
 					// Else, a little trickier
-					// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
+					// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead, maybe
 					// Otherwise, forward it!
 					if(!mem_read_inst(mem_op))
 					{
 						if(ex_rs == mem_rt && mem_rt != 0) ex_data_rs = mem_dataALU;
 						if(ex_rt == mem_rt && mem_rt != 0) ex_data_rt = mem_dataALU;
+					}
+
+					else if(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
+						&& ex_rs != mem_rt
+						) // A very special case to allow for MEM-MEM forwarding
+					{
+						ex_data_rt = mem_dataALU; // This doesn't do anything
 					}
 
 					else
