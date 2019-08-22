@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "mips.h"
 
-namespace mips_tools
+namespace priscas
 {
 	int friendly_to_numerical(const char * fr_name)
 	{

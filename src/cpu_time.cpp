@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "cpu_time.h"
 
-namespace mips_tools
+namespace priscas
 {
 	CPUTime CPUTime::add_time(long picoseconds_in)
 	{

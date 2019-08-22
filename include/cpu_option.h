@@ -25,8 +25,9 @@
 #include <vector>
 #include "mt_exception.h"
 #include "primitives.h"
+#include "priscas_global.h"
 
-namespace mips_tools
+namespace priscas
 {
 	/* Represents a CPU option
 	 * (i.e. forcing a certain control signal or the like)

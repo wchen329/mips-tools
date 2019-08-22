@@ -28,11 +28,12 @@
 #include "mem.h"
 #include "mb.h"
 #include "messages.h"
+#include "priscas_global.h"
 #include "range.h"
 #include "shell.h"
 #include "states.h"
 
-namespace mipsshell
+namespace priscas
 {
 	void Enter_Interactive(int arg);
 	void breakpoint(std::vector<std::string> & args, Shell& inst);

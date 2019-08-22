@@ -21,8 +21,9 @@
 #ifndef __MESSAGES_H__
 #define __MESSAGES_H__
 #include <string>
+#include "priscas_global.h"
 
-namespace mipsshell
+namespace priscas
 {
 	extern const std::string HELP;	// help message
 	extern const std::string HELP_HELP;

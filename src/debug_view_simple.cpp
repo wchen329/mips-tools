@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "debug_view_simple.h"
 
-namespace mips_tools
+namespace priscas
 {
 	void DebugTreeNode_Simple::addChild(DebugTreeNode_Simple* dtns)
 	{

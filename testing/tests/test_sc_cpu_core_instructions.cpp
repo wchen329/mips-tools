@@ -7,7 +7,7 @@
 
 void test_sc_cpu_core_instructions()
 {
-	using namespace mips_tools;
+	using namespace priscas;
 	std::string prog_name = "mtshell";
 	std::string flag_i = "-i";
 	std::string file_name = "asm/core_instructions.s";
@@ -15,7 +15,7 @@ void test_sc_cpu_core_instructions()
 	args.push_back(prog_name);
 	args.push_back(flag_i);
 	args.push_back(file_name);
-	mipsshell::Shell test_shell;
+	priscas::Shell test_shell;
 	test_shell.SetArgs(args);
 	test_shell.SetQuiet();
 	test_shell.Run();

@@ -22,12 +22,13 @@
 #define __DIAG_CPU_H__
 #include <vector>
 #include "cpu.h"
-#include "cpuoption.h"
+#include "cpu_option.h"
 #include "debug_view.h"
 #include "mips.h"
 #include "primitives.h"
+#include "priscas_global.h"
 
-namespace mips_tools
+namespace priscas
 {
 
 	// CPU with Diagnostic Functions

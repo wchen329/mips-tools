@@ -24,8 +24,9 @@
 /* 32 bit register
  */
 #include "primitives.h"
+#include "priscas_global.h"
 
-namespace mips_tools
+namespace priscas
 {
 
 	class reg_32

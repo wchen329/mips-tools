@@ -25,12 +25,13 @@
 #include "cpu.h"
 #include "mmem.h"
 #include "primitives.h"
+#include "priscas_global.h"
 #include "cpu_time.h"
 #include "pipeline.h"
 #include "sc_cpu.h"
 #include "superscalar.h"
 
-namespace mips_tools
+namespace priscas
 {
 	const bool NULL_SUSPEND = false; // a.k.a. never suspend
 		

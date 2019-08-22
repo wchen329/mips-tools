@@ -25,8 +25,9 @@
 #include <string>
 #include <vector>
 #include "mt_exception.h"
+#include "priscas_global.h"
 
-namespace mips_tools
+namespace priscas
 {
 	typedef std::list<size_t>::iterator range_iterator;
 

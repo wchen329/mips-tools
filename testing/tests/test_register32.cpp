@@ -4,7 +4,7 @@
 
 void test_register_32()
 {
-	using namespace mips_tools;
+	using namespace priscas;
 	reg_32 r;
 	r.set_data(150);
 	BW_32 value = r.get_data();

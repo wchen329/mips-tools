@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "primitives.h"
 
-namespace mips_tools
+namespace priscas
 {
 	BW_32::BW_32(char b_0, char b_1, char b_2, char b_3)
 	{

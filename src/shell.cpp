@@ -18,7 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#define _CRT_SECURE_NO_WARNINGS	// for MSVC
 #include <csignal>
 #include <cstdio>
 #include <cstdint>
@@ -39,7 +38,7 @@
 #include "shell.h"
 #include "states.h"
 
-namespace mipsshell
+namespace priscas
 {
 	/* A mapping from a string into a directive function pointer (must be a member of Shell)
 	 */
@@ -56,7 +55,7 @@ namespace mipsshell
 	void Shell::Run()
 	{
 		size_t argc = args.size();
-		mips_tools::cpu_t cp = mips_tools::STANDARD;
+		priscas::cpu_t cp = priscas::STANDARD;
 		int mem_width = 16;
 		FILE * inst_file = NULL;
 
@@ -71,7 +70,7 @@ namespace mipsshell
 			WriteToOutput(header);
 		}
 
-		mips_tools::HighLevelType t = mips_tools::getTypeGeneric<long>();
+		priscas::HighLevelType t = priscas::getTypeGeneric<long>();
 
 		// First get the active file in which to get instructions from
 		if(argc >= 2)
@@ -92,28 +91,28 @@ namespace mipsshell
 				/*if(args[i] == "-a")
 				{
 					if(!isQuiet) WriteToOutput(("Assembler mode ENABLED.\n"));
-					mipsshell::ASM_MODE = true;
-					mipsshell::INTERACTIVE = false;
+					priscas::ASM_MODE = true;
+					priscas::INTERACTIVE = false;
 				}*/
 
 				if(args[i] == "-i")
 				{
-					mipsshell::INTERACTIVE = false;
-					mipsshell::HAS_INPUT = true;
+					priscas::INTERACTIVE = false;
+					priscas::HAS_INPUT = true;
 					if((i+1) < argc)
 					{
 						inst_file = fopen(args[i+1].c_str(), "r");
-						mipsshell::INPUT_SPECIFIED = true;
+						priscas::INPUT_SPECIFIED = true;
 					}
 				}
 
 				if(args[i] == "-WIN32_SHELL")
 				{
-					mipsshell::INTERACTIVE = false;
-					mipsshell::HAS_INPUT = true;
+					priscas::INTERACTIVE = false;
+					priscas::HAS_INPUT = true;
 					inst_file = stdin;
-					mipsshell::INPUT_SPECIFIED = true;
-					mipsshell::WIN_32_GUI = true;
+					priscas::INPUT_SPECIFIED = true;
+					priscas::WIN_32_GUI = true;
 				}
 
 				if(args[i] == "-m")
@@ -123,20 +122,20 @@ namespace mipsshell
 
 				if(args[i] == "-c")
 				{
-					if((i+1) < argc) cp = static_cast<mips_tools::cpu_t>(atoi(args[i+1].c_str()));
+					if((i+1) < argc) cp = static_cast<priscas::cpu_t>(atoi(args[i+1].c_str()));
 				}
 			}
 		}
 
-		if(mipsshell::HAS_INPUT)
+		if(priscas::HAS_INPUT)
 		{
-			if(!mipsshell::WIN_32_GUI)
+			if(!priscas::WIN_32_GUI)
 			{
 				if(!isQuiet) WriteToOutput(("Starting in machine mode...\n"));
-				mipsshell::INTERACTIVE = false;
+				priscas::INTERACTIVE = false;
 			}
 
-			if(!mipsshell::INPUT_SPECIFIED)
+			if(!priscas::INPUT_SPECIFIED)
 			{
 				WriteToError(("Error: An input file is required (specified through -i [input file] ) in order to run in batch mode.\n"));
 				::exit(1);
@@ -151,7 +150,7 @@ namespace mipsshell
 
 		else
 		{
-			mipsshell::INTERACTIVE = true;
+			priscas::INTERACTIVE = true;
 			inst_file = stdin;
 			if(!isQuiet) WriteToOutput(("Starting in interactive mode...\n"));
 			if(!isQuiet) WriteToOutput(("Tip: system directives are preceded by a . (for example .help)\n"));
@@ -173,10 +172,10 @@ namespace mipsshell
 		if(!isQuiet) WriteToOutput(("CPU Type: "));
 		switch(cp)
 		{
-			case mips_tools::STANDARD:
+			case priscas::STANDARD:
 				if(!isQuiet) WriteToOutput(("Single Cycle\n"));
 				break;
-			case mips_tools::FIVE_P:
+			case priscas::FIVE_P:
 				if(!isQuiet) WriteToOutput(("Five Stage Pipeline\n"));
 				break;
 			default:
@@ -184,9 +183,9 @@ namespace mipsshell
 				::exit(1);
 		}
 
-		this->motherboard = new mips_tools::mb(cp, mem_width, mipsshell::SUSPEND);
+		this->motherboard = new priscas::mb(cp, mem_width, priscas::SUSPEND);
 		motherboard->reset();
-		mips_tools::mb * MB_IN_PTR = motherboard;
+		priscas::mb * MB_IN_PTR = motherboard;
 
 		if(!isQuiet)
 		{
@@ -244,7 +243,7 @@ namespace mipsshell
 					lines.push_back(current_line);		
 				}
 			}
-			catch(mips_tools::mt_exception& e)
+			catch(priscas::mt_exception& e)
 			{
 				WriteToOutput("An error has occurred when writing debugging symbols and assigning directives:\n\t");
 				WriteToOutput(e.get_err().c_str());
@@ -258,21 +257,21 @@ namespace mipsshell
 				this->queued_prog_breakpoints.pop();
 			}
 
-			mips_tools::BW_32 asm_pc = 0;
+			priscas::BW_32 asm_pc = 0;
 
 			// Now assemble the rest
 			for(size_t itr = 0; itr < lines.size(); itr++)
 			{
 				std::vector<std::string> asm_args = chop_string(lines[itr]);
-				mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
-				mips_tools::ISA& dcpuisa = dcpu.get_ISA();
-				std::shared_ptr<mips_tools::BW> inst;
+				priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(motherboard->get_cpu());
+				priscas::ISA& dcpuisa = dcpu.get_ISA();
+				std::shared_ptr<priscas::BW> inst;
 				try
 				{
 					inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
 				}
 
-				catch(mips_tools::mt_exception& e)
+				catch(priscas::mt_exception& e)
 				{
 					WriteToError(("An error occurred while assembling the program.\n"));
 					std::string msg_1 = 
@@ -285,7 +284,7 @@ namespace mipsshell
 					return;
 				}
 
-				mips_tools::BW_32& thirty_two = dynamic_cast<mips_tools::BW_32&>(*inst);
+				priscas::BW_32& thirty_two = dynamic_cast<priscas::BW_32&>(*inst);
 				motherboard->DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
 				motherboard->DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
 				motherboard->DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
@@ -310,14 +309,14 @@ namespace mipsshell
 		 *
 		 */
 
-		if(mipsshell::INTERACTIVE)
+		if(priscas::INTERACTIVE)
 		{
 			WriteToOutput((">> "));
 		}
 
-		if(mipsshell::INTERACTIVE || mipsshell::ASM_MODE)
+		if(priscas::INTERACTIVE || priscas::ASM_MODE)
 		{
-			mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
+			priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(motherboard->get_cpu());
 			std::string& val = this->ReadFromInput();
 			
 			if(val.size() == 0)
@@ -332,7 +331,7 @@ namespace mipsshell
 					std::vector<std::string> chopped = chop_string(val);
 					execute_runtime_directive(chopped);
 				}
-				catch(mips_tools::mt_exception & e)
+				catch(priscas::mt_exception & e)
 				{
 					WriteToError(e.get_err());
 				}
@@ -341,16 +340,16 @@ namespace mipsshell
 			}
 
 			std::vector<std::string> asm_args = chop_string(val);
-			mips_tools::ISA & dcpuisa = dcpu.get_ISA();
-			mips_tools::BW_32 asm_pc = dcpu.get_PC();
-			std::shared_ptr<mips_tools::BW> inst;
+			priscas::ISA & dcpuisa = dcpu.get_ISA();
+			priscas::BW_32 asm_pc = dcpu.get_PC();
+			std::shared_ptr<priscas::BW> inst;
 			
 			try
 			{
 				inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
 			}
 
-			catch(mips_tools::mt_exception& e)
+			catch(priscas::mt_exception& e)
 			{
 				WriteToError(("An error occurred while assembling the inputted instruction.\n"));
 				std::string msg = (std::string("Error information: ") + std::string(e.get_err()));
@@ -360,7 +359,7 @@ namespace mipsshell
 				continue;
 			}
 
-			mips_tools::BW_32& thirty_two = dynamic_cast<mips_tools::BW_32&>(*inst);
+			priscas::BW_32& thirty_two = dynamic_cast<priscas::BW_32&>(*inst);
 			motherboard->DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
 			motherboard->DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
 			motherboard->DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
@@ -368,14 +367,14 @@ namespace mipsshell
 			motherboard->step();
 		}
 
-		if(!mipsshell::INTERACTIVE && !mipsshell::ASM_MODE)
+		if(!priscas::INTERACTIVE && !priscas::ASM_MODE)
 		{
 
-			signal(SIGINT, mipsshell::Enter_Interactive);
-			while(this->state != KILLED && !mipsshell::SUSPEND)
+			signal(SIGINT, priscas::Enter_Interactive);
+			while(this->state != KILLED && !priscas::SUSPEND)
 			{
-				mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(motherboard->get_cpu());
-				mips_tools::BW_32 dpc = dcpu.get_PC();
+				priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(motherboard->get_cpu());
+				priscas::BW_32 dpc = dcpu.get_PC();
 				
 				if(this->directive_syms.has(dpc.AsUInt32()))
 				{
@@ -392,8 +391,8 @@ namespace mipsshell
 
 				if(this->has_prog_break_at(dcpu.get_PC().AsUInt32()))
 				{
-					mipsshell::SUSPEND = true;
-					mipsshell::INTERACTIVE = true;
+					priscas::SUSPEND = true;
+					priscas::INTERACTIVE = true;
 					unsigned long line_number = this->PC_to_line_number.at(dcpu.get_PC().AsUInt32());
 					std::string line_str = this->PC_to_line_string.at(dcpu.get_PC().AsUInt32());
 
@@ -405,8 +404,8 @@ namespace mipsshell
 
 				if(this->has_ma_break_at(motherboard->get_cycles()))
 				{
-					mipsshell::SUSPEND = true;
-					mipsshell::INTERACTIVE = true;
+					priscas::SUSPEND = true;
+					priscas::INTERACTIVE = true;
 					std::string o = (std::string("Breakpoint at cycle " + priscas_io::StrTypes::UInt32ToStr(motherboard->get_cycles()) + " hit.\n"));
 					WriteToOutput(o);
 				}
@@ -416,7 +415,7 @@ namespace mipsshell
 		if(!this->isQuiet)
 			WriteToOutput(("Simulation terminating...\n"));
 		fclose(inst_file);
-		delete mipsshell::mtsstream::asmout;
+		delete priscas::mtsstream::asmout;
 }
 
 	/* Takes an input string and breaks that string into a vector of several
@@ -489,7 +488,7 @@ namespace mipsshell
 
 		if(has_escaped || in_quotes)
 		{
-			throw mips_tools::mt_bad_escape();
+			throw priscas::mt_bad_escape();
 		}
 
 		if(built_string != "")
@@ -505,21 +504,21 @@ namespace mipsshell
 		this->state = EMBRYO;
 
 		// Set up jump table for runtime directives
-		this->directives.insert(directive_pair(".breakpoint", mipsshell::breakpoint));
-		this->directives.insert(directive_pair(".cycle", mipsshell::cycle));
-		this->directives.insert(directive_pair(".exit", mipsshell::exit));
-		this->directives.insert(directive_pair(".help", mipsshell::help));
-		this->directives.insert(directive_pair(".mem", mipsshell::mem));
-		this->directives.insert(directive_pair(".pci", mipsshell::pci));
-		this->directives.insert(directive_pair(".cpuopts", mipsshell::cpuopts));
-		this->directives.insert(directive_pair(".power", mipsshell::power));
-		this->directives.insert(directive_pair(".rst", mipsshell::rst));
-		this->directives.insert(directive_pair(".run", mipsshell::run));
-		this->directives.insert(directive_pair(".sound", mipsshell::sound));
-		this->directives.insert(directive_pair(".state", mipsshell::state));
-		this->directives.insert(directive_pair(".trace", mipsshell::trace));
-		this->directives.insert(directive_pair(".time", mipsshell::time));
-		this->directives.insert(directive_pair(".vga", mipsshell::vga));
+		this->directives.insert(directive_pair(".breakpoint", priscas::breakpoint));
+		this->directives.insert(directive_pair(".cycle", priscas::cycle));
+		this->directives.insert(directive_pair(".exit", priscas::exit));
+		this->directives.insert(directive_pair(".help", priscas::help));
+		this->directives.insert(directive_pair(".mem", priscas::mem));
+		this->directives.insert(directive_pair(".pci", priscas::pci));
+		this->directives.insert(directive_pair(".cpuopts", priscas::cpuopts));
+		this->directives.insert(directive_pair(".power", priscas::power));
+		this->directives.insert(directive_pair(".rst", priscas::rst));
+		this->directives.insert(directive_pair(".run", priscas::run));
+		this->directives.insert(directive_pair(".sound", priscas::sound));
+		this->directives.insert(directive_pair(".state", priscas::state));
+		this->directives.insert(directive_pair(".trace", priscas::trace));
+		this->directives.insert(directive_pair(".time", priscas::time));
+		this->directives.insert(directive_pair(".vga", priscas::vga));
 	}
 
 	void Shell::declare_program_breakpoint(unsigned long line)
@@ -626,14 +625,14 @@ namespace mipsshell
 		{
 			*tw_input >> rd_buffer;
 			osi::sleep(10);
-		} while(rd_buffer == "" && mipsshell::INTERACTIVE);
+		} while(rd_buffer == "" && priscas::INTERACTIVE);
 
 		return this->rd_buffer;
 	}
 
-	std::vector<mips_tools::NameValueStringPair> scan_for_values(std::vector<std::string>& input)
+	std::vector<priscas::NameValueStringPair> scan_for_values(std::vector<std::string>& input)
 	{
-		std::vector<mips_tools::NameValueStringPair> vals;
+		std::vector<priscas::NameValueStringPair> vals;
 
 		for(size_t sind = 0; sind < input.size(); sind++)
 		{
@@ -645,14 +644,14 @@ namespace mipsshell
 			{
 				std::string first = input[sind];
 				std::string second = "";
-				mips_tools::NameValueStringPair nv(first, second);
+				priscas::NameValueStringPair nv(first, second);
 				vals.push_back(nv);
 			}
 
 			// Case: empty name. This is an error
 			else if(substr_where == 0)
 			{
-				throw mips_tools::mt_invalid_cpu_opt("Option specifier (lvalue of = may not be blank) requires name");
+				throw priscas::mt_invalid_cpu_opt("Option specifier (lvalue of = may not be blank) requires name");
 			}
 
 			// Case: there is at least one equal sign
@@ -663,7 +662,7 @@ namespace mipsshell
 
 				std::string first = indc.substr(0, substr_where);
 				std::string second = indc.substr(substr_where + 1, indc.size());
-				mips_tools::NameValueStringPair nv(first, second);
+				priscas::NameValueStringPair nv(first, second);
 				vals.push_back(nv);
 			}
 		}

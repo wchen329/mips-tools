@@ -21,7 +21,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "states.h"
 
-namespace mipsshell
+namespace priscas
 {
 	bool ASM_MODE = false;		// acting in assembler mode? true if is, false if not
 	bool DEBUG_MODE = false;

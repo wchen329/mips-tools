@@ -23,8 +23,9 @@
 #define PICOSECONDS_IN_A_DAY 86400000000000000
 #define TEN_TO_TWELVE 1000000000000
 #include <cmath>
+#include "priscas_global.h"
 
-namespace mips_tools
+namespace priscas
 {
 	// CPUTime
 	// stores time in two separate fields

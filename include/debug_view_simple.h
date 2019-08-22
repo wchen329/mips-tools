@@ -24,8 +24,9 @@
 #include <map>
 #include <list>
 #include "debug_view.h"
+#include "priscas_global.h"
 
-namespace mips_tools
+namespace priscas
 {
 
 	/* Simple DebugTreeNode
@@ -97,8 +98,8 @@ namespace mips_tools
 			std::vector<DebugTree_Simple*> trees;
 	};
 
-	typedef mips_tools::DebugTableSingleType<std::string> DebugTableStringValue;
-	typedef mips_tools::TablePoint<std::string> TablePointStringV;
+	typedef priscas::DebugTableSingleType<std::string> DebugTableStringValue;
+	typedef priscas::TablePoint<std::string> TablePointStringV;
 }
 
 #endif

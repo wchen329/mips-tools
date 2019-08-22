@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <string>
+#include "priscas_global.h"
 
 namespace priscas_io
 {

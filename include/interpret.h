@@ -20,7 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __INTERPRET_H__
 #define __INTERPRET_H__
-#define _CRT_SECURE_NO_WARNINGS // MSVC
 #include <cstdio>
 #include <cstring>
 #include <exception>
@@ -35,12 +34,13 @@
 #include "mtsstream.h"
 #include "mt_exception.h"
 #include "primitives.h"
+#include "priscas_global.h"
 #include "runtime_call.h"
 #include "syms_table.h"
 
-namespace mipsshell
+namespace priscas
 {
-	extern mips_tools::syms_table debug_table;
+	extern priscas::syms_table debug_table;
 }
 
 #endif

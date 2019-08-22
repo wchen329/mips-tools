@@ -29,8 +29,9 @@
 #include "interpret.h"
 #include "diag_cpu.h"
 #include "messages.h"
+#include "priscas_global.h"
 
-namespace mipsshell
+namespace priscas
 {
 
 	// From a register specifier, i.e. %so get an integer representation

@@ -8,7 +8,7 @@
 
 void test_mips32fsp_forwarding_basic()
 {
-	using namespace mips_tools;
+	using namespace priscas;
 	std::string prog_name = "mtshell";
 	std::string flag_i = "-i";
 	std::string file_name = "asm/forwarding_basic.s";
@@ -20,7 +20,7 @@ void test_mips32fsp_forwarding_basic()
 	args.push_back(file_name);
 	args.push_back(option_c);
 	args.push_back(cpu_select);
-	mipsshell::Shell test_shell;
+	priscas::Shell test_shell;
 	test_shell.SetArgs(args);
 	test_shell.SetQuiet();
 	test_shell.Run();

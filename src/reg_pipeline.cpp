@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "reg_pipeline.h"
 
-namespace mips_tools
+namespace priscas
 {
 
 	void decode_ex_plr::load(	BW_32 data_rs,

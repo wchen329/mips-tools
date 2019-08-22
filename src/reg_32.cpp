@@ -19,7 +19,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 #include "reg_32.h"
-namespace mips_tools
+namespace priscas
 {
 	reg_32 operator|(reg_32 r_1, reg_32 r_2)
 	{

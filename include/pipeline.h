@@ -23,11 +23,12 @@
 
 #include "debug_view_simple.h"
 #include "mips.h"
+#include "priscas_global.h"
 #include "reg_32.h"
 #include "reg_pipeline.h"
 #include "sc_cpu.h"
 #include "streams.h"
-namespace mips_tools
+namespace priscas
 {
 	/* A 5-stage (FS)
 	 * MIPS R4000 clone pipelined processor (P)

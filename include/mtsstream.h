@@ -22,14 +22,15 @@
 #define __MTSSTREAM_H__
 #include <cstdio>
 #include "primitives.h"
+#include "priscas_global.h"
 
-namespace mipsshell
+namespace priscas
 {
 
 	class asm_ostream
 	{
 		public:	
-			void append(mips_tools::BW_32);
+			void append(priscas::BW_32);
 			asm_ostream(char * filename);
 			~asm_ostream();
 		private:

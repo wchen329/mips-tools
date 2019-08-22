@@ -20,8 +20,9 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __STATES_H__
 #define __STATES_H__
+#include "priscas_global.h"
 
-namespace mipsshell
+namespace priscas
 {
 	extern bool ASM_MODE;		// acting in assembler mode? true if is, false if not
 	extern bool DEBUG_MODE;		// acting in debug mode? true if is, false if now

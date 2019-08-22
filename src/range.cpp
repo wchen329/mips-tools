@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "range.h"
 
-namespace mips_tools
+namespace priscas
 {
 	range::range(std::string& specifier)
 	{
@@ -54,7 +54,7 @@ namespace mips_tools
 		// Now evaluate. We have exactly two or three fields?
 		if(string_list.size() != 1 && string_list.size() != 2 && string_list.size() != 3)
 		{
-			throw mips_tools::mt_invalid_range("Must have either 1 - 3 parameters in the format index, begin:end, or begin:end:step.");
+			throw priscas::mt_invalid_range("Must have either 1 - 3 parameters in the format index, begin:end, or begin:end:step.");
 		}
 		
 		// Then just convert. If zero, check that it's REALLY zero
@@ -76,16 +76,16 @@ namespace mips_tools
 
 		// Check for sensical stepping
 		if(step == 0)
-			throw mips_tools::mt_invalid_range("Step may not be 0.");
+			throw priscas::mt_invalid_range("Step may not be 0.");
 
 		if(end - begin > 0)
 		{
-			if(!(step > 0)) throw mips_tools::mt_invalid_range("A decreasing range must specify a postive step.");
+			if(!(step > 0)) throw priscas::mt_invalid_range("A decreasing range must specify a postive step.");
 		}
 
 		if(end - begin < 0)
 		{
-			if(!(step < 0)) throw mips_tools::mt_invalid_range("A decreasing range must specify a negative step.");
+			if(!(step < 0)) throw priscas::mt_invalid_range("A decreasing range must specify a negative step.");
 		}
 
 		// Now evaluate the range

@@ -20,12 +20,12 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "mtsstream.h"
 
-namespace mipsshell
+namespace priscas
 {
 
-	void asm_ostream::append(mips_tools::BW_32 data)
+	void asm_ostream::append(priscas::BW_32 data)
 	{
-		fwrite(&data, sizeof(mips_tools::BW_32), 1, this->f);
+		fwrite(&data, sizeof(priscas::BW_32), 1, this->f);
 	}
 
 	asm_ostream::asm_ostream(char * filename)

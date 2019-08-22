@@ -8,7 +8,7 @@
 
 void test_mips32fsp_load_to_use_control()
 {
-	using namespace mips_tools;
+	using namespace priscas;
 	std::string prog_name = "pshell";
 	std::string flag_i = "-i";
 	std::string file_name = "asm/loadtouse_control.s";
@@ -20,7 +20,7 @@ void test_mips32fsp_load_to_use_control()
 	args.push_back(file_name);
 	args.push_back(cpuspec);
 	args.push_back(cpunum);
-	mipsshell::Shell test_shell;
+	priscas::Shell test_shell;
 	test_shell.SetArgs(args);
 	test_shell.SetQuiet();
 	test_shell.Run();

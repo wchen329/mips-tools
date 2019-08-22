@@ -21,6 +21,7 @@
 #ifndef __MIPS_H__
 #define __MIPS_H__
 
+
 /* A header for mips specifc details
  * such as register name mappings
  * and a jump list for functional routines
@@ -39,10 +40,11 @@
 #include "ISA.h"
 #include "mt_exception.h"
 #include "primitives.h"
+#include "priscas_global.h"
 #include "reg_32.h"
 #include "syms_table.h"
 
-namespace mips_tools
+namespace priscas
 {
 
 	// Friendly Register Names -> Numerical Assignments

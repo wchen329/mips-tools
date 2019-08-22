@@ -33,7 +33,7 @@
  * wchen329@wisc.edu
  */
 
-namespace mips_tools
+namespace priscas
 {
 	class DebugView
 	{

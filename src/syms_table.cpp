@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "syms_table.h"
 
-namespace mips_tools
+namespace priscas
 {
 	void syms_table::insert(std::string key, unsigned long PC)
 	{

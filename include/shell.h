@@ -27,10 +27,11 @@
 #include <vector>
 #include "mb.h"
 #include "primitives.h"
+#include "priscas_global.h"
 #include "syms_table.h"
 #include "streams.h"
 
-namespace mipsshell
+namespace priscas
 {
 
 	/* Divides a string based on whitespace, tabs, commas and newlines
@@ -43,7 +44,7 @@ namespace mipsshell
 	 * These consist of string with EXACT format:
 	 * NAME=VALUE
 	 */
-	std::vector<mips_tools::NameValueStringPair> scan_for_values(std::vector<std::string>& input);
+	std::vector<priscas::NameValueStringPair> scan_for_values(std::vector<std::string>& input);
 
 	/* A single instance of a Shell
 	 * -
@@ -55,7 +56,7 @@ namespace mipsshell
 		public:
 			void Run();
 			void SetArgs(std::vector<std::string> & args) { this->args = args; }
-			mips_tools::mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
+			priscas::mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
 			void SetQuiet() { isQuiet = true; }
 			
 			void WriteToOutput(std::string& o);
@@ -97,7 +98,7 @@ namespace mipsshell
 			Shell& operator=(const Shell&);
 			Shell(const Shell&);
 			std::vector<std::string> args;
-			mips_tools::mb * motherboard;
+			priscas::mb * motherboard;
 			bool isQuiet;
 
 			Shell_State state;
@@ -110,8 +111,8 @@ namespace mipsshell
 			std::map<unsigned long, bool> microarch_breakpoints;
 			std::queue<unsigned long> queued_prog_breakpoints;
 			std::map<std::string, void(*)(std::vector<std::string>&, Shell& shell)> directives;
-			mips_tools::syms_table jump_syms;
-			mips_tools::mono_syms_table directive_syms;
+			priscas::syms_table jump_syms;
+			priscas::mono_syms_table directive_syms;
 			void execute_runtime_directive(std::vector<std::string>& args_list);
 			bool has_ma_break_at(unsigned long line){ return this->microarch_breakpoints.count(line) > 0; }
 			bool has_prog_break_at(unsigned long line){ return this->program_breakpoints.count(line) > 0; }

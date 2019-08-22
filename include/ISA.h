@@ -29,10 +29,14 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "priscas_global.h"
 #include "syms_table.h"
 
-namespace mips_tools
+namespace priscas
 {
+	/* ISA_Attrib
+	 * Contains usable values for ISA interface functions below
+	 */
 	namespace ISA_Attrib
 	{
 		enum addrmode
@@ -48,16 +52,69 @@ namespace mips_tools
 		};
 	}
 
+	/* ISA
+	 * describes an ISA a.k.a
+	 * instruction set architecture
+	 */
 	class ISA
 	{
 		public:
-			virtual unsigned get_reg_count() = 0;			// The amount of registers in this architecture
-			virtual unsigned get_address_bit_width() = 0;	// bit width of a PHYSICAL address / PC
-			virtual std::string get_reg_name(int id) = 0;	// given a register ID give the "friendly name" of the register
-			virtual int get_reg_id(std::string&) = 0;		// similarly, get the register ID given the "friendly name" of the register
+			
+			/* get_reg_count()
+			 * Returns the amount of registers in this ISA
+			 * Return:	unsigned int
+			 *			amount of registers in the ISA
+			 */
+			virtual unsigned get_reg_count() = 0;
+
+			/* get_address_bit_width()
+			 * Returns the bit width of a physical memory address
+			 * Return:	unsigned int
+			 *			bits used for physical memory addressing
+			 */
+			virtual unsigned get_address_bit_width() = 0;
+
+			/* get_reg_name(int id)
+			 * Returns the common or "friendly" name of a register given an ID
+			 * Return:	PString
+			 *			if name is valid, the register ID
+			 */
+			virtual std::string get_reg_name(int id) = 0;
+
+			/* get_reg_id(PString&)
+			 * Returns the register ID given a common or "friendly" name of a register
+			 * Return:	PString
+			 *			if ID is valid: name of the register
+			 */
+			virtual int get_reg_id(std::string&) = 0;
+			
+			/* get_register_bit_width(int id)
+			 * Given the id of a register, returns the register's bit width
+			 * Return:	int
+			 *			if ID is valid register_bit_width of register
+			 */
 			virtual int get_register_bit_width(int id) = 0;	// get the bit width of register of ID
+			
+			/* get_addressing_mode()
+			 * Get the addressing mode the ISA
+			 * Return:	ISA_Attrib::addrmode
+			 *			ISA addressing mode
+			 */
 			virtual ISA_Attrib::addrmode get_addressing_mode() = 0;		// get addressing mode
+			
+			/* get_endian()
+			 * Get the endian of the ISA
+			 * Return:	ISA_Attrib::endian
+			 *			ISA endian
+			 */
 			virtual ISA_Attrib::endian get_endian() = 0;				// get endian
+			
+			/* assemble(args ...)
+			 * Given a string of arguments, and some important parameters, assemble the instruction
+			 * (This interface may change)
+			 * Return:	BW pointer
+			 *			bitword corresponding to assembled instruction
+			 */
 			virtual std::shared_ptr<BW> assemble(std::vector<std::string>& args, BW& baseAddress, syms_table& jump_syms) = 0;
 	};
 }

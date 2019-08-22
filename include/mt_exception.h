@@ -21,12 +21,13 @@
 #ifndef __MT_EXCEPTION_H__
 #define __MT_EXCEPTION_H__
 #include <string>
+#include "priscas_global.h"
 
 /* MIPS Tools
  * Exception Class
  */
 
-namespace mips_tools
+namespace priscas
 {
 	namespace exception_nums
 	{

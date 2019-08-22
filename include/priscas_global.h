@@ -18,51 +18,27 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#ifndef __CPU_H__
-#define __CPU_H__
-#include "ISA.h"
-#include "priscas_global.h"
+#ifndef __PRISCAS_GLOBAL_H__
+#define __PRISCAS_GLOBAL_H__
+#include <string>
+
+/* Intended Global defines for PRISCAS Core, in all header files
+ * wchen329
+ */
 
 namespace priscas
 {
-
-	/* Contains interface information concerning making a
-	 * CPU object, abstract class
-	 *
-	 * wchen329
+	/* Universal PRISCAS String
+	 * Currently just a typedef, this will most likely change in the future
 	 */
-	class cpu
-	{
-		public:
-			/* rst()
-			 * Resets the processor state
-			 * (zeroes it all out)
-			 * Return: nothing
-			 */
-			virtual void rst() = 0;
-
-			/* cycle()
-			 * Run the processor for one cycle
-			 * Return:	boolean
-			 *			True, indicating the processor sends a shutdown signal, False if not (generally returns false)
-			 */
-			virtual bool cycle() = 0;
-
-			/* get_clk_T()
-			 * Retrieve clock period of processor (in picoseconds)
-			 * Return:	long
-			 *			the clock period of the processor in picoseconds
-			 */
-			virtual long get_clk_T() = 0;
-
-			/* get_ISA()
-			 * Retrieve a reference to the ISA which the processor
-			 * implements
-			 * Return:	ISA reference
-			 *			reference to processors ISA
-			 */
-			virtual ISA& get_ISA() = 0;
-	};
-
+	typedef std::string UPString;
 }
+
+/* Namespace aliases for old names of namespaces
+ * mips_tools -> priscas
+ * mipsshell -> priscas
+ */
+namespace mips_tools = priscas;
+namespace mipsshell = priscas;
+
 #endif

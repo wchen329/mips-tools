@@ -6,7 +6,7 @@
 
 void test_sc_cpu_ops()
 {
-	using namespace mips_tools;
+	using namespace priscas;
 	mmem cpu_mem;
 	sc_cpu cpu(cpu_mem);
 	cpu.rst();

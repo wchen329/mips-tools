@@ -1,5 +1,6 @@
 #ifndef __OSI_H__
 #define __OSI_H__
+#include "priscas_global.h"
 
 /* OS Interfacing
  */

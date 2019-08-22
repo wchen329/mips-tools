@@ -18,51 +18,38 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#ifndef __CPU_H__
-#define __CPU_H__
-#include "ISA.h"
-#include "priscas_global.h"
+#include "cpu_option.h"
 
 namespace priscas
 {
-
-	/* Contains interface information concerning making a
-	 * CPU object, abstract class
-	 *
-	 * wchen329
-	 */
-	class cpu
+	CPU_Option::CPU_Option(const std::string& name, const std::string& desc) :
+		nameDesc(name, desc),
+		value(0)
 	{
-		public:
-			/* rst()
-			 * Resets the processor state
-			 * (zeroes it all out)
-			 * Return: nothing
-			 */
-			virtual void rst() = 0;
+	}
 
-			/* cycle()
-			 * Run the processor for one cycle
-			 * Return:	boolean
-			 *			True, indicating the processor sends a shutdown signal, False if not (generally returns false)
-			 */
-			virtual bool cycle() = 0;
+	void CPU_Option::add_Value(std::string& strValue, int intValue)
+	{
+		// First add the value to the string list
+		this->strNames.push_back(strValue);
+		this->IntToStr.insert(std::pair<int, std::string>(intValue, strValue));
 
-			/* get_clk_T()
-			 * Retrieve clock period of processor (in picoseconds)
-			 * Return:	long
-			 *			the clock period of the processor in picoseconds
-			 */
-			virtual long get_clk_T() = 0;
+		// Then assign the integer value
 
-			/* get_ISA()
-			 * Retrieve a reference to the ISA which the processor
-			 * implements
-			 * Return:	ISA reference
-			 *			reference to processors ISA
-			 */
-			virtual ISA& get_ISA() = 0;
-	};
+		// NOTE: this isn't checked for duplicates!
+		strToInt.insert(std::pair<std::string, int>(strValue, intValue));
+	}
 
+	void CPU_Option::set_Value(std::string& value)
+	{
+		if(this->strToInt.count(value) > 0)
+		{
+			this->value = this->strToInt[value];
+		}
+
+		else
+		{
+			throw mt_invalid_cpu_opt("Value is not valid for this option.");
+		}
+	}
 }
-#endif

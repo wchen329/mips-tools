@@ -77,10 +77,10 @@
     <ClCompile Include="..\src\osi.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\cpuoption.cpp">
+    <ClCompile Include="..\src\debug_view_simple.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\debug_view_simple.cpp">
+    <ClCompile Include="..\src\cpu_option.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -172,13 +172,16 @@
     <ClInclude Include="..\include\osi.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\cpuoption.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\debug_view_simple.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\debug_view.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\priscas_global.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cpu_option.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

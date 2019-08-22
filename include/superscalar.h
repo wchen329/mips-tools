@@ -24,12 +24,13 @@
 #include <queue>
 #include <vector>
 #include "primitives.h"
+#include "priscas_global.h"
 #include "sc_cpu.h"
 #include "mips.h"
 #include "reg_32.h"
 #include "reg_pipeline.h"
 
-namespace mips_tools
+namespace priscas
 {
 
 	/* Register Map

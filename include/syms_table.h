@@ -25,10 +25,11 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "priscas_global.h"
 #include "primitives.h"
 #include "mt_exception.h"
 
-namespace mips_tools
+namespace priscas
 {
 	/* Wrapper class for the symbols table
 	 *

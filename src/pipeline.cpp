@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "pipeline.h"
 
-namespace mips_tools
+namespace priscas
 {
 	bool fsp_cpu::cycle()
 	{
@@ -72,7 +72,7 @@ namespace mips_tools
 
 		if(this->wb_sig >= 0)
 		{
-			this->pipeline_diagram->setData(current_cycle_num, wb_sig, "W");
+			this->pipeline_diagram->setData(pipeline_cycle_32, wb_sig, "W");
 		}
 
 		/* Step 1: Execute but do not yet commit transactions
@@ -588,10 +588,10 @@ namespace mips_tools
 
 		BW_32 de_rs_data_dbg;
 		BW_32 de_rt_data_dbg;
-		mips_tools::funct de_funct_dbg_raw;
+		priscas::funct de_funct_dbg_raw;
 		BW_32 de_shamt_dbg;
 		BW_32 de_imm_dbg;
-		mips_tools::opcode de_op_dbg_raw;
+		priscas::opcode de_op_dbg_raw;
 		bool de_regwe_dbg;
 		bool de_memwe_dbg;
 		bool de_memre_dbg;
@@ -605,7 +605,7 @@ namespace mips_tools
 		BW_32 em_dalu_dbg;
 		BW_32 em_rs_data_dbg;
 		BW_32 em_rt_data_dbg;
-		mips_tools::opcode em_op_dbg_raw;
+		priscas::opcode em_op_dbg_raw;
 		bool em_regwe_dbg;
 		bool em_memwe_dbg;
 		bool em_memre_dbg;

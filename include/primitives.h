@@ -23,6 +23,7 @@
 #include <cctype>
 #include <cstdint>
 #include <string>
+#include "priscas_global.h"
 /* Various byte long
  * primitives such as a 32-bitlong word
  * or a 64-bitlong one.
@@ -30,7 +31,7 @@
  * wchen329
  */
 
-namespace mips_tools
+namespace priscas
 {
 	typedef unsigned char byte_8b;
 

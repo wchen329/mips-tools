@@ -21,8 +21,9 @@
 #ifndef __REG_PIPELINE_H__
 #define __REG_PIPELINE_H__
 #include "mips.h"
+#include "priscas_global.h"
 
-namespace mips_tools
+namespace priscas
 {
 	/* DE-EX
 	 * Pipeline Register

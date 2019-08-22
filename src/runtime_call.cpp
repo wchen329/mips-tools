@@ -21,7 +21,7 @@
 
 #include "runtime_call.h"
 
-namespace mipsshell
+namespace priscas
 {
 
 	void Enter_Interactive(int a)
@@ -34,7 +34,7 @@ namespace mipsshell
 	{
 		if(args_list.size() < 1)
 		{
-			throw mips_tools::mt_insuff_arg();
+			throw priscas::mt_insuff_arg();
 		}
 		// Check first argument, and pass the rest as args for that call
 		
@@ -69,13 +69,13 @@ namespace mipsshell
 					long n = strtol(args[a + 1].c_str(), nullptr, 10);
 					if(errno != 0)
 					{
-						throw mips_tools::mt_exception();
+						throw priscas::mt_exception();
 					}
 					
 					inst.add_program_breakpoint(n);
 				}
 
-				else throw mips_tools::mt_exception();
+				else throw priscas::mt_exception();
 			}
 
 			if(args[a] == "-c")
@@ -87,7 +87,7 @@ namespace mipsshell
 					long n = strtol(args[a + 1].c_str(), nullptr, 10);
 					if(errno != 0)
 					{
-						throw mips_tools::mt_exception();
+						throw priscas::mt_exception();
 					}
 
 					inst.add_microarch_breakpoint(n);
@@ -95,7 +95,7 @@ namespace mipsshell
 					inst.WriteToOutput(o);
 				}
 
-				else throw mips_tools::mt_exception();
+				else throw priscas::mt_exception();
 			}
 		}
 
@@ -112,10 +112,10 @@ namespace mipsshell
 
 	void cpuopts(std::vector<std::string> & args, Shell& inst)
 	{
-		mips_tools::cpu& c = inst.GetMotherboard().get_cpu();
-		mips_tools::diag_cpu & dcpu = dynamic_cast<mips_tools::diag_cpu&>(c);
+		priscas::cpu& c = inst.GetMotherboard().get_cpu();
+		priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(c);
 		
-		std::vector<mips_tools::CPU_Option>& v = dcpu.get_CPU_options();
+		std::vector<priscas::CPU_Option>& v = dcpu.get_CPU_options();
 
 		if(args.size() <= 1)
 		{
@@ -164,11 +164,11 @@ namespace mipsshell
 		{
 			try
 			{
-				std::vector<mips_tools::NameValueStringPair> nvsp = scan_for_values(args);
+				std::vector<priscas::NameValueStringPair> nvsp = scan_for_values(args);
 				dcpu.exec_CPU_option(nvsp);
 			}
 
-			catch(mips_tools::mt_exception& mte)
+			catch(priscas::mt_exception& mte)
 			{
 				inst.WriteToOutput("An error has occurred while processing CPU options\n");
 				inst.WriteToOutput(mte.get_err());
@@ -297,7 +297,7 @@ namespace mipsshell
 	{
 		inst.WriteToOutput(("[Memory Information]\n"));
 
-		mips_tools::mb& cmp = inst.GetMotherboard();
+		priscas::mb& cmp = inst.GetMotherboard();
 		
 
 		// No args specified just print the memory size (in bytes)
@@ -310,13 +310,13 @@ namespace mipsshell
 		// Otherwise print memory specific to indicies
 		for(size_t itr = 1; itr < args.size(); itr++)
 		{
-			mips_tools::range r = mips_tools::range(args[itr]);
+			priscas::range r = priscas::range(args[itr]);
 
-			for(mips_tools::range_iterator itr_2 = r.begin(); itr_2 != r.end(); itr_2++)
+			for(priscas::range_iterator itr_2 = r.begin(); itr_2 != r.end(); itr_2++)
 			{
 				if(*itr_2 >= inst.GetMotherboard().get_mmem_size() || *itr_2 < 0)
 				{
-					throw mips_tools::mem_oob_exception();
+					throw priscas::mem_oob_exception();
 				}
 
 				std::string o = (std::string("Mem[") + priscas_io::StrTypes::SizeToStr(*itr_2) + std::string("]: ") + 
@@ -349,12 +349,12 @@ namespace mipsshell
 		
 		inst.WriteToOutput("[Register State Information]\n");
 
-		mips_tools::mb& cmp = inst.GetMotherboard();
-		mips_tools::diag_cpu& dcpu = dynamic_cast<mips_tools::diag_cpu&>(cmp.get_cpu());
+		priscas::mb& cmp = inst.GetMotherboard();
+		priscas::diag_cpu& dcpu = dynamic_cast<priscas::diag_cpu&>(cmp.get_cpu());
 		int reg_count = dcpu.get_reg_count();
-		mips_tools::BW_32 pc_val = dcpu.get_PC();
+		priscas::BW_32 pc_val = dcpu.get_PC();
 		
-		mips_tools::ISA& isa = dcpu.get_ISA();
+		priscas::ISA& isa = dcpu.get_ISA();
 		
 		// No args specified print out every register
 		if(args.size() <= 1)
@@ -382,13 +382,14 @@ namespace mipsshell
 		{
 			for(size_t itr = 1; itr < args.size(); itr++)
 			{
-				mips_tools::range r(args[itr]);
+				priscas::range r(args[itr]);
 
-				for(mips_tools::range_iterator ritr = r.begin(); ritr != r.end(); ritr++)
+				for(priscas::range_iterator ritr = r.begin(); ritr != r.end(); ritr++)
 				{
+
 					if(*ritr < 0 || *ritr >= dcpu.get_reg_count())
 					{
-						throw mips_tools::reg_oob_exception();
+						throw priscas::reg_oob_exception();
 					}
 
 					std::string o = std::string(isa.get_reg_name(*ritr) + std::string(":\t") +
@@ -434,7 +435,7 @@ namespace mipsshell
 		unsigned short minutes = (total_time) % 60;
 		total_time = total_time / 60;
 
-		unsigned short hours = total_time;
+		unsigned short hours = static_cast<unsigned short>(total_time);
 
 		if(total_days > 0)
 		{

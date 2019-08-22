@@ -21,8 +21,9 @@
 #ifndef __MMEM_H__
 #define __MMEM_H__
 #include "mem.h"
+#include "priscas_global.h"
 
-namespace mips_tools
+namespace priscas
 {
 	// Main memory
 	class mmem : public mem

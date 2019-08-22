@@ -22,7 +22,7 @@
 #include "format_chk.h"
 
 
-namespace mipsshell
+namespace priscas
 {
 
 	// Returns register number corresponding with argument if any
@@ -31,8 +31,8 @@ namespace mipsshell
 	{
 		std::vector<char> numbers;
 		int len = strlen(reg_str);
-		if(len <= 1) throw mips_tools::mt_bad_imm();
-		if(reg_str[0] != '$') throw mips_tools::mt_parse_unexpected("$", reg_str);
+		if(len <= 1) throw priscas::mt_bad_imm();
+		if(reg_str[0] != '$') throw priscas::mt_parse_unexpected("$", reg_str);
 		for(int i = 1; i < len; i++)
 		{
 			if(reg_str[i] >= '0' && reg_str[i] <= '9')
@@ -40,12 +40,12 @@ namespace mipsshell
 				numbers.push_back(reg_str[i]);
 			}
 
-			else throw mips_tools::mt_bad_reg_format();
+			else throw priscas::mt_bad_reg_format();
 		}
 
 		int num = -1;
 
-		if(numbers.empty()) throw mips_tools::mt_bad_reg_format();
+		if(numbers.empty()) throw priscas::mt_bad_reg_format();
 		else
 		{
 			char * num_str = new char[numbers.size()];
@@ -73,7 +73,7 @@ namespace mipsshell
 			if(str[i] < '0' || str[i] > '9')
 			{
 				if(i == 0 && str[i] != '-')
-					throw mips_tools::mt_bad_imm();
+					throw priscas::mt_bad_imm();
 			}
 		}
 

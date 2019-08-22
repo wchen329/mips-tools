@@ -20,6 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __BRANDING_H__
 #define __BRANDING_H__
+#include "priscas_global.h"
 
 // These predefines are specifically used for Windows Resource Compiler
 #define PRISCAS_BRANDING_AUTHOR "Winor Chen"

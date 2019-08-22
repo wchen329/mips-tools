@@ -34,7 +34,7 @@ int main(int argc, char ** argv)
 		args.push_back(std::string(argv[carg]));
 	}
 
-	mipsshell::Shell runtime;
+	priscas::Shell runtime;
 	runtime.SetArgs(args);
 	runtime.Run();
 	return 0;

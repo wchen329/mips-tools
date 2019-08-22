@@ -24,7 +24,7 @@
  *
  * CURRENTLY: placeholders, but will be replaced by file I/O based on localization
  */
-namespace mipsshell
+namespace priscas
 {
 	const std::string HELP =	std::string(".breakpoint - set breakpoints which will bring up the interactive prompt, that can be used for debugging\n") +
 								std::string(".cpuopts - show special CPU options or execute one\n") +

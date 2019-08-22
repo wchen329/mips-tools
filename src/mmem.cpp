@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "mmem.h"
 
-namespace mips_tools
+namespace priscas
 {
 
 	byte_8b& mmem::operator[](int ind)

@@ -27,10 +27,11 @@
 #include "mmem.h"
 #include "mips.h"
 #include "mt_exception.h"
+#include "priscas_global.h"
 
 /* Interface for the single cycle CPU implementation
  */
-namespace mips_tools
+namespace priscas
 {
 
 	class sc_cpu : public diag_cpu

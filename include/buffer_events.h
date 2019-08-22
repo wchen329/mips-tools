@@ -20,6 +20,8 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __BUFFER_EVENTS_H__
 #define __BUFFER_EVENTS_H__
+#include "priscas_global.h"
+
 /* buffer_events.h
  * This header is inplace for integration with event based facilities
  * (i.e. Qt) the contents within are not usable without an exterior definition

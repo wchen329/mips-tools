@@ -22,8 +22,9 @@
 #define __MEM_H__
 #include <cstddef>
 #include "primitives.h"
+#include "priscas_global.h"
 
-namespace mips_tools
+namespace priscas
 {
 
 	/* A standard memory
