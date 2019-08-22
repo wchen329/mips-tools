@@ -93,6 +93,7 @@ void simUI::signifySimOn()
     this->ui->actionSet_Simulation_Source->setEnabled(false);
     this->ui->actionMemory_Inspector->setEnabled(false);
     this->ui->actionRegister_Inspector->setEnabled(false);
+    this->ui->actionCPU_Specific_Debugging_Information->setEnabled(false);
     this->buf_poller->start();
     this->ui->actionCycle->setEnabled(false);
     this->ui->statusLabel->setText(this->curFileHeader + sourcefile + " " + this->simStart_Txt);
@@ -111,6 +112,7 @@ void simUI::signifySimSuspended()
     this->ui->actionMemory_Inspector->setEnabled(true);
     this->ui->actionRegister_Inspector->setEnabled(true);
     this->ui->actionCycle->setEnabled(true);
+    this->ui->actionCPU_Specific_Debugging_Information->setEnabled(true);
     this->ui->statusLabel->setText(this->curFileHeader + sourcefile + " " + this->simBreak_Txt);
 }
 
@@ -127,6 +129,7 @@ void simUI::signifySimOff()
     this->ui->actionSet_Simulation_Source->setEnabled(true);
     this->ui->actionMemory_Inspector->setEnabled(true);
     this->ui->actionRegister_Inspector->setEnabled(true);
+    this->ui->actionCPU_Specific_Debugging_Information->setEnabled(true);
     this->ui->actionCycle->setEnabled(false);
     this->ui->statusLabel->setText(this->curFileHeader + sourcefile + " " + this->simStop_Txt);
     mipsshell::INTERACTIVE = false;
