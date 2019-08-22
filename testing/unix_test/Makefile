@@ -2,8 +2,25 @@
 
 CC = g++
 VPATH = ../tests:../src
-TESTS = test_assert.o test_register32.o test_sc_cpu_loop.o test_sc_cpu_ops.o test_sc_cpu_subroutine.o test_shell_comments.o test_mips32fsp_load_to_use.o \
-        test_sc_cpu_registers.o test_mips32fsp_registers.o
+TESTS = test_assert.o \
+	test_mips32fsp_bigstallforward.o \
+	test_mips32fsp_core_instructions.o \
+	test_mips32fsp_forwarding_basic.o \
+	test_mips32fsp_forwarding_control.o \
+	test_mips32fsp_load_to_use.o \
+	test_mips32fsp_load_to_use_control.o \
+	test_mips32fsp_memtomem.o \
+	test_mips32fsp_nostall.o \
+	test_mips32fsp_registers.o \
+	test_mips32fsp_subroutine.o \
+	test_register32.o \
+	test_sc_cpu_loop.o \
+	test_sc_cpu_ops.o \
+        test_sc_cpu_registers.o \
+	test_sc_cpu_subroutine.o \
+	test_sc_cpu_core_instructions.o \
+	test_shell_comments.o \
+	test_shell_multidirectsymbol.o
 MAIN = test_hub.o basic_assert.o
 INCLUDES = -I"../../include" -I"../include" -I"../common"
 CFLAGS = $(INCLUDES) -g
