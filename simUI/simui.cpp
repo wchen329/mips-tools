@@ -102,7 +102,7 @@ void simUI::signifySimOn()
 void simUI::signifySimSuspended()
 {
     this->ui->actionStop_Simulation->setEnabled(true);
-    this->ui->actionBreak_Execution->setEnabled(true);
+    this->ui->actionBreak_Execution->setEnabled(false);
     this->ui->actionRuntime_Directive->setEnabled(true);
     this->ui->actionStart_Simulation->setEnabled(false);
     this->ui->actionContinue->setEnabled(true);
