@@ -177,7 +177,7 @@ void simUI::on_actionStart_Simulation_triggered()
     args.push_back(priscas_io::StrTypes::IntToStr(simulation::cpu_type));
 
     // Start Simulation!    
-    //delete simulation::sh;
+    delete simulation::sh;
     this->signifySimOn();
     simulation::sh = new mipsshell::Shell();
     simulation::sh->SetArgs(args);
