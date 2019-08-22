@@ -29,4 +29,5 @@ void test_mips32fsp_subroutine()
 	diag_cpu & single_cycle = dynamic_cast<diag_cpu&>(c);
 	BW_32 reg_check = single_cycle.get_reg_data(16);
 	assertEquals(reg_check.AsInt32(), 20);
+	assertEquals(test_m.get_cycles(), 30);
 }

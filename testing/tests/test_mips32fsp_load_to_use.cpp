@@ -33,4 +33,5 @@ void test_mips32fsp_load_to_use()
 	assertEquals(reg_check_s0.AsInt32(), 100);
 	assertEquals(reg_check_s1.AsInt32(), 100);
 	assertEquals(reg_check_s3.AsInt32(), 200);
+	assertEquals(test_m.get_cycles(), 13);
 }

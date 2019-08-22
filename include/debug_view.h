@@ -231,7 +231,7 @@ namespace priscas
 
 			const std::vector<TablePoint<DType>>& getDefinedPtList() { return this->pts;}
 			DebugTableSingleType<DType>()
-				: max_X(0), max_Y(0), limit(100)
+				: max_X(0), max_Y(0), limit(500)
 			{
 			}
 
