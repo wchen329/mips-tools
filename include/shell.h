@@ -73,7 +73,7 @@ namespace priscas
 			void setInputTextStream(priscas_io::text_stream & ts) { this->tw_input = &ts; }
 			void setNoConsoleOutput(bool torf) { this->NoConsoleOutput = torf; }
 			std::string getLineAtPC(unsigned long pc) {return this->PC_to_line_string.count(pc) > 0 ? this->PC_to_line_string[pc] : "???";}
-			~Shell() { delete motherboard; }
+			~Shell() { delete motherboard; if(this->inst_file != nullptr) fclose(inst_file); }
 			Shell();
 
 			/* Internal Shell State
@@ -91,6 +91,7 @@ namespace priscas
 
 		private:
 			bool NoConsoleOutput;
+			FILE* inst_file;
 			priscas_io::text_stream * tw_error;
 			priscas_io::text_stream * tw_output;
 			priscas_io::text_stream * tw_input;
