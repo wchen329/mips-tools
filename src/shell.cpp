@@ -57,7 +57,6 @@ namespace priscas
 		size_t argc = args.size();
 		priscas::cpu_t cp = priscas::STANDARD;
 		int mem_width = 16;
-		FILE * inst_file = NULL;
 
 		std::string app_brand = branding::APPLICATION_NAME + " " + branding::APPLICATION_VERSION + " " + branding::APPLICATION_DBG;
 
@@ -414,7 +413,6 @@ namespace priscas
 	}
 		if(!this->isQuiet)
 			WriteToOutput(("Simulation terminating...\n"));
-		fclose(inst_file);
 		delete priscas::mtsstream::asmout;
 }
 
@@ -498,7 +496,7 @@ namespace priscas
 	}
 
 	// Set up list of runtime directives
-	Shell::Shell() : motherboard(nullptr), isQuiet(false),  tw_error(&priscas_io::null_tstream),
+	Shell::Shell() : motherboard(nullptr), isQuiet(false), inst_file(nullptr), tw_error(&priscas_io::null_tstream),
 		tw_output(&priscas_io::null_tstream), tw_input(&priscas_io::null_tstream), NoConsoleOutput(false)
 	{
 		this->state = EMBRYO;
