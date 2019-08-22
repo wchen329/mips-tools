@@ -209,34 +209,34 @@ namespace priscas
 
 				else
 				{
-					// Else, a little trickier
-					// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead, maybe
-					// Otherwise, forward it!
-					if(!mem_read_inst(mem_op))
-					{
-						if(ex_rs == mem_rt && mem_rt != 0) ex_data_rs = mem_dataALU;
-						if(ex_rt == mem_rt && mem_rt != 0) ex_data_rt = mem_dataALU;
-					}
 
-					else if(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
-						&& ex_rs != mem_rt
-						) // A very special case to allow for MEM-MEM forwarding
-					{
-						ex_data_rt = mem_dataALU; // This doesn't do anything
-					}
-
-					else
-					{
-						if((ex_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(ex_op, ex_funct)) && (ex_rt == mem_rt && mem_rt != 0)))
-						{
-							em_flush_cycle = true;
-							we_plr_fetch = false;
-							we_plr_de = false;
-							we_pc = false;
-						}
-					}
+					// Others use Rt (if at all)
+					if(ex_rs == mem_rt && mem_rt != 0) ex_data_rs = mem_dataALU;
+					if(ex_rt == mem_rt && mem_rt != 0) ex_data_rt = mem_dataALU;
 				}
 			}
+		}
+
+		// EX Dependency, general dependency
+		if(mem_read_inst(mem_op))
+		{
+				if(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
+					&& ex_rs != mem_rt
+					) // A very special case to allow for MEM-MEM forwarding
+				{
+					ex_data_rt = mem_dataALU; // This doesn't do anything
+				}
+
+				else
+				{
+					if((ex_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(ex_op, ex_funct)) && (ex_rt == mem_rt && mem_rt != 0)))
+					{
+						em_flush_cycle = true;
+						we_plr_fetch = false;
+						we_plr_de = false;
+						we_pc = false;
+					}
+				}
 		}
 
 		switch(ex_fm)
@@ -426,27 +426,11 @@ namespace priscas
 		// Check for MEM dependency, which is only needed if a load is present
 		if(mem_regWE && jorb_inst(decode_op, decode_funct) && mem_read_inst(mem_op))
 		{
-			if(r_inst(mem_op))
+			if((decode_rs == mem_rt && decode_rs != 0) || (decode_rt == mem_rt && decode_rt != 0))
 			{
-				if((decode_rs == mem_rd && decode_rs != 0) || (decode_rt == mem_rd && decode_rt != 0))
-				{
-						em_flush_cycle = true;
-						we_plr_de = false;
-						we_pc = false;
-						we_plr_fetch = false;
-						
-				}
-			}
-
-			else
-			{
-				if((decode_rs == mem_rt && decode_rs != 0) || (decode_rt == mem_rt && decode_rt != 0))
-				{
-						em_flush_cycle = true;
-						we_plr_de = false;
-						we_pc = false;
-						we_plr_fetch = false;
-				}
+					de_flush_cycle = true;
+					we_pc = false;
+					we_plr_fetch = false;
 			}
 		}
 
