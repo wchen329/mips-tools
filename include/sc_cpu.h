@@ -48,10 +48,8 @@ namespace priscas
 			ISA& get_ISA() { return this->isa; }
 			std::vector<CPU_Option>& get_CPU_options() { return this->cpu_opts; }
 			void exec_CPU_option(std::vector<NameValueStringPair> &) {}
-			std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
-			~sc_cpu() { for(size_t w = 0; w < debug_views.size(); w++) delete debug_views[w]; }
+			virtual std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
 		protected:
-			std::vector<DebugView*> debug_views;
 			std::vector<CPU_Option> cpu_opts;
 			byte_8b mem_req_load(int index); // sends a load memory request from CPU to MMEM. The ind is the offset from address 0x0
 			void mem_req_write(byte_8b data, int index); // sends a write memory request from CPU To MMEM. The ind is the offset from address 0x0
@@ -61,6 +59,7 @@ namespace priscas
 			reg_32 pc;
 			mmem & mm;
 		private:
+			std::vector<DebugView*> debug_views;
 			sc_cpu(sc_cpu&);
 			sc_cpu operator=(sc_cpu&);
 			MIPS_32 isa;

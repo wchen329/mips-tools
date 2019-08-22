@@ -744,8 +744,8 @@ namespace priscas
 		memwb_dbg->addChild(this->DBG_MEMWB_TARGET_REG, "");
 		memwb_dbg->addChild(this->DBG_MEMWB_WRITE_DATA, "");
 		
-		sc_cpu::debug_views.push_back(pipeline_register_list_dbg);
-		sc_cpu::debug_views.push_back(pipeline_diagram);
+		this->debug_views.push_back(pipeline_register_list_dbg);
+		this->debug_views.push_back(pipeline_diagram);
 	}
 
 	void fsp_cpu::exec_CPU_option(std::vector<NameValueStringPair>& args)
