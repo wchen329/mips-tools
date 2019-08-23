@@ -49,7 +49,7 @@ aboutDialog::aboutDialog(QWidget *parent) :
     ui->textEditAbout->
             append("Most icon artwork (those except the PRISCAS icon) originate from the Oxygen Desktop project.\n");
     ui->textEditAbout->
-            append("Acknowledgments to Professor Joshua San Miguel (jsanmiguel@wisc.edu) for par-taking in design and providing feedback on feature suggestions.\n");
+            append("Acknowledgments to Professor Joshua San Miguel (jsanmiguel@wisc.edu) for partaking in design and providing feedback on feature suggestions.\n");
     ui->textEditAbout->
             append("PRISCAS software, icon, and documentation author: Winor Chen (wchen329@wisc.edu)\n");
     ui->textEditAbout->
