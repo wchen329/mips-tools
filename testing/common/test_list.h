@@ -30,5 +30,6 @@ void test_mips32fsp_bigstallforward();
 void test_mips32fsp_memtomem();
 void test_mips32fsp_storeclose();
 void test_mips32fsp_fake_hazard();
+void test_mips32fsp_fake_load_to_use();
 
 #endif

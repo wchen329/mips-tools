@@ -33,4 +33,5 @@ void Setup_Tests()
 	AddTest(test_mips32fsp_memtomem, "test_mips32fsp_memtomem");
 	AddTest(test_mips32fsp_storeclose, "test_mips32fsp_storeclose");
 	AddTest(test_mips32fsp_fake_hazard, "test_mips32fsp_fake_hazard");
+	AddTest(test_mips32fsp_fake_load_to_use, "test_mips32fsp_fake_load_to_use");
 }
