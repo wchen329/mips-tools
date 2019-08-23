@@ -46,6 +46,7 @@ int main(int argc, char ** argv)
 	online_tests.add_test(test_sc_cpu_ops, "test_sc_cpu_ops");
 	online_tests.add_test(test_sc_cpu_subroutine, "test_sc_cpu_subroutine");
 	online_tests.add_test(test_sc_cpu_registers, "test_sc_cpu_registers");
+	online_tests.add_test(test_sc_cpu_storeclose, "test_sc_cpu_storeclose");
 	online_tests.add_test(test_mips32fsp_load_to_use, "test_mips32fsp_load_to_use");
 	online_tests.add_test(test_mips32fsp_registers, "test_mips32fsp_registers");
 	online_tests.add_test(test_mips32fsp_core_instructions, "test_mips32fsp_core_instructions");
@@ -56,6 +57,7 @@ int main(int argc, char ** argv)
 	online_tests.add_test(test_mips32fsp_load_to_use_control, "test_mips32fsp_load_to_use_control");
 	online_tests.add_test(test_mips32fsp_bigstallforward, "test_mips32fsp_bigstallforward");
 	online_tests.add_test(test_mips32fsp_memtomem, "test_mips32fsp_memtomem");
+	online_tests.add_test(test_mips32fsp_storeclose, "test_mips32fsp_storeclose");
 
 	std::cout << "Found " << online_tests.get_test_count() << " tests." << std::endl;
 

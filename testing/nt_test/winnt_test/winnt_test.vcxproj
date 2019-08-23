@@ -128,6 +128,7 @@
       </PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="..\..\tests\test_mips32fsp_registers.cpp" />
+    <ClCompile Include="..\..\tests\test_mips32fsp_storeclose.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_subroutine.cpp" />
     <ClCompile Include="..\..\tests\test_register32.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
@@ -153,6 +154,7 @@
       </PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="..\..\tests\test_sc_cpu_registers.cpp" />
+    <ClCompile Include="..\..\tests\test_sc_cpu_storeclose.cpp" />
     <ClCompile Include="..\..\tests\test_sc_cpu_subroutine.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

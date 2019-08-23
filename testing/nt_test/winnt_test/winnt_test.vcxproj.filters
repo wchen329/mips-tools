@@ -117,5 +117,11 @@
     <ClCompile Include="..\..\tests\test_mips32fsp_memtomem.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\tests\test_sc_cpu_storeclose.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\test_mips32fsp_storeclose.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
