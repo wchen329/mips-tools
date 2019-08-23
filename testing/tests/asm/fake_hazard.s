@@ -10,17 +10,17 @@ ori $s1, $zero, 50
 sll $zero, $zero, 0
 sll $zero, $zero, 0
 sll $zero, $zero, 0
-sw $s0, $zero(100)
-sw $s1, $zero(104)
+sw $s0, 100($zero)
+sw $s1, 104($zero)
 
 # WAW Loads, after Following Stores
-lw $s2, $zero(104)
-lw $s2, $zero(100)
+lw $s2, 104($zero)
+lw $s2, 100($zero)
 
 # Arithmetic and Writing to the Zero Register
 addi $zero, $zero, 500
 sub $zero, $zero, $zero
-lw $zero, $zero(104)
+lw $zero, 104($zero)
 add $zero, $zero, $zero
 sll $zero, $zero, 0
 addu $zero, $zero, $zero

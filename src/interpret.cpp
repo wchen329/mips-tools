@@ -151,6 +151,7 @@ namespace priscas
 					std::string wc = args[2];
 					std::string imm_s = std::string();
 					std::string reg = std::string();
+
 					for(size_t i = 0; i < wc.length(); i++)
 					{
 						if(wc[i] == '(') { left_parenth = true; continue; }
@@ -158,12 +159,12 @@ namespace priscas
 
 						if(left_parenth)
 						{
-							imm_s.push_back(wc[i]);
+							reg.push_back(wc[i]);
 						}
 
 						else
 						{
-							reg.push_back(wc[i]);
+							imm_s.push_back(wc[i]);
 						}
 					}
 

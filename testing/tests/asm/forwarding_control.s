@@ -3,7 +3,7 @@
 # As well as branch prediction flushing
 
 addi $t0, $zero, 1
-sw $t0, $zero(3000)
+sw $t0, 3000($zero)
 addi $s1, $zero, 50
 bne $zero, $s1, FIRST 
 ori $k0, $zero, -1

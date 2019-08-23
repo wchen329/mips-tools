@@ -23,14 +23,14 @@ sll $s1, $a1, 1 # $s1 = 4
 srl $s2, $a1, 1 # $s2 = 1
 
 # Stores
-sb $a0, $zero(1024)
-sh $a0, $zero(2048)
-sw $a0, $zero(3072)
+sb $a0, 1024($zero)
+sh $a0, 2048($zero)
+sw $a0, 3072($zero)
 
 # Loads
-lbu $t1, $zero(1024)
-lhu $t2, $zero(2048)
-lw $t3, $zero(3072)
+lbu $t1, 1024($zero)
+lhu $t2, 2048($zero)
+lw $t3, 3072($zero)
 
 # Branches and CV Setting
 slt $s3, $s1, $s2 # $s3 = 0
