@@ -21,5 +21,5 @@ sll $s0, $s0, 0
 sll $s0, $s0, 0
 sll $s0, $s0, 0
 sll $s0, $s0, 0
-.exit
 sll $s0, $s0, 0
+.exit

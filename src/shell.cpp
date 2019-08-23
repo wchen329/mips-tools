@@ -384,6 +384,9 @@ namespace priscas
 						std::vector<std::string> chopped = chop_string(cmds[cmdcount]);
 						execute_runtime_directive(chopped);
 					}
+
+					// Check for exit directive
+					if(this->state == KILLED) continue;
 				}
 
 				motherboard->step();

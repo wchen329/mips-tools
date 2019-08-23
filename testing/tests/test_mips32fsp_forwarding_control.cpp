@@ -35,5 +35,5 @@ void test_mips32fsp_forwarding_control()
 	assertEquals(reg_check_s2.AsInt32(), 0);
 	assertEquals(reg_check_s3.AsInt32(), 1);
 	assertNotEquals(reg_check_k0.AsInt32(), -1);
-	assertEquals(test_m.get_cycles(), 264);
+	assertEquals(test_m.get_cycles(), 263);
 }

@@ -34,5 +34,5 @@ void test_mips32fsp_nostall()
 	assertEquals(fsp_cpu.get_reg_data($t0).AsInt32(), 15);
 	assertEquals(fsp_cpu.get_reg_data($t1).AsInt32(), 15);
 	assertEquals(fsp_cpu.get_reg_data($t2).AsInt32(), 15);
-	assertEquals(test_shell.GetMotherboard().get_cycles(), 20);
+	assertEquals(test_shell.GetMotherboard().get_cycles(), 19);
 }

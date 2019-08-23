@@ -567,6 +567,22 @@ namespace priscas
 			this->id_sig = -1;
 		}
 
+		// Second take of register write back, important for debugging views
+		BW_32 rwb_reg_val;
+		bool rwb_regWE;
+		int rwb_save_num;
+		this->mw_plr.get(rwb_reg_val, rwb_regWE, rwb_save_num);
+		if(rwb_regWE && rwb_save_num != 0)
+		{
+			this->registers[rwb_save_num].set_data(rwb_reg_val); // Register-File bypassing
+		}
+
+		/*// Enable certain edge cases of Register Write Back
+		if(wb_regWE && wb_save_num != 0)
+		{
+			this->registers[wb_save_num].set_data(wb_save_data); // Register-File bypassing
+		}*/
+
 		// Set probes
 		this->ifid_dbg->findChild(DBG_INSTRUCTION_WORD)->setValue(fetch_plr.get_data().toHexString());
 

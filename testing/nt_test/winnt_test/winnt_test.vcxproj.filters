@@ -141,5 +141,8 @@
     <ClCompile Include="..\..\tests\test_mips32fsp_ece552_f181009.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\tests\test_shell_justexit.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

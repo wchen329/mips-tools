@@ -23,4 +23,5 @@ sw $t0, 12($s1)
 sll $zero, $zero, 0
 sll $zero, $zero, 0
 sll $zero, $zero, 0
+sll $zero, $zero, 0
 .exit

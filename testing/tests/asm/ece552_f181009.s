@@ -15,4 +15,5 @@ ori  $s4, $s3, 4
 sll $zero, $zero, 0
 sll $zero, $zero, 0
 sll $zero, $zero, 0
+sll $zero, $zero, 0
 .exit
