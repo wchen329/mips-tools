@@ -51,4 +51,4 @@ clean:
 	rm simUI/*.o
 	rm bin/*
 test: $(BIN_DIR)/pshell
-	cd testing/unix_test; $(MAKE) "P_LIB=$(OBJS)"; $(MAKE) run
+	cd testing/unix_test; export TESTS=`./testobjs.sh` && $(MAKE) "P_LIB=$(OBJS)"; $(MAKE) run;
