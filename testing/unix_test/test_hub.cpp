@@ -4,15 +4,10 @@
 #include <string>
 #include <vector>
 #include "test_list.h"
+#include "test_register.h"
 
 std::vector<std::string> test_names;
 std::vector<void(*)()> runnable_tests;
-
-void register_test(std::string name, void(*test)())
-{
-	runnable_tests.push_back(test);
-	test_names.push_back(name);
-}
 
 int main()
 {
@@ -22,25 +17,7 @@ int main()
 	int ret_code = 0;
 	
 	// Add tests here
-	register_test("test_assert", test_assert);
-	register_test("test_mips32fsp_bigstallforward", test_mips32fsp_bigstallforward);
-	register_test("test_mips32fsp_core_instructions", test_mips32fsp_core_instructions);
-	register_test("test_mips32fsp_forwarding_basic", test_mips32fsp_forwarding_basic);
-	register_test("test_mips32fsp_forwarding_control", test_mips32fsp_forwarding_control);
-	register_test("test_mips32fsp_load_to_use", test_mips32fsp_load_to_use);
-	register_test("test_mips32fsp_load_to_use_control", test_mips32fsp_load_to_use_control);
-	register_test("test_mips32fsp_memtomem", test_mips32fsp_memtomem);
-	register_test("test_mips32fsp_nostall", test_mips32fsp_nostall);
-	register_test("test_mips32fsp_registers", test_mips32fsp_registers);
-	register_test("test_mips32fsp_subroutine", test_mips32fsp_subroutine);
-	register_test("test_register_32", test_register_32);
-	register_test("test_sc_cpu_core_instructions", test_sc_cpu_core_instructions);
-	register_test("test_sc_cpu_loop", test_sc_cpu_loop);
-	register_test("test_sc_cpu_ops", test_sc_cpu_ops);
-	register_test("test_sc_cpu_registers", test_sc_cpu_registers);
-	register_test("test_sc_cpu_subroutine", test_sc_cpu_subroutine);
-	register_test("test_shell_comments", test_shell_comments);
-	register_test("test_shell_multidirectsymbol", test_shell_multidirectsymbol);
+	Setup_Tests();
 
 	fprintf(stdout, "%ld tests detected...\n", runnable_tests.size());
 
