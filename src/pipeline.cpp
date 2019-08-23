@@ -781,4 +781,12 @@ namespace priscas
 			}
 		}
 	}
+
+	fsp_cpu::~fsp_cpu()
+	{
+		for(size_t w = 0; w < debug_views.size(); w++)
+		{
+			delete debug_views[w];
+		}
+	}
 }
