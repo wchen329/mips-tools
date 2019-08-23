@@ -119,6 +119,8 @@
       </PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="..\..\tests\test_mips32fsp_core_instructions.cpp" />
+    <ClCompile Include="..\..\tests\test_mips32fsp_ece552_f181009.cpp" />
+    <ClCompile Include="..\..\tests\test_mips32fsp_ece552_f18midterm6.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_fake_hazard.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_fake_load_to_use.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_forwarding_basic.cpp" />

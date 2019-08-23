@@ -31,5 +31,7 @@ void test_mips32fsp_memtomem();
 void test_mips32fsp_storeclose();
 void test_mips32fsp_fake_hazard();
 void test_mips32fsp_fake_load_to_use();
+void test_mips32fsp_ece552_f18midterm6();
+void test_mips32fsp_ece552_f181009();
 
 #endif
