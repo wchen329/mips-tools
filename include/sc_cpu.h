@@ -49,6 +49,7 @@ namespace priscas
 			std::vector<CPU_Option>& get_CPU_options() { return this->cpu_opts; }
 			void exec_CPU_option(std::vector<NameValueStringPair> &) {}
 			virtual std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
+			virtual ~sc_cpu() {}
 		protected:
 			std::vector<CPU_Option> cpu_opts;
 			byte_8b mem_req_load(int index); // sends a load memory request from CPU to MMEM. The ind is the offset from address 0x0

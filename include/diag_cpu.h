@@ -43,6 +43,7 @@ namespace priscas
 				virtual std::vector<CPU_Option>& get_CPU_options() = 0;
 				virtual std::vector<DebugView*>& get_DebugViews() = 0;
 				virtual void exec_CPU_option(std::vector<NameValueStringPair> &) = 0;	// execute a special CPU specific option
+				virtual ~diag_cpu() {}
 	};
 }
 #endif

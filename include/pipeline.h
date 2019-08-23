@@ -43,7 +43,7 @@ namespace priscas
 			fsp_cpu(mmem & m);
 			void exec_CPU_option(std::vector<NameValueStringPair> &);
 			std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
-			~fsp_cpu() { for(size_t w = 0; w < debug_views.size(); w++) delete debug_views[w]; }
+			~fsp_cpu();
 		private:
 			std::vector<DebugView*> debug_views;
 			reg_32 fetch_plr;

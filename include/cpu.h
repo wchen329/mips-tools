@@ -62,6 +62,8 @@ namespace priscas
 			 *			reference to processors ISA
 			 */
 			virtual ISA& get_ISA() = 0;
+
+			virtual ~cpu(){};
 	};
 
 }

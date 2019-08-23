@@ -48,6 +48,7 @@ namespace priscas
 			};
 
 			virtual DBGType getDBGType() = 0;
+			virtual ~DebugView() {}
 	};
 
 	/* A tree node
