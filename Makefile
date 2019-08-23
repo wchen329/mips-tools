@@ -46,9 +46,34 @@ $(BIN_DIR)/simUI: build/libmtcore.a
 release:
 	make all CFLAGS="-O2 -I\"$(INCLUDE)\" -DP_RELEASE"
 clean:
-	rm build/*.o
-	rm build/*.a
-	rm simUI/*.o
-	rm bin/*
+	@if \
+		rm build/*.o; \
+	then \
+		echo "PRISCAS Core and Shell object files removed."; \
+	else \
+		echo "PRISCAS Core and Shell object files not found. Skipping..."; \
+	fi
+	@if \
+		rm build/*.a; \
+	then \
+		echo "PRISCAS Core library file(s) removed."; \
+	else \
+		echo "PRISCAS Core library file(s) not found. Skipping..."; \
+	fi
+	@if \
+		rm simUI/*.o; \
+	then \
+		echo "PRISCAS simUI object files removed."; \
+	else \
+		echo "simUI object files not found. Skipping..."; \
+	fi
+	@if \
+		rm bin/*; \
+	then \
+		echo "Executable files removed."; \
+	else \
+		echo "Executable files not found. Skipping..."; \
+	fi
+	cd testing/unix_test; $(MAKE) clean;
 test: $(BIN_DIR)/pshell
 	cd testing/unix_test; export TESTS=`./testobjs.sh` && $(MAKE) "P_LIB=$(OBJS)"; $(MAKE) run;

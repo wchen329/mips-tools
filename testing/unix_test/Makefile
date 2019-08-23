@@ -13,7 +13,19 @@ unix_test: $(TESTS) $(MAIN)
 .cpp.o:
 	$(CC) $(CFLAGS) -c $<
 clean:
-	rm *.o
-	rm ../tests/unix_test
+	@if \
+		rm *.o; \
+	then \
+		echo "Test object files removed."; \
+	else \
+		echo "Test object files not found. Skipping..."; \
+	fi
+	@if \
+		rm ../tests/unix_test; \
+	then \
+		echo "Test executable removed."; \
+	else \
+		echo "Test executable not found. Skipping..."; \
+	fi
 run:
 	cd ../tests; ./unix_test
