@@ -34,5 +34,6 @@ void test_mips32fsp_fake_hazard();
 void test_mips32fsp_fake_load_to_use();
 void test_mips32fsp_ece552_f18midterm6();
 void test_mips32fsp_ece552_f181009();
+void test_mips32fsp_fake_load_to_use_r();
 
 #endif

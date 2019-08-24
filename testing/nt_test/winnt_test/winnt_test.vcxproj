@@ -123,6 +123,7 @@
     <ClCompile Include="..\..\tests\test_mips32fsp_ece552_f18midterm6.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_fake_hazard.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_fake_load_to_use.cpp" />
+    <ClCompile Include="..\..\tests\test_mips32fsp_fake_load_to_use_r.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_forwarding_basic.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_forwarding_control.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_load_to_use.cpp" />

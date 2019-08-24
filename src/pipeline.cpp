@@ -209,7 +209,6 @@ namespace priscas
 
 				else
 				{
-
 					// Others use Rt (if at all)
 					if(ex_rs == mem_rt && mem_rt != 0) ex_data_rs = mem_dataALU;
 					if(ex_rt == mem_rt && mem_rt != 0) ex_data_rt = mem_dataALU;
@@ -220,14 +219,9 @@ namespace priscas
 		// EX-EX Dependency, general dependency
 		if(mem_read_inst(mem_op))
 		{
-				if(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
+				if(!(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
 					&& ex_rs != mem_rt && this->cpu_opts[MEM_MEM_INDEX].get_IntValue() != PATH_STALL_MODE
-					) // A very special case to allow for MEM-MEM forwarding
-				{
-					ex_data_rt = mem_dataALU; // This doesn't do anything
-				}
-
-				else
+					) && !(r_inst(ex_op) && ex_rd == 0)) // A very special case to allow for MEM-MEM forwarding (and glitching)
 				{
 					if((ex_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(ex_op, ex_funct)) && (ex_rt == mem_rt && mem_rt != 0)))
 					{
@@ -380,22 +374,20 @@ namespace priscas
 					// Else, a little trickier
 					// If it's a memory operation (LOAD) then the value isn't ready yet. Use a stall instead
 					// Otherwise, forward it!
-					if(!mem_read_inst(ex_op))
-					{
-						if(decode_rs == mem_rt && decode_rs != 0) decode_rs_data = mem_dataALU;
-						if(decode_rt == mem_rt && decode_rt != 0) decode_rt_data = mem_dataALU;
-					}
-
-					else
-					{
-						if((decode_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(decode_op, decode_funct)) && (decode_rt == mem_rt && mem_rt != 0)))
-						{
-							de_flush_cycle = true;
-							we_pc = false;
-							we_plr_fetch = false;
-						}
-					}
+					if(decode_rs == mem_rt && decode_rs != 0) decode_rs_data = mem_dataALU;
+					if(decode_rt == mem_rt && decode_rt != 0) decode_rt_data = mem_dataALU;
 				}
+			}
+		}
+
+		// EX-ID Load to Use handling, a REQUIRED stall for branches
+		if(mem_regWE && jorb_inst(decode_op, decode_funct) && mem_read_inst(ex_op))
+		{
+			if((decode_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(decode_op, decode_funct)) && (decode_rt == mem_rt && mem_rt != 0)))
+			{
+				de_flush_cycle = true;
+				we_pc = false;
+				we_plr_fetch = false;
 			}
 		}
 
@@ -693,25 +685,28 @@ namespace priscas
 	{
 		std::string FORWARD_VALUE_STRING = "FORWARD";
 		std::string STALL_VALUE_STRING = "STALL";
-		std::string GLITCH_VALUE_STRING = "GLITCH";
+		std::string GLITCH_VALUE_STRING = "IGNORE";
 
 		// Set clock period
 		sc_cpu::clk_T = 40000;
 
 		// Register CPU Options
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify ex-ex hazard detection behavior"));
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify non load-to-use ex-ex hazard detection behavior"));
 		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
+		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 		
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_ID", "Specify ex-id hazard detection behavior"));
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_ID", "Specify non load-to-use ex-id hazard detection behavior"));
 		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
+		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_EX", "Specify mem-ex hazard detection behavior"));
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_EX", "Specify non load-to-use mem-ex hazard detection behavior"));
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
+		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify mem-mem hazard detection behavior"));
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify non load-to-use mem-mem hazard detection behavior"));
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
@@ -791,6 +786,11 @@ namespace priscas
 			else if(whichval == "PATH_MEM_MEM")
 			{
 				sc_cpu::cpu_opts[MEM_MEM_INDEX].set_Value(v.getValue());
+			}
+
+			else if(whichval == "PATH_ID_ID")
+			{
+				sc_cpu::cpu_opts[ID_ID_INDEX].set_Value(v.getValue());
 			}
 
 			else
