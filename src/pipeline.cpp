@@ -625,9 +625,9 @@ namespace priscas
 		this->exmem_dbg->findChild(this->DBG_EXMEM_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(em_regwe_dbg));
 		this->exmem_dbg->findChild(this->DBG_EXMEM_MEMWE)->setValue(priscas_io::StrTypes::BoolToStr(em_memwe_dbg));
 		this->exmem_dbg->findChild(this->DBG_EXMEM_MEMRE)->setValue(priscas_io::StrTypes::BoolToStr(em_memre_dbg));
-		this->idex_dbg->findChild(DBG_EXMEM_RS_N)->setValue(priscas_io::StrTypes::Int32ToStr(em_rs_dbg));
-		this->idex_dbg->findChild(DBG_EXMEM_RT_N)->setValue(priscas_io::StrTypes::Int32ToStr(em_rt_dbg));
-		this->idex_dbg->findChild(DBG_EXMEM_RD_N)->setValue(priscas_io::StrTypes::Int32ToStr(em_rd_dbg));
+		this->exmem_dbg->findChild(DBG_EXMEM_RS_N)->setValue(priscas_io::StrTypes::Int32ToStr(em_rs_dbg));
+		this->exmem_dbg->findChild(DBG_EXMEM_RT_N)->setValue(priscas_io::StrTypes::Int32ToStr(em_rt_dbg));
+		this->exmem_dbg->findChild(DBG_EXMEM_RD_N)->setValue(priscas_io::StrTypes::Int32ToStr(em_rd_dbg));
 
 		this->memwb_dbg->findChild(DBG_MEMWB_TARGET_REG)->setValue(priscas_io::StrTypes::Int32ToStr(db_mwRNum));
 		this->memwb_dbg->findChild(DBG_MEMWB_REGWE)->setValue(priscas_io::StrTypes::BoolToStr(wb_regWE));
@@ -673,8 +673,8 @@ namespace priscas
 		DBG_IDEX_MEMWE("MemWE"),
 		DBG_IDEX_MEMRE("MemRE"),
 		DBG_EXMEM_DATA_ALU("ALU Data"),
-		DBG_EXMEM_DATA_RS("Rs"),
-		DBG_EXMEM_DATA_RT("Rt"),
+		DBG_EXMEM_DATA_RS("Data Rs"),
+		DBG_EXMEM_DATA_RT("Data Rt"),
 		DBG_EXMEM_OPCODE("Opcode"),
 		DBG_EXMEM_REGWE("RegWE"),
 		DBG_EXMEM_MEMWE("MemWE"),
