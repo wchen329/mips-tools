@@ -4,15 +4,15 @@
 
 [Setup]
 AppName=Priscas
-AppVerName=Priscas
+AppVerName="Priscas ECE552 Edition RC1"
 AppVersion=0.3
 OutputBaseFilename="priscas_setup"
 VersionInfoProductName="Priscas Setup"
 VersionInfoDescription="Installs the Priscas computer architecture simulator."
-VersionInfoVersion=0.3.9.552
-VersionInfoTextVersion="0.3.9.552"
-VersionInfoProductVersion=0.3.9.552
-VersionInfoProductTextVersion="0.3.9.552"
+VersionInfoVersion=0.3.552.4000
+VersionInfoTextVersion="0.3.552.4000"
+VersionInfoProductVersion=0.3.552.4000
+VersionInfoProductTextVersion="0.3.552.4000"
 DefaultDirName={pf}\Priscas
 DefaultGroupName=Priscas
 DisableWelcomePage=no

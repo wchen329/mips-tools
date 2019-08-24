@@ -30,7 +30,7 @@ aboutDialog::aboutDialog(QWidget *parent) :
     ui->pushButton->setDefault(true);
     ui->layoutAbout->addWidget(ui->textEditAbout);
     ui->layoutAbout->addWidget(ui->pushButton);
-    ui->labelVersion->setText(QString("Version ") + QString(branding::APPLICATION_VERSION.c_str()));
+    ui->labelVersion->setText(QString(branding::APPLICATION_VERSION.c_str()));
 
     std::string VerNotice = std::string("Version ") + std::string(PRISCAS_BRANDING_FULL_VERSION_STRING) + std::string("\n\n");
 
