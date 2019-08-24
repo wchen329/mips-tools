@@ -38,4 +38,5 @@ void Setup_Tests()
 	AddTest(test_mips32fsp_ece552_f18midterm6, "test_mips32fsp_ece552_f18midterm6");
 	AddTest(test_mips32fsp_ece552_f181009, "test_mips32fsp_ece552_f181009");
 	AddTest(test_mips32fsp_fake_load_to_use_r, "test_mips32fsp_fake_load_to_use_r");
+	AddTest(test_mips32fsp_memtomem_stall, "test_mips32fsp_memtomem_stall");
 }

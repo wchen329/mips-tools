@@ -304,6 +304,7 @@ namespace priscas
 		rd = (rd_mask & inst_word) >> 11;
 		func = static_cast<funct>((funct_mask & inst_word));
 		shamt = (shamt_mask & inst_word) >> 6;
-		imm = (imm_mask_i & inst_word) | ((~(inst_word & (1 << 15)) + 1) ); // make it signed
+		imm = fm == I	? (imm_mask_i & inst_word) | (~(inst_word & (1 << 15)) + 1)
+						: (addr_mask & inst_word) | (~(inst_word & (1 << 25)) + 1); // make it signed
 	}
 }

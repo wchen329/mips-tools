@@ -129,6 +129,7 @@
     <ClCompile Include="..\..\tests\test_mips32fsp_load_to_use.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_load_to_use_control.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_memtomem.cpp" />
+    <ClCompile Include="..\..\tests\test_mips32fsp_memtomem_stall.cpp" />
     <ClCompile Include="..\..\tests\test_mips32fsp_nostall.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

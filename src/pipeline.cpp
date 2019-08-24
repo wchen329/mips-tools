@@ -186,18 +186,18 @@ namespace priscas
 		// MEM->EX forwarding
 		if(wb_regWE && wb_save_num != 0)
 		{
-			if(sc_cpu::cpu_opts[MEM_EX_INDEX].get_IntValue() == PATH_FORWARD_MODE)
-			{	
+			//if(sc_cpu::cpu_opts[MEM_EX_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			//{	
 				if(ex_rs == wb_save_num) ex_data_rs = wb_save_data;
 				if(ex_rt == wb_save_num) ex_data_rt = wb_save_data;
-			}
+			//}
 		}
 
 		// EX->EX forwarding
 		if(mem_regWE)
 		{
-			if(sc_cpu::cpu_opts[EX_EX_INDEX].get_IntValue() == PATH_FORWARD_MODE)
-			{
+			//if(sc_cpu::cpu_opts[EX_EX_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			//{
 
 				if(r_inst(mem_op))
 				{
@@ -213,15 +213,15 @@ namespace priscas
 					if(ex_rs == mem_rt && mem_rt != 0) ex_data_rs = mem_dataALU;
 					if(ex_rt == mem_rt && mem_rt != 0) ex_data_rt = mem_dataALU;
 				}
-			}
+			//}
 		}
 
-		// EX-EX Dependency, general dependency
+		// EX->EX Dependency, load to use, STALL required
 		if(mem_read_inst(mem_op))
 		{
 				if(!(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
-					&& ex_rs != mem_rt && this->cpu_opts[MEM_MEM_INDEX].get_IntValue() != PATH_STALL_MODE
-					) && !(r_inst(ex_op) && ex_rd == 0)) // A very special case to allow for MEM-MEM forwarding (and glitching)
+					&& ex_rs != mem_rt && this->cpu_opts[MEM_MEM_INDEX].get_IntValue() != PATH_STALL_MODE ) // special case checking for MEM-MEM forwarding
+					&& !(r_inst(ex_op) && ex_rd == 0))
 				{
 					if((ex_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(ex_op, ex_funct)) && (ex_rt == mem_rt && mem_rt != 0)))
 					{
@@ -360,8 +360,8 @@ namespace priscas
 		// EX-ID Forwarding Path, specifically for Control Hazards
 		if(mem_regWE && jorb_inst(decode_op, decode_funct))
 		{
-			if(sc_cpu::cpu_opts[EX_ID_INDEX].get_IntValue() == PATH_FORWARD_MODE)
-			{	
+			//if(sc_cpu::cpu_opts[EX_ID_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			//{	
 				if(r_inst(mem_op))
 				{
 					// R instructions write to RD, and their results are saved directly
@@ -377,7 +377,7 @@ namespace priscas
 					if(decode_rs == mem_rt && decode_rs != 0) decode_rs_data = mem_dataALU;
 					if(decode_rt == mem_rt && decode_rt != 0) decode_rt_data = mem_dataALU;
 				}
-			}
+			//}
 		}
 
 		// EX-ID Load to Use handling, a REQUIRED stall for branches
@@ -392,7 +392,7 @@ namespace priscas
 		}
 
 		// Check for ID->ID dependency, a REQUIRED stall for branches
-		if(ex_regWE && jorb_inst(decode_op, decode_funct) && this->cpu_opts[ID_ID_INDEX].get_IntValue() != PATH_GLITCH_MODE)
+		if(ex_regWE && jorb_inst(decode_op, decode_funct))
 		{
 			if(r_inst(ex_op))
 			{
@@ -415,7 +415,7 @@ namespace priscas
 			}
 		}
 
-		// Check for MEM dependency, which is only needed if a load is present
+		// Check for MEM->ID dependency, which is only needed if a load is present
 		if(mem_regWE && jorb_inst(decode_op, decode_funct) && mem_read_inst(mem_op))
 		{
 			if((decode_rs == mem_rt && decode_rs != 0) || (decode_rt == mem_rt && decode_rt != 0))
@@ -666,7 +666,7 @@ namespace priscas
 		DBG_IDEX_RT_N("Rt"),
 		DBG_IDEX_RD_N("Rd"),
 		DBG_IDEX_FUNCT("Funct"),
-		DBG_IDEX_SHAMT("Shamt"),
+		DBG_IDEX_SHAMT("Shamt or JAL Store"),
 		DBG_IDEX_IMM("Imm"),
 		DBG_IDEX_OP("Opcode"),
 		DBG_IDEX_REGWE("RegWE"),
@@ -691,7 +691,7 @@ namespace priscas
 		sc_cpu::clk_T = 40000;
 
 		// Register CPU Options
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify non load-to-use ex-ex hazard detection behavior"));
+		/*sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify non load-to-use ex-ex hazard detection behavior"));
 		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
 		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
@@ -704,16 +704,15 @@ namespace priscas
 		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_EX", "Specify non load-to-use mem-ex hazard detection behavior"));
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
+		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);*/
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify non load-to-use mem-mem hazard detection behavior"));
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify non mem-mem hazard detection behavior"));
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_ID_ID", "Specify id-id hazard detection behavior", PATH_STALL_MODE));
+		/*sc_cpu::cpu_opts.push_back(CPU_Option("PATH_ID_ID", "Specify id-id hazard detection behavior", PATH_STALL_MODE));
 		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
+		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);*/
 
 		DebugTree_Simple_List* pipeline_register_list_dbg = new DebugTree_Simple_List;
 		this->pipeline_diagram = new DebugTableStringValue;
@@ -768,7 +767,7 @@ namespace priscas
 			NameValueStringPair& v = args[s];
 			std::string& whichval = v.getName();
 
-			if(whichval == "PATH_EX_EX")
+			/*if(whichval == "PATH_EX_EX")
 			{
 				sc_cpu::cpu_opts[EX_EX_INDEX].set_Value(v.getValue());
 			}
@@ -781,17 +780,18 @@ namespace priscas
 			else if(whichval == "PATH_EX_ID")
 			{
 				sc_cpu::cpu_opts[EX_ID_INDEX].set_Value(v.getValue());
-			}
+			}*/
 
-			else if(whichval == "PATH_MEM_MEM")
+			if(whichval == "PATH_MEM_MEM")
 			{
 				sc_cpu::cpu_opts[MEM_MEM_INDEX].set_Value(v.getValue());
 			}
 
+			/*
 			else if(whichval == "PATH_ID_ID")
 			{
 				sc_cpu::cpu_opts[ID_ID_INDEX].set_Value(v.getValue());
-			}
+			}*/
 
 			else
 			{

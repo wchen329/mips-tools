@@ -59,7 +59,7 @@ namespace priscas
 			static const int EX_EX_INDEX = 0;
 			static const int EX_ID_INDEX = 1;
 			static const int MEM_EX_INDEX = 2;
-			static const int MEM_MEM_INDEX = 3;
+			static const int MEM_MEM_INDEX = 0;
 			static const int ID_ID_INDEX = 4;
 			DebugTree_Simple* ifid_dbg;
 			DebugTree_Simple* idex_dbg;
