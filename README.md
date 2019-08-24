@@ -1,6 +1,9 @@
 # PRISCAS
 PRISCAS (*formerly MIPS Tools*) is a collection of tools that may be useful in the aid of computer architecture study, particularly for the MIPS architecture. It is intended to be fully functional on both Windows and UNIX-like systems upon its completion.
 
+## Version 0.3.552.400x
+This build is a special maintenence branch of the PRISCAS release for UW-Madison's ECE 552. Features may be backported from future releases but this release's main goal is stability.
+
 ## Build Instructions
 ### Windows
 Within the PRISCAS directory there is a Visual Studio solution. This Visual Studio solution is for VS2010 and it should be able to be opened in any Visual Studio that is newer that 2010 as well. From there it is as simple to run "Build" and the project should build.
