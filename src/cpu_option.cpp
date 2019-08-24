@@ -22,9 +22,9 @@
 
 namespace priscas
 {
-	CPU_Option::CPU_Option(const std::string& name, const std::string& desc) :
+	CPU_Option::CPU_Option(const std::string& name, const std::string& desc, int default_value) :
 		nameDesc(name, desc),
-		value(0)
+		value(default_value)
 	{
 	}
 

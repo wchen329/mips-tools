@@ -26,6 +26,7 @@ Name: simuidesktopicon; Description: "Create a desktop icon for Priscas simUI";
 Name: "{group}\Priscas simUI"; Filename: "{app}\simUI.exe"
 Name: "{group}\Priscas Shell"; Filename: "{app}\pshell.exe"
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
+Name: "{group}\Priscas Quickstart Guide"; Filename: "{app}\doc\PRISCAS_Quickstart_0.3.pdf";
 Name: "{commondesktop}\Priscas simUI"; Filename: "{app}\simUI.exe"; Tasks: simuidesktopicon
 Name: "{commondesktop}\Priscas Shell"; Filename: "{app}\pshell.exe"; Tasks: shelldesktopicon
 
@@ -48,4 +49,5 @@ Source: "..\external\lib\winNT\qt\plugins\platforms\qwindows.dll"; DestDir: "{ap
 Source: "..\external\lib\winNT\qt\plugins\imageformats\qico.dll"; DestDir: "{app}\plugins\imageformats\"
 Source: "..\PRISCAS\Release\pshell.exe"; DestDir: "{app}"
 Source: "..\build-simUI-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Release\release\simUI.exe"; DestDir: "{app}"
+Source: "..\doc\pub\PRISCAS_Quickstart_0.3.pdf"; DestDir: "{app}\doc"
 

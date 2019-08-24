@@ -36,7 +36,7 @@ namespace priscas
 	class CPU_Option
 	{
 		public:
-			CPU_Option(const std::string& name, const std::string& description);
+			CPU_Option(const std::string& name, const std::string& description, int default_value = 0);
 			std::string& getName() { return nameDesc.getName(); }
 			std::string& getDescription() { return nameDesc.getDescription(); }
 			std::vector<std::string>& get_SValues() { return this->strNames; }	// get possible string values of the option

@@ -217,11 +217,11 @@ namespace priscas
 			}
 		}
 
-		// EX Dependency, general dependency
+		// EX-EX Dependency, general dependency
 		if(mem_read_inst(mem_op))
 		{
 				if(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
-					&& ex_rs != mem_rt
+					&& ex_rs != mem_rt && this->cpu_opts[MEM_MEM_INDEX].get_IntValue() != PATH_STALL_MODE
 					) // A very special case to allow for MEM-MEM forwarding
 				{
 					ex_data_rt = mem_dataALU; // This doesn't do anything
@@ -399,8 +399,8 @@ namespace priscas
 			}
 		}
 
-		// Check for EX dependency, a REQUIRED stall for branches
-		if(ex_regWE && jorb_inst(decode_op, decode_funct))
+		// Check for ID->ID dependency, a REQUIRED stall for branches
+		if(ex_regWE && jorb_inst(decode_op, decode_funct) && this->cpu_opts[ID_ID_INDEX].get_IntValue() != PATH_GLITCH_MODE)
 		{
 			if(r_inst(ex_op))
 			{
@@ -577,12 +577,6 @@ namespace priscas
 			this->registers[rwb_save_num].set_data(rwb_reg_val); // Register-File bypassing
 		}
 
-		/*// Enable certain edge cases of Register Write Back
-		if(wb_regWE && wb_save_num != 0)
-		{
-			this->registers[wb_save_num].set_data(wb_save_data); // Register-File bypassing
-		}*/
-
 		// Set probes
 		this->ifid_dbg->findChild(DBG_INSTRUCTION_WORD)->setValue(fetch_plr.get_data().toHexString());
 
@@ -701,22 +695,30 @@ namespace priscas
 		std::string STALL_VALUE_STRING = "STALL";
 		std::string GLITCH_VALUE_STRING = "GLITCH";
 
+		// Set clock period
 		sc_cpu::clk_T = 40000;
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify ex-ex forwarding behavior"));
+
+		// Register CPU Options
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify ex-ex hazard detection behavior"));
 		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
 		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 		
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_ID", "Specify ex-id forwarding behavior"));
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_ID", "Specify ex-id hazard detection behavior"));
 		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
 		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_EX", "Specify mem-ex forwarding behavior"));
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_EX", "Specify mem-ex hazard detection behavior"));
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify mem-mem forwarding behavior"));
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify mem-mem hazard detection behavior"));
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
+		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
+
+		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_ID_ID", "Specify id-id hazard detection behavior", PATH_STALL_MODE));
+		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
+		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
 		DebugTree_Simple_List* pipeline_register_list_dbg = new DebugTree_Simple_List;
 		this->pipeline_diagram = new DebugTableStringValue;
