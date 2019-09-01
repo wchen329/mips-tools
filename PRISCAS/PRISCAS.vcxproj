@@ -17,7 +17,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -39,7 +39,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../include/;$(IncludePath)</IncludePath>
-    <TargetExt>.lib</TargetExt>
+    <TargetExt>.dll</TargetExt>
     <TargetName>mtcore</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -123,6 +123,7 @@
     <ClInclude Include="..\include\osi.h" />
     <ClInclude Include="..\include\pipeline.h" />
     <ClInclude Include="..\include\primitives.h" />
+    <ClInclude Include="..\include\priscas_core.h" />
     <ClInclude Include="..\include\priscas_global.h" />
     <ClInclude Include="..\include\range.h" />
     <ClInclude Include="..\include\reg_32.h" />
@@ -133,6 +134,9 @@
     <ClInclude Include="..\include\streams.h" />
     <ClInclude Include="..\include\superscalar.h" />
     <ClInclude Include="..\include\syms_table.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="version_pcore.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

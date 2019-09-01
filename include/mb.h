@@ -26,6 +26,7 @@
 #include "mmem.h"
 #include "primitives.h"
 #include "priscas_global.h"
+#include "osi.h"
 #include "cpu_time.h"
 #include "pipeline.h"
 #include "sc_cpu.h"
@@ -50,7 +51,7 @@ namespace priscas
 	 * Representation of a computer with a single CPU and a single main memory.
 	 *
 	 */
-	class mb
+	class DLE mb
 	{
 		public:
 			void dc_on();	// power on

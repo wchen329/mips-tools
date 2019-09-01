@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 #include "mt_exception.h"
+#include "osi.h"
 #include "priscas_global.h"
 
 namespace priscas
@@ -34,7 +35,7 @@ namespace priscas
 	/* A generic, iterable "range"
 	 * Really just an ordered collection of numbers which can be iterated over
 	 */
-	class range
+	class DLE range
 	{
 		std::list<size_t> numbers;
 

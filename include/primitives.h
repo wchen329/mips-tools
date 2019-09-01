@@ -23,6 +23,7 @@
 #include <cctype>
 #include <cstdint>
 #include <string>
+#include "osi.h"
 #include "priscas_global.h"
 /* Various byte long
  * primitives such as a 32-bitlong word
@@ -107,7 +108,7 @@ namespace priscas
 	}
 
 	// general "bit word class"
-	class BW
+	class DLE BW
 	{
 		public:
 			virtual std::string toHexString() = 0;
@@ -121,7 +122,7 @@ namespace priscas
 
 	};
 
-	class BW_16 : public BW
+	class DLE BW_16 : public BW
 	{
 		public:
 			char b_0() { return *(w_addr());}
@@ -163,7 +164,7 @@ namespace priscas
 
 	};
 
-	class BW_32 : public BW
+	class DLE BW_32 : public BW
 	{
 		public:
 			char b_0() { return *(w_addr());}

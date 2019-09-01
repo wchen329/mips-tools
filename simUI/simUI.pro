@@ -49,9 +49,6 @@ RESOURCES += \
     simUIart.qrc \
     simUIlocalization.qrc
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../PRISCAS/release/ -lmtcore
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../PRISCAS/debug/ -lmtcore
-
 win32:CONFIG(release, debug|release): DEFINES += WIN32
 
 RC_FILE = $$PWD/../simUI/version.rc
@@ -71,3 +68,10 @@ INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
 
 unix:!macx: PRE_TARGETDEPS += $$PWD/../build/libmtcore.a
+
+# Dynamic Linking (Windows only)
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../PRISCAS/release/ -lmtcore
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../PRISCAS/debug/ -lmtcore
+
+INCLUDEPATH += $$PWD/../PRISCAS/Debug
+DEPENDPATH += $$PWD/../PRISCAS/Debug

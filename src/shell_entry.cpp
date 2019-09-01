@@ -21,7 +21,7 @@
 #include <csignal>
 #include <string>
 #include <vector>
-#include "shell.h"
+#include "priscas_core.h"
 
 priscas::Shell runtime;
 

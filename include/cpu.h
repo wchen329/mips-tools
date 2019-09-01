@@ -21,6 +21,7 @@
 #ifndef __CPU_H__
 #define __CPU_H__
 #include "ISA.h"
+#include "osi.h"
 #include "priscas_global.h"
 
 namespace priscas
@@ -31,7 +32,7 @@ namespace priscas
 	 *
 	 * wchen329
 	 */
-	class cpu
+	class DLE cpu
 	{
 		public:
 

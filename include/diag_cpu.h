@@ -32,7 +32,7 @@ namespace priscas
 {
 
 	// CPU with Diagnostic Functions
-	class diag_cpu : public cpu
+	class DLE diag_cpu : public cpu
 	{
 		public:
 				// still need to do: change BW_32 to a generic

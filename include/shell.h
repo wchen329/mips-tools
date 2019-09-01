@@ -20,6 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __SHELL_H__
 #define __SHELL_H__
+
 #include <set>
 #include <queue>
 #include <map>
@@ -35,7 +36,6 @@
 
 namespace priscas
 {
-
 	/* Divides a string based on whitespace, tabs, commas and newlines
 	 * Acknowledges escaping \ and quotes
 	 */
@@ -52,7 +52,7 @@ namespace priscas
 	 * -
 	 * The shell allows easy and direct access to utilizing a processor.
 	 */
-	class Shell
+	class DLE Shell
 	{
 
 		public:
