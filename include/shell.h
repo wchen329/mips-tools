@@ -60,6 +60,7 @@ namespace priscas
 			void SetArgs(std::vector<std::string> & args) { this->args = args; }
 			priscas::mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
 			void SetQuiet() { isQuiet = true; }
+			Env::Mode_t modeget() { return shEnv.get_Mode(); }
 			void modeset_Machine() { shEnv.update_Mode(Env::MACHINE); }
 			void modeset_Interactive() { shEnv.update_Mode(Env::INTERACTIVE); }
 			void modeset_Shutdown() { shEnv.update_Mode(Env::SHUTDOWN); }
