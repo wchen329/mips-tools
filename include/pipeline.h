@@ -38,6 +38,7 @@ namespace priscas
 	class fsp_cpu : public sc_cpu
 	{
 		public:
+			const UPString& getName() { return this->name; }
 			bool cycle();
 			void rst();
 			fsp_cpu(mmem & m);
@@ -77,6 +78,7 @@ namespace priscas
 			unsigned long long current_cycle_num;
 
 			// Special names
+			const UPString name;
 			const std::string DBG_INSTRUCTION_WORD;
 			const std::string DBG_MEMWB_REGWE;
 			const std::string DBG_MEMWB_WRITE_DATA;

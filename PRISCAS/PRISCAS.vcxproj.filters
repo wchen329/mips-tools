@@ -59,9 +59,6 @@
     <ClCompile Include="..\src\runtime_call.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\states.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\range.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -81,6 +78,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\cpu_option.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\env.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -128,9 +128,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\format_chk.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\states.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\interpret.h">
@@ -182,6 +179,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\cpu_option.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\env.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

@@ -38,11 +38,6 @@ namespace priscas
 			asm_ostream(asm_ostream &);
 			asm_ostream& operator=(asm_ostream &);
 	};
-
-	namespace mtsstream
-	{
-		extern asm_ostream * asmout;
-	}
 }
 
 #endif

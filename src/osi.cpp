@@ -20,14 +20,35 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "osi.h"
 
-#ifdef WIN32
-	#include <Windows.h>
-#else
-	#include <unistd.h>
-#endif
-
 namespace osi
 {
+	mlock::mlock()
+	{
+		#ifdef WIN32
+			InitializeCriticalSection(&this->mutex);
+		#else
+			this->mutex = PTHREAD_MUTEX_INITIALIZER;
+		#endif
+	}
+
+	void mlock::lock()
+	{
+		#ifdef WIN32
+			EnterCriticalSection(&this->mutex);
+		#else
+			pthread_mutex_lock(&this->mutex);
+		#endif
+	}
+
+	void mlock::unlock()
+	{
+		#ifdef WIN32
+			LeaveCriticalSection(&this->mutex);
+		#else
+			pthread_mutex_unlock(&this->mutex);
+		#endif
+	}
+
 	void sleep(int ms)
 	{
 		#ifdef WIN32

@@ -21,6 +21,7 @@
 #ifndef __PRISCAS_GLOBAL_H__
 #define __PRISCAS_GLOBAL_H__
 #include <string>
+#include <vector>
 
 /* Intended Global defines for PRISCAS Core, in all header files
  * wchen329
@@ -32,6 +33,34 @@ namespace priscas
 	 * Currently just a typedef, this will most likely change in the future
 	 */
 	typedef std::string UPString;
+
+	/* Universal PRISCAS Char
+	 * Currently a typedef, will change in future most likely
+	 */
+	typedef char UPChar;
+
+	/* Argument Vector
+	 * Contains a list of arguments
+	 */
+	typedef std::vector<UPString> Arg_Vec;
+
+	/* Argument Vector iterator
+	 */
+	typedef std::vector<UPString>::iterator Arg_Vec_Iter;
+
+	/* Const Argument Vector iterator
+	 */
+	typedef std::vector<UPString>::const_iterator Arg_Vec_CIter;
+
+	/* Filename Vector
+	 * Contains a list of filenames
+	 */
+	typedef std::vector<UPString> Filename_Vec;
+
+	/* Filename Vector Iterator
+	 *
+	 */
+	typedef std::vector<UPString>::iterator Filename_Vec_Iter;
 }
 
 /* Namespace aliases for old names of namespaces

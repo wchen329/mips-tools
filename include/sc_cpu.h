@@ -37,6 +37,7 @@ namespace priscas
 	class sc_cpu : public diag_cpu
 	{
 		public:
+			const UPString& getName() { return this->name; }
 			void rst(); // "async" reset
 			bool cycle(); // advance the processor a cycle
 			BW_32& get_reg_data(int index) { return this->registers[index].get_data(); }
@@ -44,7 +45,7 @@ namespace priscas
 			BW_32& get_PC() { return this->pc.get_data(); }
 			long get_clk_T() { return this -> clk_T ; }
 			void ghost_cycle();
-			sc_cpu(mmem & m) : mm(m), clk_T(200000) {  }
+			sc_cpu(mmem & m) : mm(m), clk_T(200000), name("MIPS-32 Single Cylce") {  }
 			ISA& get_ISA() { return this->isa; }
 			std::vector<CPU_Option>& get_CPU_options() { return this->cpu_opts; }
 			void exec_CPU_option(std::vector<NameValueStringPair> &) {}
@@ -60,6 +61,7 @@ namespace priscas
 			reg_32 pc;
 			mmem & mm;
 		private:
+			UPString name;
 			std::vector<DebugView*> debug_views;
 			sc_cpu(sc_cpu&);
 			sc_cpu operator=(sc_cpu&);

@@ -24,12 +24,6 @@
 namespace priscas
 {
 
-	void Enter_Interactive(int a)
-	{
-		INTERACTIVE = true;
-		SUSPEND = true;
-	}
-
 	void Shell::execute_runtime_directive(std::vector<std::string>& args_list)
 	{
 		if(args_list.size() < 1)
@@ -178,7 +172,7 @@ namespace priscas
 
 	void exit(std::vector<std::string> & args, Shell& inst)
 	{
-		inst.SetState(Shell::KILLED);
+		inst.modeset_Shutdown();
 	}
 
 	void help(std::vector<std::string> & args, Shell& inst)
@@ -334,8 +328,7 @@ namespace priscas
 
 	void run(std::vector<std::string> & args, Shell& inst)
 	{
-		INTERACTIVE = false;
-		SUSPEND = false;
+		inst.modeset_Machine();
 	}
 
 	void sound(std::vector<std::string> & args, Shell& inst)

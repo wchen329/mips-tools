@@ -34,6 +34,14 @@ namespace priscas
 	class cpu
 	{
 		public:
+
+			/* getName()
+			 * Return the name of the processor
+			 * Return: string
+			 *         Processor name as a string
+			 */
+			virtual const UPString& getName() = 0;
+
 			/* rst()
 			 * Resets the processor state
 			 * (zeroes it all out)

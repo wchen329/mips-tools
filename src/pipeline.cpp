@@ -656,6 +656,7 @@ namespace priscas
 		mem_sig(-1),
 		wb_sig(-1),
 		current_cycle_num(0),
+		name("MIPS-32 FSP"),
 		DBG_INSTRUCTION_WORD("Instruction Word"),
 		DBG_MEMWB_REGWE("Register Write Enable (RegWE)"),
 		DBG_MEMWB_WRITE_DATA("Write Data"),

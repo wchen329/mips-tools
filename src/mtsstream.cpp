@@ -41,6 +41,4 @@ namespace priscas
 	{
 		fclose(this->f);
 	}
-
-	asm_ostream * mtsstream::asmout = nullptr;
 }

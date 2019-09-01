@@ -28,8 +28,7 @@ namespace priscas
 		this->mb_cpu->rst();
 
 		// Start fetch decoding and executing until hlt is received
-		while(!this->suspend)
-			this->mb_cpu->cycle();
+		this->mb_cpu->cycle();
 	}
 
 	size_t mb::get_mmem_size()
@@ -69,7 +68,7 @@ namespace priscas
 		return *(this->mb_cpu);
 	}
 
-	mb::mb(cpu_t ct, int mt, const bool& suspend) : cpu_type(ct), mmem_type(mt), sim_time(CPUTime()), cycle_ct(0), suspend(suspend)
+	mb::mb(cpu_t ct, int mt) : cpu_type(ct), mmem_type(mt), sim_time(CPUTime()), cycle_ct(0)
 	{
 		size_t s = 1 << mt;
 		this->mb_mmem = new mmem(s);

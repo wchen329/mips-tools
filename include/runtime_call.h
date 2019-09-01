@@ -31,11 +31,9 @@
 #include "priscas_global.h"
 #include "range.h"
 #include "shell.h"
-#include "states.h"
 
 namespace priscas
 {
-	void Enter_Interactive(int arg);
 	void breakpoint(std::vector<std::string> & args, Shell& inst);
 	void cycle(std::vector<std::string> & args, Shell& inst);
 	void cpuopts(std::vector<std::string> & args, Shell& inst);

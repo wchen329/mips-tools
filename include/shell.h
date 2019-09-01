@@ -25,7 +25,9 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "env.h"
 #include "mb.h"
+#include "osi.h"
 #include "primitives.h"
 #include "priscas_global.h"
 #include "syms_table.h"
@@ -58,7 +60,10 @@ namespace priscas
 			void SetArgs(std::vector<std::string> & args) { this->args = args; }
 			priscas::mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
 			void SetQuiet() { isQuiet = true; }
-			
+			void modeset_Machine() { shEnv.update_Mode(Env::MACHINE); }
+			void modeset_Interactive() { shEnv.update_Mode(Env::INTERACTIVE); }
+			void modeset_Shutdown() { shEnv.update_Mode(Env::SHUTDOWN); }
+
 			void WriteToOutput(std::string& o);
 			void WriteToOutput(const char* e);
 			void WriteToError(std::string& e);
@@ -72,25 +77,14 @@ namespace priscas
 			void setErrorTextStream(priscas_io::text_stream & ts) { this->tw_error = &ts; }
 			void setInputTextStream(priscas_io::text_stream & ts) { this->tw_input = &ts; }
 			void setNoConsoleOutput(bool torf) { this->NoConsoleOutput = torf; }
+
 			std::string getLineAtPC(unsigned long pc) {return this->PC_to_line_string.count(pc) > 0 ? this->PC_to_line_string[pc] : "???";}
 			~Shell() { delete motherboard; if(this->inst_file != nullptr) fclose(inst_file); }
 			Shell();
 
-			/* Internal Shell State
-			 *
-			 */
-			enum Shell_State
-			{
-				EMBRYO = 0,
-				RUNNING = 1,
-				KILLED = 2,
-				SLEEPING = 3
-			};
-
-			void SetState(Shell_State s){ this->state = s; }
-
 		private:
 			bool NoConsoleOutput;
+			bool hasAsmInput;
 			FILE* inst_file;
 			priscas_io::text_stream * tw_error;
 			priscas_io::text_stream * tw_output;
@@ -102,7 +96,8 @@ namespace priscas
 			priscas::mb * motherboard;
 			bool isQuiet;
 
-			Shell_State state;
+			// The environment which the shell wraps around
+			Env shEnv;
 
 			// Runtime Directives, run through the shell
 			std::map<unsigned long, unsigned long> program_breakpoints;
