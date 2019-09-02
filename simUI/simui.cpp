@@ -363,7 +363,7 @@ void simUI::on_actionRuntime_Directive_triggered()
     tools_runtimeDirective trd;
     if(trd.exec())
     {
-        std::string val = trd.getTextValue().toStdString() + priscas_io::newLine;
+        std::string val = trd.getTextValue().toStdString() + std::string("\n");
         this->simTextO << val;
         this->simTextI << val;
     }

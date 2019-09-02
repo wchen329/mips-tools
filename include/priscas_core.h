@@ -15,5 +15,6 @@
 #include "primitives.h"
 #include "range.h"
 #include "shell.h"
+#include "streams.h"
 
 #endif

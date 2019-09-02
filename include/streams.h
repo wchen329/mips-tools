@@ -52,8 +52,9 @@ namespace priscas_io
 			bool isNull() { return true; }
 	};
 
-	LINK_DE extern null_text_stream null_tstream;
-	LINK_DE extern const std::string newLine;
+	extern LINK_DE null_text_stream null_tstream;
+
+	LINK_DE const extern priscas::UPString newLine;
 
 	/* Utilities for printing a number
 	 *
