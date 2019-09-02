@@ -34,6 +34,7 @@ namespace priscas
 	extern const std::string HELP_MEM;
 	extern const std::string HELP_RST;
 	extern const std::string HELP_STATE;
+	extern const std::string HELP_SR;
 	extern const std::string HELP_TIME;
 	extern const std::string HELP_RUN;
 	extern const char * BAD_COMMAND;  	// bad command message

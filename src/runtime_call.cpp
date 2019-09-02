@@ -202,47 +202,52 @@ namespace priscas
 				msg = HELP_BREAKPOINT;
 			}
 
-			if(args[1] == ".cpuopts")
+			else if(args[1] == ".cpuopts")
 			{
 				msg = HELP_CPUOPTS;
 			}
 
-			if(args[1] == ".cycle")
+			else if(args[1] == ".cycle")
 			{
 				msg = HELP_CYCLE;
 			}
 
-			if(args[1] == ".exit")
+			else if(args[1] == ".exit")
 			{
 				msg = HELP_EXIT;
 			}
 			
-			if(args[1] == ".help")
+			else if(args[1] == ".help")
 			{
 				msg = HELP_HELP;
 			}
 
-			if(args[1] == ".mem")
+			else if(args[1] == ".mem")
 			{
 				msg = HELP_MEM;
 			}
 
-			if(args[1] == ".rst")
+			else if(args[1] == ".rst")
 			{
 				msg = HELP_RST;
 			}
 
-			if(args[1] == ".run")
+			else if(args[1] == ".run")
 			{
 				msg = HELP_RUN;
 			}
 
-			if(args[1] == ".state")
+			else if(args[1] == ".sr")
+			{
+				msg = HELP_SR;
+			}
+
+			else if(args[1] == ".state")
 			{
 				msg = HELP_STATE;
 			}
 
-			if(args[1] == ".time")
+			else if(args[1] == ".time")
 			{
 				msg = HELP_TIME;
 			}
@@ -397,7 +402,7 @@ namespace priscas
 
 		if(filename == "")
 		{
-			inst.WriteToError("Error: Filename not specified, or invalid.");
+			inst.WriteToError("Error: Filename not specified, or invalid.\n");
 			return;
 		}
 
