@@ -41,18 +41,15 @@ namespace priscas
 			void rst(); // "async" reset
 			bool cycle(); // advance the processor a cycle
 			BW_32& get_reg_data(int index) { return this->registers[index].get_data(); }
-			unsigned get_reg_count() { return REG_COUNT; }
 			BW_32& get_PC() { return this->pc.get_data(); }
 			long get_clk_T() { return this -> clk_T ; }
-			void ghost_cycle();
 			sc_cpu(mmem & m) : mm(m), clk_T(200000), name("MIPS-32 Single Cylce") {  }
 			ISA& get_ISA() { return this->isa; }
-			std::vector<CPU_Option>& get_CPU_options() { return this->cpu_opts; }
-			void exec_CPU_option(std::vector<NameValueStringPair> &) {}
+			virtual CPU_ControlPanel& get_CPU_options() { return this->cp; }
+
 			virtual std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
 			virtual ~sc_cpu() {}
 		protected:
-			std::vector<CPU_Option> cpu_opts;
 			byte_8b mem_req_load(int index); // sends a load memory request from CPU to MMEM. The ind is the offset from address 0x0
 			void mem_req_write(byte_8b data, int index); // sends a write memory request from CPU To MMEM. The ind is the offset from address 0x0
 			static const int REG_COUNT = 32;
@@ -62,6 +59,7 @@ namespace priscas
 			mmem & mm;
 		private:
 			UPString name;
+			CPU_ControlPanel cp;
 			std::vector<DebugView*> debug_views;
 			sc_cpu(sc_cpu&);
 			sc_cpu operator=(sc_cpu&);

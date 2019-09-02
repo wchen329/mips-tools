@@ -114,10 +114,10 @@ namespace priscas
 		// MEM->MEM forwarding
 		if(mem_write_inst(mem_op) && wb_regWE && wb_save_num != 0)
 		{
-			if(sc_cpu::cpu_opts[MEM_MEM_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			/*if(sc_cpu::cpu_opts[MEM_MEM_INDEX].get_IntValue() == PATH_FORWARD_MODE)
 			{
 				if(mem_rt == wb_save_num) mem_data_rt = wb_save_data;
-			}
+			}*/
 		}
 
 		// Memory operations
@@ -220,7 +220,7 @@ namespace priscas
 		if(mem_read_inst(mem_op))
 		{
 				if(!(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
-					&& ex_rs != mem_rt && this->cpu_opts[MEM_MEM_INDEX].get_IntValue() != PATH_STALL_MODE ) // special case checking for MEM-MEM forwarding
+					&& ex_rs != mem_rt) //&& this->cpu_opts[MEM_MEM_INDEX].get_IntValue() != PATH_STALL_MODE ) // special case checking for MEM-MEM forwarding
 					&& !(r_inst(ex_op) && ex_rd == 0))
 				{
 					if((ex_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(ex_op, ex_funct)) && (ex_rt == mem_rt && mem_rt != 0)))
@@ -707,9 +707,9 @@ namespace priscas
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
 		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);*/
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify non mem-mem hazard detection behavior"));
-		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(STALL_VALUE_STRING, 1);
+		//sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify non mem-mem hazard detection behavior"));
+		//sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
+		//sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(STALL_VALUE_STRING, 1);
 
 		/*sc_cpu::cpu_opts.push_back(CPU_Option("PATH_ID_ID", "Specify id-id hazard detection behavior", PATH_STALL_MODE));
 		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
@@ -759,46 +759,6 @@ namespace priscas
 		
 		this->debug_views.push_back(pipeline_register_list_dbg);
 		this->debug_views.push_back(pipeline_diagram);
-	}
-
-	void fsp_cpu::exec_CPU_option(std::vector<NameValueStringPair>& args)
-	{
-		for(size_t s = 1; s < args.size(); s++)
-		{
-			NameValueStringPair& v = args[s];
-			std::string& whichval = v.getName();
-
-			/*if(whichval == "PATH_EX_EX")
-			{
-				sc_cpu::cpu_opts[EX_EX_INDEX].set_Value(v.getValue());
-			}
-
-			else if(whichval == "PATH_MEM_EX")
-			{
-				sc_cpu::cpu_opts[MEM_EX_INDEX].set_Value(v.getValue());
-			}
-
-			else if(whichval == "PATH_EX_ID")
-			{
-				sc_cpu::cpu_opts[EX_ID_INDEX].set_Value(v.getValue());
-			}*/
-
-			if(whichval == "PATH_MEM_MEM")
-			{
-				sc_cpu::cpu_opts[MEM_MEM_INDEX].set_Value(v.getValue());
-			}
-
-			/*
-			else if(whichval == "PATH_ID_ID")
-			{
-				sc_cpu::cpu_opts[ID_ID_INDEX].set_Value(v.getValue());
-			}*/
-
-			else
-			{
-				throw mt_invalid_cpu_opt("Option does not exist.");
-			}
-		}
 	}
 
 	fsp_cpu::~fsp_cpu()

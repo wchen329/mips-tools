@@ -42,8 +42,9 @@ namespace priscas
 			bool cycle();
 			void rst();
 			fsp_cpu(mmem & m);
-			void exec_CPU_option(std::vector<NameValueStringPair> &);
 			std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
+			
+
 			~fsp_cpu();
 		private:
 			std::vector<DebugView*> debug_views;

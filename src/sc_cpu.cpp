@@ -290,9 +290,4 @@ namespace priscas
 	{
 		return this->mm[index % this->mm.get_size()];
 	}
-
-	void sc_cpu::ghost_cycle()
-	{
-		this->pc.set_data(this->pc.get_data().AsUInt32() + 4);
-	}
 }

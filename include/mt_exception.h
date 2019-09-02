@@ -46,7 +46,8 @@ namespace priscas
 			BAD_MNEMONIC,
 			ASM_BAD_ARG_COUNT,
 			PARSER_UNEXPECTED,
-			PARSER_UNMATCHED_PARENTHESIS
+			PARSER_UNMATCHED_PARENTHESIS,
+			NO_SUCH_CPU_OPTION
 		};
 	}
 
@@ -196,6 +197,16 @@ namespace priscas
 			{
 				mt_exception::except_num = exception_nums::PARSER_UNMATCHED_PARENTHESIS;
 				mt_exception::message = "Unmatched or non-existent required parenthesis";
+			}
+	};
+
+	class mt_no_such_cpu_option : public mt_exception
+	{
+		public:
+			mt_no_such_cpu_option(const UPString& option_name)
+			{
+				mt_exception::except_num = exception_nums::NO_SUCH_CPU_OPTION;
+				mt_exception::message = (UPString("The option ") + UPString(option_name) + UPString(" does not exist for this CPU."));
 			}
 	};
 }

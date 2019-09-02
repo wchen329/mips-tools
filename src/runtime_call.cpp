@@ -109,23 +109,26 @@ namespace priscas
 		priscas::cpu& c = inst.GetMotherboard().get_cpu();
 		priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(c);
 		
-		std::vector<priscas::CPU_Option>& v = dcpu.get_CPU_options();
+		CPU_ControlPanel & cp = dcpu.get_CPU_options();
 
 		if(args.size() <= 1)
 		{
 			inst.WriteToOutput(("[CPU Specific Options]\n"));
-			if(v.empty())
+			if(cp.empty())
 			{
 				inst.WriteToOutput(("No CPU options found.\n"));
 			}
 
 			else
 			{
-				for(size_t s = 0; s < v.size(); s++)
+				const CPU_Option_List cpuopts_list = cp.list_Controls();
+
+				for(CPU_Option_List_CIter s = cpuopts_list.cbegin(); s != cpuopts_list.cend(); ++s)
 				{
-					std::string o = (v[s].getName() + "\n\t" + v[s].getDescription() + priscas_io::newLine);
+					std::string o = s->getName() + "\n\t" + s->getDescription() + priscas_io::newLine;
 					inst.WriteToOutput(o);
-					std::vector<std::string>& posVal_vector = v[s].get_SValues();
+					
+					const Name_Vec& posVal_vector = s->get_PossibleValues();
 
 					if(posVal_vector.size() > 0)
 					{
@@ -142,9 +145,10 @@ namespace priscas
 					}
 
 					std::string curVal = "Current Value: ";
-					curVal += v[s].getValueName();
+					curVal += s->getValue();
 					curVal += priscas_io::newLine;
 					inst.WriteToOutput(curVal);
+
 				}
 
 				inst.WriteToOutput(("To execute an option just enter\n"));
@@ -159,7 +163,11 @@ namespace priscas
 			try
 			{
 				std::vector<priscas::NameValueStringPair> nvsp = scan_for_values(args);
-				dcpu.exec_CPU_option(nvsp);
+
+				for(std::vector<NameValueStringPair>::iterator nvspit = nvsp.begin() + 1; nvspit != nvsp.end(); ++nvspit)
+				{
+					cp.set_ControlValue(nvspit->getName(), nvspit->getValue());
+				}
 			}
 
 			catch(priscas::mt_exception& mte)
@@ -344,7 +352,7 @@ namespace priscas
 
 		priscas::mb& cmp = inst.GetMotherboard();
 		priscas::diag_cpu& dcpu = dynamic_cast<priscas::diag_cpu&>(cmp.get_cpu());
-		int reg_count = dcpu.get_reg_count();
+		int reg_count = dcpu.get_ISA().get_reg_count();
 		priscas::BW_32 pc_val = dcpu.get_PC();
 		
 		priscas::ISA& isa = dcpu.get_ISA();
@@ -380,7 +388,7 @@ namespace priscas
 				for(priscas::range_iterator ritr = r.begin(); ritr != r.end(); ritr++)
 				{
 
-					if(*ritr < 0 || *ritr >= dcpu.get_reg_count())
+					if(*ritr < 0 || *ritr >= dcpu.get_ISA().get_reg_count())
 					{
 						throw priscas::reg_oob_exception();
 					}
