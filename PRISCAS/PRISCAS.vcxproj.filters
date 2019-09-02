@@ -86,6 +86,9 @@
     <ClCompile Include="..\src\priscas_osi.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\context.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -191,6 +194,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\dynamic.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\context.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

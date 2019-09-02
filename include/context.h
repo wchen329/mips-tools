@@ -18,36 +18,44 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#ifndef __RANGE_H__
-#define __RANGE_H__
-#include <list>
+#ifndef __CONTEXT_H__
+#define __CONTEXT_H__
 #include <cstdio>
-#include <string>
-#include <vector>
 #include "mt_exception.h"
 #include "priscas_global.h"
 
 namespace priscas
 {
-	LINK_DE typedef std::list<size_t>::iterator range_iterator;
 
-	/* A generic, iterable "range"
-	 * Really just an ordered collection of numbers which can be iterated over
+	/* srpackable - Save / Restore Packable
+	 * Can be packed in a save restore image.
 	 */
-	class range
+	class srpackable
 	{
-		std::list<size_t> numbers;
-
-		// Constructs a range using a string specified
-		// Ranges are constructed using MATLAB syntax, that is:
-		// begin (inclusive):end (inclusive):step
-		// i.e. 0:4:2 would look like 0, 2 (4 is out of range)
-		// the step can be omitted which then would look like 0:4 (0, 1, 2, 3)
 		public:
-			LINK_DE range(const UPString&);
-			LINK_DE range_iterator begin() { return this->numbers.begin(); }
-			LINK_DE range_iterator end() { return this->numbers.end(); }
+		
+			/* void save(FILE*)
+			 * IMPLEMENTATION: save this as part of the context.
+			 */
+			virtual void save(FILE*) = 0;
+
+			/* void restore(FILE*)
+			 * IMPLEMENTATION: restore a saved context portion
+			 */
+			virtual void restore(FILE*) = 0;
 	};
+
+	/* Save / Restore Handler
+	 * save and restore controllers for srpackables
+	 * Handles file opening and closing automatically and raises errors.
+	 */
+	class sr_handler
+	{
+		public:
+			static void image_save(srpackable&, const UPString&);
+			static void image_restore(srpackable&, const UPString&);
+	};
+
 }
 
 #endif

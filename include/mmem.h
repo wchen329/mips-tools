@@ -20,20 +20,29 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __MMEM_H__
 #define __MMEM_H__
+#include "context.h"
 #include "mem.h"
 #include "priscas_global.h"
 
 namespace priscas
 {
 	// Main memory
-	class mmem : public mem
+	class mmem : public bit_storage, public srpackable
 	{
 		public:
-			mmem(size_t size = 1024) : mem(size){}
-			byte_8b& operator[](int ind);
+			size_t get_size(){return size;}		// returns size;
+			byte_8b * begin() {return data;}	// get beginning address of data range
+			mmem(size_t size = 1024);
+			byte_8b& operator[](ptrdiff_t ind);
+			const byte_8b& operator[](ptrdiff_t ind) const;
+			void save(FILE*);
+			void restore(FILE*);
+			~mmem();
 		private:
-			mmem operator=(const mem &);		// copy assignment, disabled
-			mmem(const mem &);					// copy constructor, disabled
+			mmem operator=(const mmem &);		// copy assignment, disabled
+			mmem(const mmem &);					// copy constructor, disabled
+			byte_8b * data;					// the actual data of memory
+			size_t size;					// size of memory space in bytes
 	};
 
 }

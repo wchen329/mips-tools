@@ -183,6 +183,19 @@ namespace priscas
 			 */
 			const CPU_Option_List list_Controls() const;
 
+			/* finalize()
+			 * Finalize the control panel, that meaning do not allow any more options / controls
+			 * to be added to the control panel.
+			 * Existing options can still be edited, however
+			 */
+			void finalize() { this->is_finalized = true; }
+
+			CPU_ControlPanel() :
+				is_finalized(false)
+			{}
+
+		private:
+			
 			/* Transmute_Option_to_NameValue 
 			 * Unary functor to make an option into name value pair
 			 * and push it into a given list
@@ -204,10 +217,13 @@ namespace priscas
 					CPU_Option_List& target;
 			};
 
-		private:
+			/* Internals
+			 *
+			 */
 			typedef std::map<UPString, CPU_Option> CPUOp_Cont;
 			typedef std::map<UPString, CPU_Option> CPUOp_Cont_Iter;
 			CPUOp_Cont ops;
+			bool is_finalized;
 	};
 }
 

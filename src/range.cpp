@@ -22,7 +22,7 @@
 
 namespace priscas
 {
-	range::range(std::string& specifier)
+	range::range(const UPString& specifier)
 	{
 		// 0th value - the begin
 		// 1st value - the end

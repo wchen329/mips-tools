@@ -46,7 +46,7 @@ namespace priscas
 	 * These consist of string with EXACT format:
 	 * NAME=VALUE
 	 */
-	std::vector<priscas::NameValueStringPair> scan_for_values(std::vector<std::string>& input);
+	std::vector<priscas::NameValueStringPair> scan_for_values(const std::vector<std::string>& input);
 
 	/* A single instance of a Shell
 	 * -
@@ -107,7 +107,7 @@ namespace priscas
 			std::map<unsigned long, std::string> PC_to_line_string;
 			std::map<unsigned long, bool> microarch_breakpoints;
 			std::queue<unsigned long> queued_prog_breakpoints;
-			std::map<std::string, void(*)(std::vector<std::string>&, Shell& shell)> directives;
+			std::map<std::string, void(*)(const Arg_Vec&, Shell& shell)> directives;
 			priscas::syms_table jump_syms;
 			priscas::mono_syms_table directive_syms;
 			void execute_runtime_directive(std::vector<std::string>& args_list);

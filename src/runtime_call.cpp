@@ -48,7 +48,7 @@ namespace priscas
 		}
 	}
 
-	void breakpoint(std::vector<std::string> & args, Shell& inst)
+	void breakpoint(const Arg_Vec & args, Shell& inst)
 	{
 		inst.WriteToOutput(("[Breakpoint]\n"));
 		bool HAS_SPECIFIER = false;
@@ -99,12 +99,12 @@ namespace priscas
 		}
 	}
 
-	void cycle(std::vector<std::string> & args, Shell& inst)
+	void cycle(const Arg_Vec & args, Shell& inst)
 	{
 		inst.GetMotherboard().step();
 	}
 
-	void cpuopts(std::vector<std::string> & args, Shell& inst)
+	void cpuopts(const Arg_Vec & args, Shell& inst)
 	{
 		priscas::cpu& c = inst.GetMotherboard().get_cpu();
 		priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(c);
@@ -178,12 +178,12 @@ namespace priscas
 		}
 	}
 
-	void exit(std::vector<std::string> & args, Shell& inst)
+	void exit(const Arg_Vec & args, Shell& inst)
 	{
 		inst.modeset_Shutdown();
 	}
 
-	void help(std::vector<std::string> & args, Shell& inst)
+	void help(const Arg_Vec & args, Shell& inst)
 	{
 		inst.WriteToOutput(("[Help]\n"));
 
@@ -251,13 +251,13 @@ namespace priscas
 		}
 	}
 
-	void pci(std::vector<std::string> & args, Shell& inst)
+	void pci(const Arg_Vec & args, Shell& inst)
 	{
 		inst.WriteToOutput(("[PCI Bus Emulation]\n"));
 		inst.WriteToOutput(("Not yet implemented\n"));
 	}
 
-	void rst(std::vector<std::string> & args, Shell& inst)
+	void rst(const Arg_Vec & args, Shell& inst)
 	{
 		if(args.size() <= 1)
 		{
@@ -295,7 +295,7 @@ namespace priscas
 		}
 	}
 
-	void mem(std::vector<std::string> & args, Shell& inst)
+	void mem(const Arg_Vec & args, Shell& inst)
 	{
 		inst.WriteToOutput(("[Memory Information]\n"));
 
@@ -328,24 +328,97 @@ namespace priscas
 		}
 	}
 
-	void power(std::vector<std::string> & args, Shell& inst)
+	void power(const Arg_Vec & args, Shell& inst)
 	{
 		inst.WriteToOutput(("[Power Usage Statistics]\n"));
 		inst.WriteToOutput(("Not yet implemented\n"));
 	}
 
-	void run(std::vector<std::string> & args, Shell& inst)
+	void run(const Arg_Vec & args, Shell& inst)
 	{
 		inst.modeset_Machine();
 	}
 
-	void sound(std::vector<std::string> & args, Shell& inst)
+	void sound(const Arg_Vec & args, Shell& inst)
 	{
 		inst.WriteToOutput(("[Soundcard Emulation]\n"));
 		inst.WriteToOutput(("Not yet implemented\n"));
 	}
 
-	void state(std::vector<std::string> & args, Shell& inst)
+	void sr(const Arg_Vec & args, Shell& inst)
+	{
+		inst.WriteToOutput("[Save / Restore]\n");
+		
+		if(args.size() <= 1)
+		{
+			inst.WriteToOutput("No options were given, see \'.help .sr\' for usage information.\n");
+			return;
+		}
+
+		bool save_mode = false;
+		bool restore_mode = false;
+		UPString filename;
+
+		for(size_t viiter = 0; viiter < args.size(); viiter++)
+		{
+			size_t viiterpo = viiter + 1;
+
+			if(args[viiter] == "-s")
+			{
+				save_mode = true;
+			}
+
+			else if(args[viiter] == "-r")
+			{
+				restore_mode = true;
+			}
+
+			else if(args[viiter] == "-f")
+			{
+				if(viiterpo < args.size())
+				{
+					filename = args[viiterpo];
+				}
+			}
+		}
+
+		// Check for errors
+		if(save_mode && restore_mode)
+		{
+			inst.WriteToError("Error: Save mode and Restore Mode may not both be specified at once\n");
+			return;
+		}
+
+		if(!save_mode && !restore_mode)
+		{
+			inst.WriteToError("Error: Either save mode or restore mode must be specified.\n");
+			return;
+		}
+
+		if(filename == "")
+		{
+			inst.WriteToError("Error: Filename not specified, or invalid.");
+			return;
+		}
+
+		// All checks have passed, now perform the operation
+		
+		mmem& mp = inst.GetMotherboard().get_mmem();
+
+		if(save_mode)
+		{
+			sr_handler::image_save(mp, filename);
+		}
+
+		else if(restore_mode)
+		{
+			sr_handler::image_restore(mp, filename);
+		}
+
+		inst.WriteToOutput("Operation completed successfully.\n");
+	}
+
+	void state(const Arg_Vec & args, Shell& inst)
 	{
 		
 		inst.WriteToOutput("[Register State Information]\n");
@@ -401,7 +474,7 @@ namespace priscas
 		}
 	}
 
-	void time(std::vector<std::string> & args, Shell& inst)
+	void time(const Arg_Vec & args, Shell& inst)
 	{
 		inst.WriteToOutput("[Processor Timing Information]\n");
 		unsigned long n = inst.GetMotherboard().get_cycles();
@@ -487,13 +560,13 @@ namespace priscas
 		}
 	}
 
-	void trace(std::vector<std::string> & args, Shell& inst)
+	void trace(const Arg_Vec & args, Shell& inst)
 	{
 		inst.WriteToOutput("[Special Tracing Options]\n");
 		inst.WriteToOutput("Not yet implemented\n");
 	}
 
-	void vga(std::vector<std::string> & args, Shell& inst)
+	void vga(const Arg_Vec & args, Shell& inst)
 	{
 		inst.WriteToOutput("[VGA Emulation]\n");
 		inst.WriteToOutput("Not yet implemented\n");

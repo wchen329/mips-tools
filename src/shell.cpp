@@ -40,7 +40,7 @@ namespace priscas
 {
 	/* A mapping from a string into a directive function pointer (must be a member of Shell)
 	 */
-	typedef std::pair<std::string, void(*)(std::vector<std::string> &, Shell&)> directive_pair;
+	typedef std::pair<std::string, void(*)(const Arg_Vec &, Shell&)> directive_pair;
 
 	/* Shell for MIPS Tools
 	 *
@@ -456,6 +456,7 @@ namespace priscas
 		this->directives.insert(directive_pair(".power", priscas::power));
 		this->directives.insert(directive_pair(".rst", priscas::rst));
 		this->directives.insert(directive_pair(".run", priscas::run));
+		this->directives.insert(directive_pair(".sr", priscas::sr));
 		this->directives.insert(directive_pair(".sound", priscas::sound));
 		this->directives.insert(directive_pair(".state", priscas::state));
 		this->directives.insert(directive_pair(".trace", priscas::trace));
@@ -570,13 +571,13 @@ namespace priscas
 		return this->rd_buffer;
 	}
 
-	std::vector<priscas::NameValueStringPair> scan_for_values(std::vector<std::string>& input)
+	std::vector<priscas::NameValueStringPair> scan_for_values(const std::vector<std::string>& input)
 	{
 		std::vector<priscas::NameValueStringPair> vals;
 
 		for(size_t sind = 0; sind < input.size(); sind++)
 		{
-			std::string& indc = input[sind];
+			const std::string& indc = input[sind];
 			size_t substr_where = indc.find_first_of('=');
 
 			// Case: not found, then just use the whole string as the name, with an empty value

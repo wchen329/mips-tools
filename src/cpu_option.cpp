@@ -55,7 +55,13 @@ namespace priscas
 
 	void CPU_ControlPanel::add_Control(const CPU_Option& op)
 	{
-		this->ops.insert(std::pair<const UPString, CPU_Option>(op.getName(), CPU_Option(op)));
+		/* Only add if finalized.
+		 * If not finalized, don't do anything.
+		 */
+		if(!this->is_finalized)
+		{
+			this->ops.insert(std::pair<const UPString, CPU_Option>(op.getName(), CPU_Option(op)));
+		}
 	}
 
 	void CPU_ControlPanel::set_ControlValue(const UPString& option_Name, const UPString& option_Value)

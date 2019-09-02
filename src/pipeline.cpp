@@ -695,6 +695,7 @@ namespace priscas
 		fsp_MEMMEM.add_Value(FSP_Options::value_FORWARD(), FSP_Options::valueRaw_FORWARD());
 		fsp_MEMMEM.add_Value(FSP_Options::value_STALL(), FSP_Options::valueRaw_STALL());
 		this->cp.add_Control(fsp_MEMMEM);
+		this->cp.finalize();
 
 		DebugTree_Simple_List* pipeline_register_list_dbg = new DebugTree_Simple_List;
 		this->pipeline_diagram = new DebugTableStringValue;

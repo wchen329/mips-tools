@@ -34,21 +34,22 @@
 
 namespace priscas
 {
-	void breakpoint(std::vector<std::string> & args, Shell& inst);
-	void cycle(std::vector<std::string> & args, Shell& inst);
-	void cpuopts(std::vector<std::string> & args, Shell& inst);
-	void exit(std::vector<std::string> & args, Shell& inst);
-	void help(std::vector<std::string> & args, Shell& inst);
-	void mem(std::vector<std::string> & args, Shell& inst);
-	void pci(std::vector<std::string> & args, Shell& inst);
-	void power(std::vector<std::string> & args, Shell& inst);
-	void rst(std::vector<std::string> & args, Shell& inst);
-	void run(std::vector<std::string> & args, Shell& inst);
-	void sound(std::vector<std::string> & args, Shell& inst);
-	void state(std::vector<std::string> & args, Shell& inst);
-	void time(std::vector<std::string> & args, Shell& inst);
-	void trace(std::vector<std::string> & args, Shell& inst);
-	void vga(std::vector<std::string> & args, Shell& inst);
+	void breakpoint(const Arg_Vec & args, Shell& inst);
+	void cycle(const Arg_Vec & args, Shell& inst);
+	void cpuopts(const Arg_Vec & args, Shell& inst);
+	void exit(const Arg_Vec & args, Shell& inst);
+	void help(const Arg_Vec & args, Shell& inst);
+	void mem(const Arg_Vec & args, Shell& inst);
+	void pci(const Arg_Vec & args, Shell& inst);
+	void power(const Arg_Vec & args, Shell& inst);
+	void rst(const Arg_Vec & args, Shell& inst);
+	void run(const Arg_Vec & args, Shell& inst);
+	void sound(const Arg_Vec & args, Shell& inst);
+	void state(const Arg_Vec & args, Shell& inst);
+	void sr(const Arg_Vec & args, Shell& inst);
+	void time(const Arg_Vec & args, Shell& inst);
+	void trace(const Arg_Vec & args, Shell& inst);
+	void vga(const Arg_Vec & args, Shell& inst);
 }
 
 #endif

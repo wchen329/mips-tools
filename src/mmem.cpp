@@ -22,10 +22,58 @@
 
 namespace priscas
 {
-
-	byte_8b& mmem::operator[](int ind)
+	byte_8b& mmem::operator[](ptrdiff_t ind)
 	{
-		int real_ind = ind % this->get_size();
-		return mem::operator[](real_ind);
+		return data[ind];
+	}
+
+	const byte_8b& mmem::operator[](ptrdiff_t ind) const
+	{
+		return data[ind];
+	}
+
+	mmem::mmem(size_t size)
+	{
+
+		this -> data = new byte_8b[size];
+		this -> size = size;
+	}
+
+	mmem::mmem(const mmem & m)
+	{
+		// disabled, see interface declaration, may enable later
+	}
+	
+	mmem mmem::operator=(const mmem & m)
+	{
+		// disabled, see interface declaration, may enable later
+		return m;
+	}
+
+	mmem::~mmem()
+	{
+		delete this->data;
+	}
+
+	void mmem::save(FILE* f)
+	{
+		// Save size information
+		fwrite(&(this->size), sizeof(size_t), 1, f);
+
+		// Dump the rest of the memory array
+		fwrite(this->data, sizeof(byte_8b), this->size, f);
+	}
+
+	void mmem::restore(FILE* f)
+	{
+		// Load size information
+		fread(&(this->size), sizeof(size_t), 1, f);
+
+		// Start filling the new memory zone
+		delete[] this->data;
+		this->data = new byte_8b[this->size];
+
+		// Load the rest of the memory array
+		fread(this->data, sizeof(byte_8b), this->size, f);
 	}
 }

@@ -22,31 +22,4 @@
 
 namespace priscas
 {
-	mem::mem(size_t size)
-	{
-		this -> data = new byte_8b[size];
-		this -> size = size;
-	}
-
-	mem::mem(const mem & m)
-	{
-		// disabled, see interface declaration, may enable later
-	}
-	
-	mem mem::operator=(const mem & m)
-	{
-		// disabled, see interface declaration, may enable later
-		return m;
-	}
-
-	byte_8b& mem::operator[](int ind)
-	{
-
-		return data[ind];
-	}
-
-	mem::~mem()
-	{
-		delete this->data;
-	}
 }

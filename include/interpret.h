@@ -39,7 +39,6 @@
 
 namespace priscas
 {
-	extern priscas::syms_table debug_table;
 }
 
 #endif

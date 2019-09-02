@@ -18,36 +18,35 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#ifndef __RANGE_H__
-#define __RANGE_H__
-#include <list>
-#include <cstdio>
-#include <string>
-#include <vector>
-#include "mt_exception.h"
-#include "priscas_global.h"
+#include "context.h"
 
 namespace priscas
 {
-	LINK_DE typedef std::list<size_t>::iterator range_iterator;
-
-	/* A generic, iterable "range"
-	 * Really just an ordered collection of numbers which can be iterated over
-	 */
-	class range
+	void sr_handler::image_save(srpackable& p, const UPString& filename)
 	{
-		std::list<size_t> numbers;
+		FILE * f = fopen(filename.c_str(), "w");
 
-		// Constructs a range using a string specified
-		// Ranges are constructed using MATLAB syntax, that is:
-		// begin (inclusive):end (inclusive):step
-		// i.e. 0:4:2 would look like 0, 2 (4 is out of range)
-		// the step can be omitted which then would look like 0:4 (0, 1, 2, 3)
-		public:
-			LINK_DE range(const UPString&);
-			LINK_DE range_iterator begin() { return this->numbers.begin(); }
-			LINK_DE range_iterator end() { return this->numbers.end(); }
-	};
+		if(f == nullptr)
+		{
+			throw mt_io_file_open_failure(filename);
+		}
+
+		p.save(f);
+
+		fclose(f);
+	}
+
+	void sr_handler::image_restore(srpackable& p, const UPString& filename)
+	{
+		FILE * f = fopen(filename.c_str(), "r");
+		
+		if(f == nullptr)
+		{
+			throw mt_io_file_open_failure(filename);
+		}
+
+		p.restore(f);
+
+		fclose(f);
+	}
 }
-
-#endif

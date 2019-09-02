@@ -47,7 +47,8 @@ namespace priscas
 			ASM_BAD_ARG_COUNT,
 			PARSER_UNEXPECTED,
 			PARSER_UNMATCHED_PARENTHESIS,
-			NO_SUCH_CPU_OPTION
+			NO_SUCH_CPU_OPTION,
+			IO_FILE_OPEN_FAILURE
 		};
 	}
 
@@ -207,6 +208,16 @@ namespace priscas
 			{
 				mt_exception::except_num = exception_nums::NO_SUCH_CPU_OPTION;
 				mt_exception::message = (UPString("The option ") + UPString(option_name) + UPString(" does not exist for this CPU."));
+			}
+	};
+
+	class mt_io_file_open_failure : public mt_exception
+	{
+		public:
+			mt_io_file_open_failure(const UPString& filename)
+			{
+				mt_exception::except_num = exception_nums::IO_FILE_OPEN_FAILURE;
+				mt_exception::message = (UPString("Failed to open file ") + UPString(filename) + UPString("."));
 			}
 	};
 }
