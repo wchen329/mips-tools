@@ -564,7 +564,7 @@ namespace priscas
 		do
 		{
 			*tw_input >> rd_buffer;
-			osi::sleep(10);
+			priscas_osi::sleep(10);
 		} while(rd_buffer == "" && shEnv.get_Mode() == Env::INTERACTIVE);
 
 		return this->rd_buffer;

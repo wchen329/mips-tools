@@ -74,9 +74,6 @@
     <ClCompile Include="..\src\streams.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\osi.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\debug_view_simple.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -84,6 +81,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\env.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\priscas_osi.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -169,9 +169,6 @@
     <ClInclude Include="..\include\streams.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\osi.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\debug_view_simple.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -188,6 +185,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\priscas_core.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\priscas_osi.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\dynamic.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

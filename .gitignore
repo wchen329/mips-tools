@@ -13,6 +13,7 @@ PDCUtil/Release/*
 *.a
 *.lib
 *.dll
+*.exp
 *.exe
 *.tlog
 testing/nt_test/winnt_test/Debug/*

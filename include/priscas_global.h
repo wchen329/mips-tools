@@ -22,6 +22,7 @@
 #define __PRISCAS_GLOBAL_H__
 #include <string>
 #include <vector>
+#include "dynamic.h"
 
 /* Intended Global defines for PRISCAS Core, in all header files
  * wchen329

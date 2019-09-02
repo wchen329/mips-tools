@@ -4,11 +4,11 @@
 /* PRISCAS Core Library Include
  * wchen329
  */
-#include "osi.h"
 
 // Change all exports to imports
-#undef DLE
-#define DLE DLI
+#include "dynamic.h"
+#undef LINK_DE
+#define LINK_DE LINK_DI
 
 #include "cpu.h"
 #include "diag_cpu.h"

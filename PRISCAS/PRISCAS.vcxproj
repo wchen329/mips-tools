@@ -84,7 +84,7 @@
     <ClCompile Include="..\src\messages.cpp" />
     <ClCompile Include="..\src\mips.cpp" />
     <ClCompile Include="..\src\mtsstream.cpp" />
-    <ClCompile Include="..\src\osi.cpp" />
+    <ClCompile Include="..\src\priscas_osi.cpp" />
     <ClCompile Include="..\src\pipeline.cpp" />
     <ClCompile Include="..\src\primitives.cpp" />
     <ClCompile Include="..\src\range.cpp" />
@@ -108,6 +108,7 @@
     <ClInclude Include="..\include\debug_view.h" />
     <ClInclude Include="..\include\debug_view_simple.h" />
     <ClInclude Include="..\include\diag_cpu.h" />
+    <ClInclude Include="..\include\dynamic.h" />
     <ClInclude Include="..\include\env.h" />
     <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\interpret.h" />
@@ -120,7 +121,7 @@
     <ClInclude Include="..\include\mtsstream.h" />
     <ClInclude Include="..\include\mtswriter.h" />
     <ClInclude Include="..\include\mt_exception.h" />
-    <ClInclude Include="..\include\osi.h" />
+    <ClInclude Include="..\include\priscas_osi.h" />
     <ClInclude Include="..\include\pipeline.h" />
     <ClInclude Include="..\include\primitives.h" />
     <ClInclude Include="..\include\priscas_core.h" />

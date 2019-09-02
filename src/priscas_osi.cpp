@@ -18,9 +18,9 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include "osi.h"
+#include "priscas_osi.h"
 
-namespace osi
+namespace priscas_osi
 {
 	mlock::mlock()
 	{

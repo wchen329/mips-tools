@@ -23,7 +23,6 @@
 
 #include <cstdint>
 #include <string>
-#include "osi.h"
 #include "priscas_global.h"
 
 namespace priscas_io
@@ -34,7 +33,7 @@ namespace priscas_io
 	 * Derived versions of "text_stream" can be set to receive output and error streams of 
 	 * the Shell
 	 */
-	class DLE text_stream
+	class LINK_DE text_stream
 	{
 		public:
 			virtual void operator<<(std::string& input) = 0;
@@ -45,7 +44,7 @@ namespace priscas_io
 	/* A text stream that does nothing
 	 * -
 	 */
-	class DLE null_text_stream : public text_stream
+	class LINK_DE null_text_stream : public text_stream
 	{
 		public:
 			void operator<<(std::string& input) { }
@@ -53,14 +52,14 @@ namespace priscas_io
 			bool isNull() { return true; }
 	};
 
-	DLE extern null_text_stream null_tstream;
-	DLE extern const std::string newLine;
+	LINK_DE extern null_text_stream null_tstream;
+	LINK_DE extern const std::string newLine;
 
 	/* Utilities for printing a number
 	 *
 	 *
 	 */
-	class DLE StrTypes
+	class LINK_DE StrTypes
 	{
 		public:
 			static std::string BoolToStr(bool in) { return in ? "true" : "false"; }

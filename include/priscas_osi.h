@@ -1,5 +1,5 @@
-#ifndef __OSI_H__
-#define __OSI_H__
+#ifndef __PRISCAS_OSI_H__
+#define __PRISCAS_OSI_H__
 #include "priscas_global.h"
 
 #ifdef WIN32
@@ -13,18 +13,8 @@
 
 /* OS Interfacing
  */
-namespace osi
+namespace priscas_osi
 {
-	/* dynamic linking
-	 * (Windows only for now)
-	 */
-	#ifdef WIN32
-		#define DLI __declspec(dllimport)
-		#define DLE __declspec(dllexport)
-	#else
-		#define DLI
-		#define DLE
-	#endif
 
 	/* mlock
 	 * A UNIX and Win32 compatible Mutex / critical section
