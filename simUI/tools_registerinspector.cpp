@@ -60,7 +60,7 @@ void tools_registerInspector::addCPU(mips_tools::diag_cpu &dcpu)
     cpu_node->addChild(register_node);
     this->regNode_allocList.push_back(register_node);
 
-    for(int itr = 0; itr < dcpu.get_reg_count(); itr++)
+    for(int itr = 0; itr < dcpu.get_ISA().get_reg_count(); itr++)
     {
 
         QTreeWidgetItem * register_node = new QTreeWidgetItem();

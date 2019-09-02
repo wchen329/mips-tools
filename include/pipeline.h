@@ -43,9 +43,10 @@ namespace priscas
 			void rst();
 			fsp_cpu(mmem & m);
 			std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
-			
+			CPU_ControlPanel& get_CPU_options() { return this->cp; }
 
 			~fsp_cpu();
+
 		private:
 			std::vector<DebugView*> debug_views;
 			reg_32 fetch_plr;
@@ -55,20 +56,16 @@ namespace priscas
 			void flush_fetch_plr() { this->fetch_plr.set_data(0); }
 			void flush_de_plr() { this->de_plr.load(0,0,static_cast<funct>(0),0,0,static_cast<opcode>(0),0,0,0,0,0,0); }
 			void flush_em_plr() { this->em_plr.load(0,0,0,static_cast<opcode>(0),false,false,false,0,0,0); }
-			static const int PATH_FORWARD_MODE = 0;
-			static const int PATH_STALL_MODE = 1;
-			static const int PATH_GLITCH_MODE = 2;
-			static const int EX_EX_INDEX = 0;
-			static const int EX_ID_INDEX = 1;
-			static const int MEM_EX_INDEX = 2;
-			static const int MEM_MEM_INDEX = 0;
-			static const int ID_ID_INDEX = 4;
+
 			DebugTree_Simple* ifid_dbg;
 			DebugTree_Simple* idex_dbg;
 			DebugTree_Simple* exmem_dbg;
 			DebugTree_Simple* memwb_dbg;
 			DebugTableStringValue * pipeline_diagram;
 			
+			// CPU Control Panel
+			CPU_ControlPanel cp;
+
 			// Signatures of Instructions, for pipelining diagrams
 			int next_sig;
 			int if_sig;
@@ -107,6 +104,21 @@ namespace priscas
 			const std::string DBG_EXMEM_RS_N;
 			const std::string DBG_EXMEM_RT_N;
 			const std::string DBG_EXMEM_RD_N;
+
+			class FSP_Options
+			{
+				public:
+					// Option Names
+					static inline UPString getName_MEM_TO_MEM() { return "PATH_MEM_MEM"; };
+
+					// Option Values
+					static inline UPString value_FORWARD() { return "FORWARD"; }
+					static inline UPString value_STALL() { return "STALL"; }
+
+					// Option Raw Values
+					static inline PCPU_OpRawV valueRaw_FORWARD() { return 0; }
+					static inline PCPU_OpRawV valueRaw_STALL() { return 1; }
+			};
 	};
 }
 

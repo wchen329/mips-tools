@@ -114,10 +114,10 @@ namespace priscas
 		// MEM->MEM forwarding
 		if(mem_write_inst(mem_op) && wb_regWE && wb_save_num != 0)
 		{
-			/*if(sc_cpu::cpu_opts[MEM_MEM_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			if(this->cp.get_ControlValue_Raw(FSP_Options::getName_MEM_TO_MEM()) == FSP_Options::valueRaw_FORWARD())
 			{
 				if(mem_rt == wb_save_num) mem_data_rt = wb_save_data;
-			}*/
+			}
 		}
 
 		// Memory operations
@@ -220,7 +220,7 @@ namespace priscas
 		if(mem_read_inst(mem_op))
 		{
 				if(!(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
-					&& ex_rs != mem_rt) //&& this->cpu_opts[MEM_MEM_INDEX].get_IntValue() != PATH_STALL_MODE ) // special case checking for MEM-MEM forwarding
+					&& ex_rs != mem_rt && this->cp.get_ControlValue_Raw(FSP_Options::getName_MEM_TO_MEM()) != FSP_Options::valueRaw_STALL()) // special case checking for MEM-MEM forwarding
 					&& !(r_inst(ex_op) && ex_rd == 0))
 				{
 					if((ex_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(ex_op, ex_funct)) && (ex_rt == mem_rt && mem_rt != 0)))
@@ -684,36 +684,17 @@ namespace priscas
 		DBG_EXMEM_RT_N("Rt"),
 		DBG_EXMEM_RD_N("Rd")
 	{
-		std::string FORWARD_VALUE_STRING = "FORWARD";
-		std::string STALL_VALUE_STRING = "STALL";
-		std::string GLITCH_VALUE_STRING = "IGNORE";
 
 		// Set clock period
 		sc_cpu::clk_T = 40000;
 
 		// Register CPU Options
-		/*sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify non load-to-use ex-ex hazard detection behavior"));
-		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
-		
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_ID", "Specify non load-to-use ex-id hazard detection behavior"));
-		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_EX", "Specify non load-to-use mem-ex hazard detection behavior"));
-		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);*/
-
-		//sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify non mem-mem hazard detection behavior"));
-		//sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		//sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(STALL_VALUE_STRING, 1);
-
-		/*sc_cpu::cpu_opts.push_back(CPU_Option("PATH_ID_ID", "Specify id-id hazard detection behavior", PATH_STALL_MODE));
-		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);*/
+		// Mem-to-Mem forwarding selection
+		CPU_Option fsp_MEMMEM(FSP_Options::getName_MEM_TO_MEM(), "Specify mem-mem hazard detection behavior.");
+		fsp_MEMMEM.add_Value(FSP_Options::value_FORWARD(), FSP_Options::valueRaw_FORWARD());
+		fsp_MEMMEM.add_Value(FSP_Options::value_STALL(), FSP_Options::valueRaw_STALL());
+		this->cp.add_Control(fsp_MEMMEM);
 
 		DebugTree_Simple_List* pipeline_register_list_dbg = new DebugTree_Simple_List;
 		this->pipeline_diagram = new DebugTableStringValue;
