@@ -21,7 +21,7 @@ FILESUBTYPE     0x0
 				VALUE "InternalName", "PRISCAS_Core"
 				VALUE "LegalCopyright", PRISCAS_BRANDING_COPYRIGHT
 				VALUE "OriginalFilename", "mtcore.dll"
-				VALUE "ProductName", "PRISCAS Core Library"
+				VALUE "ProductName", "PRISCAS Core"
 				VALUE "ProductVersion", PRISCAS_BRANDING_FULL_VERSION_STRING
 			}
 		}
