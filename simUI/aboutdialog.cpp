@@ -30,7 +30,7 @@ aboutDialog::aboutDialog(QWidget *parent) :
     ui->pushButton->setDefault(true);
     ui->layoutAbout->addWidget(ui->textEditAbout);
     ui->layoutAbout->addWidget(ui->pushButton);
-    ui->labelVersion->setText(QString(branding::APPLICATION_VERSION.c_str()));
+    ui->labelVersion->setText(QString("Version ") + QString(branding::APPLICATION_VERSION.c_str()));
 
     std::string VerNotice = std::string("Version ") + std::string(PRISCAS_BRANDING_FULL_VERSION_STRING) + std::string("\n\n");
 
@@ -49,13 +49,13 @@ aboutDialog::aboutDialog(QWidget *parent) :
     ui->textEditAbout->
             append("Most icon artwork (those except the PRISCAS icon) originate from the Oxygen Desktop project.\n");
     ui->textEditAbout->
-            append("Acknowledgments to Professor Joshua San Miguel (jsanmiguel@wisc.edu) for providing design feedback and feature suggestions.\n");
+            append("Acknowledgments to Professor Joshua San Miguel (jsanmiguel@wisc.edu) for partaking in design and providing feedback on feature suggestions.\n");
     ui->textEditAbout->
-            append("PRISCAS software, and related author: wchen329@wisc.edu\n");
+            append("PRISCAS software, icon, and documentation author: Winor Chen (wchen329@wisc.edu)\n");
     ui->textEditAbout->
-            append("Project repository: https://github.com/wchen329/priscas\n");
+            append("Project repository: https://github.com/wchen329/priscas");
     ui->textEditAbout->
-            append("WARNING: This software is currently in development and may have some bugs. No warranty is implied- see the license for details.\n");
+            append("WARNING: This software is currently in development and may have some bugs.\n");
 }
 
 aboutDialog::~aboutDialog()
