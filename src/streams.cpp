@@ -24,7 +24,7 @@
 namespace priscas_io
 {
 	null_text_stream null_tstream;
-	const std::string newLine = "\n";
+	LINK_DE const priscas::UPString newLine = "\n";
 
 	template<class InputC> std::string GeneralConvToStr(InputC in)
 	{

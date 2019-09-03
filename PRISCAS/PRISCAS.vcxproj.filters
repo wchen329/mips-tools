@@ -9,6 +9,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{2c036bff-d3cf-4de6-a6a3-e25e53cd3765}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\mmem.cpp">
@@ -59,9 +62,6 @@
     <ClCompile Include="..\src\runtime_call.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\states.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\range.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -74,13 +74,19 @@
     <ClCompile Include="..\src\streams.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\osi.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\debug_view_simple.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\cpu_option.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\env.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\priscas_osi.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\context.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -130,9 +136,6 @@
     <ClInclude Include="..\include\format_chk.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\states.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\interpret.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -169,9 +172,6 @@
     <ClInclude Include="..\include\streams.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\osi.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\debug_view_simple.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -184,5 +184,25 @@
     <ClInclude Include="..\include\cpu_option.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\env.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\priscas_core.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\priscas_osi.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\dynamic.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\context.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="version_pcore.rc">
+      <Filter>res</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -32,6 +32,7 @@ namespace priscas
 								std::string(".exit - exit\n") +
 								std::string(".help - show this help message or get help with commands\n") +
 								std::string(".rst - reset CPU state and mem state\n") +
+								std::string(".sr - save and restore main memory\n") +
 								std::string(".state - echo register state\n") +
 								std::string(".mem - show main memory size, or take a peek at memory\n") +
 								std::string(".run - continue running the processor (as in unattended mode)\n") +
@@ -84,6 +85,16 @@ namespace priscas
 									std::string("interactive shell through CTRL+C. In general, setting\n") +
 									std::string("a breakpoint will also return control to the\n") +
 									std::string("interactive shell.\n");
+	const std::string HELP_SR =		std::string(".sr\n") +
+									std::string("Save or restore main memory.\n") +
+									std::string("To use, specify either save or restore mode and then\n") +
+									std::string("a filename (see below for options). A memory image will be saved to\n") +
+									std::string("or loaded from the given image.\n") +
+									std::string("Options:\n") +
+									std::string("-s (specify save mode)\n") +
+									std::string("-r (specify restore mode)\n") +
+									std::string("-f [FILENAME] (specify an input file)\n") +
+									std::string("Example: .sr -s -f file.img # save main memory to file.img\n");
 	const std::string HELP_STATE =	std::string(".state\n") +
 									std::string("Print register state information.\n") +
 									std::string("By default the state of every single register will be printed.\n") +

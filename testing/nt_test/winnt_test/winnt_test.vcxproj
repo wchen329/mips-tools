@@ -43,7 +43,10 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir);../../../include/;../../common;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)../../tests</OutDir>
-    <CustomBuildBeforeTargets>BuildCompile</CustomBuildBeforeTargets>
+    <CustomBuildBeforeTargets>
+    </CustomBuildBeforeTargets>
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -67,6 +70,16 @@
       <AdditionalDependencies>
       </AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>copy $(SolutionDir)Debug\mtcore.dll $(SolutionDir)..\testing\tests</Command>
+      <Message>Copying Priscas Core (MTCore) Library for test application...</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -186,9 +199,6 @@
     <ClCompile Include="winnt_test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\PRISCAS_Shell\PRISCAS_Shell.vcxproj">
-      <Project>{fb9ccee4-76b7-4a56-baea-f1709c4de126}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\PRISCAS\PRISCAS.vcxproj">
       <Project>{9c1d372f-1761-437c-a7ec-27a79bb967b6}</Project>
     </ProjectReference>

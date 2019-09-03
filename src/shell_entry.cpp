@@ -18,9 +18,14 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
+#include <csignal>
 #include <string>
 #include <vector>
-#include "shell.h"
+#include "priscas_core.h"
+
+priscas::Shell runtime;
+
+void break_machine(int arg);
 
 /* Main routine for Shell
  * 
@@ -34,8 +39,17 @@ int main(int argc, char ** argv)
 		args.push_back(std::string(argv[carg]));
 	}
 
-	priscas::Shell runtime;
 	runtime.SetArgs(args);
+	signal(SIGINT, break_machine);
 	runtime.Run();
 	return 0;
+}
+
+/* break_machine
+ * Changes the shell back to SIGINT when the signal is received.
+ */
+void break_machine(int arg)
+{
+	runtime.modeset_Interactive();
+	signal(SIGINT, break_machine);
 }

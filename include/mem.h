@@ -27,27 +27,28 @@
 namespace priscas
 {
 
-	/* A standard memory
+	/* bit_storage
 	 * That represents anything that any level of the memory hierarchy
 	 *
 	 * wchen329
 	 */
-	class mem
+	class bit_storage
 	{
 		public:
-			virtual byte_8b& operator[](int ind);		// indexing operater into memory
-			mem(size_t size = 1024);			// constructor takes, byte size of memory as argument
-			size_t get_size(){return size;}		// returns size;
-			~mem();
-			byte_8b * begin() {return data;}		// get beginning address of data range
+			/* byte_8b& operator[](ptrdiff_t ind)
+			 * IMPLEMENTATION: get a byte from this bit storage.
+			 */
+			virtual byte_8b& operator[](ptrdiff_t ind) = 0;
 
-		protected:
-				
-		private:
-			byte_8b * data;					// the actual data of memory
-			size_t size;					// size of memory space in bytes
-			mem operator=(const mem &);		// copy assignment, disabled
-			mem(const mem &);				// copy constructor, disabled
+			/* const byte_8b& operator[](int ind) const
+			 * IMPLEMENTATION: get a (read only) byte ref. from this bit storage
+			 */
+			virtual const byte_8b& operator[](ptrdiff_t ind) const = 0;
+
+			/* ~bit_storage()
+			 * IMPLEMENTATION: clean up
+			 */
+			virtual ~bit_storage() {};
 	};
 
 }

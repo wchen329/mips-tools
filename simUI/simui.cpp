@@ -19,12 +19,12 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 #include "addbreak.h"
+#include "env.h"
 #include "listbreak.h"
 #include "simui.h"
 #include "ui_simui.h"
 #include "aboutdialog.h"
 #include "shell.h"
-#include "states.h"
 #include "integration.h"
 #include "simoptionsdialog.h"
 #include "tools_meminspector.h"
@@ -75,9 +75,10 @@ void simUI::bufferUpdate_Timer_Triggered()
         this->ui->consoleScreen->append(buf.c_str());
 
     // Check state
-    if(mipsshell::INTERACTIVE && mipsshell::SUSPEND)
+    if(simulation::sh != nullptr)
     {
-        this->signifySimSuspended();
+        if(simulation::sh->modeget() == priscas::Env::INTERACTIVE)
+            this->signifySimSuspended();
     }
 }
 
@@ -132,8 +133,6 @@ void simUI::signifySimOff()
     this->ui->actionCPU_Specific_Debugging_Information->setEnabled(true);
     this->ui->actionCycle->setEnabled(false);
     this->ui->statusLabel->setText(this->curFileHeader + sourcefile + " " + this->simStop_Txt);
-    mipsshell::INTERACTIVE = false;
-    mipsshell::SUSPEND = false;
 
     // Clear buffer
     std::string buf;
@@ -210,7 +209,6 @@ QTextEdit& simUI::getConsoleWindowRef()
 void simUI::on_actionClear_Console_Window_triggered()
 {
     this->ui->consoleScreen->setText("");
-
 }
 
 void simUI::on_actionFont_triggered()
@@ -263,8 +261,7 @@ void simUI::on_actionCPU_Options_triggered()
 
 void simUI::on_actionStop_Simulation_triggered()
 {
-    mipsshell::INTERACTIVE = false;
-    simulation::sh->SetState(mipsshell::Shell::KILLED);
+    simulation::sh->modeset_Shutdown();
     while(!simulation::runner.isFinished())
         simulation::runner.wait(1);
     this->signifySimOff();
@@ -328,8 +325,7 @@ void simUI::on_actionList_Current_Breakpoints_triggered()
 
 void simUI::on_actionBreak_Execution_triggered()
 {
-    mipsshell::INTERACTIVE = true;
-    mipsshell::SUSPEND = true;
+    simulation::sh->modeset_Interactive();
     this->signifySimSuspended();
 }
 
@@ -352,8 +348,7 @@ void simUI::on_actionRegister_Inspector_triggered()
 
 void simUI::on_actionContinue_triggered()
 {
-    mipsshell::INTERACTIVE = false;
-    mipsshell::SUSPEND = false;
+    simulation::sh->modeset_Machine();
     this->signifySimOn();
 }
 
@@ -368,7 +363,7 @@ void simUI::on_actionRuntime_Directive_triggered()
     tools_runtimeDirective trd;
     if(trd.exec())
     {
-        std::string val = trd.getTextValue().toStdString() + priscas_io::newLine;
+        std::string val = trd.getTextValue().toStdString() + std::string("\n");
         this->simTextO << val;
         this->simTextI << val;
     }

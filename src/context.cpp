@@ -1,4 +1,3 @@
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //    PRISCAS - Computer architecture simulator
@@ -19,17 +18,35 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include "states.h"
+#include "context.h"
 
 namespace priscas
 {
-	bool ASM_MODE = false;		// acting in assembler mode? true if is, false if not
-	bool DEBUG_MODE = false;
-	bool INTERACTIVE = false;	// in interactive mode, true if is, false if not
-	bool HAS_INPUT = false;
-	bool INPUT_SPECIFIED = false;
-	bool SUSPEND = false;
-	bool PRE_ASM = false;
-	bool WIN_32_GUI = false;
-	bool EXIT_COND = false;
+	void sr_handler::image_save(srpackable& p, const UPString& filename)
+	{
+		FILE * f = fopen(filename.c_str(), "w");
+
+		if(f == nullptr)
+		{
+			throw mt_io_file_open_failure(filename);
+		}
+
+		p.save(f);
+
+		fclose(f);
+	}
+
+	void sr_handler::image_restore(srpackable& p, const UPString& filename)
+	{
+		FILE * f = fopen(filename.c_str(), "r");
+		
+		if(f == nullptr)
+		{
+			throw mt_io_file_open_failure(filename);
+		}
+
+		p.restore(f);
+
+		fclose(f);
+	}
 }

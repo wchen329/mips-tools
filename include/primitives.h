@@ -107,7 +107,7 @@ namespace priscas
 	}
 
 	// general "bit word class"
-	class BW
+	class LINK_DE BW
 	{
 		public:
 			virtual std::string toHexString() = 0;
@@ -121,7 +121,7 @@ namespace priscas
 
 	};
 
-	class BW_16 : public BW
+	class LINK_DE BW_16 : public BW
 	{
 		public:
 			char b_0() { return *(w_addr());}
@@ -163,13 +163,14 @@ namespace priscas
 
 	};
 
-	class BW_32 : public BW
+	class LINK_DE BW_32 : public BW
 	{
 		public:
 			char b_0() { return *(w_addr());}
 			char b_1() { return *(w_addr() + 1);}
 			char b_2() { return *(w_addr() + 2);}
 			char b_3() { return *(w_addr() + 3);}
+
 			BW_32() { w.i32 = 0; }
 			BW_32(int32_t data){ w.i32 = data; }
 			BW_32(uint32_t data) { w.ui32 = data; }
@@ -211,6 +212,8 @@ namespace priscas
 		public:
 			std::string& getName() { return this->name; }
 			std::string& getDescription() { return this->desc; }
+			const std::string& getName() const { return this->name; }
+			const std::string& getDescription() const { return this->desc; }
 			NameDescPair(std::string name_of, std::string desc_of) : name(name_of), desc(desc_of) {}
 		private:
 			std::string name;

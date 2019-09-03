@@ -95,7 +95,7 @@ namespace priscas
 		bool wb_regWE;
 		this->mw_plr.get(wb_save_data, wb_regWE, wb_save_num);
 
-		if(wb_regWE && wb_save_num != 0)
+		if(wb_regWE)
 		{
 			this->registers[wb_save_num].set_data(wb_save_data); // Register-File bypassing
 		}
@@ -114,7 +114,7 @@ namespace priscas
 		// MEM->MEM forwarding
 		if(mem_write_inst(mem_op) && wb_regWE && wb_save_num != 0)
 		{
-			if(sc_cpu::cpu_opts[MEM_MEM_INDEX].get_IntValue() == PATH_FORWARD_MODE)
+			if(this->cp.get_ControlValue_Raw(FSP_Options::getName_MEM_TO_MEM()) == FSP_Options::valueRaw_FORWARD())
 			{
 				if(mem_rt == wb_save_num) mem_data_rt = wb_save_data;
 			}
@@ -220,7 +220,7 @@ namespace priscas
 		if(mem_read_inst(mem_op))
 		{
 				if(!(mem_write_inst(ex_op) && (ex_rt == mem_rt && mem_rt != 0)
-					&& ex_rs != mem_rt && this->cpu_opts[MEM_MEM_INDEX].get_IntValue() != PATH_STALL_MODE ) // special case checking for MEM-MEM forwarding
+					&& ex_rs != mem_rt && this->cp.get_ControlValue_Raw(FSP_Options::getName_MEM_TO_MEM()) != FSP_Options::valueRaw_STALL()) // special case checking for MEM-MEM forwarding
 					&& !(r_inst(ex_op) && ex_rd == 0))
 				{
 					if((ex_rs == mem_rt && mem_rt != 0) || (!(reg_write_inst(ex_op, ex_funct)) && (ex_rt == mem_rt && mem_rt != 0)))
@@ -479,7 +479,7 @@ namespace priscas
 		}
 
 		// Write data to carry on
-		bool decode_regWE = reg_write_inst(decode_op, decode_funct);
+		bool decode_regWE = reg_write_inst(decode_op, decode_funct) && ((r_inst(decode_op) && decode_rd != 0 ) || ((!r_inst(decode_op) && decode_rt != 0)));
 		bool decode_memWE = mem_write_inst(decode_op);
 		bool decode_memRE = mem_read_inst(decode_op);
 
@@ -656,6 +656,7 @@ namespace priscas
 		mem_sig(-1),
 		wb_sig(-1),
 		current_cycle_num(0),
+		name("MIPS-32 FSP"),
 		DBG_INSTRUCTION_WORD("Instruction Word"),
 		DBG_MEMWB_REGWE("Register Write Enable (RegWE)"),
 		DBG_MEMWB_WRITE_DATA("Write Data"),
@@ -683,37 +684,39 @@ namespace priscas
 		DBG_EXMEM_RT_N("Rt"),
 		DBG_EXMEM_RD_N("Rd")
 	{
-		std::string FORWARD_VALUE_STRING = "FORWARD";
-		std::string STALL_VALUE_STRING = "STALL";
-		std::string GLITCH_VALUE_STRING = "IGNORE";
 
 		// Set clock period
 		sc_cpu::clk_T = 40000;
 
 		// Register CPU Options
-		/*sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_EX", "Specify non load-to-use ex-ex hazard detection behavior"));
-		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[EX_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
+
+		// Mem-to-Mem forwarding selection
+		CPU_Option fsp_MEMMEM(FSP_Options::getName_MEM_TO_MEM(), "Specify mem-mem hazard detection behavior.");
+		fsp_MEMMEM.add_Value(FSP_Options::value_FORWARD(), FSP_Options::valueRaw_FORWARD());
+		fsp_MEMMEM.add_Value(FSP_Options::value_STALL(), FSP_Options::valueRaw_STALL());
+		this->cp.add_Control(fsp_MEMMEM);
 		
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_EX_ID", "Specify non load-to-use ex-id hazard detection behavior"));
-		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[EX_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);
+		UPString fsp_oAluSrc1_desc;
+		fsp_oAluSrc1_desc = UPString("Specify Rs ALU input forwarding mux signal.");
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_EX", "Specify non load-to-use mem-ex hazard detection behavior"));
-		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[MEM_EX_INDEX].add_Value(GLITCH_VALUE_STRING, 2);*/
+		// AluSrc1 Signal
+		CPU_Option fsp_MUX_AluSrc1(FSP_Options::getName_MUX_AluSrc1(), fsp_oAluSrc1_desc);
+		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_AUTO(), FSP_Options::valueRaw_AUTO());
+		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_STUCK_FW_MEM(), FSP_Options::valueRaw_STUCK_FW_MEM());
+		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_STUCK_FW_EX(), FSP_Options::valueRaw_STUCK_FW_EX());
+		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_STUCK_OFF(), FSP_Options::valueRaw_STUCK_OFF());
+		this->cp.add_Control(fsp_MUX_AluSrc1);
 
-		sc_cpu::cpu_opts.push_back(CPU_Option("PATH_MEM_MEM", "Specify non mem-mem hazard detection behavior"));
-		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(FORWARD_VALUE_STRING, 0);
-		sc_cpu::cpu_opts[MEM_MEM_INDEX].add_Value(STALL_VALUE_STRING, 1);
+		// AluSrc2 signal
+		CPU_Option fsp_MUX_AluSrc2(FSP_Options::getName_MUX_AluSrc2(), "Specify Rt / Imm input forwarding mux signal.");
+		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_AUTO(), 0);
+		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_STUCK_FW_MEM(), FSP_Options::valueRaw_STUCK_FW_MEM());
+		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_STUCK_FW_EX(), FSP_Options::valueRaw_STUCK_FW_EX());
+		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_STUCK_OFF(), FSP_Options::valueRaw_STUCK_OFF());
+		this->cp.add_Control(fsp_MUX_AluSrc2);
 
-		/*sc_cpu::cpu_opts.push_back(CPU_Option("PATH_ID_ID", "Specify id-id hazard detection behavior", PATH_STALL_MODE));
-		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(STALL_VALUE_STRING, 1);
-		sc_cpu::cpu_opts[ID_ID_INDEX].add_Value(GLITCH_VALUE_STRING, 2);*/
-
+		this->cp.finalize();
+		
 		DebugTree_Simple_List* pipeline_register_list_dbg = new DebugTree_Simple_List;
 		this->pipeline_diagram = new DebugTableStringValue;
 		pipeline_register_list_dbg->setName("Pipeline Register Inspector");
@@ -758,46 +761,6 @@ namespace priscas
 		
 		this->debug_views.push_back(pipeline_register_list_dbg);
 		this->debug_views.push_back(pipeline_diagram);
-	}
-
-	void fsp_cpu::exec_CPU_option(std::vector<NameValueStringPair>& args)
-	{
-		for(size_t s = 1; s < args.size(); s++)
-		{
-			NameValueStringPair& v = args[s];
-			std::string& whichval = v.getName();
-
-			/*if(whichval == "PATH_EX_EX")
-			{
-				sc_cpu::cpu_opts[EX_EX_INDEX].set_Value(v.getValue());
-			}
-
-			else if(whichval == "PATH_MEM_EX")
-			{
-				sc_cpu::cpu_opts[MEM_EX_INDEX].set_Value(v.getValue());
-			}
-
-			else if(whichval == "PATH_EX_ID")
-			{
-				sc_cpu::cpu_opts[EX_ID_INDEX].set_Value(v.getValue());
-			}*/
-
-			if(whichval == "PATH_MEM_MEM")
-			{
-				sc_cpu::cpu_opts[MEM_MEM_INDEX].set_Value(v.getValue());
-			}
-
-			/*
-			else if(whichval == "PATH_ID_ID")
-			{
-				sc_cpu::cpu_opts[ID_ID_INDEX].set_Value(v.getValue());
-			}*/
-
-			else
-			{
-				throw mt_invalid_cpu_opt("Option does not exist.");
-			}
-		}
 	}
 
 	fsp_cpu::~fsp_cpu()

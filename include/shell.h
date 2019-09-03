@@ -20,20 +20,22 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __SHELL_H__
 #define __SHELL_H__
+
 #include <set>
 #include <queue>
 #include <map>
 #include <string>
 #include <vector>
+#include "env.h"
 #include "mb.h"
 #include "primitives.h"
 #include "priscas_global.h"
+#include "priscas_osi.h"
 #include "syms_table.h"
 #include "streams.h"
 
 namespace priscas
 {
-
 	/* Divides a string based on whitespace, tabs, commas and newlines
 	 * Acknowledges escaping \ and quotes
 	 */
@@ -44,7 +46,7 @@ namespace priscas
 	 * These consist of string with EXACT format:
 	 * NAME=VALUE
 	 */
-	std::vector<priscas::NameValueStringPair> scan_for_values(std::vector<std::string>& input);
+	std::vector<priscas::NameValueStringPair> scan_for_values(const std::vector<std::string>& input);
 
 	/* A single instance of a Shell
 	 * -
@@ -54,43 +56,36 @@ namespace priscas
 	{
 
 		public:
-			void Run();
-			void SetArgs(std::vector<std::string> & args) { this->args = args; }
-			priscas::mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
-			void SetQuiet() { isQuiet = true; }
-			
-			void WriteToOutput(std::string& o);
-			void WriteToOutput(const char* e);
-			void WriteToError(std::string& e);
-			void WriteToError(const char* e);
-			std::string& ReadFromInput();
+			LINK_DE void Run();
+			LINK_DE void SetArgs(std::vector<std::string> & args) { this->args = args; }
+			LINK_DE mb& GetMotherboard() { return *this->motherboard; } // Call this **after** Run
+			LINK_DE void SetQuiet() { isQuiet = true; }
+			LINK_DE Env::Mode_t modeget() { return shEnv.get_Mode(); }
+			LINK_DE void modeset_Machine() { shEnv.update_Mode(Env::MACHINE); }
+			LINK_DE void modeset_Interactive() { shEnv.update_Mode(Env::INTERACTIVE); }
+			LINK_DE void modeset_Shutdown() { shEnv.update_Mode(Env::SHUTDOWN); }
 
-			void add_program_breakpoint(unsigned long line); // sets the program breakpoint directly, CANNOT be used be external sources (yet!)
-			void declare_program_breakpoint(unsigned long line); // queues the breakpoint to be added, but doesn't set it
-			void add_microarch_breakpoint(unsigned long cycle) { this->microarch_breakpoints.insert(std::pair<unsigned long, bool>(cycle, true)); }
-			void setOutputTextStream(priscas_io::text_stream & ts) { this->tw_output = &ts; }
-			void setErrorTextStream(priscas_io::text_stream & ts) { this->tw_error = &ts; }
-			void setInputTextStream(priscas_io::text_stream & ts) { this->tw_input = &ts; }
-			void setNoConsoleOutput(bool torf) { this->NoConsoleOutput = torf; }
-			std::string getLineAtPC(unsigned long pc) {return this->PC_to_line_string.count(pc) > 0 ? this->PC_to_line_string[pc] : "???";}
-			~Shell() { delete motherboard; if(this->inst_file != nullptr) fclose(inst_file); }
-			Shell();
+			LINK_DE void WriteToOutput(std::string& o);
+			LINK_DE void WriteToOutput(const char* e);
+			LINK_DE void WriteToError(std::string& e);
+			LINK_DE void WriteToError(const char* e);
+			LINK_DE std::string& ReadFromInput();
 
-			/* Internal Shell State
-			 *
-			 */
-			enum Shell_State
-			{
-				EMBRYO = 0,
-				RUNNING = 1,
-				KILLED = 2,
-				SLEEPING = 3
-			};
+			LINK_DE void add_program_breakpoint(unsigned long line); // sets the program breakpoint directly, CANNOT be used be external sources (yet!)
+			LINK_DE void declare_program_breakpoint(unsigned long line); // queues the breakpoint to be added, but doesn't set it
+			LINK_DE void add_microarch_breakpoint(unsigned long cycle) { this->microarch_breakpoints.insert(std::pair<unsigned long, bool>(cycle, true)); }
+			LINK_DE void setOutputTextStream(priscas_io::text_stream & ts) { this->tw_output = &ts; }
+			LINK_DE void setErrorTextStream(priscas_io::text_stream & ts) { this->tw_error = &ts; }
+			LINK_DE void setInputTextStream(priscas_io::text_stream & ts) { this->tw_input = &ts; }
+			LINK_DE void setNoConsoleOutput(bool torf) { this->NoConsoleOutput = torf; }
 
-			void SetState(Shell_State s){ this->state = s; }
+			LINK_DE std::string getLineAtPC(unsigned long pc) {return this->PC_to_line_string.count(pc) > 0 ? this->PC_to_line_string[pc] : "???";}
+			LINK_DE ~Shell() { delete motherboard; if(this->inst_file != nullptr) fclose(inst_file); }
+			LINK_DE Shell();
 
 		private:
 			bool NoConsoleOutput;
+			bool hasAsmInput;
 			FILE* inst_file;
 			priscas_io::text_stream * tw_error;
 			priscas_io::text_stream * tw_output;
@@ -102,7 +97,8 @@ namespace priscas
 			priscas::mb * motherboard;
 			bool isQuiet;
 
-			Shell_State state;
+			// The environment which the shell wraps around
+			Env shEnv;
 
 			// Runtime Directives, run through the shell
 			std::map<unsigned long, unsigned long> program_breakpoints;
@@ -111,7 +107,7 @@ namespace priscas
 			std::map<unsigned long, std::string> PC_to_line_string;
 			std::map<unsigned long, bool> microarch_breakpoints;
 			std::queue<unsigned long> queued_prog_breakpoints;
-			std::map<std::string, void(*)(std::vector<std::string>&, Shell& shell)> directives;
+			std::map<std::string, void(*)(const Arg_Vec&, Shell& shell)> directives;
 			priscas::syms_table jump_syms;
 			priscas::mono_syms_table directive_syms;
 			void execute_runtime_directive(std::vector<std::string>& args_list);

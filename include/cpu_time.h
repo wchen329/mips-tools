@@ -30,7 +30,7 @@ namespace priscas
 	// CPUTime
 	// stores time in two separate fields
 	// days and picoseconds!
-	class CPUTime
+	class LINK_DE CPUTime
 	{
 		unsigned long long day;
 		unsigned long long picoseconds;

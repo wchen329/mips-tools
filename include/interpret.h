@@ -25,7 +25,6 @@
 #include <exception>
 #include <memory>
 #include <string>
-#include "states.h"
 #include "diag_cpu.h"
 #include "format_chk.h"
 #include "mb.h"
@@ -40,7 +39,6 @@
 
 namespace priscas
 {
-	extern priscas::syms_table debug_table;
 }
 
 #endif

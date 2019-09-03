@@ -33,7 +33,7 @@ namespace priscas_io
 	 * Derived versions of "text_stream" can be set to receive output and error streams of 
 	 * the Shell
 	 */
-	class text_stream
+	class LINK_DE text_stream
 	{
 		public:
 			virtual void operator<<(std::string& input) = 0;
@@ -44,7 +44,7 @@ namespace priscas_io
 	/* A text stream that does nothing
 	 * -
 	 */
-	class null_text_stream : public text_stream
+	class LINK_DE null_text_stream : public text_stream
 	{
 		public:
 			void operator<<(std::string& input) { }
@@ -52,14 +52,15 @@ namespace priscas_io
 			bool isNull() { return true; }
 	};
 
-	extern null_text_stream null_tstream;
-	extern const std::string newLine;
+	extern LINK_DE null_text_stream null_tstream;
+
+	LINK_DE const extern priscas::UPString newLine;
 
 	/* Utilities for printing a number
 	 *
 	 *
 	 */
-	class StrTypes
+	class LINK_DE StrTypes
 	{
 		public:
 			static std::string BoolToStr(bool in) { return in ? "true" : "false"; }

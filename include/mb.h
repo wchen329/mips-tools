@@ -33,8 +33,10 @@
 
 namespace priscas
 {
-	const bool NULL_SUSPEND = false; // a.k.a. never suspend
-		
+	/* CPU Types
+	 *
+	 *
+	 */
 	enum cpu_t
 	{
 			STANDARD = 0,
@@ -48,7 +50,7 @@ namespace priscas
 	 * Representation of a computer with a single CPU and a single main memory.
 	 *
 	 */
-	class mb
+	class LINK_DE mb
 	{
 		public:
 			void dc_on();	// power on
@@ -62,11 +64,10 @@ namespace priscas
 			CPUTime get_time() { return this->sim_time; } // return the current simulation time elapsed
 			size_t get_mmem_size();	// get main memory size in BYTES
 
-			mb(cpu_t ct = STANDARD, int mt = 16, const bool& SUSPEND = NULL_SUSPEND);
+			mb(cpu_t ct = STANDARD, int mt = 16);
 			~mb();
 
 		private:
-			const bool& suspend;
 			cpu * mb_cpu;	// single socket cpu
 			mmem * mb_mmem;  // single main memory
 			cpu_t cpu_type;	// types of MIPS processor

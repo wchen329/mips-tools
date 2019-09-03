@@ -20,7 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __DIAG_CPU_H__
 #define __DIAG_CPU_H__
-#include <vector>
 #include "cpu.h"
 #include "cpu_option.h"
 #include "debug_view.h"
@@ -32,17 +31,33 @@ namespace priscas
 {
 
 	// CPU with Diagnostic Functions
-	class diag_cpu : public cpu
+	class LINK_DE diag_cpu : public cpu
 	{
 		public:
-				// still need to do: change BW_32 to a generic
+
+				/* get_reg_data(int index)
+				 * IMPLEMENTATION: returns the data at the register specified
+				 */
 				virtual BW_32& get_reg_data(int index) = 0;
-				virtual unsigned get_reg_count() = 0;
-				virtual void ghost_cycle() = 0;	// ghost cycle- essentially cycling with a NO-OP, advances the PC.
-				virtual BW_32& get_PC() = 0;	// get current PC value
-				virtual std::vector<CPU_Option>& get_CPU_options() = 0;
+				
+				/* get_PC()
+				 * IMPLEMENTATION: return the value of the PC
+				 */
+				virtual BW_32& get_PC() = 0;
+				
+				/* CPU_ControlPanel& get_CPU_Options()
+				 * IMPLEMENTATION: return the CPU control panel
+				 */
+				virtual CPU_ControlPanel& get_CPU_options() = 0;
+				
+				/* get_DebugViews()
+				 * IMPLEMENATION: return debug views
+				 */
 				virtual std::vector<DebugView*>& get_DebugViews() = 0;
-				virtual void exec_CPU_option(std::vector<NameValueStringPair> &) = 0;	// execute a special CPU specific option
+				
+				/* ~diag_cpu()
+				 * Virtual destructor. Allows manual destructor for other diagnostic CPUs in general.
+				 */
 				virtual ~diag_cpu() {}
 	};
 }

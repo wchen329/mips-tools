@@ -18,26 +18,44 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#ifndef __MTSSTREAM_H__
-#define __MTSSTREAM_H__
+#ifndef __CONTEXT_H__
+#define __CONTEXT_H__
 #include <cstdio>
-#include "primitives.h"
+#include "mt_exception.h"
 #include "priscas_global.h"
 
 namespace priscas
 {
 
-	class asm_ostream
+	/* srpackable - Save / Restore Packable
+	 * Can be packed in a save restore image.
+	 */
+	class srpackable
 	{
-		public:	
-			void append(priscas::BW_32);
-			asm_ostream(char * filename);
-			~asm_ostream();
-		private:
-			FILE * f;
-			asm_ostream(asm_ostream &);
-			asm_ostream& operator=(asm_ostream &);
+		public:
+		
+			/* void save(FILE*)
+			 * IMPLEMENTATION: save this as part of the context.
+			 */
+			virtual void save(FILE*) = 0;
+
+			/* void restore(FILE*)
+			 * IMPLEMENTATION: restore a saved context portion
+			 */
+			virtual void restore(FILE*) = 0;
 	};
+
+	/* Save / Restore Handler
+	 * save and restore controllers for srpackables
+	 * Handles file opening and closing automatically and raises errors.
+	 */
+	class sr_handler
+	{
+		public:
+			static void image_save(srpackable&, const UPString&);
+			static void image_restore(srpackable&, const UPString&);
+	};
+
 }
 
 #endif

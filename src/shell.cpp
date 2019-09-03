@@ -32,17 +32,15 @@
 #include "mb.h"
 #include "mt_exception.h"
 #include "mtsstream.h"
-#include "osi.h"
 #include "interpret.h"
 #include "runtime_call.h"
 #include "shell.h"
-#include "states.h"
 
 namespace priscas
 {
 	/* A mapping from a string into a directive function pointer (must be a member of Shell)
 	 */
-	typedef std::pair<std::string, void(*)(std::vector<std::string> &, Shell&)> directive_pair;
+	typedef std::pair<std::string, void(*)(const Arg_Vec &, Shell&)> directive_pair;
 
 	/* Shell for MIPS Tools
 	 *
@@ -54,135 +52,84 @@ namespace priscas
 	 */
 	void Shell::Run()
 	{
-		size_t argc = args.size();
-		priscas::cpu_t cp = priscas::STANDARD;
-		int mem_width = 16;
 
-		std::string app_brand = branding::APPLICATION_NAME + " " + branding::APPLICATION_VERSION + " " + branding::APPLICATION_DBG;
+		UPString app_brand =
+			branding::APPLICATION_NAME + " " + branding::APPLICATION_VERSION + " " + branding::APPLICATION_DBG;
 
-		if(!isQuiet)
+		// Set quiet mode
+		UPString header = app_brand + priscas_io::newLine + branding::APPLICATION_DESC + priscas_io::newLine;
+		WriteToOutput(header);
+
+		// Set shell environment
+		this->shEnv.characterize_Env(args);
+
+		// Asm unput was specified
+		if(shEnv.get_Option_AsmInput())
 		{
-			std::string header = 
-			app_brand + priscas_io::newLine +
-			branding::APPLICATION_DESC + priscas_io::newLine;
-			
-			WriteToOutput(header);
-		}
 
-		priscas::HighLevelType t = priscas::getTypeGeneric<long>();
-
-		// First get the active file in which to get instructions from
-		if(argc >= 2)
-		{
-			for(size_t i = 1; i < argc; i++)
+			if(!shEnv.get_Option_AsmInputSpecified())
 			{
-				if(args[i] == "-h")
-				{
-					WriteToOutput(("Usage options:\n"));
-					WriteToOutput(("-h (show this message)\n"));
-					WriteToOutput(("-i [file] (execute a text file with by assembling and running the program)\n"));
-					WriteToOutput(("-m [width] (specify a memory bit width; the total memory available will be 2^[width]\n"));
-					//WriteToOutput(( "-a (active assembler mode, requires the -i option):\n"));
-					WriteToOutput(("-c (select a CPU type 0: for single cycle (default) or 1: for Five Stage Pipeline)\n"));
-					return;
-				}
-
-				/*if(args[i] == "-a")
-				{
-					if(!isQuiet) WriteToOutput(("Assembler mode ENABLED.\n"));
-					priscas::ASM_MODE = true;
-					priscas::INTERACTIVE = false;
-				}*/
-
-				if(args[i] == "-i")
-				{
-					priscas::INTERACTIVE = false;
-					priscas::HAS_INPUT = true;
-					if((i+1) < argc)
-					{
-						inst_file = fopen(args[i+1].c_str(), "r");
-						priscas::INPUT_SPECIFIED = true;
-					}
-				}
-
-				if(args[i] == "-WIN32_SHELL")
-				{
-					priscas::INTERACTIVE = false;
-					priscas::HAS_INPUT = true;
-					inst_file = stdin;
-					priscas::INPUT_SPECIFIED = true;
-					priscas::WIN_32_GUI = true;
-				}
-
-				if(args[i] == "-m")
-				{
-					if((i+1) < argc) mem_width = atoi(args[i+1].c_str());
-				}
-
-				if(args[i] == "-c")
-				{
-					if((i+1) < argc) cp = static_cast<priscas::cpu_t>(atoi(args[i+1].c_str()));
-				}
-			}
-		}
-
-		if(priscas::HAS_INPUT)
-		{
-			if(!priscas::WIN_32_GUI)
-			{
-				if(!isQuiet) WriteToOutput(("Starting in machine mode...\n"));
-				priscas::INTERACTIVE = false;
+				WriteToError("Error: An input file is required (specified through -i [input file] ) in order to run in batch mode.\n");
+				return;
 			}
 
-			if(!priscas::INPUT_SPECIFIED)
+			else
 			{
-				WriteToError(("Error: An input file is required (specified through -i [input file] ) in order to run in batch mode.\n"));
-				::exit(1);
+				inst_file = fopen(shEnv.get_asmFilenames()[0].c_str(), "r");
 			}
 
 			if(inst_file == NULL)
 			{
-				WriteToError(("Error: The file specified cannot be opened or doesn't exist.\n"));
-				::exit(1);
+				WriteToError("Error: The file specified cannot be opened or doesn't exist.\n");
+				return;
 			}
 		}
 
 		else
 		{
-			priscas::INTERACTIVE = true;
 			inst_file = stdin;
-			if(!isQuiet) WriteToOutput(("Starting in interactive mode...\n"));
-			if(!isQuiet) WriteToOutput(("Tip: system directives are preceded by a . (for example .help)\n"));
+			WriteToOutput("Starting in interactive mode...\n");
+			WriteToOutput("Tip: system directives are preceded by a . (for example .help)\n");
 		}
 
-		if(mem_width <= 0)
+
+		// Check for valid memory configurations
+		if(shEnv.get_memBitwidth() <= 1)
 		{
-			WriteToError(("Error: An error occurred when trying to read memory width (must be larger than 0 and a natural number)."));
-			::exit(1);
+			WriteToError("Error: An error occurred when trying to read memory width (must be larger than 1 and a natural number).");
+			return;
 		}
 
-		if(mem_width > 32)
+		else if(shEnv.get_memBitwidth() > 20)
 		{
 			
-			WriteToError(("Error: Memory size specified is too large (must be less than or equal to 20 bits wide)"));
-			::exit(1);
+			WriteToError("Error: Memory size specified is too large (must be less than or equal to 20 bits wide)");
+			return;
 		}
 
-		if(!isQuiet) WriteToOutput(("CPU Type: "));
+		// Set CPU Type
+		cpu_t cp = priscas::STANDARD;
+
+		if(!shEnv.get_cpuStrings().empty())
+		{
+			cp = static_cast<cpu_t>(atoi(shEnv.get_cpuStrings()[0].c_str()));
+		}
+
+		WriteToOutput(("CPU Type: "));
 		switch(cp)
 		{
 			case priscas::STANDARD:
-				if(!isQuiet) WriteToOutput(("Single Cycle\n"));
+				WriteToOutput(("Single Cycle\n"));
 				break;
 			case priscas::FIVE_P:
-				if(!isQuiet) WriteToOutput(("Five Stage Pipeline\n"));
+				WriteToOutput(("Five Stage Pipeline\n"));
 				break;
 			default:
-				if(!isQuiet) WriteToOutput(("Invalid CPU type detected. Exiting...\n"));
-				::exit(1);
+				WriteToOutput(("Invalid CPU type detected. Exiting...\n"));
+				return;
 		}
 
-		this->motherboard = new priscas::mb(cp, mem_width, priscas::SUSPEND);
+		this->motherboard = new priscas::mb(cp, shEnv.get_memBitwidth());
 		motherboard->reset();
 		priscas::mb * MB_IN_PTR = motherboard;
 
@@ -201,7 +148,7 @@ namespace priscas
 		 * (1) collect file symbols
 		 * (2) map it to memory assemble that file first
 		 */
-		if(INPUT_SPECIFIED)
+		if(shEnv.get_Option_AsmInputSpecified())
 		{
 			std::vector<std::string> lines;
 
@@ -291,94 +238,92 @@ namespace priscas
 				asm_pc.AsUInt32() += 4;
 			}
 			
-			this->state = SLEEPING;
+			
+			// this->state = SLEEPING;
 		}
 
 		inst_file = stdin;
 
-		while(this->state != KILLED)
-		{
+		/* Event and execution loop
 
-		/* Second, execute.
-		 * To execute:
-		 * - If the PC can be debugged, then just run it. Ignore "debugging" symbols.
-		 * - If the PC can be debugged, then for every PC, execute the runtime directive associated with the PC BEFORE the instruction is fetched
-		 *   then run the CPU a cycle, and repeat.
-		 * If no input file was specified, then it starts in interactive / debugging mode
-		 *
 		 */
-
-		if(priscas::INTERACTIVE)
+		while(shEnv.get_Mode() != Env::SHUTDOWN)
 		{
-			WriteToOutput((">> "));
-		}
 
-		if(priscas::INTERACTIVE || priscas::ASM_MODE)
-		{
-			priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(motherboard->get_cpu());
-			std::string& val = this->ReadFromInput();
+			/* Second, execute.
+			 * To execute:
+			 * - If the PC can be debugged, then just run it. Ignore "debugging" symbols.
+			 * - If the PC can be debugged, then for every PC, execute the runtime directive associated with the PC BEFORE the instruction is fetched
+			 *   then run the CPU a cycle, and repeat.
+			 * If no input file was specified, then it starts in interactive / debugging mode
+			 *
+			 */
+
+			if(shEnv.get_Mode() == Env::INTERACTIVE)
+			{
+				WriteToOutput((">> "));
+
+				priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(motherboard->get_cpu());
+				std::string& val = this->ReadFromInput();
 			
-			if(val.size() == 0)
-			{
-				continue;
-			}
+				if(val.size() == 0)
+				{
+					continue;
+				}
 
-			if(val[0] == '.')
-			{
+				if(val[0] == '.')
+				{
+					try
+					{
+						std::vector<std::string> chopped = chop_string(val);
+						execute_runtime_directive(chopped);
+					}
+					catch(priscas::mt_exception & e)
+					{
+						WriteToError(e.get_err());
+					}
+
+					continue;
+				}
+
+				std::vector<std::string> asm_args = chop_string(val);
+				priscas::ISA & dcpuisa = dcpu.get_ISA();
+				priscas::BW_32 asm_pc = dcpu.get_PC();
+				std::shared_ptr<priscas::BW> inst;
+			
 				try
 				{
-					std::vector<std::string> chopped = chop_string(val);
-					execute_runtime_directive(chopped);
+					inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
 				}
-				catch(priscas::mt_exception & e)
+
+				catch(priscas::mt_exception& e)
 				{
-					WriteToError(e.get_err());
+					WriteToError(("An error occurred while assembling the inputted instruction.\n"));
+					std::string msg = (std::string("Error information: ") + std::string(e.get_err()));
+					WriteToError(msg);
+					WriteToError(priscas_io::newLine.c_str());
+
+					continue;
 				}
 
-				continue;
+				priscas::BW_32& thirty_two = dynamic_cast<priscas::BW_32&>(*inst);
+				motherboard->DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
+				motherboard->DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
+				motherboard->DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
+				motherboard->DMA_write(thirty_two.b_3(), asm_pc.AsUInt32() + 3);
+				motherboard->step();
 			}
 
-			std::vector<std::string> asm_args = chop_string(val);
-			priscas::ISA & dcpuisa = dcpu.get_ISA();
-			priscas::BW_32 asm_pc = dcpu.get_PC();
-			std::shared_ptr<priscas::BW> inst;
-			
-			try
+			if(shEnv.get_Mode() == Env::MACHINE)
 			{
-				inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
-			}
 
-			catch(priscas::mt_exception& e)
-			{
-				WriteToError(("An error occurred while assembling the inputted instruction.\n"));
-				std::string msg = (std::string("Error information: ") + std::string(e.get_err()));
-				WriteToError(msg);
-				WriteToError(priscas_io::newLine.c_str());
-
-				continue;
-			}
-
-			priscas::BW_32& thirty_two = dynamic_cast<priscas::BW_32&>(*inst);
-			motherboard->DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
-			motherboard->DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
-			motherboard->DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
-			motherboard->DMA_write(thirty_two.b_3(), asm_pc.AsUInt32() + 3);
-			motherboard->step();
-		}
-
-		if(!priscas::INTERACTIVE && !priscas::ASM_MODE)
-		{
-
-			signal(SIGINT, priscas::Enter_Interactive);
-			while(this->state != KILLED && !priscas::SUSPEND)
-			{
 				priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(motherboard->get_cpu());
 				priscas::BW_32 dpc = dcpu.get_PC();
 				
 				if(this->directive_syms.has(dpc.AsUInt32()))
 				{
 					std::vector<std::string> cmds = this->directive_syms.lookup_from_PC(dpc.AsUInt32());
-					
+				
 					for(size_t cmdcount = 0; cmdcount < cmds.size(); cmdcount++)
 					{
 						std::vector<std::string> chopped = chop_string(cmds[cmdcount]);
@@ -386,15 +331,15 @@ namespace priscas
 					}
 
 					// Check for exit directive
-					if(this->state == KILLED) continue;
+					if(shEnv.get_Mode() == Env::SHUTDOWN)
+						continue;
 				}
 
 				motherboard->step();
 
 				if(this->has_prog_break_at(dcpu.get_PC().AsUInt32()))
 				{
-					priscas::SUSPEND = true;
-					priscas::INTERACTIVE = true;
+					shEnv.update_Mode(Env::INTERACTIVE);
 					unsigned long line_number = this->PC_to_line_number.at(dcpu.get_PC().AsUInt32());
 					std::string line_str = this->PC_to_line_string.at(dcpu.get_PC().AsUInt32());
 
@@ -406,18 +351,15 @@ namespace priscas
 
 				if(this->has_ma_break_at(motherboard->get_cycles()))
 				{
-					priscas::SUSPEND = true;
-					priscas::INTERACTIVE = true;
+					shEnv.update_Mode(Env::INTERACTIVE);
 					std::string o = (std::string("Breakpoint at cycle " + priscas_io::StrTypes::UInt32ToStr(motherboard->get_cycles()) + " hit.\n"));
 					WriteToOutput(o);
 				}
 			}
 		}
+
+		WriteToOutput(("Simulation terminating...\n"));
 	}
-		if(!this->isQuiet)
-			WriteToOutput(("Simulation terminating...\n"));
-		delete priscas::mtsstream::asmout;
-}
 
 	/* Takes an input string and breaks that string into a vector of several
 	 * based off of whitespace and tab delineators
@@ -500,10 +442,9 @@ namespace priscas
 
 	// Set up list of runtime directives
 	Shell::Shell() : motherboard(nullptr), isQuiet(false), inst_file(nullptr), tw_error(&priscas_io::null_tstream),
-		tw_output(&priscas_io::null_tstream), tw_input(&priscas_io::null_tstream), NoConsoleOutput(false)
+		tw_output(&priscas_io::null_tstream), tw_input(&priscas_io::null_tstream), NoConsoleOutput(false),
+		hasAsmInput(false)
 	{
-		this->state = EMBRYO;
-
 		// Set up jump table for runtime directives
 		this->directives.insert(directive_pair(".breakpoint", priscas::breakpoint));
 		this->directives.insert(directive_pair(".cycle", priscas::cycle));
@@ -515,6 +456,7 @@ namespace priscas
 		this->directives.insert(directive_pair(".power", priscas::power));
 		this->directives.insert(directive_pair(".rst", priscas::rst));
 		this->directives.insert(directive_pair(".run", priscas::run));
+		this->directives.insert(directive_pair(".sr", priscas::sr));
 		this->directives.insert(directive_pair(".sound", priscas::sound));
 		this->directives.insert(directive_pair(".state", priscas::state));
 		this->directives.insert(directive_pair(".trace", priscas::trace));
@@ -568,23 +510,21 @@ namespace priscas
 
 	void Shell::WriteToOutput(std::string& o)
 	{
-		if(!NoConsoleOutput)
+		if(!isQuiet)
 		{
-			fprintf(stdout, o.c_str());
-		}
+			if(!NoConsoleOutput)
+			{
+				fprintf(stdout, o.c_str());
+			}
 
-		*tw_output << o;
+			*tw_output << o;
+		}
 	}
 
 	void Shell::WriteToOutput(const char* o)
 	{
-		if(!NoConsoleOutput)
-		{
-			fprintf(stdout, o);
-		}
-
-		std::string out = std::string(o);
-		*tw_output << out;
+		std::string o_str(o);
+		WriteToOutput(o_str);
 	}
 
 	std::string& Shell::ReadFromInput()
@@ -625,19 +565,19 @@ namespace priscas
 		do
 		{
 			*tw_input >> rd_buffer;
-			osi::sleep(10);
-		} while(rd_buffer == "" && priscas::INTERACTIVE);
+			priscas_osi::sleep(10);
+		} while(rd_buffer == "" && shEnv.get_Mode() == Env::INTERACTIVE);
 
 		return this->rd_buffer;
 	}
 
-	std::vector<priscas::NameValueStringPair> scan_for_values(std::vector<std::string>& input)
+	std::vector<priscas::NameValueStringPair> scan_for_values(const std::vector<std::string>& input)
 	{
 		std::vector<priscas::NameValueStringPair> vals;
 
 		for(size_t sind = 0; sind < input.size(); sind++)
 		{
-			std::string& indc = input[sind];
+			const std::string& indc = input[sind];
 			size_t substr_where = indc.find_first_of('=');
 
 			// Case: not found, then just use the whole string as the name, with an empty value

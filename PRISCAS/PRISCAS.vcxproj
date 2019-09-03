@@ -17,12 +17,12 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
@@ -39,12 +39,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../include/;$(IncludePath)</IncludePath>
-    <TargetExt>.lib</TargetExt>
+    <TargetExt>.dll</TargetExt>
     <TargetName>mtcore</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>../include;$(IncludePath)</IncludePath>
     <TargetName>mtcore</TargetName>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -74,16 +75,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\context.cpp" />
     <ClCompile Include="..\src\cpu_option.cpp" />
     <ClCompile Include="..\src\cpu_time.cpp" />
     <ClCompile Include="..\src\debug_view_simple.cpp" />
+    <ClCompile Include="..\src\env.cpp" />
     <ClCompile Include="..\src\format_chk.cpp" />
     <ClCompile Include="..\src\interpret.cpp" />
     <ClCompile Include="..\src\mem.cpp" />
     <ClCompile Include="..\src\messages.cpp" />
     <ClCompile Include="..\src\mips.cpp" />
     <ClCompile Include="..\src\mtsstream.cpp" />
-    <ClCompile Include="..\src\osi.cpp" />
+    <ClCompile Include="..\src\priscas_osi.cpp" />
     <ClCompile Include="..\src\pipeline.cpp" />
     <ClCompile Include="..\src\primitives.cpp" />
     <ClCompile Include="..\src\range.cpp" />
@@ -94,7 +97,6 @@
     <ClCompile Include="..\src\mb.cpp" />
     <ClCompile Include="..\src\mmem.cpp" />
     <ClCompile Include="..\src\shell.cpp" />
-    <ClCompile Include="..\src\states.cpp" />
     <ClCompile Include="..\src\streams.cpp" />
     <ClCompile Include="..\src\superscalar.cpp" />
     <ClCompile Include="..\src\syms_table.cpp" />
@@ -102,12 +104,15 @@
   <ItemGroup>
     <ClInclude Include="..\include\branding.h" />
     <ClInclude Include="..\include\buffer_events.h" />
+    <ClInclude Include="..\include\context.h" />
     <ClInclude Include="..\include\cpu.h" />
     <ClInclude Include="..\include\cpu_option.h" />
     <ClInclude Include="..\include\cpu_time.h" />
     <ClInclude Include="..\include\debug_view.h" />
     <ClInclude Include="..\include\debug_view_simple.h" />
     <ClInclude Include="..\include\diag_cpu.h" />
+    <ClInclude Include="..\include\dynamic.h" />
+    <ClInclude Include="..\include\env.h" />
     <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\interpret.h" />
     <ClInclude Include="..\include\ISA.h" />
@@ -119,9 +124,10 @@
     <ClInclude Include="..\include\mtsstream.h" />
     <ClInclude Include="..\include\mtswriter.h" />
     <ClInclude Include="..\include\mt_exception.h" />
-    <ClInclude Include="..\include\osi.h" />
+    <ClInclude Include="..\include\priscas_osi.h" />
     <ClInclude Include="..\include\pipeline.h" />
     <ClInclude Include="..\include\primitives.h" />
+    <ClInclude Include="..\include\priscas_core.h" />
     <ClInclude Include="..\include\priscas_global.h" />
     <ClInclude Include="..\include\range.h" />
     <ClInclude Include="..\include\reg_32.h" />
@@ -129,10 +135,12 @@
     <ClInclude Include="..\include\runtime_call.h" />
     <ClInclude Include="..\include\sc_cpu.h" />
     <ClInclude Include="..\include\shell.h" />
-    <ClInclude Include="..\include\states.h" />
     <ClInclude Include="..\include\streams.h" />
     <ClInclude Include="..\include\superscalar.h" />
     <ClInclude Include="..\include\syms_table.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="version_pcore.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

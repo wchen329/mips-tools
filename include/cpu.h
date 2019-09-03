@@ -31,32 +31,40 @@ namespace priscas
 	 *
 	 * wchen329
 	 */
-	class cpu
+	class LINK_DE cpu
 	{
 		public:
+
+			/* getName()
+			 * IMPLEMENTATION: Return the name of the processor
+			 * Return: string
+			 *         Processor name as a string
+			 */
+			virtual const UPString& getName() = 0;
+
 			/* rst()
-			 * Resets the processor state
+			 * IMPLEMENTATION: Resets the processor state
 			 * (zeroes it all out)
 			 * Return: nothing
 			 */
 			virtual void rst() = 0;
 
 			/* cycle()
-			 * Run the processor for one cycle
+			 * IMPLEMENTATION: Run the processor for one cycle
 			 * Return:	boolean
 			 *			True, indicating the processor sends a shutdown signal, False if not (generally returns false)
 			 */
 			virtual bool cycle() = 0;
 
 			/* get_clk_T()
-			 * Retrieve clock period of processor (in picoseconds)
+			 * IMPLEMENTATION: Retrieve clock period of processor (in picoseconds)
 			 * Return:	long
 			 *			the clock period of the processor in picoseconds
 			 */
 			virtual long get_clk_T() = 0;
 
 			/* get_ISA()
-			 * Retrieve a reference to the ISA which the processor
+			 * IMPLEMENTATION: Retrieve a reference to the ISA which the processor
 			 * implements
 			 * Return:	ISA reference
 			 *			reference to processors ISA

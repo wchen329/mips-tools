@@ -18,21 +18,23 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#ifndef __STATES_H__
-#define __STATES_H__
-#include "priscas_global.h"
+#ifndef __DYNAMIC_H__
+#define __DYNAMIC_H__
 
-namespace priscas
-{
-	extern bool ASM_MODE;		// acting in assembler mode? true if is, false if not
-	extern bool DEBUG_MODE;		// acting in debug mode? true if is, false if now
-	extern bool INTERACTIVE;	// in interactive mode, true if is, false if not
-	extern bool HAS_INPUT;		// no input file
-	extern bool INPUT_SPECIFIED;
-	extern bool SUSPEND;
-	extern bool PRE_ASM;
-	extern bool WIN_32_GUI;
-	extern bool EXIT_COND;
-}
+/* Declarations for dynamic linking related
+ * such as certain macroes
+ * wchen329
+ */
+
+/* dynamic linking options
+ * (Windows only for now)
+ */
+#ifdef WIN32
+	#define LINK_DI __declspec(dllimport) // Link Dynamic Import
+	#define LINK_DE __declspec(dllexport) // Link Dynamic Export
+#else
+	#define LINK_DI
+	#define LINK_DE
+#endif
 
 #endif
