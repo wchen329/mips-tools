@@ -49,13 +49,13 @@ aboutDialog::aboutDialog(QWidget *parent) :
     ui->textEditAbout->
             append("Most icon artwork (those except the PRISCAS icon) originate from the Oxygen Desktop project.\n");
     ui->textEditAbout->
-            append("Acknowledgments to Professor Joshua San Miguel (jsanmiguel@wisc.edu) for partaking in design and providing feedback on feature suggestions.\n");
+            append("Acknowledgments to Professor Joshua San Miguel (jsanmiguel@wisc.edu) for providing design feedback and feature suggestions.\n");
     ui->textEditAbout->
-            append("PRISCAS software, icon, and documentation author: Winor Chen (wchen329@wisc.edu)\n");
+            append("PRISCAS software, and related author: wchen329@wisc.edu\n");
     ui->textEditAbout->
-            append("Project repository: https://github.com/wchen329/priscas");
+            append("Project repository: https://github.com/wchen329/priscas\n");
     ui->textEditAbout->
-            append("WARNING: This software is currently in development and may have some bugs.\n");
+            append("WARNING: This software is currently in development and may have some bugs. No warranty is implied- see the license for details.\n");
 }
 
 aboutDialog::~aboutDialog()
