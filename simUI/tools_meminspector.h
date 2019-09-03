@@ -23,7 +23,7 @@
 
 #include <QDialog>
 #include <QTreeWidgetItem>
-#include "mem.h"
+#include "mmem.h"
 
 namespace Ui {
 class tools_meminspector;
@@ -36,14 +36,14 @@ class tools_meminspector : public QDialog
 public:
     explicit tools_meminspector(QWidget *parent = 0);
     ~tools_meminspector();
-    void addMemoryChannel(mips_tools::mem* m);
+    void addMemoryChannel(mips_tools::mmem* m);
 
 private slots:
     void on_pushButton_Display_clicked();
 
 private:
     Ui::tools_meminspector *ui;
-    std::vector<mips_tools::mem*> memoryChannels;
+    std::vector<mips_tools::mmem*> memoryChannels;
     std::vector<QTreeWidgetItem*> channel_alloc;
     std::vector<QTreeWidgetItem*> mement_alloc;
     void resetTree();

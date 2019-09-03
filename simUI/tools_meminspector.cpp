@@ -41,7 +41,7 @@ tools_meminspector::tools_meminspector(QWidget *parent) :
     this->ui->treeWidget_MemInspect->setHeaderLabels(*qsl);
 }
 
-void tools_meminspector::addMemoryChannel(mips_tools::mem* m)
+void tools_meminspector::addMemoryChannel(mips_tools::mmem* m)
 {
     this->memoryChannels.push_back(m);
 }

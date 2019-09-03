@@ -125,6 +125,7 @@ namespace priscas
 
 				for(CPU_Option_List_CIter s = cpuopts_list.cbegin(); s != cpuopts_list.cend(); ++s)
 				{
+					inst.WriteToOutput("\n");
 					std::string o = s->getName() + "\n\t" + s->getDescription() + priscas_io::newLine;
 					inst.WriteToOutput(o);
 					
@@ -148,9 +149,9 @@ namespace priscas
 					curVal += s->getValue();
 					curVal += priscas_io::newLine;
 					inst.WriteToOutput(curVal);
-
 				}
 
+				inst.WriteToOutput("\n");
 				inst.WriteToOutput(("To execute an option just enter\n"));
 				inst.WriteToOutput(".cpuopts [option 1]=[value 1] ... into the shell\n");
 				inst.WriteToOutput("If no possible values are specified for an option, omit \'=\':\n");

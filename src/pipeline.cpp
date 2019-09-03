@@ -95,7 +95,7 @@ namespace priscas
 		bool wb_regWE;
 		this->mw_plr.get(wb_save_data, wb_regWE, wb_save_num);
 
-		if(wb_regWE && wb_save_num != 0)
+		if(wb_regWE)
 		{
 			this->registers[wb_save_num].set_data(wb_save_data); // Register-File bypassing
 		}
@@ -479,7 +479,7 @@ namespace priscas
 		}
 
 		// Write data to carry on
-		bool decode_regWE = reg_write_inst(decode_op, decode_funct);
+		bool decode_regWE = reg_write_inst(decode_op, decode_funct) && ((r_inst(decode_op) && decode_rd != 0 ) || ((!r_inst(decode_op) && decode_rt != 0)));
 		bool decode_memWE = mem_write_inst(decode_op);
 		bool decode_memRE = mem_read_inst(decode_op);
 
@@ -695,8 +695,28 @@ namespace priscas
 		fsp_MEMMEM.add_Value(FSP_Options::value_FORWARD(), FSP_Options::valueRaw_FORWARD());
 		fsp_MEMMEM.add_Value(FSP_Options::value_STALL(), FSP_Options::valueRaw_STALL());
 		this->cp.add_Control(fsp_MEMMEM);
-		this->cp.finalize();
+		
+		UPString fsp_oAluSrc1_desc;
+		fsp_oAluSrc1_desc = UPString("Specify Rs ALU input forwarding mux signal.");
 
+		// AluSrc1 Signal
+		CPU_Option fsp_MUX_AluSrc1(FSP_Options::getName_MUX_AluSrc1(), fsp_oAluSrc1_desc);
+		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_AUTO(), FSP_Options::valueRaw_AUTO());
+		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_STUCK_FW_MEM(), FSP_Options::valueRaw_STUCK_FW_MEM());
+		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_STUCK_FW_EX(), FSP_Options::valueRaw_STUCK_FW_EX());
+		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_STUCK_OFF(), FSP_Options::valueRaw_STUCK_OFF());
+		this->cp.add_Control(fsp_MUX_AluSrc1);
+
+		// AluSrc2 signal
+		CPU_Option fsp_MUX_AluSrc2(FSP_Options::getName_MUX_AluSrc2(), "Specify Rt / Imm input forwarding mux signal.");
+		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_AUTO(), 0);
+		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_STUCK_FW_MEM(), FSP_Options::valueRaw_STUCK_FW_MEM());
+		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_STUCK_FW_EX(), FSP_Options::valueRaw_STUCK_FW_EX());
+		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_STUCK_OFF(), FSP_Options::valueRaw_STUCK_OFF());
+		this->cp.add_Control(fsp_MUX_AluSrc2);
+
+		this->cp.finalize();
+		
 		DebugTree_Simple_List* pipeline_register_list_dbg = new DebugTree_Simple_List;
 		this->pipeline_diagram = new DebugTableStringValue;
 		pipeline_register_list_dbg->setName("Pipeline Register Inspector");

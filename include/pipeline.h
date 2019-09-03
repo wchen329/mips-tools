@@ -109,15 +109,25 @@ namespace priscas
 			{
 				public:
 					// Option Names
-					static inline UPString getName_MEM_TO_MEM() { return "PATH_MEM_MEM"; };
+					static inline UPString getName_MEM_TO_MEM() { return "PATH_MEM_MEM"; }
+					static inline UPString getName_MUX_AluSrc1() { return "MUX_AluSrc1"; }
+					static inline UPString getName_MUX_AluSrc2() { return "MUX_AluSrc2"; }
 
 					// Option Values
 					static inline UPString value_FORWARD() { return "FORWARD"; }
 					static inline UPString value_STALL() { return "STALL"; }
+					static inline UPString value_AUTO() { return "AUTO"; }
+					static inline UPString value_STUCK_FW_MEM() { return "STUCK_FW_MEM"; }
+					static inline UPString value_STUCK_FW_EX() { return "STUCK_FW_EX"; }
+					static inline UPString value_STUCK_OFF() { return "STUCK_OFF"; }
 
 					// Option Raw Values
 					static inline PCPU_OpRawV valueRaw_FORWARD() { return 0; }
 					static inline PCPU_OpRawV valueRaw_STALL() { return 1; }
+					static inline PCPU_OpRawV valueRaw_AUTO() { return 0; }
+					static inline PCPU_OpRawV valueRaw_STUCK_FW_MEM() { return 1; }
+					static inline PCPU_OpRawV valueRaw_STUCK_FW_EX() { return 2; }
+					static inline PCPU_OpRawV valueRaw_STUCK_OFF() { return 10; }
 			};
 	};
 }
