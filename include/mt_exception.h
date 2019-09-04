@@ -48,7 +48,8 @@ namespace priscas
 			PARSER_UNEXPECTED,
 			PARSER_UNMATCHED_PARENTHESIS,
 			NO_SUCH_CPU_OPTION,
-			IO_FILE_OPEN_FAILURE
+			IO_FILE_OPEN_FAILURE,
+			IO_DEVICE_TYPE_MISMATCH
 		};
 	}
 
@@ -219,6 +220,17 @@ namespace priscas
 				mt_exception::except_num = exception_nums::IO_FILE_OPEN_FAILURE;
 				mt_exception::message = (UPString("Failed to open file ") + UPString(filename) + UPString("."));
 			}
+	};
+
+	class mt_io_device_type_mismatch : public mt_exception
+	{
+		public:
+			mt_io_device_type_mismatch()
+			{
+				mt_exception::except_num = exception_nums::IO_DEVICE_TYPE_MISMATCH;
+				mt_exception::message = UPString("A request was sent to a device, but the device does not understand that particular device. The request as a result has been ignored.");
+			}
+
 	};
 }
 

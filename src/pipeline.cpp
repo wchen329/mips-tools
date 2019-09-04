@@ -699,7 +699,7 @@ namespace priscas
 		UPString fsp_oAluSrc1_desc;
 		fsp_oAluSrc1_desc = UPString("Specify Rs ALU input forwarding mux signal.");
 
-		// AluSrc1 Signal
+		/*// AluSrc1 Signal
 		CPU_Option fsp_MUX_AluSrc1(FSP_Options::getName_MUX_AluSrc1(), fsp_oAluSrc1_desc);
 		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_AUTO(), FSP_Options::valueRaw_AUTO());
 		fsp_MUX_AluSrc1.add_Value(FSP_Options::value_STUCK_FW_MEM(), FSP_Options::valueRaw_STUCK_FW_MEM());
@@ -713,7 +713,7 @@ namespace priscas
 		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_STUCK_FW_MEM(), FSP_Options::valueRaw_STUCK_FW_MEM());
 		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_STUCK_FW_EX(), FSP_Options::valueRaw_STUCK_FW_EX());
 		fsp_MUX_AluSrc2.add_Value(FSP_Options::value_STUCK_OFF(), FSP_Options::valueRaw_STUCK_OFF());
-		this->cp.add_Control(fsp_MUX_AluSrc2);
+		this->cp.add_Control(fsp_MUX_AluSrc2);*/
 
 		this->cp.finalize();
 		

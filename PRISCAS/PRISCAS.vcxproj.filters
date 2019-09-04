@@ -89,6 +89,9 @@
     <ClCompile Include="..\src\context.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\southbridge.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -197,6 +200,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\context.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\southbridge.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\io_device.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

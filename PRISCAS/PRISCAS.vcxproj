@@ -97,6 +97,7 @@
     <ClCompile Include="..\src\mb.cpp" />
     <ClCompile Include="..\src\mmem.cpp" />
     <ClCompile Include="..\src\shell.cpp" />
+    <ClCompile Include="..\src\southbridge.cpp" />
     <ClCompile Include="..\src\streams.cpp" />
     <ClCompile Include="..\src\superscalar.cpp" />
     <ClCompile Include="..\src\syms_table.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="..\include\env.h" />
     <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\interpret.h" />
+    <ClInclude Include="..\include\io_device.h" />
     <ClInclude Include="..\include\ISA.h" />
     <ClInclude Include="..\include\mb.h" />
     <ClInclude Include="..\include\mem.h" />
@@ -135,6 +137,7 @@
     <ClInclude Include="..\include\runtime_call.h" />
     <ClInclude Include="..\include\sc_cpu.h" />
     <ClInclude Include="..\include\shell.h" />
+    <ClInclude Include="..\include\southbridge.h" />
     <ClInclude Include="..\include\streams.h" />
     <ClInclude Include="..\include\superscalar.h" />
     <ClInclude Include="..\include\syms_table.h" />
