@@ -75,12 +75,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\com.cpp" />
     <ClCompile Include="..\src\context.cpp" />
     <ClCompile Include="..\src\cpu_option.cpp" />
     <ClCompile Include="..\src\cpu_time.cpp" />
     <ClCompile Include="..\src\debug_view_simple.cpp" />
     <ClCompile Include="..\src\env.cpp" />
     <ClCompile Include="..\src\format_chk.cpp" />
+    <ClCompile Include="..\src\hdd.cpp" />
     <ClCompile Include="..\src\interpret.cpp" />
     <ClCompile Include="..\src\mem.cpp" />
     <ClCompile Include="..\src\messages.cpp" />
@@ -105,6 +107,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\branding.h" />
     <ClInclude Include="..\include\buffer_events.h" />
+    <ClInclude Include="..\include\com.h" />
     <ClInclude Include="..\include\context.h" />
     <ClInclude Include="..\include\cpu.h" />
     <ClInclude Include="..\include\cpu_option.h" />
@@ -115,6 +118,7 @@
     <ClInclude Include="..\include\dynamic.h" />
     <ClInclude Include="..\include\env.h" />
     <ClInclude Include="..\include\format_chk.h" />
+    <ClInclude Include="..\include\hdd.h" />
     <ClInclude Include="..\include\interpret.h" />
     <ClInclude Include="..\include\io_device.h" />
     <ClInclude Include="..\include\ISA.h" />

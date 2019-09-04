@@ -20,5 +20,16 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __HDD_H__
 #define __HDD_H__
+#include "io_device.h"
+#include "priscas_global.h"
+
+namespace priscas
+{
+	class hdd : public io_device
+	{
+		public:
+			void receive_req(io_request& in) { in(*this);  }
+	};
+}
 
 #endif

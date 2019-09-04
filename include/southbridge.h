@@ -21,6 +21,8 @@
 #ifndef __SOUTHBRIDGE_H__
 #define __SOUTHBRIDGE_H__
 #include <map>
+#include "com.h"
+#include "primitives.h"
 #include "priscas_global.h"
 #include "io_device.h"
 
@@ -35,10 +37,56 @@ namespace priscas
 	class southbridge
 	{
 		public:
-			
+			/* bool get_COM_Write_Ready(...)
+			 * Checks to see if the com_numth com port is ready
+			 * to be written to.
+			 */
+			bool get_COM_Write_Ready(unsigned com_num);
+
+			/* bool get_COM_Read_Ready(...)
+			 * Checks to see if the com_numth com port has a value 
+			 * ready to be read
+			 */
+			bool get_COM_Read_Ready(unsigned com_num);
+
+			/* void send_COM_Write(...)
+			 * Send the byte data to the COM port
+			 * This automatically performs the handshaking required by the CPU side.
+			 */
+			void send_COM_Write(byte_8b data, unsigned com_num);
+
+			/* void send_COM_Read(...)
+			 * This automatically performs the handshaking required by the CPU side.
+			 * Does not read automatically necessarily. For now all COMs are instant read but this will change later.
+			 * Use exec_COM_Read(...) to actually perform the read
+			 */
+			void send_COM_Read(unsigned com_num);
+
+			/* void send_HDD_Write(...)
+			 * Send byte data to an hdd to the address specified
+			 */
+			void send_HDD_Write(unsigned hdd_num, uint64_t address);
+
+			/* void send_HDD_Read(...)
+			 * Read byte data from an hdd from the address specified
+			 * Does not read automatically necessarily, use exec_HDD_read(...) to perform the read after
+			 * the HDD is done setting up a read op (specified by the HDD speed)
+			 */
+			void send_HDD_Read(unsigned hdd_num, uint64_t address);
+
+			/* byte_8b exec_COM_Read(...)
+			 * Read from a COM port, make sure the read op is actually done in the device though!
+			 */
+			byte_8b exec_COM_Read(unsigned com_num);
+
+			/* byte_8b exec_HDD_Read(...)
+			 * Read from an HDD, make sure the read op is actuall done though!
+			 */
+			byte_8b exec_HDD_Read(unsigned hdd_num);
 
 		private:
-			
+			std::vector<com_port*> communications_ports;
+
 	};
 }
 

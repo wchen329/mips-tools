@@ -92,6 +92,12 @@
     <ClCompile Include="..\src\southbridge.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\hdd.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\com.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -206,6 +212,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\io_device.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\com.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\hdd.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

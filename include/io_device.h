@@ -65,16 +65,22 @@ namespace priscas
 			 * Return: nothing
 			 */
 			virtual void operator()(io_device& iod_ref) = 0;
-		private:
+			
+			/* ~io_request
+			 * virtual destructor
+			 */
+			virtual ~io_request() {}
+
+		protected:
 
 			/* detectAs()
 			 * Provides typed check conversion to a specific device
 			 */
-			template<class io_req_sub> io_req_sub& detectAs(io_request& src) throw (mt_io_device_type_mismatch)
+			template<class io_dev_sub> io_dev_sub& detectAs(io_device& src)
 			{
 				try
 				{
-					return dynamic_cast<io_req_sub>(src);
+					return dynamic_cast<io_dev_sub&>(src);
 				}
 
 				catch(std::bad_cast&)
@@ -84,11 +90,6 @@ namespace priscas
 					throw mt_io_device_type_mismatch();
 				}
 			}
-
-			/* ~io_request
-			 * virtual destructor
-			 */
-			virtual ~io_request() {}
 	};
 
 	/* IO Device
@@ -102,15 +103,22 @@ namespace priscas
 	{
 		public:
 
-			/* send_req(...)
+			/* void receive_req(...)
 			 * Send a command to the I/O device
 			 */
-			virtual void send_req(io_request& in) = 0;
+			virtual void receive_req(io_request& in) = 0;
+
+			/* void cycle(ps_passed)
+			 * Perform additional work during the cycle (if any).
+			 * This can be used to implement multicycle devices.
+			 * Sole argument is how many picoseconds passed since the last cycle
+			 */
+			virtual void cycle(unsigned long long ps_passed) {};
 
 			/* get_handshaking_protocol(...)
 			 * Returns a functor to the handshaking protocol
 			 */
-			virtual handshaking_protocol& get_handshaking_protocol() = 0;
+			//virtual handshaking_protocol& get_handshaking_protocol() = 0;
 
 			/* ~io_device()
 			 * virtual destructor
