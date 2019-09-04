@@ -29,6 +29,24 @@ namespace priscas
 	{
 		public:
 			void receive_req(io_request& in) { in(*this);  }
+
+		private:
+			class hdd_read_byte_sequence
+			{
+				/* application operator
+				 * Read a byte from a given address into the HDD's single byte
+				 * read buffer
+				 */
+				void operator(io_device& dev);	
+			};
+
+			class hdd_write_byte_sequence
+			{
+				/* application operator
+				 * Write a byte from the write buffer into the given address.
+				 */
+				void operator(io_device& dev);
+			};
 	};
 }
 

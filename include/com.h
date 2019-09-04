@@ -39,6 +39,11 @@ namespace priscas
 			// Receive Request
 			void receive_req(io_request& in) { in(*this); }
 
+			/* peek_read();
+ 			 * Get the current value in the read buffer
+			 */
+			byte_8b peek_read() { return this->read_buffer; }
+
 			// COM Port specific requests
 			class com_read_bytesequence : public io_request
 			{
@@ -49,6 +54,14 @@ namespace priscas
 			{
 				void operator()(io_device& iod_ref);
 			};
+
+			/* com_port()
+			 * Set the COM port buffers
+			 */
+			com_port() :
+				write_buffer(0),
+				read_buffer(0)
+			{}
 
 		protected:
 

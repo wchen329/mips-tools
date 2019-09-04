@@ -6,7 +6,7 @@ LIB_DIR = build
 CFLAGS = -g -I"$(INCLUDE)"
 OBJS = context.o cpu_option.o debug_view_simple.o env.o format_chk.o cpu_time.o interpret.o mb.o mem.o messages.o mips.o mmem.o mtsstream.o \
 	pipeline.o primitives.o range.o reg_32.o reg_pipeline.o runtime_call.o sc_cpu.o \
-	shell.o streams.o superscalar.o syms_table.o priscas_osi.o
+	shell.o streams.o superscalar.o syms_table.o priscas_osi.o hdd.o com.o southbridge.o
 SHELL_MAIN = shell_entry.o
 INCLUDE = include
 
