@@ -19,3 +19,17 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 #include "hdd.h"
+
+namespace priscas
+{
+	void hdd::hdd_read_byte_sequence::operator()(io_device & dev)
+	{
+		hdd& hdev = detectAs<hdd>(dev);
+	}
+
+	void hdd::hdd_write_byte_sequence::operator()(io_device & dev)
+	{
+		hdd& hdev = detectAs<hdd>(dev);
+	}
+}
+

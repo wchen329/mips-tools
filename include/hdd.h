@@ -21,6 +21,7 @@
 #ifndef __HDD_H__
 #define __HDD_H__
 #include "io_device.h"
+#include "primitives.h"
 #include "priscas_global.h"
 
 namespace priscas
@@ -30,22 +31,41 @@ namespace priscas
 		public:
 			void receive_req(io_request& in) { in(*this);  }
 
+		protected:
+			/* byte_8b hddgetc()
+			 * Read a byte from the HDD
+			 */
+			byte_8b hddgetc(unsigned long long address);
+
+			/* void hddputc(byte_8b)
+			 * Write a byte to an address in the HDD
+			 */
+			void hddputc(byte_8b);
+
 		private:
-			class hdd_read_byte_sequence
+			class hdd_read_byte_sequence : public io_request
 			{
 				/* application operator
 				 * Read a byte from a given address into the HDD's single byte
 				 * read buffer
 				 */
-				void operator(io_device& dev);	
+				void operator()(io_device& dev);	
+
+				// Address to read from, if bigger then disk
+				// addressable, it is mod(address_size)
+				unsigned long long address;
 			};
 
-			class hdd_write_byte_sequence
+			class hdd_write_byte_sequence : public io_request
 			{
 				/* application operator
 				 * Write a byte from the write buffer into the given address.
 				 */
-				void operator(io_device& dev);
+				void operator()(io_device& dev);
+
+				// Address to write to, if bigger than disk
+				// addressable, it is mod(address_size)
+				unsigned long long address;
 			};
 	};
 }
