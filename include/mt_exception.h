@@ -49,7 +49,9 @@ namespace priscas
 			PARSER_UNMATCHED_PARENTHESIS,
 			NO_SUCH_CPU_OPTION,
 			IO_FILE_OPEN_FAILURE,
-			IO_DEVICE_TYPE_MISMATCH
+			IO_DEVICE_TYPE_MISMATCH,
+			IO_HDD_SEEK_FAILURE,
+			IO_HDD_READWRITE_FAILURE
 		};
 	}
 
@@ -231,6 +233,27 @@ namespace priscas
 				mt_exception::message = UPString("A request was sent to a device, but the device does not understand that particular device. The request as a result has been ignored.");
 			}
 
+	};
+
+	class mt_io_hdd_rw_io_failure : public mt_exception
+	{
+		public:
+			mt_io_hdd_rw_io_failure()
+			{
+				mt_exception::except_num = exception_nums::IO_HDD_SEEK_FAILURE;
+				mt_exception::message = UPString("A read or write to an HDD failed.");
+			}
+
+	};
+
+	class mt_io_hdd_seek_failure : public mt_exception
+	{
+		public:
+			mt_io_hdd_seek_failure()
+			{
+				mt_exception::except_num = exception_nums::IO_HDD_READWRITE_FAILURE;
+				mt_exception::message = UPString("Seeking to the specified address for HDD I/O failed.");
+			}
 	};
 }
 

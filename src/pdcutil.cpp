@@ -37,8 +37,8 @@ int main(int argc, char ** argv)
 	bool size_specced = false;
 	bool delay_specced = false;
 	bool filename_specced = false;
-	unsigned long disk_size = 0;
-	unsigned long disk_delay = 0;
+	uint32_t disk_size = 0;
+	uint32_t disk_delay = 0;
 	std::string filename;
 	const int8_t ZERO = 0;
 
@@ -132,8 +132,8 @@ int main(int argc, char ** argv)
 	fwrite(img_header.c_str(), sizeof(char), 10, imgfile);
 
 	// Write the size and delay next
-	fwrite(&disk_size, sizeof(disk_size), 1, imgfile);
-	fwrite(&disk_size, sizeof(disk_delay), 1, imgfile);
+	fwrite(&disk_size, sizeof(uint32_t), 1, imgfile);
+	fwrite(&disk_delay, sizeof(uint32_t), 1, imgfile);
 
 	// Now zero out the rest of the space
 	for(unsigned long csize = 0; csize < disk_size; csize++)

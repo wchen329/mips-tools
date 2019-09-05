@@ -19,3 +19,33 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 #include "southbridge.h"
+
+namespace priscas
+{
+	void southbridge::send_HDD_Write(unsigned hdd_num, uint64_t address, byte_8b data)
+	{
+		if(hdd_num >= this->hard_disks.size())
+		{
+			return; // throw exception
+		}
+
+		hdd::hdd_write_byte_sequence req(address, data);
+		hard_disks[hdd_num]->receive_req(req);
+	}
+
+	void southbridge::send_HDD_Read(unsigned hdd_num, uint64_t address)
+	{
+		if(hdd_num >= this->hard_disks.size())
+		{
+			return; // throw exc
+		}
+
+		hdd::hdd_read_byte_sequence req(address);
+		hard_disks[hdd_num]->receive_req(req);
+	}
+
+	byte_8b southbridge::exec_HDD_Read(unsigned hdd_num)
+	{
+		return 0;
+	}
+}

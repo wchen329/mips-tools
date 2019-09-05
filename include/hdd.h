@@ -30,43 +30,94 @@ namespace priscas
 	{
 		public:
 			void receive_req(io_request& in) { in(*this);  }
+			
+			/* HDD
+			 * zero out buffers
+			 */
+			hdd() :
+				read_buf(0),
+				write_buf(0)
+			{}
+
+			class hdd_read_byte_sequence : public io_request
+			{
+				public:
+					/* application operator
+					 * Read a byte from a given address into the HDD's single byte
+					 * read buffer
+					 */
+					void operator()(io_device& dev);	
+
+					/* constructor
+					 * Arg: address
+					 */
+					hdd_read_byte_sequence(unsigned long long addr) : address(addr) {}
+
+				private:
+
+					// Address to read from, if bigger then disk
+					// addressable, it is mod(address_size)
+					unsigned long long address;
+			};
+
+			class hdd_write_byte_sequence : public io_request
+			{
+				public:
+
+					/* application operator
+					 * Write a byte from the write buffer into the given address.
+					 */
+					void operator()(io_device& dev);
+
+					/* constructor
+					 * Arg: address
+					 */
+					hdd_write_byte_sequence(unsigned long long addr, byte_8b data) : address(addr), writable(data) {}
+
+				private:
+	
+					// Address to write to, if bigger than disk
+					// addressable, it is mod(address_size)
+					unsigned long long address;
+
+					// Data to write
+					byte_8b writable;
+			};
 
 		protected:
 			/* byte_8b hddgetc()
 			 * Read a byte from the HDD
 			 */
-			byte_8b hddgetc(unsigned long long address);
+			virtual byte_8b hddgetc(unsigned long long address) = 0;
 
 			/* void hddputc(byte_8b)
 			 * Write a byte to an address in the HDD
 			 */
-			void hddputc(byte_8b);
+			virtual void hddputc(unsigned long long address, byte_8b) = 0;
+
 
 		private:
-			class hdd_read_byte_sequence : public io_request
-			{
-				/* application operator
-				 * Read a byte from a given address into the HDD's single byte
-				 * read buffer
-				 */
-				void operator()(io_device& dev);	
 
-				// Address to read from, if bigger then disk
-				// addressable, it is mod(address_size)
-				unsigned long long address;
-			};
+			byte_8b read_buf;
+			byte_8b write_buf;
+	};
 
-			class hdd_write_byte_sequence : public io_request
-			{
-				/* application operator
-				 * Write a byte from the write buffer into the given address.
-				 */
-				void operator()(io_device& dev);
-
-				// Address to write to, if bigger than disk
-				// addressable, it is mod(address_size)
-				unsigned long long address;
-			};
+	/* HDD
+	 * Implemented through a image on the local filesystem
+	 * (Generation One)
+	 */
+	class hdd_img_gen1_impl : public hdd
+	{
+		public:
+			hdd_img_gen1_impl(const UPString& filename);
+		protected:
+			byte_8b hddgetc(unsigned long long address);
+			void hddputc(unsigned long long address, byte_8b);
+		private:
+			size_t offset;
+			uint32_t disk_delay;
+			uint32_t disk_size;
+			FILE * hddimg;
 	};
 }
 

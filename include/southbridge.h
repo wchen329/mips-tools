@@ -22,6 +22,7 @@
 #define __SOUTHBRIDGE_H__
 #include <map>
 #include "com.h"
+#include "hdd.h"
 #include "primitives.h"
 #include "priscas_global.h"
 #include "io_device.h"
@@ -65,7 +66,7 @@ namespace priscas
 			/* void send_HDD_Write(...)
 			 * Send byte data to an hdd to the address specified
 			 */
-			void send_HDD_Write(unsigned hdd_num, uint64_t address);
+			void send_HDD_Write(unsigned hdd_num, uint64_t address, byte_8b data);
 
 			/* void send_HDD_Read(...)
 			 * Read byte data from an hdd from the address specified
@@ -86,7 +87,7 @@ namespace priscas
 
 		private:
 			std::vector<com_port*> communications_ports;
-
+			std::vector<hdd*> hard_disks;
 	};
 }
 
