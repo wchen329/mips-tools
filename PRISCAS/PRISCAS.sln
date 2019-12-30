@@ -16,6 +16,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winnt_test", "..\testing\nt
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PDCUtil", "..\PDCUtil\PDCUtil.vcxproj", "{982441F3-7E5F-47AD-8A59-8F1263863A1F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simui", "..\simUI\simui.vcxproj", "{8900FAFA-0CA4-439D-B6DD-04C2113E5F67}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9C1D372F-1761-437C-A7EC-27A79BB967B6} = {9C1D372F-1761-437C-A7EC-27A79BB967B6}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -37,6 +42,10 @@ Global
 		{982441F3-7E5F-47AD-8A59-8F1263863A1F}.Debug|Win32.Build.0 = Debug|Win32
 		{982441F3-7E5F-47AD-8A59-8F1263863A1F}.Release|Win32.ActiveCfg = Release|Win32
 		{982441F3-7E5F-47AD-8A59-8F1263863A1F}.Release|Win32.Build.0 = Release|Win32
+		{8900FAFA-0CA4-439D-B6DD-04C2113E5F67}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8900FAFA-0CA4-439D-B6DD-04C2113E5F67}.Debug|Win32.Build.0 = Debug|Win32
+		{8900FAFA-0CA4-439D-B6DD-04C2113E5F67}.Release|Win32.ActiveCfg = Release|Win32
+		{8900FAFA-0CA4-439D-B6DD-04C2113E5F67}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
