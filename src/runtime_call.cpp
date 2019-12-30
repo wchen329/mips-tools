@@ -487,14 +487,20 @@ namespace priscas
 		std::string cc = "Cycle Count: " + priscas_io::StrTypes::UInt32ToStr(n) + " cycles\n";
 		inst.WriteToOutput(cc);
 
+		
+		float instCount = static_cast<float>(dynamic_cast<diag_cpu&>(inst.GetMotherboard().get_cpu()).get_InstCommitCount());
+		instCount = instCount == 0 ? 1 : instCount;
+		UPString strCPI = priscas_io::StrTypes::FloatToStr(static_cast<float>(n) / instCount);
+		inst.WriteToOutput(UPString("CPI: ") + strCPI + priscas_io::newLine);
+
 		// Print it out in terms of smallest units
-		inst.WriteToOutput("Time Elapsed:\n");
+		inst.WriteToOutput("Time Elapsed: ");
 		unsigned long long total_time = inst.GetMotherboard().get_time().getPS();
 		unsigned long long total_days = inst.GetMotherboard().get_time().getDays();
 		
 		if(total_time == 0)
 		{
-			inst.WriteToOutput("0s\n");
+			inst.WriteToOutput("0s\t");
 		}
 		
 		unsigned short picoseconds = (total_time) % 1000;
@@ -519,51 +525,53 @@ namespace priscas
 
 		if(total_days > 0)
 		{
-			std::string t = priscas_io::StrTypes::UInt64ToStr(total_days) + " days\n";
+			std::string t = priscas_io::StrTypes::UInt64ToStr(total_days) + " days\t";
 			inst.WriteToOutput(t);
 		}
 
 		if(hours > 0)
 		{
-			std::string t = priscas_io::StrTypes::UIntToStr(hours) + " hours\n";
+			std::string t = priscas_io::StrTypes::UIntToStr(hours) + " hours\t";
 			inst.WriteToOutput(t);
 		}
 
 		if(minutes > 0)
 		{
-			std::string t = priscas_io::StrTypes::UIntToStr(minutes) + " minutes\n";
+			std::string t = priscas_io::StrTypes::UIntToStr(minutes) + " minutes\t";
 			inst.WriteToOutput(t);
 		}
 
 		if(seconds > 0)
 		{
-			std::string t = priscas_io::StrTypes::UIntToStr(seconds) + " seconds\n";
+			std::string t = priscas_io::StrTypes::UIntToStr(seconds) + " seconds\t";
 			inst.WriteToOutput(t);
 		}
 
 		if(milliseconds > 0)
 		{
-			std::string t = priscas_io::StrTypes::UIntToStr(milliseconds) + " ms\n";
+			std::string t = priscas_io::StrTypes::UIntToStr(milliseconds) + " ms\t";
 			inst.WriteToOutput(t);
 		}
 
 		if(microseconds > 0)
 		{
-			std::string t = priscas_io::StrTypes::UIntToStr(microseconds) + " micros\n";
+			std::string t = priscas_io::StrTypes::UIntToStr(microseconds) + " micros\t";
 			inst.WriteToOutput(t);
 		}
 
 		if(nanoseconds > 0)
 		{
-			std::string t = priscas_io::StrTypes::UIntToStr(nanoseconds) + " ns\n";
+			std::string t = priscas_io::StrTypes::UIntToStr(nanoseconds) + " ns\t";
 			inst.WriteToOutput(t);
 		}
 
 		if(picoseconds > 0)
 		{
-			std::string t = priscas_io::StrTypes::UIntToStr(picoseconds) + " ps\n";
+			std::string t = priscas_io::StrTypes::UIntToStr(picoseconds) + " ps";
 			inst.WriteToOutput(t);
 		}
+
+		inst.WriteToOutput( "" + priscas_io::newLine);
 	}
 
 	void trace(const Arg_Vec & args, Shell& inst)

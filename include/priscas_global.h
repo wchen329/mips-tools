@@ -100,6 +100,7 @@ namespace priscas
 	 *
 	 */
 	typedef std::vector<UPString>::iterator Filename_Vec_Iter;
+
 }
 
 /* Namespace aliases for old names of namespaces

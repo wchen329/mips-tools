@@ -267,6 +267,8 @@ namespace priscas
 			this->registers[r_write].set_data(reg_wdata);
 		}
 		
+		// There are no no-ops in the single cycle CPU, so assume that every cycle one valid instruction is fetched and executed (for now, until MEM delay is implemented)
+		++this->comcount;
 
 		return true;
 	}

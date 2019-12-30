@@ -29,6 +29,7 @@
 
 namespace priscas
 {
+	typedef uint64_t InstCount; // Instruction Count
 
 	// CPU with Diagnostic Functions
 	class LINK_DE diag_cpu : public cpu
@@ -54,7 +55,12 @@ namespace priscas
 				 * IMPLEMENATION: return debug views
 				 */
 				virtual std::vector<DebugView*>& get_DebugViews() = 0;
-				
+
+				/* get_InstCommitCount()
+				 * IMPLEMENTATION: return commit count
+				 */
+				virtual InstCount get_InstCommitCount() = 0;
+
 				/* ~diag_cpu()
 				 * Virtual destructor. Allows manual destructor for other diagnostic CPUs in general.
 				 */

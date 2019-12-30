@@ -43,12 +43,13 @@ namespace priscas
 			BW_32& get_reg_data(int index) { return this->registers[index].get_data(); }
 			BW_32& get_PC() { return this->pc.get_data(); }
 			long get_clk_T() { return this -> clk_T ; }
-			sc_cpu(mmem & m) : mm(m), clk_T(200000), name("MIPS-32 Single Cylce") {  }
+			sc_cpu(mmem & m) : mm(m), clk_T(200000), comcount(0), name("MIPS-32 Single Cylce") {  }
 			ISA& get_ISA() { return this->isa; }
 			virtual CPU_ControlPanel& get_CPU_options() { return this->cp; }
 
 			virtual std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
 			virtual ~sc_cpu() {}
+			virtual InstCount get_InstCommitCount() { return comcount; }
 		protected:
 			byte_8b mem_req_load(int index); // sends a load memory request from CPU to MMEM. The ind is the offset from address 0x0
 			void mem_req_write(byte_8b data, int index); // sends a write memory request from CPU To MMEM. The ind is the offset from address 0x0
@@ -64,6 +65,7 @@ namespace priscas
 			sc_cpu(sc_cpu&);
 			sc_cpu operator=(sc_cpu&);
 			MIPS_32 isa;
+			InstCount comcount;
 	};
 }
 #endif
