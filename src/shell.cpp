@@ -31,7 +31,6 @@
 #include "mb.h"
 #include "mt_exception.h"
 #include "mtsstream.h"
-#include "interpret.h"
 #include "runtime_call.h"
 #include "shell.h"
 

@@ -82,9 +82,7 @@
     <ClCompile Include="..\src\cpu_time.cpp" />
     <ClCompile Include="..\src\debug_view_simple.cpp" />
     <ClCompile Include="..\src\env.cpp" />
-    <ClCompile Include="..\src\format_chk.cpp" />
     <ClCompile Include="..\src\hdd.cpp" />
-    <ClCompile Include="..\src\interpret.cpp" />
     <ClCompile Include="..\src\mem.cpp" />
     <ClCompile Include="..\src\messages.cpp" />
     <ClCompile Include="..\src\mips.cpp" />
@@ -96,13 +94,13 @@
     <ClCompile Include="..\src\reg_32.cpp" />
     <ClCompile Include="..\src\reg_pipeline.cpp" />
     <ClCompile Include="..\src\runtime_call.cpp" />
-    <ClCompile Include="..\src\sc_cpu.cpp" />
+    <ClCompile Include="..\src\mips32_sc_cpu.cpp" />
     <ClCompile Include="..\src\mb.cpp" />
     <ClCompile Include="..\src\mmem.cpp" />
     <ClCompile Include="..\src\shell.cpp" />
     <ClCompile Include="..\src\southbridge.cpp" />
     <ClCompile Include="..\src\streams.cpp" />
-    <ClCompile Include="..\src\superscalar.cpp" />
+    <ClCompile Include="..\src\mips32_ss_cpu.cpp" />
     <ClCompile Include="..\src\syms_table.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -118,9 +116,7 @@
     <ClInclude Include="..\include\debug_view_simple.h" />
     <ClInclude Include="..\include\dynamic.h" />
     <ClInclude Include="..\include\env.h" />
-    <ClInclude Include="..\include\format_chk.h" />
     <ClInclude Include="..\include\hdd.h" />
-    <ClInclude Include="..\include\interpret.h" />
     <ClInclude Include="..\include\io_device.h" />
     <ClInclude Include="..\include\ISA.h" />
     <ClInclude Include="..\include\mb.h" />
@@ -141,11 +137,11 @@
     <ClInclude Include="..\include\reg_32.h" />
     <ClInclude Include="..\include\reg_pipeline.h" />
     <ClInclude Include="..\include\runtime_call.h" />
-    <ClInclude Include="..\include\sc_cpu.h" />
+    <ClInclude Include="..\include\mips32_sc_cpu.h" />
     <ClInclude Include="..\include\shell.h" />
     <ClInclude Include="..\include\southbridge.h" />
     <ClInclude Include="..\include\streams.h" />
-    <ClInclude Include="..\include\superscalar.h" />
+    <ClInclude Include="..\include\mips32_ss_cpu.h" />
     <ClInclude Include="..\include\syms_table.h" />
   </ItemGroup>
   <ItemGroup>

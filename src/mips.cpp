@@ -22,7 +22,7 @@
 
 namespace priscas
 {
-	int friendly_to_numerical(const char * fr_name)
+	int MIPS_32::friendly_to_numerical(const char * fr_name)
 	{
 		int len = strlen(fr_name);
 		if(len < 2) return INVALID;
@@ -135,7 +135,7 @@ namespace priscas
 		return name;
 	}
 
-	bool r_inst(opcode operation)
+	bool MIPS_32::r_inst(opcode operation)
 	{
 		return
 		
@@ -143,7 +143,7 @@ namespace priscas
 			false ;
 	}
 
-	bool i_inst(opcode operation)
+	bool MIPS_32::i_inst(opcode operation)
 	{
 		return
 			operation == ADDI ? true :
@@ -170,42 +170,42 @@ namespace priscas
 			operation == SWL ? true : false ;
 	}
 
-	bool j_inst(opcode operation)
+	bool MIPS_32::j_inst(opcode operation)
 	{
 		return
 			operation == JUMP ? true :
 			operation == JAL ? true: false;
 	}
 
-	bool mem_inst(opcode operation)
+	bool MIPS_32::mem_inst(opcode operation)
 	{
 		return
 			(mem_write_inst(operation) || mem_read_inst(operation))?
 			true : false;
 	}
 
-	bool mem_write_inst(opcode operation)
+	bool MIPS_32::mem_write_inst(opcode operation)
 	{
 		return
 			(operation == SW || operation == SB || operation == SH )?
 			true : false;
 	}
 
-	bool mem_read_inst(opcode operation)
+	bool MIPS_32::mem_read_inst(opcode operation)
 	{
 		return
 			(operation == LW || operation == LBU || operation == LHU )?
 			true : false;
 	}
 
-	bool reg_write_inst(opcode operation, funct func)
+	bool MIPS_32::reg_write_inst(opcode operation, funct func)
 	{
 		return
 			(mem_read_inst(operation)) || (operation == R_FORMAT && func != JR) || (operation == ADDI) || (operation == ORI)
 			|| (operation == ANDI) || (operation == XORI) || (operation == SLTI) || (operation == SLTIU) || (operation == ADDIU) || (operation == JAL);
 	}
 
-	bool shift_inst(funct f)
+	bool MIPS_32::shift_inst(funct f)
 	{
 		return
 			f == SLL ? true :
@@ -213,7 +213,7 @@ namespace priscas
 			false;
 	}
 
-	bool jorb_inst(opcode operation, funct fcode)
+	bool MIPS_32::jorb_inst(opcode operation, funct fcode)
 	{
 		// First check jumps
 		bool is_jump = j_inst(operation);
@@ -229,7 +229,7 @@ namespace priscas
 		return is_jump || is_branch || is_jr;
 	}
 
-	BW_32 generic_mips32_encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op)
+	BW_32 MIPS_32::generic_mips32_encode(int rs, int rt, int rd, int funct, int imm_shamt_jaddr, opcode op)
 	{
 		BW_32 w = 0;
 
@@ -260,7 +260,7 @@ namespace priscas
 		return w;
 	}
 
-	BW_32 offset_to_address_br(BW_32 current, BW_32 target)
+	BW_32 MIPS_32::offset_to_address_br(BW_32 current, BW_32 target)
 	{
 		BW_32 ret = target.AsInt32() - current.AsInt32();
 		ret = ret.AsInt32() - 4;
@@ -268,7 +268,7 @@ namespace priscas
 		return ret;
 	}
 
-	void mips_decoding_unit_32::decode(	BW_32 inst,
+	void MIPS_32::mips_decoding_unit_32::decode(	BW_32 inst,
 										format& fm,
 										opcode& op,
 										int& rs,
@@ -306,5 +306,267 @@ namespace priscas
 		shamt = (shamt_mask & inst_word) >> 6;
 		imm = fm == I	? (imm_mask_i & inst_word) | (~(inst_word & (1 << 15)) + 1)
 						: (addr_mask & inst_word) | (~(inst_word & (1 << 25)) + 1); // make it signed
+	}
+
+		// Main interpretation routine
+	mBW MIPS_32::assemble(const Arg_Vec& args, const BW& baseAddress, syms_table& jump_syms) const
+	{
+		if(args.size() < 1)
+			return std::shared_ptr<BW>(new BW_32());
+
+		opcode current_op = SYS_RES;
+		funct f_code = NONE;
+
+		int rs = 0;
+		int rt = 0;
+		int rd = 0;
+		int imm = 0;
+
+		// Mnemonic resolution
+		
+		if("add" == args[0]) { current_op = R_FORMAT; f_code = ADD; }
+		else if("addiu" == args[0]) { current_op = ADDIU; }
+		else if("addu" == args[0]) { current_op = R_FORMAT; f_code = ADDU; }
+		else if("addi" == args[0]) { current_op = ADDI; }
+		else if("beq" == args[0]) { current_op = BEQ; }
+		else if("bne" == args[0]) { current_op = BNE; }
+		else if("sub" == args[0]) { current_op = R_FORMAT; f_code = SUB; }
+		else if("and" == args[0]) { current_op = R_FORMAT; f_code = AND; }
+		else if("andi" == args[0]) { current_op = ANDI; }
+		else if("or" == args[0]) { current_op = R_FORMAT; f_code = OR; }	
+		else if("ori" == args[0]) { current_op = ORI; }	
+		else if("nor" == args[0]) { current_op = R_FORMAT; f_code = NOR; }	
+		else if("xori" ==  args[0]) { current_op = XORI; }
+		else if("lbu" == args[0]) { current_op = LBU; }
+		else if("lhu" == args[0]) { current_op = LHU; }
+		else if("lw" == args[0]) { current_op = LW; }
+		else if("sb" == args[0]) { current_op = SB; }
+		else if("sh" == args[0]) { current_op = SH; }
+		else if("sw" == args[0]) { current_op = SW; }
+		else if("sll" == args[0]) { current_op = R_FORMAT; f_code = SLL; }
+		else if("srl" == args[0]) { current_op = R_FORMAT; f_code = SRL; }
+		else if("slt" == args[0]) { current_op = R_FORMAT; f_code = SLT; }	
+		else if("slti" == args[0]) { current_op = SLTI;}
+		else if("sltiu" == args[0]) { current_op = SLTIU; }	
+		else if("sltu" == args[0]) { current_op = R_FORMAT; f_code = SLTU; }
+		else if("subu" == args[0]) { current_op = R_FORMAT; f_code = SUBU; }
+		else if("j" == args[0]) { current_op = JUMP;}
+		else if("jal" == args[0]) { current_op = JAL;}	
+		else if("jr" == args[0]) { current_op = R_FORMAT; f_code = JR;}
+		else
+		{
+			throw mt_bad_mnemonic();
+		}
+
+		// Check for insufficient arguments
+		if(args.size() >= 1)
+		{
+			if	(
+					(r_inst(current_op) && args.size() != 4 && f_code != JR) ||
+					(r_inst(current_op) && args.size() != 2 && f_code == JR) ||
+					(i_inst(current_op) && args.size() != 4 && !mem_inst(current_op)) ||
+					(i_inst(current_op) && args.size() != 3 && mem_inst(current_op)) ||
+					(j_inst(current_op) && args.size() != 2)				
+				)
+			{
+				throw mt_asm_bad_arg_count();
+			}
+
+			// Now first argument parsing
+			if(r_inst(current_op))
+			{
+					if(f_code == JR)
+					{
+						if((rs = friendly_to_numerical(args[1].c_str())) <= INVALID)
+						rs = get_reg_num(args[1].c_str());
+					}
+
+					else
+					{
+						if((rd = friendly_to_numerical(args[1].c_str())) <= INVALID)
+						rd = get_reg_num(args[1].c_str());
+					}
+			}
+
+			else if(i_inst(current_op))
+			{
+				// later, check for branches
+				if((rt = friendly_to_numerical(args[1].c_str())) <= INVALID)
+				rt = get_reg_num(args[1].c_str());
+			}
+
+			else if(j_inst(current_op))
+			{
+				if(jump_syms.has(args[1]))
+				{
+					BW_32 label_PC = static_cast<int32_t>(jump_syms.lookup_from_sym(std::string(args[1].c_str())));
+					imm = (label_PC.AsInt32() >> 2);
+				}
+
+				else
+				{
+					imm = get_imm(args[1].c_str());
+				}
+			}
+	
+			else
+			{
+				mt_bad_mnemonic();
+			} 
+		}
+
+		// Second Argument Parsing
+		
+		if(args.size() > 2)
+		{
+			if(r_inst(current_op))
+			{
+				if (f_code != JR)
+				{
+					if((rs = friendly_to_numerical(args[2].c_str())) <= INVALID)
+						rs = get_reg_num(args[2].c_str());
+				}
+			}
+						
+			else if(i_inst(current_op))
+			{
+				if(mem_inst(current_op))
+				{
+					bool left_parenth = false; bool right_parenth = false;
+					std::string wc = args[2];
+					std::string imm_s = std::string();
+					std::string reg = std::string();
+
+					for(size_t i = 0; i < wc.length(); i++)
+					{
+						if(wc[i] == '(') { left_parenth = true; continue; }
+						if(wc[i] == ')') { right_parenth = true; continue; }
+
+						if(left_parenth)
+						{
+							reg.push_back(wc[i]);
+						}
+
+						else
+						{
+							imm_s.push_back(wc[i]);
+						}
+					}
+
+					if(!right_parenth || !left_parenth) throw mt_unmatched_parenthesis();
+					if((rs = friendly_to_numerical(reg.c_str())) <= INVALID) rs = get_reg_num(reg.c_str());
+					imm = get_imm(imm_s.c_str());
+								
+				}
+
+				else
+				{
+					// later, MUST check for branches
+					if((rs = friendly_to_numerical(args[2].c_str())) <= INVALID)
+					rs = get_reg_num(args[2].c_str());
+				}
+			}
+
+			else if(j_inst(current_op)){}
+		}
+
+		if(args.size() > 3)
+		{
+			// Third Argument Parsing
+			if(r_inst(current_op))
+			{
+				if(f_code != JR)
+				{
+					if(shift_inst(f_code))
+					{
+						imm = get_imm(args[3].c_str());
+					}
+
+					else
+					{	
+						if((rt = friendly_to_numerical(args[3].c_str())) <= INVALID)
+							rt = get_reg_num(args[3].c_str());
+					}
+				}
+			}
+						
+			else if(i_inst(current_op))
+			{
+
+				if(jump_syms.has(args[3]))
+				{
+					BW_32 addr = baseAddress.AsInt32();
+					BW_32 label_PC = static_cast<uint32_t>(jump_syms.lookup_from_sym(UPString(args[3].c_str())));
+					imm = offset_to_address_br(addr, label_PC).AsInt32();
+				}
+
+				else
+				{
+					imm = get_imm(args[3].c_str());
+				}
+			}
+
+			else if(j_inst(current_op)){}
+		}
+
+		// Pass the values of rs, rt, rd to the processor's encoding function
+		BW_32 inst = generic_mips32_encode(rs, rt, rd, f_code, imm, current_op);
+
+		return mBW(new BW_32(inst));
+	}
+
+		// Returns register number corresponding with argument if any
+	// Returns -1 if invalid or out of range
+	int MIPS_32::get_reg_num(const char * reg_str)
+	{
+		std::vector<char> numbers;
+		int len = strlen(reg_str);
+		if(len <= 1) throw priscas::mt_bad_imm();
+		if(reg_str[0] != '$') throw priscas::mt_parse_unexpected("$", reg_str);
+		for(int i = 1; i < len; i++)
+		{
+			if(reg_str[i] >= '0' && reg_str[i] <= '9')
+			{
+				numbers.push_back(reg_str[i]);
+			}
+
+			else throw priscas::mt_bad_reg_format();
+		}
+
+		int num = -1;
+
+		if(numbers.empty()) throw priscas::mt_bad_reg_format();
+		else
+		{
+			char * num_str = new char[numbers.size()];
+
+			int k = 0;
+			for(std::vector<char>::iterator itr = numbers.begin(); itr < numbers.end(); itr++)
+			{
+				num_str[k] = *itr;
+				k++;
+			}
+			num = atoi(num_str);
+			delete[] num_str;
+		}
+
+		return num;
+	}
+
+	// Returns immediate value if valid
+	int MIPS_32::get_imm(const char * str)
+	{
+		int len = strlen(str);
+		
+		for(int i = 0; i < len; i++)
+		{
+			if(str[i] < '0' || str[i] > '9')
+			{
+				if(i == 0 && str[i] != '-')
+					throw priscas::mt_bad_imm();
+			}
+		}
+
+		return atoi(str);
 	}
 }

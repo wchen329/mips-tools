@@ -18,14 +18,14 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include "sc_cpu.h"
+#include "mips32_sc_cpu.h"
 
 namespace priscas
 {
 
 	bool mips32_sc_cpu::cycle()
 	{
-		format fm;
+		MIPS_32::format fm;
 		
 		// Fetch
 		
@@ -43,14 +43,14 @@ namespace priscas
 
 		// Decode
 
-		opcode op; 
+		MIPS_32::opcode op; 
 		int rs; 
 		int rt;
 		int rd;
-		funct func;
+		MIPS_32::funct func;
 		int32_t shamt;
 		int32_t imm;
-		mips_decoding_unit_32 decoding_unit;
+		MIPS_32::mips_decoding_unit_32 decoding_unit;
 		decoding_unit.decode(	inst_word,
 								fm,
 								op,
@@ -71,56 +71,56 @@ namespace priscas
 		// find correct format based on opcode
 		switch(fm)
 		{
-			case R:
+			case MIPS_32::R:
 				
 				// Eventually replace these with template functions
 				switch(func)
 				{
-					case ADD:
+					case MIPS_32::ADD:
 						reg_wdata = (this->registers[rs].get_data().AsInt32() + this->registers[rt].get_data().AsInt32());
 						r_write = rd;
 						break;
-					case ADDU:
+					case MIPS_32::ADDU:
 						reg_wdata = (this->registers[rs].get_data().AsUInt32() + this->registers[rt].get_data().AsUInt32());
 						r_write = rd;
 						break;
-					case JR:
+					case MIPS_32::JR:
 						this->pc.set_data(this->registers[rs].get_data().AsInt32());
 						break;
-					case OR:
+					case MIPS_32::OR:
 						reg_wdata = (this->registers[rs] | this->registers[rt]).get_data().AsInt32();
 						r_write = rd;
 						break;
-					case NOR:
+					case MIPS_32::NOR:
 						reg_wdata = ~(this->registers[rs] | this->registers[rt]).get_data().AsInt32();
 						r_write = rd;
 						break;
-					case AND: 
+					case MIPS_32::AND: 
 						reg_wdata = (this->registers[rs] & this->registers[rt]).get_data().AsInt32();
 						r_write = rd;
 						break;
-					case SLL:
+					case MIPS_32::SLL:
 						reg_wdata = this->registers[rs].get_data().AsInt32() << shamt;
 						r_write = rd;
 						break;
-					case SRL:
+					case MIPS_32::SRL:
 						reg_wdata = this->registers[rs].get_data().AsInt32() >> shamt;
 						reg_wdata = (reg_wdata.AsInt32() & ((1 << (32 - shamt)) - 1)); // make it a logical shift
 						r_write = rd;
 						break;
-					case SLT:
+					case MIPS_32::SLT:
 						reg_wdata = this->registers[rs].get_data().AsInt32() < this->registers[rt].get_data().AsInt32() ? 1 : 0;
 						r_write = rd;
 						break;
-					case SLTU:
+					case MIPS_32::SLTU:
 						reg_wdata = this->registers[rs].get_data().AsUInt32() < this->registers[rt].get_data().AsUInt32() ? 1 : 0;
 						r_write = rd;
 						break;
-					case SUB:
+					case MIPS_32::SUB:
 						reg_wdata = (this->registers[rs].get_data().AsInt32() - this->registers[rt].get_data().AsInt32());
 						r_write = rd;
 						break;
-					case SUBU:
+					case MIPS_32::SUBU:
 						reg_wdata = (this->registers[rs].get_data().AsUInt32() - this->registers[rt].get_data().AsUInt32());
 						r_write = rd;
 						break;
@@ -128,18 +128,18 @@ namespace priscas
 
 				break;
 				
-			case I:
+			case MIPS_32::I:
 				switch(op)
 				{
-					case ADDI:
+					case MIPS_32::ADDI:
 						reg_wdata = this->registers[rs].get_data().AsInt32() + imm;
 						r_write = rt;
 						break;
-					case ADDIU:
+					case MIPS_32::ADDIU:
 						reg_wdata = this->registers[rs].get_data().AsUInt32() + static_cast<unsigned int>(imm);
 						r_write = rt;
 						break;
-					case BEQ:
+					case MIPS_32::BEQ:
 						reg_we = false;
 						if(this->registers[rs].get_data().AsInt32() == this->registers[rt].get_data().AsInt32())
 						{
@@ -148,7 +148,7 @@ namespace priscas
 						}
 
 						break;
-					case BNE:
+					case MIPS_32::BNE:
 						reg_we = false;
 						if(this->registers[rs].get_data().AsInt32() != this->registers[rt].get_data().AsInt32())
 						{
@@ -156,19 +156,19 @@ namespace priscas
 							this->pc.set_data(curr_pc.AsInt32() + branch_addr.AsInt32());
 						}
 						break;
-					case ORI:
+					case MIPS_32::ORI:
 						reg_wdata = this->registers[rs].get_data().AsInt32() | imm;
 						r_write = rt;
 						break;
-					case ANDI:
+					case MIPS_32::ANDI:
 						reg_wdata = this->registers[rs].get_data().AsInt32() & imm;
 						r_write = rt;
 						break;
-					case XORI:
+					case MIPS_32::XORI:
 						reg_wdata = this->registers[rs].get_data().AsInt32() ^ imm;
 						r_write = rt;
 						break;
-					case LBU:
+					case MIPS_32::LBU:
 						{
 						byte_8b l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
 						BW_32 load_write = 0;
@@ -177,7 +177,7 @@ namespace priscas
 						r_write = rt;
 						}
 						break;
-					case LHU:
+					case MIPS_32::LHU:
 						{
 						byte_8b l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
 						byte_8b l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 1);
@@ -188,7 +188,7 @@ namespace priscas
 						r_write = rt;
 						}
 						break;
-					case LW:
+					case MIPS_32::LW:
 						{
 						byte_8b l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
 						byte_8b l_word_p_2 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32() + 1);
@@ -203,22 +203,22 @@ namespace priscas
 						r_write = rt;
 						}
 						break;
-					case SB:
+					case MIPS_32::SB:
 						{
 						char s_word_p_1 = (this->registers[rt].get_data().AsInt32() & ((1 << 8) - 1));
 						this->mem_req_write(s_word_p_1, this->registers[rs].get_data().AsInt32() + imm);
 						reg_we = false;
 						}
 						break;
-					case SLTI:
+					case MIPS_32::SLTI:
 						reg_wdata = this->registers[rs].get_data().AsInt32() < imm ? 1 : 0;
 						r_write = rt;
 						break;
-					case SLTIU:
+					case MIPS_32::SLTIU:
 						reg_wdata = this->registers[rs].get_data().AsUInt32() < static_cast<uint32_t>(imm) ? 1 : 0;
 						r_write = rt;
 						break;
-					case SH:
+					case MIPS_32::SH:
 						{
 						byte_8b s_word_p_1 = (this->registers[rt].get_data().AsInt32() & ((1 << 8) - 1));
 						byte_8b s_word_p_2 = ((this->registers[rt].get_data().AsInt32() >> 8) & ((1 << 8) - 1));
@@ -227,7 +227,7 @@ namespace priscas
 						reg_we = false;
 						}
 						break;
-					case SW:
+					case MIPS_32::SW:
 						{
 						byte_8b s_word_p_1 = (this->registers[rt].get_data().AsInt32() & ((1 << 8) - 1));
 						byte_8b s_word_p_2 = ((this->registers[rt].get_data().AsInt32() >> 8) & ((1 << 8) - 1) );
@@ -243,16 +243,16 @@ namespace priscas
 				}
 				break;
 
-				case J:
+				case MIPS_32::J:
 				{
 					int32_t jump_mask = ~((1 << 28) - 1);
 
 					switch(op)
 					{
-						case JUMP:
+						case MIPS_32::JUMP:
 							pc.set_data((pc.get_data().AsInt32() & jump_mask) | (imm << 2));
 							break;
-						case JAL:
+						case MIPS_32::JAL:
 							this->registers[31].set_data(pc.get_data().AsInt32() + 4); // Add 4, since it has already been incremented once
 							pc.set_data((pc.get_data().AsInt32() & jump_mask) | (imm << 2));
 							break;

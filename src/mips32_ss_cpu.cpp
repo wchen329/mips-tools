@@ -18,7 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include "superscalar.h"
+#include "mips32_ss_cpu.h"
 
 namespace priscas
 {

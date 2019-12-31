@@ -33,10 +33,10 @@ namespace priscas
 		public:
 			void load(	BW_32 data_rs,
 						BW_32 data_rt,
-						funct func,
+						MIPS_32::funct func,
 						BW_32 shamt,
 						BW_32 imm,
-						opcode op,
+						MIPS_32::opcode op,
 						bool regWE,
 						bool memWE,
 						bool memRE,
@@ -45,10 +45,10 @@ namespace priscas
 						int rd );
 			void get(	BW_32& data_rs,
 						BW_32& data_rt,
-						funct& func,
+						MIPS_32::funct& func,
 						BW_32& shamt,
 						BW_32& imm,
-						opcode& op,
+						MIPS_32::opcode& op,
 						bool& regWE,
 						bool& memWE,
 						bool& memRE,
@@ -58,10 +58,10 @@ namespace priscas
 		private:
 			BW_32 data_rs;
 			BW_32 data_rt;
-			funct func;
+			MIPS_32::funct func;
 			BW_32 shamt;
 			BW_32 imm;
-			opcode op;
+			MIPS_32::opcode op;
 			bool regWE;
 			bool memWE;
 			bool memRE;
@@ -79,7 +79,7 @@ namespace priscas
 			void load(	BW_32 data_ALU,
 						BW_32 data_rs,
 						BW_32 data_rt,
-						opcode op,
+						MIPS_32::opcode op,
 						bool regWE,
 						bool memWE,
 						bool memRE,
@@ -89,7 +89,7 @@ namespace priscas
 			void get(	BW_32& data_ALU,
 						BW_32& data_rs,
 						BW_32& data_rt,
-						opcode& op,
+						MIPS_32::opcode& op,
 						bool& regWE,
 						bool& memWE,
 						bool& memRE,
@@ -100,7 +100,7 @@ namespace priscas
 			BW_32 data_ALU;
 			BW_32 data_rs;
 			BW_32 data_rt;
-			opcode op;
+			MIPS_32::opcode op;
 			bool regWE;
 			bool memWE;
 			bool memRE;

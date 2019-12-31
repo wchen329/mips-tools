@@ -26,7 +26,7 @@
 #include "priscas_global.h"
 #include "reg_32.h"
 #include "reg_pipeline.h"
-#include "sc_cpu.h"
+#include "mips32_sc_cpu.h"
 #include "streams.h"
 namespace priscas
 {

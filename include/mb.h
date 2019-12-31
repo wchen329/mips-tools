@@ -29,9 +29,9 @@
 #include "priscas_global.h"
 #include "cpu_time.h"
 #include "pipeline.h"
-#include "sc_cpu.h"
+#include "mips32_sc_cpu.h"
+#include "mips32_ss_cpu.h"
 #include "southbridge.h"
-#include "superscalar.h"
 
 namespace priscas
 {
