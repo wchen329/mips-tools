@@ -276,20 +276,20 @@ namespace priscas
 	 */
 	BW_32 offset_to_address_br(BW_32 current, BW_32 target);
 
-	/* MIPS_32 ISA
+	/* MIPS32 ISA Specification
 	 *
 	 */
 	class MIPS_32 : public ISA
 	{
 		
 		public:
-			unsigned get_reg_count() { return REG_COUNT; }
-			virtual unsigned get_address_bit_width() { return PC_BIT_WIDTH; }
-			virtual std::string get_reg_name(int id);
-			virtual int get_reg_id(std::string& fr) { return friendly_to_numerical(fr.c_str()); }
-			virtual int get_register_bit_width(int id) { return UNIVERSAL_REG_BW; }
-			virtual ISA_Attrib::addrmode get_addressing_mode() { return ISA_Attrib::ADDR_BYTE; }
-			virtual ISA_Attrib::endian get_endian() { return ISA_Attrib::CPU_LITTLE_ENDIAN; }
+			unsigned get_reg_count() const{ return REG_COUNT; }
+			virtual unsigned get_address_bit_width() const { return PC_BIT_WIDTH; }
+			virtual std::string get_reg_name(int id) const;
+			virtual int get_reg_id(const UPString& fr) const { return friendly_to_numerical(fr.c_str()); }
+			virtual int get_register_bit_width(int id) const { return UNIVERSAL_REG_BW; }
+			virtual ISA_Attrib::addrmode get_addressing_mode() const { return ISA_Attrib::ADDR_BYTE; }
+			virtual ISA_Attrib::endian get_endian() const { return ISA_Attrib::CPU_LITTLE_ENDIAN; }
 			virtual mBW assemble(const Arg_Vec& args, const BW& baseAddress, syms_table& jump_syms) const;
 		private:
 			static const unsigned REG_COUNT = 32;

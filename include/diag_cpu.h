@@ -40,7 +40,7 @@ namespace priscas
 				 * IMPLEMENTATION: returns the data at the register specified
 				 */
 				virtual BW_32& get_reg_data(int index) = 0;
-				
+
 				/* get_PC()
 				 * IMPLEMENTATION: return the value of the PC
 				 */

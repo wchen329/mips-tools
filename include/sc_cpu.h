@@ -44,7 +44,7 @@ namespace priscas
 			BW_32& get_PC() { return this->pc.get_data(); }
 			long get_clk_T() { return this -> clk_T ; }
 			sc_cpu(mmem & m) : mm(m), clk_T(200000), comcount(0), name("MIPS-32 Single Cylce") {  }
-			ISA& get_ISA() { return this->isa; }
+			const ISA& get_ISA() { return this->isa; }
 			virtual CPU_ControlPanel& get_CPU_options() { return this->cp; }
 
 			virtual std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }

@@ -434,8 +434,9 @@ namespace priscas
 	{
 				Arg_Vec asm_args = chop_string(ains);
 				diag_cpu & dcpu = dynamic_cast<diag_cpu&>(target.get_cpu());
-				ISA& dcpuisa = dcpu.get_ISA();
+				const ISA& dcpuisa = dcpu.get_ISA();
 				mBW inst;
+
 				try
 				{
 					inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);

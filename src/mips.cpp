@@ -91,9 +91,9 @@ namespace priscas
 		return reg_val;
 	}
 
-	std::string MIPS_32::get_reg_name(int id)
+	UPString MIPS_32::get_reg_name(int id) const
 	{
-		std::string name =
+		UPString name =
 			id == 0 ? "$zero" :
 			id == 1 ? "$at" :
 			id == 2 ? "$v0" :

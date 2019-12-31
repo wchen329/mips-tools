@@ -66,10 +66,11 @@ namespace priscas
 			/* get_ISA()
 			 * IMPLEMENTATION: Retrieve a reference to the ISA which the processor
 			 * implements
+			 * The ISA is read only.
 			 * Return:	ISA reference
 			 *			reference to processors ISA
 			 */
-			virtual ISA& get_ISA() = 0;
+			virtual const ISA& get_ISA() = 0;
 
 			virtual ~cpu(){};
 	};

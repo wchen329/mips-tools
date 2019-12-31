@@ -29,8 +29,8 @@ namespace priscas
 		if(args.size() < 1)
 			return std::shared_ptr<BW>(new BW_32());
 
-		priscas::opcode current_op = priscas::SYS_RES;
-		priscas::funct f_code = priscas::NONE;
+		opcode current_op = SYS_RES;
+		funct f_code = NONE;
 
 		int rs = 0;
 		int rt = 0;
@@ -39,35 +39,35 @@ namespace priscas
 
 		// Mnemonic resolution
 		
-		if("add" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::ADD; }
-		else if("addiu" == args[0]) { current_op = priscas::ADDIU; }
-		else if("addu" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::ADDU; }
-		else if("addi" == args[0]) { current_op = priscas::ADDI; }
-		else if("beq" == args[0]) { current_op = priscas::BEQ; }
-		else if("bne" == args[0]) { current_op = priscas::BNE; }
-		else if("sub" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::SUB; }
-		else if("and" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::AND; }
-		else if("andi" == args[0]) { current_op = priscas::ANDI; }
-		else if("or" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::OR; }	
-		else if("ori" == args[0]) { current_op = priscas::ORI; }	
-		else if("nor" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::NOR; }	
-		else if("xori" ==  args[0]) { current_op = priscas::XORI; }
-		else if("lbu" == args[0]) { current_op = priscas::LBU; }
-		else if("lhu" == args[0]) { current_op = priscas::LHU; }
-		else if("lw" == args[0]) { current_op = priscas::LW; }
-		else if("sb" == args[0]) { current_op = priscas::SB; }
-		else if("sh" == args[0]) { current_op = priscas::SH; }
-		else if("sw" == args[0]) { current_op = priscas::SW; }
-		else if("sll" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::SLL; }
-		else if("srl" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::SRL; }
-		else if("slt" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::SLT; }	
-		else if("slti" == args[0]) { current_op = priscas::SLTI;}
-		else if("sltiu" == args[0]) { current_op = priscas::SLTIU; }	
-		else if("sltu" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::SLTU; }
-		else if("subu" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::SUBU; }
-		else if("j" == args[0]) { current_op = priscas::JUMP;}
-		else if("jal" == args[0]) { current_op = priscas::JAL;}	
-		else if("jr" == args[0]) { current_op = priscas::R_FORMAT; f_code = priscas::JR;}
+		if("add" == args[0]) { current_op = R_FORMAT; f_code = ADD; }
+		else if("addiu" == args[0]) { current_op = ADDIU; }
+		else if("addu" == args[0]) { current_op = R_FORMAT; f_code = ADDU; }
+		else if("addi" == args[0]) { current_op = ADDI; }
+		else if("beq" == args[0]) { current_op = BEQ; }
+		else if("bne" == args[0]) { current_op = BNE; }
+		else if("sub" == args[0]) { current_op = R_FORMAT; f_code = SUB; }
+		else if("and" == args[0]) { current_op = R_FORMAT; f_code = AND; }
+		else if("andi" == args[0]) { current_op = ANDI; }
+		else if("or" == args[0]) { current_op = R_FORMAT; f_code = OR; }	
+		else if("ori" == args[0]) { current_op = ORI; }	
+		else if("nor" == args[0]) { current_op = R_FORMAT; f_code = NOR; }	
+		else if("xori" ==  args[0]) { current_op = XORI; }
+		else if("lbu" == args[0]) { current_op = LBU; }
+		else if("lhu" == args[0]) { current_op = LHU; }
+		else if("lw" == args[0]) { current_op = LW; }
+		else if("sb" == args[0]) { current_op = SB; }
+		else if("sh" == args[0]) { current_op = SH; }
+		else if("sw" == args[0]) { current_op = SW; }
+		else if("sll" == args[0]) { current_op = R_FORMAT; f_code = SLL; }
+		else if("srl" == args[0]) { current_op = R_FORMAT; f_code = SRL; }
+		else if("slt" == args[0]) { current_op = R_FORMAT; f_code = SLT; }	
+		else if("slti" == args[0]) { current_op = SLTI;}
+		else if("sltiu" == args[0]) { current_op = SLTIU; }	
+		else if("sltu" == args[0]) { current_op = R_FORMAT; f_code = SLTU; }
+		else if("subu" == args[0]) { current_op = R_FORMAT; f_code = SUBU; }
+		else if("j" == args[0]) { current_op = JUMP;}
+		else if("jal" == args[0]) { current_op = JAL;}	
+		else if("jr" == args[0]) { current_op = R_FORMAT; f_code = JR;}
 		else
 		{
 			throw mt_bad_mnemonic();
@@ -77,56 +77,56 @@ namespace priscas
 		if(args.size() >= 1)
 		{
 			if	(
-					(r_inst(current_op) && args.size() != 4 && f_code != priscas::JR) ||
-					(r_inst(current_op) && args.size() != 2 && f_code == priscas::JR) ||
+					(r_inst(current_op) && args.size() != 4 && f_code != JR) ||
+					(r_inst(current_op) && args.size() != 2 && f_code == JR) ||
 					(i_inst(current_op) && args.size() != 4 && !mem_inst(current_op)) ||
 					(i_inst(current_op) && args.size() != 3 && mem_inst(current_op)) ||
 					(j_inst(current_op) && args.size() != 2)				
 				)
 			{
-				throw priscas::mt_asm_bad_arg_count();
+				throw mt_asm_bad_arg_count();
 			}
 
 			// Now first argument parsing
 			if(r_inst(current_op))
 			{
-					if(f_code == priscas::JR)
+					if(f_code == JR)
 					{
-						if((rs = priscas::friendly_to_numerical(args[1].c_str())) <= priscas::INVALID)
-						rs = priscas::get_reg_num(args[1].c_str());
+						if((rs = friendly_to_numerical(args[1].c_str())) <= INVALID)
+						rs = get_reg_num(args[1].c_str());
 					}
 
 					else
 					{
-						if((rd = priscas::friendly_to_numerical(args[1].c_str())) <= priscas::INVALID)
-						rd = priscas::get_reg_num(args[1].c_str());
+						if((rd = friendly_to_numerical(args[1].c_str())) <= INVALID)
+						rd = get_reg_num(args[1].c_str());
 					}
 			}
 
 			else if(i_inst(current_op))
 			{
 				// later, check for branches
-				if((rt = priscas::friendly_to_numerical(args[1].c_str())) <= priscas::INVALID)
-				rt = priscas::get_reg_num(args[1].c_str());
+				if((rt = friendly_to_numerical(args[1].c_str())) <= INVALID)
+				rt = get_reg_num(args[1].c_str());
 			}
 
 			else if(j_inst(current_op))
 			{
 				if(jump_syms.has(args[1]))
 				{
-					priscas::BW_32 label_PC = static_cast<int32_t>(jump_syms.lookup_from_sym(std::string(args[1].c_str())));
+					BW_32 label_PC = static_cast<int32_t>(jump_syms.lookup_from_sym(std::string(args[1].c_str())));
 					imm = (label_PC.AsInt32() >> 2);
 				}
 
 				else
 				{
-					imm = priscas::get_imm(args[1].c_str());
+					imm = get_imm(args[1].c_str());
 				}
 			}
 	
 			else
 			{
-				priscas::mt_bad_mnemonic();
+				mt_bad_mnemonic();
 			} 
 		}
 
@@ -136,10 +136,10 @@ namespace priscas
 		{
 			if(r_inst(current_op))
 			{
-				if (f_code != priscas::JR)
+				if (f_code != JR)
 				{
-					if((rs = priscas::friendly_to_numerical(args[2].c_str())) <= priscas::INVALID)
-						rs = priscas::get_reg_num(args[2].c_str());
+					if((rs = friendly_to_numerical(args[2].c_str())) <= INVALID)
+						rs = get_reg_num(args[2].c_str());
 				}
 			}
 						
@@ -169,16 +169,16 @@ namespace priscas
 					}
 
 					if(!right_parenth || !left_parenth) throw mt_unmatched_parenthesis();
-					if((rs = priscas::friendly_to_numerical(reg.c_str())) <= priscas::INVALID) rs = priscas::get_reg_num(reg.c_str());
-					imm = priscas::get_imm(imm_s.c_str());
+					if((rs = friendly_to_numerical(reg.c_str())) <= INVALID) rs = get_reg_num(reg.c_str());
+					imm = get_imm(imm_s.c_str());
 								
 				}
 
 				else
 				{
 					// later, MUST check for branches
-					if((rs = priscas::friendly_to_numerical(args[2].c_str())) <= priscas::INVALID)
-					rs = priscas::get_reg_num(args[2].c_str());
+					if((rs = friendly_to_numerical(args[2].c_str())) <= INVALID)
+					rs = get_reg_num(args[2].c_str());
 				}
 			}
 
@@ -190,17 +190,17 @@ namespace priscas
 			// Third Argument Parsing
 			if(r_inst(current_op))
 			{
-				if(f_code != priscas::JR)
+				if(f_code != JR)
 				{
 					if(shift_inst(f_code))
 					{
-						imm = priscas::get_imm(args[3].c_str());
+						imm = get_imm(args[3].c_str());
 					}
 
 					else
 					{	
-						if((rt = priscas::friendly_to_numerical(args[3].c_str())) <= priscas::INVALID)
-							rt = priscas::get_reg_num(args[3].c_str());
+						if((rt = friendly_to_numerical(args[3].c_str())) <= INVALID)
+							rt = get_reg_num(args[3].c_str());
 					}
 				}
 			}
@@ -210,14 +210,14 @@ namespace priscas
 
 				if(jump_syms.has(args[3]))
 				{
-					priscas::BW_32 addr = baseAddress.AsInt32();
-					priscas::BW_32 label_PC = static_cast<uint32_t>(jump_syms.lookup_from_sym(std::string(args[3].c_str())));
-					imm = priscas::offset_to_address_br(addr, label_PC).AsInt32();
+					BW_32 addr = baseAddress.AsInt32();
+					BW_32 label_PC = static_cast<uint32_t>(jump_syms.lookup_from_sym(UPString(args[3].c_str())));
+					imm = offset_to_address_br(addr, label_PC).AsInt32();
 				}
 
 				else
 				{
-					imm = priscas::get_imm(args[3].c_str());
+					imm = get_imm(args[3].c_str());
 				}
 			}
 
@@ -227,6 +227,6 @@ namespace priscas
 		// Pass the values of rs, rt, rd to the processor's encoding function
 		BW_32 inst = generic_mips32_encode(rs, rt, rd, f_code, imm, current_op);
 
-		return std::shared_ptr<BW>(new BW_32(inst));
+		return mBW(new BW_32(inst));
 	}
 }

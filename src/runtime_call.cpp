@@ -429,12 +429,12 @@ namespace priscas
 		
 		inst.WriteToOutput("[Register State Information]\n");
 
-		priscas::mb& cmp = inst.GetMotherboard();
-		priscas::diag_cpu& dcpu = dynamic_cast<priscas::diag_cpu&>(cmp.get_cpu());
+		mb& cmp = inst.GetMotherboard();
+		diag_cpu& dcpu = dynamic_cast<priscas::diag_cpu&>(cmp.get_cpu());
 		int reg_count = dcpu.get_ISA().get_reg_count();
-		priscas::BW_32 pc_val = dcpu.get_PC();
+		BW_32 pc_val = dcpu.get_PC();
 		
-		priscas::ISA& isa = dcpu.get_ISA();
+		const ISA& isa = dcpu.get_ISA();
 		
 		// No args specified print out every register
 		if(args.size() <= 1)
