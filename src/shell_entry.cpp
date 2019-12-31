@@ -23,25 +23,34 @@
 #include <vector>
 #include "priscas_core.h"
 
-priscas::Shell runtime;
-
 void break_machine(int arg);
 
-/* Main routine for Shell
- * 
+priscas::Shell runtime; // Simulator Runtime
+
+/* Main routine for running
+ * the pRISCas Shell directly.
  */
 int main(int argc, char ** argv)
 {
-	std::vector<std::string> args;
+	using namespace priscas;
 
+	Arg_Vec args; // Arguments to Simulator Runtime
+
+	// Simple pass each argument as an argument to the shell.
 	for(int carg = 0; carg < argc; carg++)
 	{
-		args.push_back(std::string(argv[carg]));
+		args.push_back(UPString(argv[carg]));
 	}
 
+	// Set arguments to the ones just built from the passed in argv
 	runtime.SetArgs(args);
+
+	// Allow for breaking out of .run (bugged TODO: fix)
 	signal(SIGINT, break_machine);
+
+	// Start the simulation
 	runtime.Run();
+
 	return 0;
 }
 
@@ -51,5 +60,5 @@ int main(int argc, char ** argv)
 void break_machine(int arg)
 {
 	runtime.modeset_Interactive();
-	signal(SIGINT, break_machine);
+	signal(SIGINT, break_machine); // This has a strange bug in Windows. TODO: fix
 }

@@ -63,7 +63,7 @@ namespace priscas
 		// Set shell environment
 		this->shEnv.characterize_Env(args);
 
-		// Asm unput was specified
+		// Asm input was specified
 		if(shEnv.get_Option_AsmInput())
 		{
 
@@ -108,51 +108,56 @@ namespace priscas
 		}
 
 		// Set CPU Type
-		cpu_t cp = priscas::STANDARD;
+		cpu_t cp = STANDARD;
 
 		if(!shEnv.get_cpuStrings().empty())
 		{
 			cp = static_cast<cpu_t>(atoi(shEnv.get_cpuStrings()[0].c_str()));
 		}
 
-		WriteToOutput(("CPU Type: "));
+		WriteToOutput("CPU Type: ");
 		switch(cp)
 		{
-			case priscas::STANDARD:
-				WriteToOutput(("Single Cycle\n"));
+			case STANDARD:
+				WriteToOutput("Single Cycle\n");
 				break;
-			case priscas::FIVE_P:
-				WriteToOutput(("Five Stage Pipeline\n"));
+			case FIVE_P:
+				WriteToOutput("Five Stage Pipeline\n");
 				break;
 			default:
-				WriteToOutput(("Invalid CPU type detected. Exiting...\n"));
+				WriteToOutput("Invalid CPU type detected. Exiting...\n");
 				return;
 		}
 
-		this->motherboard = new priscas::mb(cp, shEnv.get_memBitwidth());
+		this->motherboard = new mb(cp, shEnv.get_memBitwidth());
 		motherboard->reset();
-		priscas::mb * MB_IN_PTR = motherboard;
+		mb* MB_IN_PTR = motherboard;
 
 		if(!isQuiet)
 		{
-			std::string msg = 
-			(std::string( "Main Memory size: " + priscas_io::StrTypes::SizeToStr(motherboard->get_mmem_size()) + " bytes\n"));
+			UPString msg = UPString( "Main Memory size: " + priscas_io::StrTypes::SizeToStr(motherboard->get_mmem_size()) + " bytes\n");
 			WriteToOutput(msg);
 		}
 
 		/* Actual Execution Portion
+		 * This is a "double-pass" assembler
+		 * First run through: read symbols and map them with a symbol table
+		 * Second run through: do the actual assembling
 		 */
 
 
 		/* First, if an input file was specified
 		 * (1) collect file symbols
 		 * (2) map it to memory assemble that file first
+		 *
 		 */
 		if(shEnv.get_Option_AsmInputSpecified())
 		{
-			std::vector<std::string> lines;
 
+			UPString_Vec lines;
 			uint32_t equiv_pc = 0;
+			BW_32 asm_pc = 0;
+
 			char input_f_stream[255];
 			memset(input_f_stream, 0, sizeof(input_f_stream));
 			unsigned long line_number = 0;
@@ -161,8 +166,8 @@ namespace priscas
 				while(fgets(input_f_stream, 254, inst_file) != NULL)
 				{
 					line_number++;
-					std::string current_line = std::string(input_f_stream);
-					std::vector<std::string> parts = chop_string(current_line);
+					UPString current_line = UPString(input_f_stream);
+					Arg_Vec parts = chop_string(current_line);
 	
 					// Remove strings that are just whitespace
 					if(parts.empty())
@@ -189,7 +194,7 @@ namespace priscas
 					lines.push_back(current_line);		
 				}
 			}
-			catch(priscas::mt_exception& e)
+			catch(mt_exception& e)
 			{
 				WriteToOutput("An error has occurred when writing debugging symbols and assigning directives:\n\t");
 				WriteToOutput(e.get_err().c_str());
@@ -203,43 +208,18 @@ namespace priscas
 				this->queued_prog_breakpoints.pop();
 			}
 
-			priscas::BW_32 asm_pc = 0;
-
 			// Now assemble the rest
 			for(size_t itr = 0; itr < lines.size(); itr++)
 			{
-				std::vector<std::string> asm_args = chop_string(lines[itr]);
-				priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(motherboard->get_cpu());
-				priscas::ISA& dcpuisa = dcpu.get_ISA();
-				std::shared_ptr<priscas::BW> inst;
-				try
+				if(!this->AsmFlash(lines[itr], *motherboard, asm_pc))
 				{
-					inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
-				}
-
-				catch(priscas::mt_exception& e)
-				{
-					WriteToError(("An error occurred while assembling the program.\n"));
-					std::string msg_1 = 
-						(std::string("Error information: ") + std::string(e.get_err()));
-					WriteToError(msg_1);
-					WriteToError(("Line of error:\n"));
-					std::string msg_2 = 
-						(std::string("\t") + lines[itr] + std::string("\n"));
-					WriteToError(msg_2);
 					return;
 				}
 
-				priscas::BW_32& thirty_two = dynamic_cast<priscas::BW_32&>(*inst);
-				motherboard->DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
-				motherboard->DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
-				motherboard->DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
-				motherboard->DMA_write(thirty_two.b_3(), asm_pc.AsUInt32() + 3);
+				// Increment the PC at which to flash
 				asm_pc.AsUInt32() += 4;
 			}
 			
-			
-			// this->state = SLEEPING;
 		}
 
 		inst_file = stdin;
@@ -261,21 +241,21 @@ namespace priscas
 
 			if(shEnv.get_Mode() == Env::INTERACTIVE)
 			{
-				WriteToOutput((">> "));
+				WriteToOutput(">> ");
 
-				priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(motherboard->get_cpu());
-				std::string& val = this->ReadFromInput();
-			
+				diag_cpu & dcpu = dynamic_cast<diag_cpu&>(motherboard->get_cpu());
+				const UPString& val = this->ReadFromInput();
+
 				if(val.size() == 0)
 				{
 					continue;
 				}
 
-				if(val[0] == '.')
+				else if(val[0] == '.')
 				{
 					try
 					{
-						std::vector<std::string> chopped = chop_string(val);
+						UPString_Vec chopped = chop_string(val);
 						execute_runtime_directive(chopped);
 					}
 					catch(priscas::mt_exception & e)
@@ -283,50 +263,33 @@ namespace priscas
 						WriteToError(e.get_err());
 					}
 
-					continue;
 				}
-
-				std::vector<std::string> asm_args = chop_string(val);
-				priscas::ISA & dcpuisa = dcpu.get_ISA();
-				priscas::BW_32 asm_pc = dcpu.get_PC();
-				std::shared_ptr<priscas::BW> inst;
-			
-				try
+				
+				else
 				{
-					inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
+					priscas::BW_32 asm_pc = dcpu.get_PC();
+					this->AsmFlash(val, *motherboard, asm_pc); 
+				
+					motherboard->step();
 				}
-
-				catch(priscas::mt_exception& e)
-				{
-					WriteToError(("An error occurred while assembling the inputted instruction.\n"));
-					std::string msg = (std::string("Error information: ") + std::string(e.get_err()));
-					WriteToError(msg);
-					WriteToError(priscas_io::newLine.c_str());
-
-					continue;
-				}
-
-				priscas::BW_32& thirty_two = dynamic_cast<priscas::BW_32&>(*inst);
-				motherboard->DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
-				motherboard->DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
-				motherboard->DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
-				motherboard->DMA_write(thirty_two.b_3(), asm_pc.AsUInt32() + 3);
-				motherboard->step();
 			}
 
 			if(shEnv.get_Mode() == Env::MACHINE)
 			{
 
-				priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(motherboard->get_cpu());
-				priscas::BW_32 dpc = dcpu.get_PC();
+				diag_cpu & dcpu = dynamic_cast<diag_cpu&>(motherboard->get_cpu());
+				BW_32 dpc = dcpu.get_PC();
 				
+				/* See if the current PC has any runtime directives associated.
+				 * If it, does then execute them sequentially.
+				 */
 				if(this->directive_syms.has(dpc.AsUInt32()))
 				{
-					std::vector<std::string> cmds = this->directive_syms.lookup_from_PC(dpc.AsUInt32());
+					UPString_Vec cmds = this->directive_syms.lookup_from_PC(dpc.AsUInt32());
 				
 					for(size_t cmdcount = 0; cmdcount < cmds.size(); cmdcount++)
 					{
-						std::vector<std::string> chopped = chop_string(cmds[cmdcount]);
+						UPString_Vec chopped = chop_string(cmds[cmdcount]);
 						execute_runtime_directive(chopped);
 					}
 
@@ -335,30 +298,33 @@ namespace priscas
 						continue;
 				}
 
+				// Advance the system a cycle
 				motherboard->step();
 
+				// Check for program breakpoints
 				if(this->has_prog_break_at(dcpu.get_PC().AsUInt32()))
 				{
 					shEnv.update_Mode(Env::INTERACTIVE);
 					unsigned long line_number = this->PC_to_line_number.at(dcpu.get_PC().AsUInt32());
-					std::string line_str = this->PC_to_line_string.at(dcpu.get_PC().AsUInt32());
+					UPString line_str = this->PC_to_line_string.at(dcpu.get_PC().AsUInt32());
 
-					std::string o = (std::string("Breakpoint at line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(" hit.\n"));
+					UPString o = (UPString("Breakpoint at line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + UPString(" hit.\n"));
 					WriteToOutput(o);
-					std::string p = (std::string("line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + std::string(":\n\t") + line_str + std::string("\n"));
+					UPString p = (UPString("line ") + priscas_io::StrTypes::UInt32ToStr(line_number) + UPString(":\n\t") + line_str + UPString("\n"));
 					WriteToOutput(p);
 				}
 
+				// Check for microarchitectural breakpoints
 				if(this->has_ma_break_at(motherboard->get_cycles()))
 				{
 					shEnv.update_Mode(Env::INTERACTIVE);
-					std::string o = (std::string("Breakpoint at cycle " + priscas_io::StrTypes::UInt32ToStr(motherboard->get_cycles()) + " hit.\n"));
+					UPString o = (UPString("Breakpoint at cycle " + priscas_io::StrTypes::UInt32ToStr(motherboard->get_cycles()) + " hit.\n"));
 					WriteToOutput(o);
 				}
 			}
 		}
 
-		WriteToOutput(("Simulation terminating...\n"));
+		WriteToOutput("Simulation terminating...\n");
 	}
 
 	/* Takes an input string and breaks that string into a vector of several
@@ -366,9 +332,9 @@ namespace priscas
 	 * Also removes comments
 	 * "Also acknowledges " " and ' ' and \ all used for escaping
 	 */
-	std::vector<std::string> chop_string(std::string & input)
+	UPString_Vec chop_string(const UPString & input)
 	{
-		std::string commentless_input;
+		UPString commentless_input;
 		size_t real_end = input.size();
 		for(size_t cind = 0; cind < input.size(); cind++)
 		{
@@ -464,6 +430,39 @@ namespace priscas
 		this->directives.insert(directive_pair(".vga", priscas::vga));
 	}
 
+	inline bool Shell::AsmFlash(const UPString& ains, mb& target, const BW& asm_pc)
+	{
+				Arg_Vec asm_args = chop_string(ains);
+				diag_cpu & dcpu = dynamic_cast<diag_cpu&>(target.get_cpu());
+				ISA& dcpuisa = dcpu.get_ISA();
+				mBW inst;
+				try
+				{
+					inst = dcpuisa.assemble(asm_args, asm_pc, jump_syms);
+				}
+
+				catch(priscas::mt_exception& e)
+				{
+					WriteToError("An error occurred while assembling the program.\n");
+					UPString msg_1 = 
+						UPString("Error information: ") + UPString(e.get_err());
+					WriteToError(msg_1);
+					WriteToError("Line of error:\n");
+					UPString msg_2 = 
+						UPString("\t") + ains + UPString("\n");
+					WriteToError(msg_2);
+					return false;
+				}
+
+				BW_32& thirty_two = dynamic_cast<BW_32&>(*inst);
+				target.DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
+				target.DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
+				target.DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
+				target.DMA_write(thirty_two.b_3(), asm_pc.AsUInt32() + 3);
+
+				return true;
+	}
+
 	void Shell::declare_program_breakpoint(unsigned long line)
 	{
 		this->queued_prog_breakpoints.push(line);
@@ -527,7 +526,7 @@ namespace priscas
 		WriteToOutput(o_str);
 	}
 
-	std::string& Shell::ReadFromInput()
+	const UPString& Shell::ReadFromInput()
 	{
 		this->rd_buffer.clear();
 

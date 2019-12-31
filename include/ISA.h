@@ -79,14 +79,14 @@ namespace priscas
 			 * Return:	PString
 			 *			if name is valid, the register ID
 			 */
-			virtual std::string get_reg_name(int id) = 0;
+			virtual UPString get_reg_name(int id) = 0;
 
 			/* get_reg_id(PString&)
 			 * Returns the register ID given a common or "friendly" name of a register
 			 * Return:	PString
 			 *			if ID is valid: name of the register
 			 */
-			virtual int get_reg_id(std::string&) = 0;
+			virtual int get_reg_id(UPString&) = 0;
 			
 			/* get_register_bit_width(int id)
 			 * Given the id of a register, returns the register's bit width
@@ -115,7 +115,7 @@ namespace priscas
 			 * Return:	BW pointer
 			 *			bitword corresponding to assembled instruction
 			 */
-			virtual std::shared_ptr<BW> assemble(std::vector<std::string>& args, BW& baseAddress, syms_table& jump_syms) = 0;
+			virtual mBW assemble(const Arg_Vec& args, const BW& baseAddress, syms_table& jump_syms) const = 0;
 	};
 }
 #endif

@@ -24,7 +24,7 @@ namespace priscas
 {
 
 	// Main interpretation routine
-	std::shared_ptr<BW> MIPS_32::assemble(std::vector<std::string>& args, BW& baseAddress, syms_table& jump_syms)
+	mBW MIPS_32::assemble(const Arg_Vec& args, const BW& baseAddress, syms_table& jump_syms) const
 	{
 		if(args.size() < 1)
 			return std::shared_ptr<BW>(new BW_32());

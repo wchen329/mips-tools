@@ -39,7 +39,7 @@ namespace priscas
 	/* Divides a string based on whitespace, tabs, commas and newlines
 	 * Acknowledges escaping \ and quotes
 	 */
-	std::vector<std::string> chop_string(std::string & input);
+	UPString_Vec chop_string(const UPString & input);
 
 	/* Searches a vector of strings
 	 * for value assignment pairs
@@ -69,7 +69,7 @@ namespace priscas
 			LINK_DE void WriteToOutput(const char* e);
 			LINK_DE void WriteToError(std::string& e);
 			LINK_DE void WriteToError(const char* e);
-			LINK_DE std::string& ReadFromInput();
+			LINK_DE const UPString& ReadFromInput();
 
 			LINK_DE void add_program_breakpoint(unsigned long line); // sets the program breakpoint directly, CANNOT be used be external sources (yet!)
 			LINK_DE void declare_program_breakpoint(unsigned long line); // queues the breakpoint to be added, but doesn't set it
@@ -96,6 +96,9 @@ namespace priscas
 			std::vector<std::string> args;
 			priscas::mb * motherboard;
 			bool isQuiet;
+
+			// Assembling facilities
+			inline bool AsmFlash(const UPString& ains, mb& target, const BW& asm_pc); // macroop for assemble and flash; return true if success, false if not
 
 			// The environment which the shell wraps around
 			Env shEnv;

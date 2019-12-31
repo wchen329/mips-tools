@@ -56,6 +56,18 @@ namespace priscas
 	 */
 	typedef std::vector<UPString>::const_iterator Arg_Vec_CIter;
 
+	/* String Vector
+	 */
+	typedef std::vector<UPString> UPString_Vec;
+
+	/* String Vector iterator
+	 */
+	typedef std::vector<UPString>::iterator UPString_Vec_Iter;
+
+	/* Const String Vector iterator
+	 */
+	typedef std::vector<UPString>::const_iterator UPString_Vec_CIter;
+
 	/* Name Vector
 	 */
 	typedef std::vector<UPString> Name_Vec;
@@ -100,7 +112,6 @@ namespace priscas
 	 *
 	 */
 	typedef std::vector<UPString>::iterator Filename_Vec_Iter;
-
 }
 
 /* Namespace aliases for old names of namespaces
