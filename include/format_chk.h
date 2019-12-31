@@ -27,7 +27,6 @@
 #include <memory>
 #include <vector>
 #include "interpret.h"
-#include "diag_cpu.h"
 #include "messages.h"
 #include "priscas_global.h"
 

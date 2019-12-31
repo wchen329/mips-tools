@@ -11,7 +11,6 @@
 #define LINK_DE LINK_DI
 
 #include "cpu.h"
-#include "diag_cpu.h"
 #include "primitives.h"
 #include "priscas_global.h"
 #include "range.h"

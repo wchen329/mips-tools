@@ -65,7 +65,7 @@ namespace priscas
 	/* MIPS R10K Superscalar Processor Clone
 	 *
 	 */
-	class r10k_superscalar : public sc_cpu
+	class r10k_superscalar : public mips32_sc_cpu
 	{
 
 		public:

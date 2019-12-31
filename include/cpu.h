@@ -20,11 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __CPU_H__
 #define __CPU_H__
+#include "cpu_option.h"
+#include "debug_view.h"
+#include "debug_view_simple.h"
 #include "ISA.h"
 #include "priscas_global.h"
 
 namespace priscas
 {
+	typedef uint64_t InstCount; // Instruction Count
 
 	/* Contains interface information concerning making a
 	 * CPU object, abstract class
@@ -72,6 +76,34 @@ namespace priscas
 			 */
 			virtual const ISA& get_ISA() = 0;
 
+			/* get_reg_data(int index)
+			 * IMPLEMENTATION: returns the data at the register specified
+			 */
+			virtual BW_32& get_reg_data(int index) = 0;
+
+			/* get_PC()
+			 * IMPLEMENTATION: return the value of the PC
+			 */
+			virtual BW_32& get_PC() = 0;
+				
+			/* CPU_ControlPanel& get_CPU_Options()
+			 * IMPLEMENTATION: return the CPU control panel
+			 */
+			virtual CPU_ControlPanel& get_CPU_options() = 0;
+				
+			/* get_DebugViews()
+			 * IMPLEMENATION: return debug views
+			 */
+			virtual std::vector<DebugView*>& get_DebugViews() = 0;
+
+			/* get_InstCommitCount()
+			 * IMPLEMENTATION: return commit count
+			 */
+			virtual InstCount get_InstCommitCount() = 0;
+			
+			/* ~diag_cpu()
+			 * Virtual destructor. Allows manual destructor for CPUs in general.
+			 */
 			virtual ~cpu(){};
 	};
 

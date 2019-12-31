@@ -52,10 +52,11 @@ namespace priscas
 			cvi->base_cycle();
 		}
 
-		// Then we execute further cycling in the cpu.
+		// Then we execute further "cycling" in the cpu.
 		// Please note that if something is tied to both cycle and a clock signal on the motherboard,
 		// it will execute twice. So this is better for diagnostic stuff which may require the CPU to be
 		// in a known good state.
+		// TODO: change this to cpu->debug_cycle()
 		this->mb_cpu->cycle();
 
 		// Increase cycle count
@@ -89,10 +90,10 @@ namespace priscas
 		switch(ct)
 		{
 			case STANDARD:
-				this->mb_cpu = new sc_cpu(*this->mb_mmem);
+				this->mb_cpu = new mips32_sc_cpu(*this->mb_mmem);
 				break;
 			case FIVE_P:
-				this->mb_cpu = new fsp_cpu(*this->mb_mmem);
+				//this->mb_cpu = new fsp_cpu(*this->mb_mmem);
 				break;
 			case SUPERSCALAR:
 				this->mb_cpu = new r10k_superscalar(*this->mb_mmem);

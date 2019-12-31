@@ -25,7 +25,6 @@
 #include <exception>
 #include <memory>
 #include <string>
-#include "diag_cpu.h"
 #include "format_chk.h"
 #include "mb.h"
 #include "messages.h"

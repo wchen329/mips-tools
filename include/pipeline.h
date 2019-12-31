@@ -35,7 +35,7 @@ namespace priscas
 	 *
 	 * wchen329
 	 */
-	class fsp_cpu : public sc_cpu
+/*	class fsp_cpu// : public diag_cpu
 	{
 		public:
 			const UPString& getName() { return this->name; }
@@ -44,7 +44,9 @@ namespace priscas
 			fsp_cpu(mmem & m);
 			std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
 			CPU_ControlPanel& get_CPU_options() { return this->cp; }
-
+			//long get_clk_T() { return this -> clk_T ; }
+			//BW_32& get_reg_data(int index) { return this->registers[index].get_data(); }
+			//BW_32& get_PC() { return this->pc.get_data(); }
 			~fsp_cpu();
 
 		private:
@@ -129,7 +131,7 @@ namespace priscas
 					static inline PCPU_OpRawV valueRaw_STUCK_FW_EX() { return 2; }
 					static inline PCPU_OpRawV valueRaw_STUCK_OFF() { return 10; }
 			};
-	};
+	};*/
 }
 
 #endif

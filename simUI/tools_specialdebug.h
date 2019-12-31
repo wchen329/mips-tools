@@ -26,7 +26,7 @@
 #include <QTreeWidget>
 #include <QStringList>
 #include <vector>
-#include "diag_cpu.h"
+#include "cpu.h"
 #include "shell.h"
 
 namespace Ui {
@@ -39,7 +39,7 @@ class tools_specialdebug : public QDialog
 
 public:
     explicit tools_specialdebug(QWidget *parent = 0);
-    void setCPU(mips_tools::diag_cpu& dcpu, mipsshell::Shell * sh);
+    void setCPU(priscas::cpu& dcpu, mipsshell::Shell * sh);
     ~tools_specialdebug();
 
 

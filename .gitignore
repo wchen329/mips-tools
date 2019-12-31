@@ -31,3 +31,7 @@ testing/tests/unix_test
 simUI/simUI.pro.user*
 simUI/Makefile
 *.sdf
+simUI/ui_*.h
+simUI/Makefile.*
+simUI/release
+simUI/Debug

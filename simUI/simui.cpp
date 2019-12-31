@@ -335,7 +335,7 @@ void simUI::on_actionRegister_Inspector_triggered()
     try
     {
         if(simulation::sh != nullptr)
-            tri.addCPU(dynamic_cast<mips_tools::diag_cpu&>(simulation::sh->GetMotherboard().get_cpu()));
+            tri.addCPU(simulation::sh->GetMotherboard().get_cpu());
     }
 
     catch(std::bad_cast)
@@ -384,8 +384,9 @@ void simUI::on_actionCPU_Specific_Debugging_Information_triggered()
 
     if(simulation::sh != nullptr)
     {
-        mips_tools::diag_cpu& dcpu = static_cast<mips_tools::diag_cpu&>(simulation::sh->GetMotherboard().get_cpu());
+        priscas::cpu& dcpu = simulation::sh->GetMotherboard().get_cpu();
         tsd.setCPU(dcpu, simulation::sh);
     }
+
     tsd.exec();
 }

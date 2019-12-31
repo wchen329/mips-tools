@@ -21,11 +21,11 @@
 #ifndef __SC_CPU_H__
 #define __SC_CPU_H__
 #include <memory>
-#include "diag_cpu.h"
 #include "reg_32.h"
 #include "primitives.h"
 #include "mmem.h"
 #include "mips.h"
+#include "mips_cpu.h"
 #include "mt_exception.h"
 #include "priscas_global.h"
 
@@ -34,23 +34,34 @@
 namespace priscas
 {
 
-	class sc_cpu : public diag_cpu
+	class mips32_sc_cpu : public mips32_cpu
 	{
 		public:
 			const UPString& getName() { return this->name; }
+			
 			void rst(); // "async" reset
+			
 			bool cycle(); // advance the processor a cycle
+			
 			BW_32& get_reg_data(int index) { return this->registers[index].get_data(); }
+			
 			BW_32& get_PC() { return this->pc.get_data(); }
-			long get_clk_T() { return this -> clk_T ; }
-			sc_cpu(mmem & m) : mm(m), clk_T(200000), comcount(0), name("MIPS-32 Single Cylce") {  }
-			const ISA& get_ISA() { return this->isa; }
+			
+			mips32_sc_cpu(mmem & m) :
+				mm(m),
+				comcount(0),
+				mips32_cpu("Generic MIPS-32 Single Cycle", 200000)
+			{}
+
 			virtual CPU_ControlPanel& get_CPU_options() { return this->cp; }
 
 			virtual std::vector<DebugView*>& get_DebugViews() { return this->debug_views; }
-			virtual ~sc_cpu() {}
+			
+			virtual ~mips32_sc_cpu() {}
+			
 			virtual InstCount get_InstCommitCount() { return comcount; }
-		protected:
+		
+		protected:	
 			byte_8b mem_req_load(int index); // sends a load memory request from CPU to MMEM. The ind is the offset from address 0x0
 			void mem_req_write(byte_8b data, int index); // sends a write memory request from CPU To MMEM. The ind is the offset from address 0x0
 			static const int REG_COUNT = 32;
@@ -62,9 +73,8 @@ namespace priscas
 			UPString name;
 			CPU_ControlPanel cp;
 			std::vector<DebugView*> debug_views;
-			sc_cpu(sc_cpu&);
-			sc_cpu operator=(sc_cpu&);
-			MIPS_32 isa;
+			mips32_sc_cpu(mips32_sc_cpu&);
+			mips32_sc_cpu operator=(mips32_sc_cpu&);
 			InstCount comcount;
 	};
 }

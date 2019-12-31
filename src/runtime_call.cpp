@@ -106,9 +106,7 @@ namespace priscas
 
 	void cpuopts(const Arg_Vec & args, Shell& inst)
 	{
-		priscas::cpu& c = inst.GetMotherboard().get_cpu();
-		priscas::diag_cpu & dcpu = dynamic_cast<priscas::diag_cpu&>(c);
-		
+		cpu& dcpu = inst.GetMotherboard().get_cpu();
 		CPU_ControlPanel & cp = dcpu.get_CPU_options();
 
 		if(args.size() <= 1)
@@ -430,7 +428,7 @@ namespace priscas
 		inst.WriteToOutput("[Register State Information]\n");
 
 		mb& cmp = inst.GetMotherboard();
-		diag_cpu& dcpu = dynamic_cast<priscas::diag_cpu&>(cmp.get_cpu());
+		cpu& dcpu = cmp.get_cpu();
 		int reg_count = dcpu.get_ISA().get_reg_count();
 		BW_32 pc_val = dcpu.get_PC();
 		
@@ -488,7 +486,7 @@ namespace priscas
 		inst.WriteToOutput(cc);
 
 		
-		float instCount = static_cast<float>(dynamic_cast<diag_cpu&>(inst.GetMotherboard().get_cpu()).get_InstCommitCount());
+		float instCount = static_cast<float>(inst.GetMotherboard().get_cpu().get_InstCommitCount());
 		instCount = instCount == 0 ? 1 : instCount;
 		UPString strCPI = priscas_io::StrTypes::FloatToStr(static_cast<float>(n) / instCount);
 		inst.WriteToOutput(UPString("CPI: ") + strCPI + priscas_io::newLine);

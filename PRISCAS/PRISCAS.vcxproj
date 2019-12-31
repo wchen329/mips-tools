@@ -75,6 +75,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\mips_cpu.cpp" />
     <ClCompile Include="..\src\com.cpp" />
     <ClCompile Include="..\src\context.cpp" />
     <ClCompile Include="..\src\cpu_option.cpp" />
@@ -88,8 +89,8 @@
     <ClCompile Include="..\src\messages.cpp" />
     <ClCompile Include="..\src\mips.cpp" />
     <ClCompile Include="..\src\mtsstream.cpp" />
+    <ClCompile Include="..\src\phdl.cpp" />
     <ClCompile Include="..\src\priscas_osi.cpp" />
-    <ClCompile Include="..\src\pipeline.cpp" />
     <ClCompile Include="..\src\primitives.cpp" />
     <ClCompile Include="..\src\range.cpp" />
     <ClCompile Include="..\src\reg_32.cpp" />
@@ -105,6 +106,7 @@
     <ClCompile Include="..\src\syms_table.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\mips_cpu.h" />
     <ClInclude Include="..\include\branding.h" />
     <ClInclude Include="..\include\buffer_events.h" />
     <ClInclude Include="..\include\com.h" />
@@ -114,7 +116,6 @@
     <ClInclude Include="..\include\cpu_time.h" />
     <ClInclude Include="..\include\debug_view.h" />
     <ClInclude Include="..\include\debug_view_simple.h" />
-    <ClInclude Include="..\include\diag_cpu.h" />
     <ClInclude Include="..\include\dynamic.h" />
     <ClInclude Include="..\include\env.h" />
     <ClInclude Include="..\include\format_chk.h" />
@@ -130,6 +131,7 @@
     <ClInclude Include="..\include\mtsstream.h" />
     <ClInclude Include="..\include\mtswriter.h" />
     <ClInclude Include="..\include\mt_exception.h" />
+    <ClInclude Include="..\include\phdl.h" />
     <ClInclude Include="..\include\priscas_osi.h" />
     <ClInclude Include="..\include\pipeline.h" />
     <ClInclude Include="..\include\primitives.h" />

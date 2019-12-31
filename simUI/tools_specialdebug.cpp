@@ -35,7 +35,7 @@ tools_specialdebug::tools_specialdebug(QWidget *parent) :
     this->setLayout(ui->verticalLayoutSpecialDebug);
 }
 
-void tools_specialdebug::setCPU(mips_tools::diag_cpu& dcpu, mipsshell::Shell* sh = nullptr)
+void tools_specialdebug::setCPU(priscas::cpu& dcpu, mipsshell::Shell* sh = nullptr)
 {
     if(dcpu.get_DebugViews().size() != 0)
     {

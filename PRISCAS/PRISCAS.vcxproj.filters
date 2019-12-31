@@ -35,9 +35,6 @@
     <ClCompile Include="..\src\syms_table.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\pipeline.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\reg_pipeline.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -98,6 +95,12 @@
     <ClCompile Include="..\src\com.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\phdl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mips_cpu.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -131,9 +134,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\mt_exception.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\diag_cpu.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\syms_table.h">
@@ -218,6 +218,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\hdd.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\phdl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mips_cpu.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

@@ -28,7 +28,6 @@
 #include <memory>
 #include "branding.h"
 #include "cpu.h"
-#include "diag_cpu.h"
 #include "mb.h"
 #include "mt_exception.h"
 #include "mtsstream.h"
@@ -123,6 +122,7 @@ namespace priscas
 				break;
 			case FIVE_P:
 				WriteToOutput("Five Stage Pipeline\n");
+				return;
 				break;
 			default:
 				WriteToOutput("Invalid CPU type detected. Exiting...\n");
@@ -243,7 +243,7 @@ namespace priscas
 			{
 				WriteToOutput(">> ");
 
-				diag_cpu & dcpu = dynamic_cast<diag_cpu&>(motherboard->get_cpu());
+				cpu & dcpu = motherboard->get_cpu();
 				const UPString& val = this->ReadFromInput();
 
 				if(val.size() == 0)
@@ -277,7 +277,7 @@ namespace priscas
 			if(shEnv.get_Mode() == Env::MACHINE)
 			{
 
-				diag_cpu & dcpu = dynamic_cast<diag_cpu&>(motherboard->get_cpu());
+				cpu & dcpu = motherboard->get_cpu();
 				BW_32 dpc = dcpu.get_PC();
 				
 				/* See if the current PC has any runtime directives associated.
@@ -433,7 +433,7 @@ namespace priscas
 	inline bool Shell::AsmFlash(const UPString& ains, mb& target, const BW& asm_pc)
 	{
 				Arg_Vec asm_args = chop_string(ains);
-				diag_cpu & dcpu = dynamic_cast<diag_cpu&>(target.get_cpu());
+				cpu & dcpu = target.get_cpu();
 				const ISA& dcpuisa = dcpu.get_ISA();
 				mBW inst;
 

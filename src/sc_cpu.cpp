@@ -23,7 +23,7 @@
 namespace priscas
 {
 
-	bool sc_cpu::cycle()
+	bool mips32_sc_cpu::cycle()
 	{
 		format fm;
 		
@@ -273,7 +273,7 @@ namespace priscas
 		return true;
 	}
 
-	void sc_cpu::rst()
+	void mips32_sc_cpu::rst()
 	{
 		for(int i = 0; i < 32; i++)
 		{
@@ -283,12 +283,12 @@ namespace priscas
 		this->pc.set_data(0);
 	}
 
-	void sc_cpu::mem_req_write(byte_8b data, int index)
+	void mips32_sc_cpu::mem_req_write(byte_8b data, int index)
 	{
 		this->mm[index % this->mm.get_size()] = data;
 	}
 
-	byte_8b sc_cpu::mem_req_load(int index)
+	byte_8b mips32_sc_cpu::mem_req_load(int index)
 	{
 		return this->mm[index % this->mm.get_size()];
 	}

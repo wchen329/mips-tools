@@ -24,7 +24,6 @@
 #include <cstdio>
 #include <map>
 #include <vector>
-#include "diag_cpu.h"
 #include "mem.h"
 #include "mb.h"
 #include "messages.h"

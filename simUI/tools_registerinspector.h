@@ -25,7 +25,7 @@
 #include <QHeaderView>
 #include <QTreeWidgetItem>
 #include <vector>
-#include "diag_cpu.h"
+#include "cpu.h"
 #include "streams.h"
 
 namespace Ui {
@@ -39,7 +39,7 @@ class tools_registerInspector : public QDialog
 public:
     explicit tools_registerInspector(QWidget *parent = 0);
     ~tools_registerInspector();
-    void addCPU(mips_tools::diag_cpu& dcpu);
+    void addCPU(priscas::cpu& dcpu);
 private:
     Ui::tools_registerInspector *ui;
     std::vector<QTreeWidgetItem*> regNode_allocList;

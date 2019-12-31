@@ -37,7 +37,7 @@ tools_registerInspector::tools_registerInspector(QWidget *parent) :
     this->ui->treeViewRegisters->setHeaderLabels(*qsl);
 }
 
-void tools_registerInspector::addCPU(mips_tools::diag_cpu &dcpu)
+void tools_registerInspector::addCPU(priscas::cpu &dcpu)
 {
 
     QTreeWidgetItem * cpu_node = new QTreeWidgetItem();
