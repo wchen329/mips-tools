@@ -293,6 +293,12 @@ namespace priscas
 			 */
 			static BW_32 offset_to_address_br(BW_32 current, BW_32 target);
 
+
+			/* Get register write destination for Integer unit instructions
+			 */
+			static int getRegDst(int rd, int rt, opcode op);
+
+
 		private:
 			static const unsigned REG_COUNT = 32;
 			static const unsigned PC_BIT_WIDTH = 32;

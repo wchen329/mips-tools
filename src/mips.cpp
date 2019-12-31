@@ -569,4 +569,23 @@ namespace priscas
 
 		return atoi(str);
 	}
+
+	/* This chooses between
+	 * rt and rs according to the opcode
+	 *
+	 */
+	int MIPS_32::getRegDst(int rd, int rt, opcode op)
+	{
+		/* All supported R instructions (except JR which is just "special")
+		 * write to Rd of course since it has Rd.
+		 * All others that do write, write to rt.
+		 */
+		switch(op)
+		{
+			case R_FORMAT:
+				return rd;
+			default:
+				return rt;
+		}
+	}
 }

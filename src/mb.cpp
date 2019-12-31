@@ -46,7 +46,10 @@ namespace priscas
 
 	void mb::step()
 	{
-		// First we step each clock on the motherboard
+		// Step the base clock
+		this->base_clock.cycle();
+
+		// First we step each additional clock on the motherboard
 		for(Clock_Vec::iterator cvi = clock_signals.begin(); cvi != clock_signals.end(); ++cvi)
 		{
 			cvi->base_cycle();
@@ -90,13 +93,13 @@ namespace priscas
 		switch(ct)
 		{
 			case STANDARD:
-				this->mb_cpu = new mips32_sc_cpu(*this->mb_mmem);
+				this->mb_cpu = new mips32_sc_cpu(*this->mb_mmem, this->base_clock);
 				break;
 			case FIVE_P:
 				//this->mb_cpu = new fsp_cpu(*this->mb_mmem);
 				break;
 			case SUPERSCALAR:
-				this->mb_cpu = new r10k_superscalar(*this->mb_mmem);
+				this->mb_cpu = new r10k_superscalar(*this->mb_mmem, this->base_clock);
 				break;
 		}
 	}

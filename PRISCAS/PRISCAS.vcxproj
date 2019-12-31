@@ -93,6 +93,8 @@
     <ClCompile Include="..\src\range.cpp" />
     <ClCompile Include="..\src\reg_32.cpp" />
     <ClCompile Include="..\src\reg_pipeline.cpp" />
+    <ClCompile Include="..\src\rtl_cpu_common.cpp" />
+    <ClCompile Include="..\src\rtl_cpu_mips.cpp" />
     <ClCompile Include="..\src\runtime_call.cpp" />
     <ClCompile Include="..\src\mips32_sc_cpu.cpp" />
     <ClCompile Include="..\src\mb.cpp" />
@@ -136,6 +138,8 @@
     <ClInclude Include="..\include\range.h" />
     <ClInclude Include="..\include\reg_32.h" />
     <ClInclude Include="..\include\reg_pipeline.h" />
+    <ClInclude Include="..\include\rtl_cpu_common.h" />
+    <ClInclude Include="..\include\rtl_cpu_mips.h" />
     <ClInclude Include="..\include\runtime_call.h" />
     <ClInclude Include="..\include\mips32_sc_cpu.h" />
     <ClInclude Include="..\include\shell.h" />

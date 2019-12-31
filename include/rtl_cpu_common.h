@@ -18,34 +18,36 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include "mips32_sc_cpu.h"
+#ifndef __RTL_CPU_COMMON_H__
+#define __RTL_CPU_COMMON_H__
+#include "phdl.h"
 
+/* Provides some very basic RTLBranch facilities
+ *
+ */
 namespace priscas
 {
-
-	bool mips32_sc_cpu::cycle()
+	/* Basic Single Cycle CPU
+	 * RTL "template"
+	 *
+	 * Since a single cycle CPU is more or less, a single stage pipeline
+	 * many can mostly be described in a single RTL branch.
+	 *
+	 * This specific branch encapsulates a whole Fetch->Decode->Execute sort of sequence
+	 * in a single go
+	 *
+	 * The individual specifics, vary between implementations. fetch(), decode(), and execute() must be reimplemented by derivatives
+	 */
+	class RTLB_basic_sc : public RTLBranch
 	{
-		++this->comcount;
-		return true;
-	}
+		public:
+			void cycle();
 
-	void mips32_sc_cpu::rst()
-	{
-/*		for(int i = 0; i < 32; i++)
-		{
-			this->RegisterFile
-		}
-		*/
-		this->pc.force_current_state(0);
-	}
-
-	void mips32_sc_cpu::mem_req_write(byte_8b data, int index)
-	{
-		this->mm[index % this->mm.get_size()] = data;
-	}
-
-	byte_8b mips32_sc_cpu::mem_req_load(int index)
-	{
-		return this->mm[index % this->mm.get_size()];
-	}
+		protected:
+			virtual void fetch() = 0;
+			virtual void decode() = 0;
+			virtual void execute() = 0;
+	};
 }
+
+#endif

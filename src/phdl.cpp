@@ -49,4 +49,22 @@ namespace priscas
 			this->logics[no]->cycle();
 		}
 	}
+
+	void BaseClock::cycle()
+	{
+		/* First evaluate RTLish
+		 * statements
+		 */
+
+		// Change this to make it parallelizable, potentially
+		for(size_t no = 0; no < this->logics.size(); ++no)
+		{
+			this->logics[no]->cycle();
+		}
+
+		/* Second evaluate sequential logic
+		 * statements
+		 */
+		Clock::cycle();
+	}
 }

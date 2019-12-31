@@ -18,34 +18,14 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include "mips32_sc_cpu.h"
+#include "rtl_cpu_common.h"
 
 namespace priscas
 {
-
-	bool mips32_sc_cpu::cycle()
+	void RTLB_basic_sc::cycle()
 	{
-		++this->comcount;
-		return true;
-	}
-
-	void mips32_sc_cpu::rst()
-	{
-/*		for(int i = 0; i < 32; i++)
-		{
-			this->RegisterFile
-		}
-		*/
-		this->pc.force_current_state(0);
-	}
-
-	void mips32_sc_cpu::mem_req_write(byte_8b data, int index)
-	{
-		this->mm[index % this->mm.get_size()] = data;
-	}
-
-	byte_8b mips32_sc_cpu::mem_req_load(int index)
-	{
-		return this->mm[index % this->mm.get_size()];
+		fetch();
+		decode();
+		execute();
 	}
 }

@@ -21,6 +21,7 @@
 #ifndef __SC_CPU_H__
 #define __SC_CPU_H__
 #include <memory>
+#include "phdl.h"
 #include "reg_32.h"
 #include "primitives.h"
 #include "mmem.h"
@@ -37,17 +38,32 @@ namespace priscas
 	class mips32_sc_cpu : public mips32_cpu
 	{
 		public:
-			const UPString& getName() { return this->name; }
 			
-			void rst(); // "async" reset
+			/* rst()
+			 * Asynchronous reset
+			 */
+			void rst();
 			
-			bool cycle(); // advance the processor a cycle
+			/* cycle()
+			 * Update debugging probes.
+			 */
+			bool cycle();
 			
-			BW_32& get_reg_data(int index) { return this->registers[index].get_data(); }
+			/* BW_32& get_reg_data(int index)
+			 * Get the current state of the index'th register
+			 */
+			BW_32& get_reg_data(int index) { return this->RegisterFile[index].get_current_state(); }
 			
-			BW_32& get_PC() { return this->pc.get_data(); }
+			/* BW_32& get_PC()
+			 * Get current state of the PC
+			 */
+			BW_32& get_PC() { return this->pc.get_current_state(); }
 			
-			mips32_sc_cpu(mmem & m) :
+			/* Constructor.
+			 * Allows CPU to read from/write to meomry
+			 * and also sets up timing with any clocks.
+			 */
+			mips32_sc_cpu(mmem & m, BaseClock& bclk) :
 				mm(m),
 				comcount(0),
 				mips32_cpu("Generic MIPS-32 Single Cycle", 200000)
@@ -60,22 +76,34 @@ namespace priscas
 			virtual ~mips32_sc_cpu() {}
 			
 			virtual InstCount get_InstCommitCount() { return comcount; }
-		
-		protected:	
+	
 			byte_8b mem_req_load(int index); // sends a load memory request from CPU to MMEM. The ind is the offset from address 0x0
+			
 			void mem_req_write(byte_8b data, int index); // sends a write memory request from CPU To MMEM. The ind is the offset from address 0x0
-			static const int REG_COUNT = 32;
-			long clk_T;
-			reg_32 registers[REG_COUNT];
-			reg_32 pc;
-			mmem & mm;
+
 		private:
-			UPString name;
-			CPU_ControlPanel cp;
-			std::vector<DebugView*> debug_views;
+			
+			// Disabled copy constructor
 			mips32_sc_cpu(mips32_sc_cpu&);
 			mips32_sc_cpu operator=(mips32_sc_cpu&);
-			InstCount comcount;
+
+			CPU_ControlPanel cp;
+
+			std::vector<DebugView*> debug_views;
+			
+			// Statistics
+			InstCount comcount; // amount of instructions committed (since last reset)
+
+			/* Non-Memory CPU State 
+			 */
+			static const int REG_COUNT = 32;
+			Register_32 RegisterFile[REG_COUNT];
+			Register_32 pc;
+
+			/* Memory state
+			 * (as reference)
+			 */
+			mmem & mm;
 	};
 }
 #endif

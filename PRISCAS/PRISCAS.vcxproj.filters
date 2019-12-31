@@ -95,6 +95,12 @@
     <ClCompile Include="..\src\mips32_ss_cpu.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\rtl_cpu_common.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rtl_cpu_mips.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
@@ -212,6 +218,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\mips32_ss_cpu.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rtl_cpu_common.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rtl_cpu_mips.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

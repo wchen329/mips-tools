@@ -25,7 +25,7 @@
  * This refers to the parallelizable backend portion of the
  * simulator which attempts to mirror the operation of real hardware
  * similar to a Hardware Description Language (HDL).
- * Note that: z and x values are not emulated (i.e. from Verilog)
+ * Note that: HiZ and unknown (x) values are not emulated
  */
 #include "primitives.h"
 #include "priscas_global.h"
@@ -56,6 +56,22 @@ namespace priscas
 
 	typedef Bus_Generic<BW_32> Bus_32;
 	typedef Bus_Generic<BW_16> Bus_16;
+
+	/* RTLBranch
+	 * A RTL branch is supposed to represent dataflow (RTL-ish level) throughout the processor. It is also intended to handle behavioral constructions.
+	 * Mainly, it's supposed to be combinational blocks which set the states of sequential logics.
+	 * RTL branches are only to be tied to the base clock (which incidentally is also the fastest)
+	 */
+	class RTLBranch
+	{
+			public:
+				/* cycle()
+				 * IMPLEMENTATION: perform operations during which would otherwise happen during a cycle.
+				 */
+				virtual void cycle() = 0;
+	};
+
+	typedef std::shared_ptr<RTLBranch> mRTLBranch;
 
 	/* SequentialBlock
 	 * Represents block of sequential logic
@@ -93,7 +109,7 @@ namespace priscas
 			 * Cycle all connected sequential blocks.
 			 * Unless there is a good reason to, use base_cycle instead (which works off of the base clock)
 			 */
-			void cycle();
+			virtual void cycle();
 
 			/* connect(...)
 			 * Connect a sequential logic block. This will be
@@ -106,7 +122,7 @@ namespace priscas
 			 * It can be also trivially seen that the base clock has an interval of 0.
 			 * For example, Clock with interval of 1 will actually activate every 2 base clock cycles.
 			 */
-			void setInterval(int64_t interval) { this->interval = interval; }
+			virtual void setInterval(int64_t interval) { this->interval = interval; }
 			
 			/* set_Offset(...)
 			 * Sets clock skew.
@@ -115,12 +131,67 @@ namespace priscas
 			 * - A postive offset means that the clock is ahead of the base clock by the offset in base clock cycles. However, the reset signal is assumed to be asserted
 			 *   at the beginning, so any state changes which occur before the first cycle of the base clock will not take effect
 			 */
+			virtual void setOffset(int64_t cyclesleft) { this->cyclesleft = cyclesleft; }
+
+			/* Constructor.
+			 * Defaults to a clock matching the base clock.
+			 */
+			Clock() :
+				interval(0),
+				cyclesleft(0)
+			{}
+
+			/* Constructor.
+			 * Takes an interval and offset directly. 
+			 */
+			Clock(int64_t interval, int64_t offset) :
+				interval(interval),
+				cyclesleft(offset)
+			{}
 
 		private:
 			typedef std::vector<mSequentialBlock> SeqmBlkV;
 			SeqmBlkV logics;
-			uint64_t interval;
+			int64_t interval;
 			int64_t cyclesleft;
+	};
+
+	/* BaseClock
+	 * The base clock is a special clock which has an interval of 0.
+	 * Furthermore, it also executes pseudo-RTLish dataflow and behavorial statements
+	 * which happens BEFORE affected sequential logics are updated
+	 */
+	class BaseClock : public Clock
+	{
+		public:
+			/* cycle()
+			 * Evaluate dataflow and behavioral statements.
+			 * Then, cycle all connected sequential blocks.
+			 *
+			 * Since this is the base clock, this is equivalent to using base_cycle()
+			 * But potentially has slightly less overhead
+			 */
+			void cycle();
+
+			/* link(...)
+			 * Add a Dataflow or Behavoral Branch which will be evaluated
+			 * every clock cycle
+			 */
+			void link(mRTLBranch logic) { this->logics.push_back(logic); }
+
+			/* set_Interval(...)
+			 * Since this is the base clock, do nothing...
+			 */
+			void setInterval(int64_t interval) {}
+			
+			/* set_Offset(...)
+			 * Since this is the base clock, do nothing...
+			 */
+			void setOffset(int64_t cyclesleft) {}
+
+		private:
+			typedef std::vector<mRTLBranch> RTLmBrV;
+			RTLmBrV logics;
 	};
 
 	/* Register_Generic
@@ -135,7 +206,8 @@ namespace priscas
 			 * Return the current state
 			 * (atomic)
 			 */
-			RegCC get_current_state() { return current_state; }
+			RegCC& get_current_state() { return current_state; }
+			const RegCC& get_current_state() const { return current_state; }
 
 			/* force_current_state(...)
 			 * Atomically set the current state.
