@@ -23,6 +23,7 @@
 #include <cstring>
 #include <memory>
 #include "cpu.h"
+#include "phdl.h"
 #include "mmem.h"
 #include "primitives.h"
 #include "priscas_global.h"
@@ -124,7 +125,6 @@ namespace priscas
 			LINK_DE ~mb();
 
 		private:
-			
 			cpu * mb_cpu; // single CPU
 			mmem * mb_mmem;  // single main memory
 			cpu_t cpu_type;	// types of MIPS processor
@@ -132,6 +132,7 @@ namespace priscas
 			CPUTime sim_time;	// current simulation time in seconds
 			unsigned long cycle_ct;	// cycle count
 			southbridge io_controller; // southbridge a.k.a I/O Controller
+			Clock_Vec clock_signals; // clock signals
 			
 	};
 

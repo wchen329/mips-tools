@@ -46,8 +46,22 @@ namespace priscas
 
 	void mb::step()
 	{
+		// First we step each clock on the motherboard
+		for(Clock_Vec::iterator cvi = clock_signals.begin(); cvi != clock_signals.end(); ++cvi)
+		{
+			cvi->base_cycle();
+		}
+
+		// Then we execute further cycling in the cpu.
+		// Please note that if something is tied to both cycle and a clock signal on the motherboard,
+		// it will execute twice. So this is better for diagnostic stuff which may require the CPU to be
+		// in a known good state.
 		this->mb_cpu->cycle();
+
+		// Increase cycle count
 		this->cycle_ct++;
+
+		// Record the time spent in the simulator world
 		this->sim_time += mb_cpu -> get_clk_T();
 	}
 

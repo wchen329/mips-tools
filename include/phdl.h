@@ -181,6 +181,14 @@ namespace priscas
 
 	typedef Register_Generic<BW_32> Register_32;
 	typedef Register_Generic<BW_16> Register_16;
+
+	/* Other relavent typedefs
+	 * (most corresponding to STL typedefing)
+	 */
+
+	/* Vector of Clock
+	 */
+	typedef std::vector<Clock> Clock_Vec;
 }
 
 #endif
