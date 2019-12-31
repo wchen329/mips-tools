@@ -35,3 +35,6 @@ simUI/ui_*.h
 simUI/Makefile.*
 simUI/release
 simUI/Debug
+PRISCAS/Makefile*
+PRISCAS/ui_*.h
+PRISCAS/ui_*.cpp
