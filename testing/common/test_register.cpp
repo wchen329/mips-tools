@@ -13,6 +13,8 @@ void Setup_Tests()
 	// Add new tests here
 	AddTest(test_assert, "test_assert");
 	AddTest(test_register_32, "test_register_32");
+	AddTest(test_basic_node, "test_basic_node");
+
 	/*
 	AddTest(test_shell_comments, "test_shell_comments");
 	AddTest(test_shell_justexit, "test_shell_justexit");

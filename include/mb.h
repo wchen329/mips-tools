@@ -134,7 +134,7 @@ namespace priscas
 			southbridge io_controller; // southbridge a.k.a I/O Controller
 			Clock base_clock; // Base Clock signal
 			Clock_Vec clock_signals; // Extra clock signals
-			
+			pHDL_Execution_Engine execeng; // Execution Engine
 			
 	};
 

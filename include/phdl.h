@@ -44,13 +44,22 @@ namespace priscas
 	// Forward declaration
 	class Node;
 	typedef std::shared_ptr<Node> mNode;
-
+	class Drivable;
+	typedef Drivable* pDrivable;
+	 
 	/* Drivable
 	 * Elements which derive this within may be driven by a bus connection (or Node).
 	 */
-	class Drivable
+	class LINK_DE Drivable
 	{
 		public:
+
+			/* drive(..)
+			 * Drive this drivable with a voltage signal (in the form of bits)
+			 *
+			 * The driver is the point to the Drivable that which is driving the bus.
+			 * In  most cases, it will simply be the caller.
+			 */
 			virtual void drive(const BW& input) = 0;
 	};
 
@@ -148,15 +157,15 @@ namespace priscas
 	{
 
 		public:
-			/* cycle()
+			/* prologue()
 			 * IMPLEMENTATION: perform operations during which would otherwise happen during a cycle.
-			 * Ideally this should be broken up into three sections:
-			 *	- prologue: charge output bus
-			 *  - content: traverse direct children within RTL graph
-			 *  - epilogue: update state at the end of the cycle
 			 */
-			virtual void cycle() = 0;
+			virtual void prologue() = 0;
 
+			/* epilogue()
+			 * IMPLEMENTATION: perform operations which occur between cycles (i.e. assign queue STATE CHANGES)
+			 */
+			virtual void epilogue() = 0;
 	};
 
 	typedef std::shared_ptr<SequentialBlock> mSequentialBlock;
@@ -254,7 +263,7 @@ namespace priscas
 			 * The next state becomes the current state on the next clock edge.
 			 * (NOT atomic)
 			 */
-			void set_next_state(RegCC data_in) { this->next_state = data_in; }
+			void set_next_state(RegCC data_in) { this->next_state = data_in; dirty = true; }
 
 			/* operator<=
 			 * Short hand for set_next_state(...).
@@ -274,20 +283,47 @@ namespace priscas
 			 */
 			RegCC operator*() { return get_current_state(); }
 
-			/* cycle()
-			 * Set the current state to next state.
+			/* prologue()
+			 * Start the execution chain.
 			 */
-			void cycle()
+			void prologue()
 			{
 				// Prologue and Content
 				if(output_connection.get() != nullptr)
 				{
 					this->output_connection->drive(this->current_state);
 				}
-
-				// Epilogue
-				this->current_state = this->next_state;
 			}
+
+			/* epilogue()
+			 * Commit state changes queued during the cycle.
+			 */
+			void epilogue()
+			{
+				// Epilogue: if "dirty" then update.
+				// If not, don't do anything
+				// having this allows for implicit feedback setting the state
+
+				if(this->dirty)
+					this->current_state = this->next_state;
+
+				dirty = false;
+			}
+
+			/* input_bind()
+			 * Connect the input of the register to something.
+			 * NOTE: Do not connect more than one input, or use <= to a register when that register is fed through a wire
+			 * This is obviously like contention, and what can happen is undefined.
+			 */
+			void input_bind(mDrivable inp) { this->input_connection = inp; }
+
+			/* output_connect()
+			 * Connect the output of the register to something
+			 * NOTE: This can only be bound to one "drivable". If more outputs are needed, use a Node.
+			 */
+			void output_bind(mDrivable outp) { this->output_connection = inp; }
+
+			Register_Generic() : dirty(false) {}
 
 		private:
 
@@ -298,10 +334,13 @@ namespace priscas
 			RegCC next_state;
 
 			// Input Connection
-			mNode input_connection;
+			mDrivable input_connection;
 
 			// Output Connection
-			mNode output_connection;
+			mDrivable output_connection;
+
+			// Dirty. Does this register have a queued update?
+			bool dirty;
 	};
 
 	typedef Register_Generic<BW_32> Register_32;
@@ -355,7 +394,7 @@ namespace priscas
 
 		private:
 			ContainerT data;
-			mNode connection;
+			mDrivable connection;
 	};
 
 	typedef Bus_Generic<BW_32> Bus_32;
@@ -408,9 +447,16 @@ namespace priscas
 		public:
 
 			/* Drive the connection with data.
+			 * A node ought not to drive to the Drivable which is currently driving it.
 			 * This drives all connected devices' with the provided data accordingly.
 			 */
-			void drive(const BW& bin) { for(Drivable_Vec::iterator at = connected_devices.begin(); at != connected_devices.end(); ++at) (*at)->drive(bin); }
+			void drive(const BW& bin)
+			{
+				for(Drivable_Vec::iterator at = connected_devices.begin(); at != connected_devices.end(); ++at)
+				{
+					mDrivable dr = (*at);
+				}
+			}
 		
 			/* Connect a new device to this node.
 			 */
@@ -456,7 +502,7 @@ namespace priscas
 				public:
 					/* Execute the work unit which is a sequential block chain in this case
 					 */
-					virtual void operator()() {this->work->cycle();}
+					virtual void operator()() {this->work->prologue();}
 
 					pHDL_Work_Seq_Unit(mSequentialBlock w) : work(w) {}
 
@@ -478,7 +524,7 @@ namespace priscas
 			 * A special thread which checks the 
 			 *
 			 */
-			class pHDL_EventHandler : priscas_osi::UPThread
+			class pHDL_EventHandler : public priscas_osi::UPThread
 			{
 				public:
 					void Work();
@@ -502,39 +548,42 @@ namespace priscas
 						wq_lock.unlock();
 					}
 
-					pHDL_EventHandler() : loadFac(0) {}
+					pHDL_EventHandler() :
+						loadFac(0)
+					{
+						UPThread::ActivateThread(this);
+					}
 
 				private:
 					WorkQueue wq;
 					priscas_osi::mlock wq_lock;
 					LoadFactor loadFac;
 			};
-
-			/* Execute.
-			 * Advances the execution engine of the incorporated sequential logics by one cycle.
-			 */
-			void execute();
-
-			/* Blocks the calling thread until the HDL engine finishes up the current cycle
-			 * and then pauses execution until "execute()" is called again.
-			 */
-			//void pause();
+			typedef std::shared_ptr<pHDL_EventHandler> mpHDL_EventHandler;
 
 			/* Adds some work to the least occupied thread
 			 */
 			void Register_Work_Request(mSequentialBlock executable);
 
-			/* register_clock
-			 * Add a clock signal which this execution engine will control.
-			 */
-			void register_clock(Clock clk){ this->clks.push_back(clk); }
-			typedef std::vector<pHDL_EventHandler> UPThreadPool;
+			
+			typedef std::vector<mpHDL_EventHandler> UPThreadPool;
 
-			pHDL_Execution_Engine() : tschedind(0) {}
+			pHDL_Execution_Engine(size_t threadcount) :
+				tschedind(0)
+			{
+				threads.resize(threadcount);
+				pHDL_EventHandler h;
+				h.Execute();
+				
+				for(size_t tind = 0; tind < threads.size(); ++tind)
+				{
+					threads[tind] = mpHDL_EventHandler(new pHDL_EventHandler());
+					threads[tind] ->Execute();
+				}
+			}
 
 		private:
 			size_t tschedind;
-			Clock_Vec clks;
 			UPThreadPool threads;
 			
 	};

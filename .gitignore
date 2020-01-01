@@ -16,8 +16,8 @@ PDCUtil/Release/*
 *.exp
 *.exe
 *.tlog
-testing/nt_test/winnt_test/Debug/*
-testing/nt_test/winnt_test/Release/*
+testing/winnt_test/Debug/*
+testing/winnt_test/Release/*
 testing/tests/winnt_test.exe.metagen
 testing/tests/winnt_test.ilk
 testing/tests/winnt_test.pdb

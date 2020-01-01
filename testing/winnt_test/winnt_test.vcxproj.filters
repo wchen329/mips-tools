@@ -27,6 +27,9 @@
     <ClCompile Include="..\tests\test_register32.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\tests\test_basic_node.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test_ds.h">

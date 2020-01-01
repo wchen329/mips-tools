@@ -92,7 +92,7 @@ namespace priscas_osi
 			// Just do some work.
 			
 			myself->Work();
-			myself->SetInFlight(false); // Exiting thread...
+		//	myself->SetInFlight(false); // Exiting thread...
 			return 0;
 		}
 }

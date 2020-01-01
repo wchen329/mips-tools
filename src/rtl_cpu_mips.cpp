@@ -60,9 +60,9 @@ namespace priscas
 		int r_write = op == MIPS_32::JAL ? MIPS_32::getRegDst(rs, rt, op) : 31;
 
 		// Set read / write destinations accordingly
-		this->reg_file_read_addr_1_bus.drive(BW_32(rs));
-		this->reg_file_read_addr_2_bus.drive(BW_32(rt));
-		this->reg_file_write_addr_bus.drive(BW_32(r_write));
+		//this->reg_file_read_addr_1_bus.drive(BW_32(rs));
+		//this->reg_file_read_addr_2_bus.drive(BW_32(rt));
+		//this->reg_file_write_addr_bus.drive(BW_32(r_write));
 	}
 
 	void RTLB_mips32_sc::execute()
@@ -264,7 +264,7 @@ namespace priscas
 					PCSrc == BRANCH ? branch_target :
 					-1;
 
-		pc_write_bus.drive(next_pc);
+		//pc_write_bus.drive(next_pc);
 
 		// Todo: maybe separate Write Back and Memory
 	}

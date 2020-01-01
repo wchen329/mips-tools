@@ -46,7 +46,7 @@ namespace priscas
 		// Change this to make it parallelizable, potentially
 		for(size_t no = 0; no < this->logics.size(); ++no)
 		{
-			this->logics[no]->cycle();
+			this->logics[no]->prologue();
 		}
 	}
 	
@@ -55,7 +55,7 @@ namespace priscas
 		// Just use round robin for now, instead of "smart" scheduling.
 		tschedind = (tschedind + 1) % threads.size();
 
-		threads[tschedind].addWork_ts(mpHDL_Work_Unit(new pHDL_Work_Seq_Unit(executable)));
+		threads[tschedind]->addWork_ts(mpHDL_Work_Unit(new pHDL_Work_Seq_Unit(executable)));
 	}
 
 	void pHDL_Execution_Engine::pHDL_EventHandler::Work()
@@ -68,15 +68,14 @@ namespace priscas
 			{
 				priscas_osi::sleep(1);	// Otherwise, wait for one
 			}
-
+			/*
 			wq_lock.lock();
 			mpHDL_Work_Unit work = this->wq.front(); wq.pop();
 			--loadFac;
 			wq_lock.unlock();
 		
 			// Perform work
-			(*work)();		
+			(*work)();*/
 		}
 	}
-
 }

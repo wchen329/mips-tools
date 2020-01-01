@@ -68,6 +68,7 @@
     <ClCompile Include="..\common\test_register.cpp" />
     <ClCompile Include="..\src\basic_assert.cpp" />
     <ClCompile Include="..\tests\test_assert.cpp" />
+    <ClCompile Include="..\tests\test_basic_node.cpp" />
     <ClCompile Include="..\tests\test_register32.cpp" />
     <ClCompile Include="test_ds.cpp" />
     <ClCompile Include="winnt_test.cpp" />

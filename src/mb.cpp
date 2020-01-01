@@ -86,8 +86,9 @@ namespace priscas
 		return *(this->mb_cpu);
 	}
 
-	mb::mb(cpu_t ct, int mt) : cpu_type(ct), mmem_type(mt), sim_time(CPUTime()), cycle_ct(0)
+	mb::mb(cpu_t ct, int mt) : cpu_type(ct), mmem_type(mt), sim_time(CPUTime()), cycle_ct(0), execeng(10)
 	{
+		
 		size_t s = 1 << mt;
 		this->mb_mmem = new mmem(s);
 		switch(ct)

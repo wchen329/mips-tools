@@ -88,12 +88,17 @@ namespace priscas_osi
 
 		protected:
 			void SetInFlight(bool state) { this->active; }
+			void ActivateThread(UPThread * myself) { this->myself = myself; }
 
 		private:
 			OS_thread_t thinst;
 			OS_thread_id_t tid;
 			UPThread * myself;
 			bool active;
+
+			// Disable copy construction
+			UPThread(const UPThread&);
+			UPThread& operator=(const UPThread&);
 	};
 
 	// Managed Pointers for Threads
