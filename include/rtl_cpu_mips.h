@@ -66,18 +66,18 @@ namespace priscas
 			BW_32 branch_target;
 
 			// PC Ports
-			Bus_32 pc_read_bus;
-			Bus_32 pc_write_bus;
+			Node pc_read_bus;
+			Node pc_write_bus;
 
 			// RF Read Ports
-			Bus_32 reg_file_read_addr_1_bus; // TODO: shrink these ports down to the actual 5-bit (or something that looks like it)
-			Bus_32 reg_file_read_addr_2_bus;
-			Bus_32 reg_file_read_data_1_bus;
-			Bus_32 reg_file_read_data_2_bus;
+			Node reg_file_read_addr_1_bus; // TODO: shrink these ports down to the actual 5-bit (or something that looks like it)
+			Node reg_file_read_addr_2_bus;
+			Node reg_file_read_data_1_bus;
+			Node reg_file_read_data_2_bus;
 
 			// RF Write Ports
-			Bus_32 reg_file_write_addr_bus;
-			Bus_32 reg_file_write_data_bus;
+			Node reg_file_write_addr_bus;
+			Node reg_file_write_data_bus;
 	};
 }
 

@@ -25,7 +25,7 @@ namespace priscas
 	void RTLB_mips32_sc::fetch()
 	{
 		// Read from the PC
-		curr_pc = pc_read_bus.read();
+		//curr_pc = pc_read_bus.read();
 		
 		// Prepare "next" PC (regardless if a branch is taken, PC+4 always occurs)
 		pc_plus_4 = (curr_pc.AsInt32() + 4 % m.get_size());
@@ -81,7 +81,7 @@ namespace priscas
 
 		PCSrc_t PCSrc = PCPLUS4;
 
-		// find correct format based on opcode
+	/*	// find correct format based on opcode
 		switch(fm)
 		{
 			case MIPS_32::R:
@@ -165,7 +165,7 @@ namespace priscas
 						break;
 					case MIPS_32::XORI:
 						reg_wdata = this->reg_file_read_data_1_bus.read().AsInt32() ^ imm;
-						break;
+						break;*/
 /*					case MIPS_32::LBU:
 						{
 						byte_8b l_word_p_1 = this->mem_req_load(imm + this->registers[rs].get_data().AsInt32());
@@ -238,8 +238,8 @@ namespace priscas
 						reg_we = false;
 						}
 						break;*/
-				}
-				break;
+		//		}
+		/*		break;
 
 				case MIPS_32::J:
 				{
@@ -256,7 +256,7 @@ namespace priscas
 					}
 				}
 				break;
-		}
+		}*/
 
 		// Set next PC
 		next_pc =	PCSrc == PCPLUS4 ? pc_plus_4 :

@@ -44,26 +44,95 @@ namespace priscas
 	// Forward declaration
 	class Node;
 	typedef std::shared_ptr<Node> mNode;
+	
 	class Drivable;
 	typedef Drivable* pDrivable;
-	 
+	typedef std::shared_ptr<Drivable> mDrivable;
+	typedef std::list<mDrivable> mDrivableList;
+	typedef std::list<pDrivable> pDrivableList;
+
 	/* Drivable
 	 * Elements which derive this within may be driven by a bus connection (or Node).
 	 */
-	class LINK_DE Drivable
+	class Drivable
 	{
 		public:
 
-			/* drive(..)
-			 * Drive this drivable with a voltage signal (in the form of bits)
-			 *
-			 * The driver is the point to the Drivable that which is driving the bus.
-			 * In  most cases, it will simply be the caller.
+			/* drive(...)
+			 * Drive this drivable with a voltage signal from its inputs (in the form of bits)
 			 */
-			virtual void drive(const BW& input) = 0;
+			virtual void drive() = 0;
+
+			/* ready()
+			 * Ready iff all parents are valid
+			 */
+			bool ready()
+			{
+				bool ready = false;
+				
+				for(mDrivableList::iterator liter = drivers.begin(); liter != drivers.end(); ++liter)
+				{
+					ready &= (*liter)->valid;
+				}
+			}
+
+			/* connect_input(...)
+			 * Connect new input to this drivable.
+			 * This automatically links the other way as well, adding the argument as a dependent node
+			 */
+			virtual void connect_input(mDrivable inp) { drivers.push_back(inp); inp->drivees.push_back(inp.get());}
+
+			 /* get_dependents
+			  * Get the elements which are driven by this drivable
+			  */
+			virtual const pDrivableList& get_dependents() { return this->drivees;}
+
+			/* get_Drive_Output
+			 * Get the input of this block which resulted from driving this block.
+			 */
+			const BW& get_Drive_Output() { return this->drive_output; }
+
+			Drivable() : valid(false), drive_output(false) {}
+			
+		protected:
+
+			/* get_drivers
+			 * Get the elements which are driving this drivable
+			 * (This is protected, rather than public since this is technically representing a DAG. This is only intended to be used to receive inputs as necessary)
+			 */
+			virtual mDrivableList get_drivers() { return this->drivers; }
+
+			/* set_Drive_Output
+			 * Set the output of driving this block which will be visible to its children.
+			 */
+			void set_Drive_Output(const BW& output)
+			{
+				this->drive_output = output.AsInt32();
+			}
+
+			/* setValid(bool);
+			 * Set valid if true, Set invalid if false
+			 */
+			void setValid(bool valid) { this->valid = valid; }
+
+			/* invalidate_All_Parents()
+			 * Shorthand for setting all parents to invalid
+			 */
+			void invalidate_All_Parents()
+			{
+				for(mDrivableList::iterator liter = drivers.begin(); liter != drivers.end(); ++liter)
+				{
+					(*liter)->setValid(false);
+				}
+			}
+
+		private:
+			mDrivableList drivers;
+			pDrivableList drivees;
+			BW_32 drive_output;
+			bool valid;
 	};
 
-	typedef std::shared_ptr<Drivable> mDrivable;
 
 	/* Execution_Synchronized
 	 *
@@ -273,9 +342,9 @@ namespace priscas
 			/* void drive()
 			 * Implicit bus access, which allows this bus to be driven.
 			 */
-			void drive(const BW& next_state)
+			void drive()
 			{
-				(*this) <= next_state;
+				epilogue();
 			}
 
 			/* RegCC operator*
@@ -289,10 +358,8 @@ namespace priscas
 			void prologue()
 			{
 				// Prologue and Content
-				if(output_connection.get() != nullptr)
-				{
-					this->output_connection->drive(this->current_state);
-				}
+				this->set_Drive_Output(this->get_current_state());
+				this->setValid(true);
 			}
 
 			/* epilogue()
@@ -300,28 +367,26 @@ namespace priscas
 			 */
 			void epilogue()
 			{
+				if(this->get_drivers().size() > 0)
+				{
+					mDrivable dout = this->get_drivers().front();
+					const BW& input = dout->get_Drive_Output();
+					this->next_state.AsInt32() = input.AsInt32();
+					this->current_state.AsInt32() = input.AsInt32();
+					return;
+				}
+
 				// Epilogue: if "dirty" then update.
 				// If not, don't do anything
 				// having this allows for implicit feedback setting the state
 
 				if(this->dirty)
+				{
 					this->current_state = this->next_state;
+				}
 
 				dirty = false;
 			}
-
-			/* input_bind()
-			 * Connect the input of the register to something.
-			 * NOTE: Do not connect more than one input, or use <= to a register when that register is fed through a wire
-			 * This is obviously like contention, and what can happen is undefined.
-			 */
-			void input_bind(mDrivable inp) { this->input_connection = inp; }
-
-			/* output_connect()
-			 * Connect the output of the register to something
-			 * NOTE: This can only be bound to one "drivable". If more outputs are needed, use a Node.
-			 */
-			void output_bind(mDrivable outp) { this->output_connection = inp; }
 
 			Register_Generic() : dirty(false) {}
 
@@ -345,9 +410,12 @@ namespace priscas
 
 	typedef Register_Generic<BW_32> Register_32;
 	typedef Register_Generic<BW_16> Register_16;
+	typedef std::shared_ptr<Register_32> mRegister_32;
+	typedef std::shared_ptr<Register_16> mRegister_16;
 
-
-
+	/* Bus
+	 * A unidirectional bus.
+	 */
 	class Bus : public Drivable
 	{
 		public:
@@ -355,7 +423,7 @@ namespace priscas
 			 * Drive the bus with some data.
 			 * (atomic)
 			 */
-			virtual void drive(const BW& input) = 0;
+			virtual void drive() = 0;
 
 			/* read(...)
 			 * Read data off the bus
@@ -363,43 +431,6 @@ namespace priscas
 			 */
 			virtual const BW& read() = 0;
 	};
-
-	/* Bus_Generic
-	 * A generic n bit bus.
-	 */
-	template<class ContainerT> class Bus_Generic : public Bus
-	{
-		public:
-			/* drive(...)
-			 * Drive the bus with some data.
-			 * (atomic)
-			 */
-			virtual void drive(const BW& input)
-			{
-				// Set the current "voltage data" of the bus to be the input
-				//data = input;
-
-				// Drive the connection, if it exists.
-				if(connection.get() != nullptr)
-				{
-					connection->drive(input);
-				}
-			};
-
-			/* read(...)
-			 * Read data off the bus
-			 * (atomic)
-			 */
-			const BW& read() { return data; };
-
-		private:
-			ContainerT data;
-			mDrivable connection;
-	};
-
-	typedef Bus_Generic<BW_32> Bus_32;
-	typedef Bus_Generic<BW_16> Bus_16;
-	typedef std::vector<Bus> Bus_Vec;
 
 	/* Generic_Mux
 	 * (Multiplexor)
@@ -450,21 +481,14 @@ namespace priscas
 			 * A node ought not to drive to the Drivable which is currently driving it.
 			 * This drives all connected devices' with the provided data accordingly.
 			 */
-			void drive(const BW& bin)
+			void drive()
 			{
-				for(Drivable_Vec::iterator at = connected_devices.begin(); at != connected_devices.end(); ++at)
-				{
-					mDrivable dr = (*at);
-				}
-			}
-		
-			/* Connect a new device to this node.
-			 */
-			void connect(mDrivable new_device) { connected_devices.push_back(new_device); }
+				this->invalidate_All_Parents();
+				mDrivableList drl = this->get_drivers(); // todo use references
 
-		private:
-			
-			Drivable_Vec connected_devices;
+				this->set_Drive_Output(this->get_drivers().front()->get_Drive_Output());
+
+			}
 	};
 
 	/* Execution Engine.
