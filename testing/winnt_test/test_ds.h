@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "basic_assert.h"
 
 class test_collection
 {

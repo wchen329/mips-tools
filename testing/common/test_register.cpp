@@ -12,7 +12,7 @@ void Setup_Tests()
 {
 	// Add new tests here
 	AddTest(test_assert, "test_assert");
-	AddTest(test_register_32, "test_register_32");
+	/*AddTest(test_register_32, "test_register_32");
 	AddTest(test_shell_comments, "test_shell_comments");
 	AddTest(test_shell_justexit, "test_shell_justexit");
 	AddTest(test_shell_multidirectsymbol, "test_shell_multidirect_symbol");
@@ -38,5 +38,5 @@ void Setup_Tests()
 	AddTest(test_mips32fsp_ece552_f18midterm6, "test_mips32fsp_ece552_f18midterm6");
 	AddTest(test_mips32fsp_ece552_f181009, "test_mips32fsp_ece552_f181009");
 	AddTest(test_mips32fsp_fake_load_to_use_r, "test_mips32fsp_fake_load_to_use_r");
-	AddTest(test_mips32fsp_memtomem_stall, "test_mips32fsp_memtomem_stall");
+	AddTest(test_mips32fsp_memtomem_stall, "test_mips32fsp_memtomem_stall");*/
 }

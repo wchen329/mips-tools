@@ -1,9 +1,4 @@
-#include "stdafx.h"
 #include "test_ds.h"
-
-using namespace System;
-using namespace System::Diagnostics;
-//using namespace System::Time;
 
 int test_collection::run_test(int index)
 {
@@ -12,17 +7,26 @@ int test_collection::run_test(int index)
 	std::string n(this->test_to_name.at(test_routine));
 
 	fprintf(stdout, "Running test [%d] : %s ", index, n.c_str());
-	size_t addr = (size_t)test_routine;
 	
-	Process^ running_test = gcnew Process();
-	running_test->StartInfo->FileName = "winnt_test.exe";
-	running_test->StartInfo->Arguments = "-t " + addr;
-	running_test->StartInfo->UseShellExecute = false;
-	running_test->StartInfo->RedirectStandardError = true;
-	running_test->Start();
-	running_test->WaitForExit();
+	//running_test->StartInfo->FileName = "winnt_test.exe";
+	//running_test->StartInfo->Arguments = "-t " + addr;
+	//running_test->StartInfo->UseShellExecute = false;
+	//running_test->StartInfo->RedirectStandardError = true;
+	//running_test->Start();
+	//running_test->WaitForExit();
 
-	int status = running_test->ExitCode;
+	//int status = running_test->ExitCode;
+
+	int status = 0;
+
+	try
+	{
+		test_routine();
+	}
+	catch(const Failed_Assert_Exception&)
+	{
+		status = 1;
+	}
 
 	//Timer^ t = gcnew Timer();
 	//t->Interval = 5;
@@ -39,7 +43,7 @@ int test_collection::run_test(int index)
 	{
 		fprintf(stdout, "FAILED\n");
 		fprintf(stdout, "[Debug Information]\n\t");
-		Console::WriteLine(running_test->StandardError->ReadToEnd());
+		//Console::WriteLine(running_test->StandardError->ReadToEnd());
 		ret = 1;
 	}
 

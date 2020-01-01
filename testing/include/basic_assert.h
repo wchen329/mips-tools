@@ -23,9 +23,11 @@
 		extern int __sym_l__;
 		extern const char* __sym_f__;
 
-		#define ERR_MSG "Assertion at %s:%d failed.\n"
+		class Failed_Assert_Exception {};
+
+		#define ERR_MSG "Assertion at %s:%d failed. "
 		#define FillLine __sym_l__ = __LINE__; __sym_f__ = __FILE__;
-		#define AssertExpr(expression) if(!(expression)) { FillLine; fprintf(stderr, ERR_MSG, __sym_f__, __sym_l__); exit(1); }
+		#define AssertExpr(expression) if(!(expression)) { FillLine; fprintf(stderr, ERR_MSG, __sym_f__, __sym_l__); throw Failed_Assert_Exception();; }
 
 		#define assertEquals(arg_1, arg_2) AssertExpr(arg_1 == arg_2);
 	
