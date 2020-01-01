@@ -41,12 +41,16 @@ namespace priscas
 	class RTLB_basic_sc : public RTLBranch
 	{
 		public:
-			void cycle();
-
+			virtual void cycle();
 		protected:
 			virtual void fetch() = 0;
 			virtual void decode() = 0;
 			virtual void execute() = 0;
+
+			/* Constructor.
+			 * Merely wraps around RTLBranch's constructor
+			 */
+			RTLB_basic_sc(int thresh) : RTLBranch(thresh) {}
 	};
 }
 

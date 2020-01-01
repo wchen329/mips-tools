@@ -132,7 +132,7 @@ namespace priscas
 			CPUTime sim_time;	// current simulation time in seconds
 			unsigned long cycle_ct;	// cycle count
 			southbridge io_controller; // southbridge a.k.a I/O Controller
-			BaseClock base_clock; // Base Clock signal
+			Clock base_clock; // Base Clock signal
 			Clock_Vec clock_signals; // Extra clock signals
 			
 	};

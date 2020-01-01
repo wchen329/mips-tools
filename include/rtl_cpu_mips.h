@@ -36,7 +36,8 @@ namespace priscas
 			RTLB_mips32_sc(
 					mmem min
 			) :
-				m(min)
+				m(min),
+				RTLB_basic_sc(1)
 			{}
 
 		protected:

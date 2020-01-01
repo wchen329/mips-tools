@@ -93,7 +93,7 @@ namespace priscas
 			 * reorder_buf_entries - reorder buffer size
 			 * (default): 5 entries
 			 */
-			r10k_superscalar(mmem& m, BaseClock& bc, int inst_buffer_entries = 1, int phys_reg_count = 10,
+			r10k_superscalar(mmem& m, Clock& bc, int inst_buffer_entries = 1, int phys_reg_count = 10,
 				int funit_count = 3, int dispatch_buffer_entries = 5, int reorder_buf_entries = 5); 
 		
 		private:

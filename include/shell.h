@@ -116,6 +116,7 @@ namespace priscas
 			void execute_runtime_directive(std::vector<std::string>& args_list);
 			bool has_ma_break_at(unsigned long line){ return this->microarch_breakpoints.count(line) > 0; }
 			bool has_prog_break_at(unsigned long line){ return this->program_breakpoints.count(line) > 0; }
+
 	};
 }
 

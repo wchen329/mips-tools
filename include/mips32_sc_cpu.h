@@ -63,7 +63,7 @@ namespace priscas
 			 * Allows CPU to read from/write to meomry
 			 * and also sets up timing with any clocks.
 			 */
-			mips32_sc_cpu(mmem & m, BaseClock& bclk) :
+			mips32_sc_cpu(mmem & m, Clock& bclk) :
 				mm(m),
 				comcount(0),
 				mips32_cpu("Generic MIPS-32 Single Cycle", 200000)

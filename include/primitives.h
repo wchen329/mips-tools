@@ -175,6 +175,11 @@ namespace priscas
 			bool operator==(const BW& bw2) const { return (this->AsInt16() == bw2.AsInt16()); }
 			bool operator!=(const BW& bw2) const { return (this->AsInt16() != bw2.AsInt16()); }
 
+			// Cast operator (from BW)
+			BW_16 operator=(const BW& in)
+			{
+				return BW_16(in.AsInt16());
+			}
 
 		private:
 			char * w_addr() { return (char*)&w.i16; }
@@ -228,9 +233,14 @@ namespace priscas
 			bool operator==(const BW& bw2) const { return (this->AsInt32() == bw2.AsInt32()); }
 			bool operator!=(const BW& bw2) const { return (this->AsInt32() != bw2.AsInt32()); }
 
+			BW_32 operator=(const BW& in) {return BWdefConv(in);}
+			BW_32(const BW& in) { BW_32(in.AsInt32()); }
+
 		private:
 			char * w_addr() { return (char*)&w.i32; }
-			
+
+			inline BW_32 BWdefConv(const BW& in);
+
 			union BW_32_internal
 			{
 				int16_t i16;

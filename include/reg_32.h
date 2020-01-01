@@ -22,6 +22,7 @@
 #define __REG_32_H__
 
 /* 32 bit register
+ * LEGACY. Use Register_32 etc. instead.
  */
 #include "primitives.h"
 #include "priscas_global.h"

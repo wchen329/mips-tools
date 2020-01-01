@@ -57,4 +57,40 @@ namespace priscas_osi
 			usleep(1000*ms);
 		#endif
 	}
+
+	void UPThread::Execute()
+	{
+		bool err;
+
+			#ifdef WIN32
+				if(thinst != nullptr)
+				{
+					CloseHandle(thinst);
+				}
+
+				thinst = CreateThread(
+							NULL,
+							0,
+							ThreadEventLoop,
+							myself,
+							0,
+							&tid
+						);
+
+				err = thinst == NULL ? true : false;
+
+			#endif
+	}
+
+	#ifdef WIN32
+		DWORD WINAPI ThreadEventLoop(void* arg)
+	#endif
+		{
+			UPThread* myself = static_cast<UPThread*>(arg);
+			
+			// Just do some work.
+			myself->Work();
+
+			return 0;
+		}
 }

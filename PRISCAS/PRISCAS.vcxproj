@@ -96,13 +96,11 @@
     <ClCompile Include="..\src\rtl_cpu_common.cpp" />
     <ClCompile Include="..\src\rtl_cpu_mips.cpp" />
     <ClCompile Include="..\src\runtime_call.cpp" />
-    <ClCompile Include="..\src\mips32_sc_cpu.cpp" />
     <ClCompile Include="..\src\mb.cpp" />
     <ClCompile Include="..\src\mmem.cpp" />
     <ClCompile Include="..\src\shell.cpp" />
     <ClCompile Include="..\src\southbridge.cpp" />
     <ClCompile Include="..\src\streams.cpp" />
-    <ClCompile Include="..\src\mips32_ss_cpu.cpp" />
     <ClCompile Include="..\src\syms_table.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +140,7 @@
     <ClInclude Include="..\include\rtl_cpu_mips.h" />
     <ClInclude Include="..\include\runtime_call.h" />
     <ClInclude Include="..\include\mips32_sc_cpu.h" />
+    <ClInclude Include="..\include\seq_cpu_common.h" />
     <ClInclude Include="..\include\shell.h" />
     <ClInclude Include="..\include\southbridge.h" />
     <ClInclude Include="..\include\streams.h" />

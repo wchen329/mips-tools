@@ -60,9 +60,9 @@ namespace priscas
 		int r_write = op == MIPS_32::JAL ? MIPS_32::getRegDst(rs, rt, op) : 31;
 
 		// Set read / write destinations accordingly
-		this->reg_file_read_addr_1_bus.drive(rs);
-		this->reg_file_read_addr_2_bus.drive(rt);
-		this->reg_file_write_addr_bus.drive(r_write);
+		this->reg_file_read_addr_1_bus.drive(BW_32(rs));
+		this->reg_file_read_addr_2_bus.drive(BW_32(rt));
+		this->reg_file_write_addr_bus.drive(BW_32(r_write));
 	}
 
 	void RTLB_mips32_sc::execute()
@@ -248,7 +248,7 @@ namespace priscas
 					switch(op)
 					{
 						case MIPS_32::JAL:
-							this->reg_file_write_data_bus.drive(curr_pc.AsInt32() + 8);
+							//this->reg_file_write_data_bus.drive(curr_pc.AsInt32() + 8);
 						case MIPS_32::JUMP:
 							branch_target = ((pc_plus_4.AsInt32() & jump_mask) | (imm << 2));
 							PCSrc = BRANCH;
