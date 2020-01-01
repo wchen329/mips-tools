@@ -75,6 +75,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\mips32_sc_cpu.cpp" />
+    <ClCompile Include="..\src\mips32_ss_cpu.cpp" />
     <ClCompile Include="..\src\mips_cpu.cpp" />
     <ClCompile Include="..\src\com.cpp" />
     <ClCompile Include="..\src\context.cpp" />

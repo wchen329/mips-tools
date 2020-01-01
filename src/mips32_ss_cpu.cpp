@@ -22,7 +22,7 @@
 
 namespace priscas
 {
-	r10k_superscalar::r10k_superscalar(mmem& m, BaseClock& bc, int inst_buffer_entries, int phys_reg_count,
+	r10k_superscalar::r10k_superscalar(mmem& m, Clock& bc, int inst_buffer_entries, int phys_reg_count,
 				int funit_count, int dispatch_buffer_entries, int reorder_buf_entries) 
 				: mips32_sc_cpu(m, bc)
 	{

@@ -239,7 +239,7 @@ namespace priscas
 		private:
 			char * w_addr() { return (char*)&w.i32; }
 
-			inline BW_32 BWdefConv(const BW& in);
+			inline BW_32 BWdefConv(const BW& in) { return BW_32(in.AsInt32());}
 
 			union BW_32_internal
 			{

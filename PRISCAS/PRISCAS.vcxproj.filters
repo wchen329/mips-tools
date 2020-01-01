@@ -95,6 +95,12 @@
     <ClCompile Include="..\src\reg_32.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\mips32_sc_cpu.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mips32_ss_cpu.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cpu.h">
