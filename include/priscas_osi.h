@@ -45,6 +45,8 @@ namespace priscas_osi
 	class UPThread
 	{
 		public:
+			
+			friend DWORD WINAPI ThreadEventLoop(void* arg);
 
 			/* Execute()
 			 * Run the thread
@@ -55,7 +57,13 @@ namespace priscas_osi
 			 * Once the thread starts running, it just goes into work.
 			 * PROGRAMMER: to make the thread useful, derive this class and reimplement "Work".
 			 */
-			virtual void Work () {}
+			virtual void Work () = 0;
+
+			/* InFlight
+			 * Returns true if the thread hasn't returned from its "Work" function yet.
+			 * If it has (or never started) then it returns false.
+			 */
+			bool InFlight() { return active; }
 
 			/* Destructor.
 			 * Clean up thread resources if required
@@ -72,15 +80,20 @@ namespace priscas_osi
 			 * Make a new empty instance of a thread.
 			 */
 			UPThread() :
-				thinst(nullptr)  
+				thinst(nullptr),
+				active(false)
 			{
 				myself = this;
 			}
+
+		protected:
+			void SetInFlight(bool state) { this->active; }
 
 		private:
 			OS_thread_t thinst;
 			OS_thread_id_t tid;
 			UPThread * myself;
+			bool active;
 	};
 
 	/* (Threading)
@@ -88,6 +101,18 @@ namespace priscas_osi
 	 */
 	void sleep(int ms);
 
+
+	/* Example_UPThread_Spinner
+	 * Example thread which just spins
+	 */
+	class Example_UPThread_Spinner : public UPThread
+	{
+		void Work()
+		{
+			// Spin
+			while(true);
+		}
+	};
 }
 
 #endif

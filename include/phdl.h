@@ -417,6 +417,25 @@ namespace priscas
 			Drivable_Vec connected_devices;
 	};
 
+	/* Execution Engine.
+	 * The execution engine attempts to parallelize the work occurring within
+	 * one clock cycle.
+	 *
+	 *
+	 */
+	class pHDL_Execution_Engine
+	{
+		public:
+
+			/* Execute.
+			 * Advances the execution engine of the incorporated sequential logics by one cycle.
+			 */
+			void execute();
+
+		private:
+			//priscas_osi::UPThread worker_pool;
+	};
+
 	/* Other relavent typedefs
 	 * (most corresponding to STL typedefing)
 	 */

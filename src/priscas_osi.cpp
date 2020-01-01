@@ -61,6 +61,7 @@ namespace priscas_osi
 	void UPThread::Execute()
 	{
 		bool err;
+		myself->SetInFlight(true); // Entering thread... (yes, it's not quite in YET [almost], but that doesn't matter)
 
 			#ifdef WIN32
 				if(thinst != nullptr)
@@ -89,8 +90,9 @@ namespace priscas_osi
 			UPThread* myself = static_cast<UPThread*>(arg);
 			
 			// Just do some work.
+			
 			myself->Work();
-
+			myself->SetInFlight(false); // Exiting thread...
 			return 0;
 		}
 }
