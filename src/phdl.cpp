@@ -49,5 +49,34 @@ namespace priscas
 			this->logics[no]->cycle();
 		}
 	}
+	
+	void pHDL_Execution_Engine::Register_Work_Request(mSequentialBlock executable)
+	{
+		// Just use round robin for now, instead of "smart" scheduling.
+		tschedind = (tschedind + 1) % threads.size();
+
+		threads[tschedind].addWork_ts(mpHDL_Work_Unit(new pHDL_Work_Seq_Unit(executable)));
+	}
+
+	void pHDL_Execution_Engine::pHDL_EventHandler::Work()
+	{
+		while(true)
+		{
+
+			// Get work descriptor from queue if not empty
+			while(this->wq.empty())
+			{
+				priscas_osi::sleep(1);	// Otherwise, wait for one
+			}
+
+			wq_lock.lock();
+			mpHDL_Work_Unit work = this->wq.front(); wq.pop();
+			--loadFac;
+			wq_lock.unlock();
+		
+			// Perform work
+			(*work)();		
+		}
+	}
 
 }

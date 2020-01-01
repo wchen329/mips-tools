@@ -96,10 +96,28 @@ namespace priscas_osi
 			bool active;
 	};
 
+	// Managed Pointers for Threads
+	typedef std::unique_ptr<UPThread> umUPThread;
+	typedef std::shared_ptr<UPThread> mUPThread;
+
 	/* (Threading)
 	 * Sleep a thread for the given amount of milliseconds
 	 */
 	void sleep(int ms);
+
+	/* wait_generic(...)
+	 * Wait for a thread to complete.
+	 * Templates:
+	 *     - Pointer type to thread to accept
+	 *     - wait_time (how long to wait before trying again)
+	 *
+	 * wait_target: the thread  to wait for
+	 */
+	/*template <class ThreadPtrT, int wait_time>void wait_generic(ThreadPtrT wait_target)
+	{
+		// This can be optimized a bit, but here is the simplest wait formula.
+		
+	}*/
 
 
 	/* Example_UPThread_Spinner
