@@ -24,6 +24,9 @@
     <ClCompile Include="..\src\basic_assert.cpp">
       <Filter>nttest_backend</Filter>
     </ClCompile>
+    <ClCompile Include="..\tests\test_register32.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test_ds.h">

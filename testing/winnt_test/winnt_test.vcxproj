@@ -37,7 +37,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)../include;$(ProjectDir)../common;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)../include;$(ProjectDir)../../include;$(ProjectDir)../common;$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -47,6 +48,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>mtcore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -66,6 +68,7 @@
     <ClCompile Include="..\common\test_register.cpp" />
     <ClCompile Include="..\src\basic_assert.cpp" />
     <ClCompile Include="..\tests\test_assert.cpp" />
+    <ClCompile Include="..\tests\test_register32.cpp" />
     <ClCompile Include="test_ds.cpp" />
     <ClCompile Include="winnt_test.cpp" />
   </ItemGroup>

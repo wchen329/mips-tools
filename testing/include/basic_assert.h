@@ -1,5 +1,6 @@
 #ifndef __BASIC_ASSERT_H__
 #define __BASIC_ASSERT_H__
+#include "priscas_core.h"
 
 	#ifndef WIN32
 		#include <cassert>
