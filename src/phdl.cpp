@@ -24,20 +24,19 @@ namespace priscas
 {
 	void Clock::base_cycle()
 	{
-		int64_t tleft = this->cyclesleft;
+		this->cycle();
+	}
 
-		if(this->cyclesleft == 0)
+	void Clock::setInterval(uint64_t interval)
+	{
+		this->interval = interval;
+		
+		if(!this->logics.empty())
 		{
-			// Cycle the actual clock signal
-			this->cycle();
-
-			// Reset the timer
-			this->cyclesleft = this->interval;
-		}
-
-		else
-		{
-			--this->cyclesleft;
+			for(size_t li = 0; li < this->logics.size(); ++li)
+			{
+				logics[li]->set_Thresh(interval);
+			}
 		}
 	}
 
@@ -55,8 +54,6 @@ namespace priscas
 			}
 
 		}
-
-		this->execeng->start();
 	}
 	
 	void pHDL_Execution_Engine::Register_Work_Request(mSequentialBlock executable)

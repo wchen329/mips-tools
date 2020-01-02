@@ -42,6 +42,8 @@
 namespace priscas
 {
 	// Forward declaration
+	class Clock;
+
 	class Node;
 	typedef std::shared_ptr<Node> mNode;
 	
@@ -223,11 +225,27 @@ namespace priscas
 	{
 
 		public:
+
+			friend class Clock;
 			
 			/* drive()
-			 * Implementation defined.
+			 * Execute epilogue when clock is met. Then return true.
 			 */
-			virtual bool drive() = 0;
+			virtual bool drive()
+			{
+				if(timeout == 0)
+				{
+					epilogue();
+					timeout = thresh;
+				}
+
+				else
+				{
+					--timeout;
+				}
+
+				return true;
+			}
 
 			/* prologue()
 			 * IMPLEMENTATION: perform operations during which would otherwise happen during a cycle.
@@ -238,6 +256,18 @@ namespace priscas
 			 * IMPLEMENTATION: perform operations which occur between cycles (i.e. assign queue STATE CHANGES)
 			 */
 			virtual void epilogue() = 0;
+
+			SequentialBlock() : thresh(0), timeout(0) {}
+
+		protected:
+			/* set_Thresh(...)
+			 * Sets the amount of base clocks required to wait until drive executes the epilogue.
+			 */
+			void set_Thresh(uint64_t offset) { this->thresh = offset; this->timeout = offset; }
+
+		private:
+			uint64_t thresh;
+			uint64_t timeout; // the amount of time left until this clock can fire.
 	};
 
 	typedef std::shared_ptr<SequentialBlock> mSequentialBlock;
@@ -249,20 +279,14 @@ namespace priscas
 	{
 		public:
 
-			/* Pre-Cycle prepares the base_cycle() function by
-			 * executing the prologue of all connected sequential blocks.
-			 * This is separate from "cycle" since the prologues all need to be done in a synchronized manner.
-			 */
-			LINK_DE void precycle();
-
 			/* base_cycle()
 			 * Advance time one base clock cycle for this clock.
+			 * (alias to cycle)
 			 */
 			LINK_DE void base_cycle();
 
 			/* cycle()
 			 * Cycle all connected sequential blocks.
-			 * Unless there is a good reason to, use base_cycle instead (which works off of the base clock)
 			 */
 			LINK_DE virtual void cycle();
 
@@ -270,17 +294,18 @@ namespace priscas
 			 * Connect a sequential logic block. This will be
 			 * controlled by the clock accordingly and will be cycled when "cycle" is called
 			 */
-			void connect(mSequentialBlock logic)  { this->logics.push_back(logic); }
+			void connect(mSequentialBlock logic)  { this->logics.push_back(logic); logic->set_Thresh(this->interval); }
 
 			/* set_Interval(...)
 			 * Sets how many "base clock cycles" to wait before actually "cycling"
 			 * It can be also trivially seen that the base clock has an interval of 0.
 			 * For example, Clock with interval of 1 will actually activate every 2 base clock cycles.
 			 */
-			virtual void setInterval(int64_t interval) { this->interval = interval; }
+			void setInterval(uint64_t interval);
 			
 			/* set_Offset(...)
 			 * Sets clock skew.
+			 * NOT YET IMPLEMENTED. DO NOT USE.
 			 * The offset is the "head start" of the clock (or how much it is delayed when first inserted).
 			 * - A negative offset means that the clock is delayed by the absolute value of that base clock cycles
 			 * - A postive offset means that the clock is ahead of the base clock by the offset in base clock cycles. However, the reset signal is assumed to be asserted
@@ -350,15 +375,6 @@ namespace priscas
 			 * Short hand for set_next_state(...).
 			 */
 			void operator<=(RegCC data_in) { set_next_state(data_in); }
-
-			/* bool drive()
-			 * Implicit bus access, which allows this bus to be driven.
-			 */
-			bool drive()
-			{
-				epilogue();
-				return true;
-			}
 
 			/* RegCC operator*
 			 * Short hand for get_current_state()
