@@ -22,6 +22,40 @@
 
 namespace priscas
 {
+	bool RTLBranch::drive()
+	{
+		
+		++this->visit_count; // increase visit count
+
+		// Test if ready. If not ready, simply exit true without doing anything.
+		// TODO: make this thread safe
+		if(this->ready_requirement != this->visit_count)
+		{
+			return true;
+		}
+
+		// Otherwise, we're ready to execute.
+		else
+		{
+			// Execute.
+			this->cycle();
+
+			// After execution, clean up by setting the visit count to 0. Since this is the last instance that should be driving for the cycle
+			// this should be OK.
+			this->visit_count = 0;
+
+			if(this->get_dependents().size() == 0)
+			{
+				return true;
+			}
+
+			else
+			{
+				return false;
+			}
+		}
+	}
+
 	void Clock::base_cycle()
 	{
 		this->cycle();
@@ -92,30 +126,21 @@ namespace priscas
 		// For each of the work units, do BFS-style traversal.
 		while(!this->dr.empty())
 		{
-			// If not ready, then execute something else first until we are.
-			if(!dr.front()->ready())
-			{
-				dr.push_back(dr.front()); // Put it at the lowest priority.
-				dr.pop_front();
-			}
 
-			// Otherwise, execute, and push the children to the front (if not at the end of a path).
-			else
+			// Otherwise, execute, and push the children to the end for BFS-style traversal (if not at the end of a path).
+			// If I'm not at an end, keep climbing
+			if(!dr.front()->drive())
 			{
-				// If I'm not at an end, keep climbing
-				if(!dr.front()->drive())
+				pDrivableList tl = dr.front()->get_dependents();
+				for(pDrivableList::iterator tli = tl.begin(); tli != tl.end(); ++tli)
 				{
-					pDrivableList tl = dr.front()->get_dependents();
-					for(pDrivableList::iterator tli = tl.begin(); tli != tl.end(); ++tli)
-					{
-						dr.push_front(*tli);
-					}
-
+					dr.push_back(*tli);
 				}
 
-				// In either case, this work has been done. Pop it.
-				dr.pop_front();
 			}
+
+			// In either case, this work has been done. Pop it.
+			dr.pop_front();
 		}
 
 		this->bready = true;

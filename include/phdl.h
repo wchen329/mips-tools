@@ -70,16 +70,11 @@ namespace priscas
 			 */
 			virtual bool drive() = 0;
 
-			/* ready()
-			 * Ready iff all parents are valid
-			 */
-			virtual bool ready() { return true; }
-
 			/* connect_input(...)
 			 * Connect new input to this drivable.
 			 * This automatically links the other way as well, adding the argument as a dependent node
 			 */
-			void connect_input(mDrivable inp) { drivers.push_back(inp); inp->drivees.push_back(inp.get());}
+			void connect_input(mDrivable inp) { drivers.push_back(inp); inp->drivees.push_back(this);}
 
 			 /* get_dependents
 			  * Get the elements which are driven by this drivable
@@ -91,7 +86,7 @@ namespace priscas
 			 */
 			const BW& get_Drive_Output() { return this->drive_output; }
 
-			Drivable() : valid(false), drive_output(false) {}
+			Drivable() : drive_output(false) {}
 			
 		protected:
 
@@ -109,27 +104,10 @@ namespace priscas
 				this->drive_output = output.AsInt32();
 			}
 
-			/* setValid(bool);
-			 * Set valid if true, Set invalid if false
-			 */
-			void setValid(bool valid) { this->valid = valid; }
-
-			/* invalidate_All_Parents()
-			 * Shorthand for setting all parents to invalid
-			 */
-			void invalidate_All_Parents()
-			{
-				for(mDrivableList::iterator liter = drivers.begin(); liter != drivers.end(); ++liter)
-				{
-					(*liter)->setValid(false);
-				}
-			}
-
 		private:
 			mDrivableList drivers;
 			pDrivableList drivees;
 			BW_32 drive_output;
-			bool valid;
 	};
 
 
@@ -192,24 +170,34 @@ namespace priscas
 	 * RTL branches will not execute (cycle) until all parent buses are done being driven.
 	 * The 
 	 */
-	class RTLBranch : public Execution_Synchronized
+	class RTLBranch : public Drivable
 	{
 			public:
+
 				/* cycle()
-				 * IMPLEMENTATION: perform operations during which would otherwise happen during a cycle.
+				 * Take the inputs and evaluate the node.
 				 */
 				virtual void cycle() = 0;
 
-				/* execute()
-				 * Wrap around cycle().
+				/* drive()
+				 * If the RTLBranch isn't ready, this should short circuit by returning true.
+				 * If it is ready, then this should "cycle" which depends on implementation.
+				 * Upon leaving, the visit_count should reset to zero, 
+				 *     If there are no children, then this should return true
+				 *     If there are children, return false
+				 * drive somehow executes early or gets stuck, then this probably means there is a combination loop (error) or an extra bus is driving this.
 				 */
-				void execute() { cycle(); }
+				LINK_DE bool drive();
 
 				/* Constructor.
-				 * Merely wraps around Execution_Synchronized's constructor
+				 * Set the visit count to zero.
 				 */
-				RTLBranch(int thresh) : Execution_Synchronized(thresh) {}
+				RTLBranch(unsigned input_count = 1) : visit_count(0), ready_requirement(input_count) {}
 
+			private:
+
+				unsigned visit_count;
+				unsigned ready_requirement;
 	};
 
 	typedef std::shared_ptr<RTLBranch> mRTLBranch;
@@ -388,7 +376,6 @@ namespace priscas
 			{
 				// Prologue and Content
 				this->set_Drive_Output(this->get_current_state());
-				this->setValid(true);
 			}
 
 			/* epilogue()
@@ -512,7 +499,6 @@ namespace priscas
 			 */
 			bool drive()
 			{
-				this->invalidate_All_Parents();
 				mDrivableList drl = this->get_drivers(); // todo use references
 
 				this->set_Drive_Output(this->get_drivers().front()->get_Drive_Output());
@@ -565,15 +551,7 @@ namespace priscas
 			  */
 			LINK_DE void Register_Work_Request(pDrivable executable)
 			{
-				if(executable->ready())
-				{
-					this->dr.push_front(executable);
-				}
-
-				else
-				{
-					this->dr.push_back(executable);
-				}
+				this->dr.push_back(executable);
 			}
 
 			/* ready()

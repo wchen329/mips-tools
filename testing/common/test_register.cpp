@@ -16,6 +16,7 @@ void Setup_Tests()
 	AddTest(test_basic_node, "test_basic_node");
 	AddTest(test_clock_signal, "test_clock_signal");
 	AddTest(test_dual_clock_signals, "test_dual_clock_signals");
+	AddTest(test_combinational, "test_combinational");
 
 	/*
 	AddTest(test_shell_comments, "test_shell_comments");

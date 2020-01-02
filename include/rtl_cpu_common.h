@@ -27,6 +27,22 @@
  */
 namespace priscas
 {
+	// Common gates
+
+	/* PrimitiveAnd
+	 * Output: first input & second input
+	 *
+	 */
+	class PrimitiveAnd : public RTLBranch
+	{
+		public:
+			LINK_DE void cycle();
+
+			PrimitiveAnd() : RTLBranch(2) {} // 2 inputs
+	};
+
+	typedef std::shared_ptr<PrimitiveAnd> mPrimitiveAnd;
+
 	/* Basic Single Cycle CPU
 	 * RTL "template"
 	 *
@@ -41,16 +57,14 @@ namespace priscas
 	class RTLB_basic_sc : public RTLBranch
 	{
 		public:
-			virtual void cycle();
+			virtual bool drive();
 		protected:
 			virtual void fetch() = 0;
 			virtual void decode() = 0;
 			virtual void execute() = 0;
-
-			/* Constructor.
-			 * Merely wraps around RTLBranch's constructor
-			 */
-			RTLB_basic_sc(int thresh) : RTLBranch(thresh) {}
+			
+			// placeholder
+			RTLB_basic_sc() : RTLBranch(1) {}
 	};
 }
 

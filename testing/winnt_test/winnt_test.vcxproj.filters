@@ -36,6 +36,9 @@
     <ClCompile Include="..\tests\test_dual_clock_signals.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\tests\test_combinational.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test_ds.h">

@@ -139,7 +139,6 @@ namespace priscas
 			// Equality and non-equality operations
 			virtual bool operator==(const BW& bw2) const = 0;
 			virtual bool operator!=(const BW& bw2) const = 0;
-
 	};
 
 	class LINK_DE BW_16 : public BW
