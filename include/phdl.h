@@ -51,6 +51,9 @@ namespace priscas
 	typedef std::list<mDrivable> mDrivableList;
 	typedef std::list<pDrivable> pDrivableList;
 
+	class PHDL_Execution_Engine;
+	typedef std::shared_ptr<PHDL_Execution_Engine> mPHDL_Execution_Engine; 
+
 	/* Drivable
 	 * Elements which derive this within may be driven by a bus connection (or Node).
 	 */
@@ -60,32 +63,26 @@ namespace priscas
 
 			/* drive(...)
 			 * Drive this drivable with a voltage signal from its inputs (in the form of bits)
+			 * Return true if end of a chain (i.e. sequential logics)
+			 * Return false if not end of a chain.
 			 */
-			virtual void drive() = 0;
+			virtual bool drive() = 0;
 
 			/* ready()
 			 * Ready iff all parents are valid
 			 */
-			bool ready()
-			{
-				bool ready = false;
-				
-				for(mDrivableList::iterator liter = drivers.begin(); liter != drivers.end(); ++liter)
-				{
-					ready &= (*liter)->valid;
-				}
-			}
+			virtual bool ready() { return true; }
 
 			/* connect_input(...)
 			 * Connect new input to this drivable.
 			 * This automatically links the other way as well, adding the argument as a dependent node
 			 */
-			virtual void connect_input(mDrivable inp) { drivers.push_back(inp); inp->drivees.push_back(inp.get());}
+			void connect_input(mDrivable inp) { drivers.push_back(inp); inp->drivees.push_back(inp.get());}
 
 			 /* get_dependents
 			  * Get the elements which are driven by this drivable
 			  */
-			virtual const pDrivableList& get_dependents() { return this->drivees;}
+			const pDrivableList& get_dependents() { return this->drivees;}
 
 			/* get_Drive_Output
 			 * Get the input of this block which resulted from driving this block.
@@ -222,10 +219,16 @@ namespace priscas
 	 * A sequential block is aimed to have a single clock signal.
 	 * If multiple signals are needed, break them into separate blocks.
 	 */
-	class SequentialBlock
+	class SequentialBlock : public Drivable
 	{
 
 		public:
+			
+			/* drive()
+			 * Implementation defined.
+			 */
+			virtual bool drive() = 0;
+
 			/* prologue()
 			 * IMPLEMENTATION: perform operations during which would otherwise happen during a cycle.
 			 */
@@ -246,16 +249,22 @@ namespace priscas
 	{
 		public:
 
+			/* Pre-Cycle prepares the base_cycle() function by
+			 * executing the prologue of all connected sequential blocks.
+			 * This is separate from "cycle" since the prologues all need to be done in a synchronized manner.
+			 */
+			LINK_DE void precycle();
+
 			/* base_cycle()
 			 * Advance time one base clock cycle for this clock.
 			 */
-			void base_cycle();
+			LINK_DE void base_cycle();
 
 			/* cycle()
 			 * Cycle all connected sequential blocks.
 			 * Unless there is a good reason to, use base_cycle instead (which works off of the base clock)
 			 */
-			virtual void cycle();
+			LINK_DE virtual void cycle();
 
 			/* connect(...)
 			 * Connect a sequential logic block. This will be
@@ -279,6 +288,8 @@ namespace priscas
 			 */
 			virtual void setOffset(int64_t cyclesleft) { this->cyclesleft = cyclesleft; }
 
+			virtual void setExecutionEngine(mPHDL_Execution_Engine execin) { this->execeng = execin; }
+
 			/* Constructor.
 			 * Defaults to a clock matching the base clock.
 			 */
@@ -300,6 +311,7 @@ namespace priscas
 			SeqmBlkV logics;
 			int64_t interval;
 			int64_t cyclesleft;
+			mPHDL_Execution_Engine execeng;
 	};
 
 	typedef std::vector<Clock> Clock_Vec;
@@ -308,7 +320,7 @@ namespace priscas
 	 * A generic n bit register
 	 * (this will supersede the Reg_32)
 	 */
-	template<class RegCC> class Register_Generic : protected SequentialBlock, public Drivable
+	template<class RegCC> class Register_Generic : public SequentialBlock
 	{
 		public:
 		
@@ -339,12 +351,13 @@ namespace priscas
 			 */
 			void operator<=(RegCC data_in) { set_next_state(data_in); }
 
-			/* void drive()
+			/* bool drive()
 			 * Implicit bus access, which allows this bus to be driven.
 			 */
-			void drive()
+			bool drive()
 			{
 				epilogue();
+				return true;
 			}
 
 			/* RegCC operator*
@@ -414,7 +427,7 @@ namespace priscas
 	typedef std::shared_ptr<Register_16> mRegister_16;
 
 	/* Bus
-	 * A unidirectional bus.
+	 * A general bus.
 	 */
 	class Bus : public Drivable
 	{
@@ -423,7 +436,7 @@ namespace priscas
 			 * Drive the bus with some data.
 			 * (atomic)
 			 */
-			virtual void drive() = 0;
+			virtual bool drive() = 0;
 
 			/* read(...)
 			 * Read data off the bus
@@ -481,20 +494,94 @@ namespace priscas
 			 * A node ought not to drive to the Drivable which is currently driving it.
 			 * This drives all connected devices' with the provided data accordingly.
 			 */
-			void drive()
+			bool drive()
 			{
 				this->invalidate_All_Parents();
 				mDrivableList drl = this->get_drivers(); // todo use references
 
 				this->set_Drive_Output(this->get_drivers().front()->get_Drive_Output());
-
+			
+				return false;
 			}
+	};
+
+	/* PHDL Execution Engine
+	 * The execution engine is responsible for evaluating operations performed during a cycle.
+	 * generally its execution pattern will look like this: 
+	 *
+	 * - Start the firing chain by executing the prologue of all the sequential logics (this is done by the clock)
+	 * - Mark all the dependents for executing
+	 * - Execute the dependents, and climb the chain of dependents until
+	 *   - A path divergence is encountered. In that case, one path will be traversed, while the other, will be pushed on some data structure for executing later.
+	 *   - Another block of sequential logic is encountered and executed. In that case, the path has ended and we should continue executing another path or execute a new one until
+	 *     we are finished.
+	 */
+	class PHDL_Execution_Engine
+	{
+		public:
+			 /* Add a work unit to the execution engine.
+			  * 
+			  */
+			LINK_DE virtual void Register_Work_Request(pDrivable executable) = 0;
+
+			/* ready()
+			 * Returns true if all execution paths required have been finished executing.
+			 * Otherwise returns false.
+			 */
+			LINK_DE virtual bool ready() = 0;
+
+			/* start()
+			 * Begin the execution chain.
+			 */
+			LINK_DE virtual void start() = 0;
+	};
+	 
+	/* PHDL Sequential Execution Engine
+	 * This execution engine traverses the graph in a single thread.
+	 * (somewhat slow, but emphasizing correctness)
+	 *
+	 */
+	class PHDL_Sequential_Execution_Engine : public PHDL_Execution_Engine
+	{
+		public:
+			 /* Add a work unit to the execution engine.
+			  * 
+			  */
+			LINK_DE void Register_Work_Request(pDrivable executable)
+			{
+				if(executable->ready())
+				{
+					this->dr.push_front(executable);
+				}
+
+				else
+				{
+					this->dr.push_back(executable);
+				}
+			}
+
+			/* ready()
+			 * Returns true if all execution paths required have been finished executing.
+			 * Otherwise returns false.
+			 * For the sequential engine this just mean not ready when enter, ready when exit
+			 */
+			LINK_DE bool ready() { return this->bready; }
+
+			/* start()
+			 * Start traversing the chain.
+			 */
+			LINK_DE void start();
+
+			LINK_DE PHDL_Sequential_Execution_Engine() : bready(true) {}
+
+		private:
+			bool bready;
+			pDrivableList dr;
 	};
 
 	/* Execution Engine.
 	 * The execution engine attempts to parallelize the work occurring within
 	 * one clock cycle.
-	 *
 	 *
 	 */
 	class pHDL_Execution_Engine

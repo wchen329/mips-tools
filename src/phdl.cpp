@@ -43,11 +43,20 @@ namespace priscas
 
 	void Clock::cycle()
 	{
-		// Change this to make it parallelizable, potentially
+		// Prepare each prologue and add each child to the execution engine
 		for(size_t no = 0; no < this->logics.size(); ++no)
 		{
 			this->logics[no]->prologue();
+
+			for(pDrivableList::const_iterator pdl = this->logics[no]->get_dependents().begin(); pdl != this->logics[no]->get_dependents().end(); ++pdl)
+			{
+				pDrivable p_add = *pdl;
+				this->execeng->Register_Work_Request(p_add);
+			}
+
 		}
+
+		this->execeng->start();
 	}
 	
 	void pHDL_Execution_Engine::Register_Work_Request(mSequentialBlock executable)
@@ -77,5 +86,41 @@ namespace priscas
 			// Perform work
 			(*work)();*/
 		}
+	}
+
+	void PHDL_Sequential_Execution_Engine::start()
+	{
+		this->bready = false;
+			
+		// For each of the work units, do BFS-style traversal.
+		while(!this->dr.empty())
+		{
+			// If not ready, then execute something else first until we are.
+			if(!dr.front()->ready())
+			{
+				dr.push_back(dr.front()); // Put it at the lowest priority.
+				dr.pop_front();
+			}
+
+			// Otherwise, execute, and push the children to the front (if not at the end of a path).
+			else
+			{
+				// If I'm not at an end, keep climbing
+				if(!dr.front()->drive())
+				{
+					pDrivableList tl = dr.front()->get_dependents();
+					for(pDrivableList::iterator tli = tl.begin(); tli != tl.end(); ++tli)
+					{
+						dr.push_front(*tli);
+					}
+
+				}
+
+				// In either case, this work has been done. Pop it.
+				dr.pop_front();
+			}
+		}
+
+		this->bready = true;
 	}
 }

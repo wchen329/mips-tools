@@ -30,6 +30,9 @@
     <ClCompile Include="..\tests\test_basic_node.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\test_clock_signal.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test_ds.h">
