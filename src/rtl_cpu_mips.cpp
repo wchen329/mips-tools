@@ -31,12 +31,12 @@ namespace priscas
 		pc_plus_4 = (curr_pc.AsInt32() + 4 % m.get_size());
 
 		// Recover instruction from zero cycle memory
-		inst = BW_32(
+		/*inst = BW_32(
 			m[curr_pc.AsUInt32()],
 			m[curr_pc.AsUInt32() + 1],
 			m[curr_pc.AsUInt32() + 2],
 			m[curr_pc.AsUInt32() + 3]
-		);
+		);*/
 	}
 
 	void RTLB_mips32_sc::decode()

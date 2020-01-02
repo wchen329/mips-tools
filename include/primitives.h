@@ -35,7 +35,8 @@
 namespace priscas
 {
 	typedef unsigned char byte_8b;
-	
+	typedef uint8_t bytecount_t;
+	typedef uint8_t bitlength_t;
 
 	template<class ConvType, int bitlength> UPString genericHexBuilder(ConvType c)
 	{
@@ -46,7 +47,16 @@ namespace priscas
 
 		while(tbl > 0)
 		{
-			char val = c & 0x0F;
+			/* This "mask" is to support
+			 * bitword non-aligned with modulo 4
+			 */
+			char mask =	tbl == 4 ? 0x0F :
+						tbl == 3 ? 0x07 :
+						tbl == 2 ? 0x03 :
+						tbl == 1 ? 0x01 :
+						0;
+
+			char val = c & mask;
 
 			switch(val)
 			{
@@ -101,6 +111,14 @@ namespace priscas
 			};
 
 
+			/* If bitwidth is not modulo 4 aligned and less than 4
+			 * then we are done already.
+			 */
+			if(tbl < 4)
+			{
+				tbl = 0;
+			}
+
 			c = (c >> 4);
 			tbl -= 4;
 		}
@@ -114,143 +132,215 @@ namespace priscas
 	class LINK_DE BW
 	{
 		public:
+			/* toHexString()
+			 * IMPLEMENTATION:
+			 * Return the hexadecimal representation of this bit word in
+			 * a string
+			 */
 			virtual UPString toHexString() const = 0;
 
-			// Interpret as signed 16-bit integer
-			virtual int16_t& AsInt16() = 0;
-			virtual const int16_t& AsInt16() const = 0;
+			/* The following are "safe" non-ambiguous casts into
+			 * C primitive types
+			 */
+			virtual const uint8_t& AsUInt8() const = 0;
+			virtual uint8_t& AsUInt8() = 0;
 
-			// Interpret as unsigned 16-bit integer
-			virtual uint16_t& AsUInt16() = 0;
+			virtual const int8_t& AsInt8() const = 0;
+			virtual int8_t& AsInt8() = 0;
+
 			virtual const uint16_t& AsUInt16() const = 0;
-
-			// Interpret as signed 32-bit integer
-			virtual int32_t& AsInt32() = 0;
-			virtual const int32_t& AsInt32() const = 0;
+			virtual uint16_t& AsUInt16() = 0;
 			
-			// Interpret as signed 32-bit unsigned integer
-			virtual uint32_t& AsUInt32() = 0;
+			virtual const int16_t& AsInt16() const = 0;
+			virtual int16_t& AsInt16() = 0;
+			
 			virtual const uint32_t& AsUInt32() const = 0;
+			virtual uint32_t& AsUInt32() = 0;
 
-			// Interpret as single precision floating point number 
-			virtual float& AsSPFloat() = 0;
+			virtual const int32_t& AsInt32() const = 0;
+			virtual int32_t& AsInt32() = 0;
+			
+			virtual const uint64_t& AsUInt64() const = 0;
+			virtual uint64_t& AsUInt64() = 0;
+
+			virtual const int64_t& AsInt64() const = 0;
+			virtual int64_t& AsInt64() = 0;
+
 			virtual const float& AsSPFloat() const = 0;
+			virtual float& AsSPFloat() = 0;
 
-			// Equality and non-equality operations
+			virtual const double& AsDPFloat() const = 0;
+			virtual double& AsDPFloat() = 0;
+
+			/* get_bitlength()
+			 * IMPLEMENTATION: Returns the bitlength of a bitword
+			 */
+			virtual bitlength_t get_bitlength() const = 0;
+
+			/* get_bytecount()
+			 * IMPLEMENTATION: Returns the amount of bytes this BW consists of
+			 * If the amount of bits is is not modulo 8 aligned, this will always round down.
+			 */
+			bytecount_t get_bytecount() { return get_bitlength() / 8; }
+
+			/* get_ByteN(...)
+			 * Get the nth byte of this (little endian)
+			 */
+			virtual byte_8b get_ByteN(ptrdiff_t n) const = 0;
+
+			/* set_ByteN(...)
+			 * Get the nth byte of this (little endian)
+			 */
+			void set_ByteN(byte_8b writable, ptrdiff_t n);
+
+			/* == (equality)
+			 * IMPLEMENTATION:
+			 * Two BWs are considered equal iff
+			 * - the two BWs have the same valid BITLENGTH
+			 * - the two BWs have matching internal bit patterns, for its valid bits
+			 */
 			virtual bool operator==(const BW& bw2) const = 0;
-			virtual bool operator!=(const BW& bw2) const = 0;
+			
+			/* != (not-equal)
+			 * Not equals.
+			 */
+			bool operator!=(const BW& bw2) const { return !(*this == bw2); }
 	};
 
-	class LINK_DE BW_16 : public BW
+	/* BW_generic (Little Endian)
+	 * n-bit BW
+	 * This BW simply uses truncation to values < 64 bits
+	 * Converting from a larger-bit number to a smaller one is considered lossy-
+	 * there is no guarentee properties such as equality hold after such an operation happens.
+	 */
+	template<int bitlength> class LINK_DE BW_generic: public BW
 	{
 		public:
-			char b_0() { return *(w_addr());}
-			char b_1() { return *(w_addr() + 1);}
-			BW_16() { w.i16 = 0; }
-			BW_16(int16_t data){ w.i16 = data; }
-			BW_16(uint16_t data) { w.ui16 = data; }
-			BW_16(char b_0, char b_1);
 
-			UPString toHexString() const { return genericHexBuilder<int16_t, 16>(this->w.i16); }
-			
-			int16_t& AsInt16() { return w.i16; }
-			const int16_t& AsInt16() const { return w.i16; }
+			BW_generic() { w.i64 = 0; }
+			BW_generic(int32_t data){ w.i64 = data; }
+			BW_generic(uint32_t data) { w.ui64 = data; }
+			BW_generic(float data) { w.fp32 = data; }
+			BW_generic(double data) { w.fp64 = data; }
 
-			uint16_t& AsUInt16() { return w.ui16; }
+			UPString toHexString() const { return genericHexBuilder<int64_t, bitlength>(this->w.i32); }
+
+			/* The following are "safe" non-ambiguous casts into
+			 * C primitive types
+			 */
+			const uint8_t& AsUInt8() const { return w.ui8; }
+			uint8_t& AsUInt8() { return w.ui8; }
+
+			const int8_t& AsInt8() const { return w.i8; }
+			int8_t& AsInt8() { return w.i8; }
+
 			const uint16_t& AsUInt16() const { return w.ui16; }
-
-			// 32-bit operations; since this is operating on a 16-bit number, it is currently not well defined
-			// THE OPERATION OF THE FOLLOWING IS SUBJECT TO CHANGE (potentially undefined)...
-			int32_t& AsInt32() { return w.i32; }
-			const int32_t& AsInt32() const { return w.i32; }
-
-			uint32_t& AsUInt32() { return w.ui32; }
+			uint16_t& AsUInt16() { return w.ui16; }
+			
+			const int16_t& AsInt16() const { return w.i16; }
+			int16_t& AsInt16() { return w.i16; }
+			
 			const uint32_t& AsUInt32() const { return w.ui32; }
+			uint32_t& AsUInt32() { return w.ui32; }
 
-			float& AsSPFloat() { return w.fp32; }
+			const int32_t& AsInt32() const { return w.i32; }
+			int32_t& AsInt32() { return w.i32; }
+			
+			const uint64_t& AsUInt64() const { return w.ui64; }
+			uint64_t& AsUInt64() { return w.ui64; }
+
+			const int64_t& AsInt64() const { return w.i64; }
+			int64_t& AsInt64() { return w.i64; }
+
 			const float& AsSPFloat() const { return w.fp32; }
-			////////////////// (END undefined cases)
+			float& AsSPFloat() { return w.fp32; }
 
-			bool operator==(const BW& bw2) const { return (this->AsInt16() == bw2.AsInt16()); }
-			bool operator!=(const BW& bw2) const { return (this->AsInt16() != bw2.AsInt16()); }
+			const double& AsDPFloat() const { return w.fp64; }
+			double& AsDPFloat() { return w.fp64; }
 
-			// Cast operator (from BW)
-			BW_16 operator=(const BW& in)
+			/* TODO:
+			 * These will be modified when > 64 bitlength is supported
+			 */
+			BW_generic<bitlength> operator=(const BW& in) {return BW_generic<bitlength>(in.asInt64());}
+			BW_generic<bitlength>(const BW& in) { BW_generic<bitlength>(in.AsInt64()); }
+
+			/* get_bitlength()
+			 * Return bitlength;
+			 */
+			bitlength_t get_bitlength() const { return bitlength; }
+
+			/* == (equality)
+			 * Two BWs are considered equal iff
+			 * - the two BWs have the same valid BITLENGTH
+			 * - the two BWs have matching internal bit patterns, for its valid bits
+			 */
+			virtual bool operator==(const BW& bw2) const
 			{
-				return BW_16(in.AsInt16());
+				if(this->get_bitlength() != bw2.get_bitlength())
+				{
+					return false;
+				}
+
+				// Truncate
+				uint64_t m1 = (static_cast<uint64_t>(1) << bitlength) - 1;
+				uint64_t imm_1 = (m1 & imm_1);
+
+				// Truncate
+				uint64_t m2 = (static_cast<uint64_t>(1) << bw2.get_bitlength()) - 1;
+				uint64_t imm_2 = (m2 & imm_2);
+
+				if(imm_1 != imm_2)
+				{
+					return false;
+				}
+
+				else
+				{
+					return true;
+				}
+			}
+
+			/* get_ByteN(...)
+			 * Get the nth byte of this (little endian)
+			 */
+			byte_8b get_ByteN(ptrdiff_t n) const
+			{
+				byte_8b * bpt = (byte_8b*)(&w);
+				return *(bpt + n);
+			}
+
+			/* set_ByteN(...)
+			 * Get the nth byte of this (little endian)
+			 */
+			void set_ByteN(byte_8b writable, ptrdiff_t n)
+			{
+				byte_8b * bpt = (byte_8b*)(&w);
+				*(bpt + n) = writable;
 			}
 
 		private:
-			char * w_addr() { return (char*)&w.i16; }
-
-			union BW_16_internal
+			
+			union BW_prim_internal
 			{
+				int8_t i8;
+				uint8_t ui8;
 				int16_t i16;
 				uint16_t ui16;
 				int32_t i32;
 				uint32_t ui32;
 				float fp32;
+				int64_t i64;
+				uint64_t ui64;
+				double fp64;
 			};
 
-			
-			BW_16_internal w;
-
+			BW_prim_internal w;
 	};
 
-	class LINK_DE BW_32 : public BW
-	{
-		public:
-			char b_0() { return *(w_addr());}
-			char b_1() { return *(w_addr() + 1);}
-			char b_2() { return *(w_addr() + 2);}
-			char b_3() { return *(w_addr() + 3);}
-
-			BW_32() { w.i32 = 0; }
-			BW_32(int32_t data){ w.i32 = data; }
-			BW_32(uint32_t data) { w.ui32 = data; }
-			BW_32(float data) { w.fp32 = data; }
-			BW_32(char b_0, char b_1, char b_2, char b_3);
-
-
-			UPString toHexString() const { return genericHexBuilder<int32_t, 32>(this->w.i32); }
-			
-			const int16_t& AsInt16() const { return w.i16; }
-			int16_t& AsInt16() { return w.i16; }
-			
-			const uint16_t& AsUInt16() const { return w.ui16; }
-			uint16_t& AsUInt16() { return w.ui16; }
-			
-			const int32_t& AsInt32() const { return w.i32; }
-			int32_t& AsInt32() { return w.i32; }
-			
-			const uint32_t& AsUInt32() const { return w.ui32; }
-			uint32_t& AsUInt32() { return w.ui32; }
-
-			const float& AsSPFloat() const { return w.fp32; }
-			float& AsSPFloat() { return w.fp32; }
-
-			bool operator==(const BW& bw2) const { return (this->AsInt32() == bw2.AsInt32()); }
-			bool operator!=(const BW& bw2) const { return (this->AsInt32() != bw2.AsInt32()); }
-
-			BW_32 operator=(const BW& in) {return BWdefConv(in);}
-			BW_32(const BW& in) { BW_32(in.AsInt32()); }
-
-		private:
-			char * w_addr() { return (char*)&w.i32; }
-
-			inline BW_32 BWdefConv(const BW& in) { return BW_32(in.AsInt32());}
-
-			union BW_32_internal
-			{
-				int16_t i16;
-				uint16_t ui16;
-				int32_t i32;
-				uint32_t ui32;
-				float fp32;
-			};
-
-			BW_32_internal w;
-	};
+	typedef BW_generic<8> BW_8;
+	typedef BW_generic<16> BW_16;
+	typedef BW_generic<32> BW_32;
+	typedef BW_generic<64> BW_64;
 
 	/* Just a collection of two strings
 	 * Name - the name of this object

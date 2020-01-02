@@ -454,11 +454,10 @@ namespace priscas
 					return false;
 				}
 
-				BW_32& thirty_two = dynamic_cast<BW_32&>(*inst);
-				target.DMA_write(thirty_two.b_0(), asm_pc.AsUInt32());
-				target.DMA_write(thirty_two.b_1(), asm_pc.AsUInt32() + 1);
-				target.DMA_write(thirty_two.b_2(), asm_pc.AsUInt32() + 2);
-				target.DMA_write(thirty_two.b_3(), asm_pc.AsUInt32() + 3);
+				for(bytecount_t wind = 0; wind < inst->get_bytecount(); ++wind)
+				{
+					target.DMA_write(inst->get_ByteN(wind), asm_pc.AsUInt32() + wind);
+				}
 
 				return true;
 	}
