@@ -113,22 +113,10 @@ namespace priscas
 			cp = static_cast<cpu_t>(atoi(shEnv.get_cpuStrings()[0].c_str()));
 		}
 
-		WriteToOutput("CPU Type: ");
-		switch(cp)
-		{
-			case STANDARD:
-				WriteToOutput("Single Cycle\n");
-				break;
-			case FIVE_P:
-				WriteToOutput("Five Stage Pipeline\n");
-				return;
-				break;
-			default:
-				WriteToOutput("Invalid CPU type detected. Exiting...\n");
-				return;
-		}
 
 		this->motherboard = new mb(cp, shEnv.get_memBitwidth());
+
+		WriteToOutput("CPU Type: " + motherboard->get_cpu().getName() + priscas_io::newLine);
 		motherboard->reset();
 		mb* MB_IN_PTR = motherboard;
 

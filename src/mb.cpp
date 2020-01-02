@@ -97,7 +97,7 @@ namespace priscas
 				this->mb_cpu = new mips32_sc_cpu(*this->mb_mmem, this->base_clock);
 				break;
 			case FIVE_P:
-				//this->mb_cpu = new fsp_cpu(*this->mb_mmem);
+				this->mb_cpu = new mips32_sc_cpu(*this->mb_mmem, this->base_clock);
 				break;
 			case SUPERSCALAR:
 				this->mb_cpu = new r10k_superscalar(*this->mb_mmem, this->base_clock);
