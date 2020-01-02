@@ -86,7 +86,7 @@ namespace priscas
 		return *(this->mb_cpu);
 	}
 
-	mb::mb(cpu_t ct, int mt) : cpu_type(ct), mmem_type(mt), sim_time(CPUTime()), cycle_ct(0), execeng(10)
+	mb::mb(cpu_t ct, int mt) : cpu_type(ct), mmem_type(mt), sim_time(CPUTime()), cycle_ct(0), execeng(new PHDL_TLP_Execution_Engine(4))
 	{
 		
 		size_t s = 1 << mt;
@@ -103,6 +103,9 @@ namespace priscas
 				this->mb_cpu = new r10k_superscalar(*this->mb_mmem, this->base_clock);
 				break;
 		}
+
+		// Register the execution engine with the Clock signals
+		this->base_clock.setExecutionEngine(execeng);
 	}
 
 	mb::~mb()

@@ -22,30 +22,41 @@
 
 namespace priscas_osi
 {
-	mlock::mlock()
+	mlock::mlock() : mutex(new OS_lock_t)
 	{
+		this->mutex = new OS_lock_t;
+
 		#ifdef WIN32
-			InitializeCriticalSection(&this->mutex);
+			InitializeCriticalSection(this->mutex);
 		#else
-			this->mutex = PTHREAD_MUTEX_INITIALIZER;
+			*this->mutex = PTHREAD_MUTEX_INITIALIZER;
 		#endif
 	}
 
 	void mlock::lock()
 	{
 		#ifdef WIN32
-			EnterCriticalSection(&this->mutex);
+			EnterCriticalSection(this->mutex);
 		#else
-			pthread_mutex_lock(&this->mutex);
+			pthread_mutex_lock(this->mutex);
 		#endif
 	}
 
 	void mlock::unlock()
 	{
 		#ifdef WIN32
-			LeaveCriticalSection(&this->mutex);
+			LeaveCriticalSection(this->mutex);
 		#else
-			pthread_mutex_unlock(&this->mutex);
+			pthread_mutex_unlock(this->mutex);
+		#endif
+	}
+
+	mlock::~mlock()
+	{
+		#ifdef WIN32
+			DeleteCriticalSection(this->mutex);
+		#else
+			pthread_mutex_destroy(this->mutex);
 		#endif
 	}
 
@@ -61,7 +72,7 @@ namespace priscas_osi
 	void UPThread::Execute()
 	{
 		bool err;
-		myself->SetInFlight(true); // Entering thread... (yes, it's not quite in YET [almost], but that doesn't matter)
+//		myself->SetInFlight(true); // Entering thread... (yes, it's not quite in YET [almost], but that doesn't matter)
 
 			#ifdef WIN32
 				if(thinst != nullptr)

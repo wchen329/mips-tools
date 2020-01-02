@@ -198,6 +198,7 @@ namespace priscas
 
 				unsigned visit_count;
 				unsigned ready_requirement;
+				priscas_osi::mlock synch;
 	};
 
 	typedef std::shared_ptr<RTLBranch> mRTLBranch;
@@ -573,46 +574,31 @@ namespace priscas
 			pDrivableList dr;
 	};
 
-	/* Execution Engine.
+	/* Thread Level Parallel Execution Engine.
 	 * The execution engine attempts to parallelize the work occurring within
 	 * one clock cycle.
 	 *
+	 * This is currently quite an (experimental) naive implementation and is not really that optimized (might be slower than Sequential)
+	 *
 	 */
-	class pHDL_Execution_Engine
+	class PHDL_TLP_Execution_Engine : public PHDL_Execution_Engine
 	{
 
 		public:
 
-			/* pHDL_Work_Unit
-			 * Each HDL work unit
-			 * will execute on one sequential block and trace out the execution path along the graph.
-			 * If:
-			 *     The Work Unit encounters a path divergence: It will go down one path, and push the other paths back on the the work descriptor list
-			 *     The Work Unit encounters a convergence upon two paths: It will attempt to inherit the path. If it fails (probably because the target has dependents it needs) it will relinquish the path.
-			 *         this would imply another sequential block goes down this path (the other source branch) so it should not be pushed back on to the work descriptor list
-			 *         (except the state update which itself will be pushed back at the lowest priority), and the thread should get
-			 *         another work descriptor to work on in the mean time.
-			 */
-			class pHDL_Work_Unit
-			{
-				public:
-					/* Application operator.
-					 * Execute the work unit
-					 */
-					virtual void operator()() = 0;
-			};
-
-			class pHDL_Work_Seq_Unit : public pHDL_Work_Unit
+			class PHDL_Work_Unit
 			{
 				public:
 					/* Execute the work unit which is a sequential block chain in this case
 					 */
-					virtual void operator()() {this->work->prologue();}
+					virtual void operator()() {this->work->drive(); }
 
-					pHDL_Work_Seq_Unit(mSequentialBlock w) : work(w) {}
+					/* Construct.
+					 */
+					PHDL_Work_Unit(pDrivable w) : work(w) {}
 
 				private:
-					mSequentialBlock work;
+					pDrivable work;
 			};
 
 			/* LoadFactor
@@ -622,8 +608,7 @@ namespace priscas
 			 */
 			typedef size_t LoadFactor;
 
-			typedef std::shared_ptr<pHDL_Work_Unit> mpHDL_Work_Unit;
-			typedef std::queue<mpHDL_Work_Unit> WorkQueue;
+			typedef std::queue<PHDL_Work_Unit> PHDLTLPWorkQueue;
 
 			/* pHDL_EventHandler
 			 * A special thread which checks the 
@@ -638,7 +623,7 @@ namespace priscas
 					 * Adjusts the load factor of the associated thread accordingly. 
 					 * (thread-safe)
 					 */
-					void addWork_ts(mpHDL_Work_Unit work) { wq_lock.lock(); wq.push(work); ++loadFac; wq_lock.unlock();}
+					void addWork_ts(PHDL_Work_Unit work) { wq_lock.lock(); wq.push(work); ++loadFac; wq_lock.unlock();}
 
 					/* The "smallest" pHDL_EventHandler is going to be the
 					 * one with the least load.
@@ -660,7 +645,7 @@ namespace priscas
 					}
 
 				private:
-					WorkQueue wq;
+					PHDLTLPWorkQueue wq;
 					priscas_osi::mlock wq_lock;
 					LoadFactor loadFac;
 			};
@@ -668,22 +653,30 @@ namespace priscas
 
 			/* Adds some work to the least occupied thread
 			 */
-			void Register_Work_Request(mSequentialBlock executable);
-
+			void Register_Work_Request(pDrivable executable);
+								
+			// TODO
+			bool ready() { return true; }
 			
 			typedef std::vector<mpHDL_EventHandler> UPThreadPool;
 
-			pHDL_Execution_Engine(size_t threadcount) :
+			PHDL_TLP_Execution_Engine(size_t threadcount) :
 				tschedind(0)
 			{
 				threads.resize(threadcount);
-				pHDL_EventHandler h;
-				h.Execute();
 				
 				for(size_t tind = 0; tind < threads.size(); ++tind)
-				{
+				{					
 					threads[tind] = mpHDL_EventHandler(new pHDL_EventHandler());
-					threads[tind] ->Execute();
+					threads[tind]->Execute();
+				}
+			}
+
+			void start()
+			{
+				for(size_t tind = 0; tind < threads.size(); ++tind)
+				{
+
 				}
 			}
 

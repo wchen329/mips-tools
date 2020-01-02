@@ -24,19 +24,23 @@ namespace priscas
 {
 	bool RTLBranch::drive()
 	{
-		
+		synch.lock();
 		++this->visit_count; // increase visit count
 
 		// Test if ready. If not ready, simply exit true without doing anything.
 		// TODO: make this thread safe
+		
 		if(this->ready_requirement != this->visit_count)
 		{
+			synch.unlock();
 			return true;
 		}
 
 		// Otherwise, we're ready to execute.
 		else
 		{
+			synch.unlock();
+
 			// Execute.
 			this->cycle();
 
@@ -90,15 +94,18 @@ namespace priscas
 		}
 	}
 	
-	void pHDL_Execution_Engine::Register_Work_Request(mSequentialBlock executable)
+	void PHDL_TLP_Execution_Engine::Register_Work_Request(pDrivable executable)
 	{
 		// Just use round robin for now, instead of "smart" scheduling.
 		tschedind = (tschedind + 1) % threads.size();
 
-		threads[tschedind]->addWork_ts(mpHDL_Work_Unit(new pHDL_Work_Seq_Unit(executable)));
+		threads[tschedind]->addWork_ts(PHDL_Work_Unit(executable));
+
+		// Get the children, use breadth-first traversal to register them
+		// TODO
 	}
 
-	void pHDL_Execution_Engine::pHDL_EventHandler::Work()
+	void PHDL_TLP_Execution_Engine::pHDL_EventHandler::Work()
 	{
 		while(true)
 		{
@@ -108,14 +115,14 @@ namespace priscas
 			{
 				priscas_osi::sleep(1);	// Otherwise, wait for one
 			}
-			/*
+			
 			wq_lock.lock();
-			mpHDL_Work_Unit work = this->wq.front(); wq.pop();
+			PHDL_Work_Unit work = this->wq.front(); wq.pop();
 			--loadFac;
 			wq_lock.unlock();
 		
 			// Perform work
-			(*work)();*/
+			work();
 		}
 	}
 
@@ -139,7 +146,7 @@ namespace priscas
 
 			}
 
-			// In either case, this work has been done. Pop it.
+			// In any case, this work has been done. Pop it.
 			dr.pop_front();
 		}
 

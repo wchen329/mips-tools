@@ -1,5 +1,6 @@
 #ifndef __PRISCAS_OSI_H__
 #define __PRISCAS_OSI_H__
+#include <memory>
 #include "priscas_global.h"
 
 #ifdef WIN32
@@ -19,6 +20,7 @@
 namespace priscas_osi
 {
 
+
 	/* mlock
 	 * A UNIX and Win32 compatible Mutex / critical section
 	 * The Mutex is automatically initialized- no need to initialize it.
@@ -26,13 +28,16 @@ namespace priscas_osi
 	 */
 	class mlock
 	{
-		private:
-			OS_lock_t mutex;
-			
 		public:
-			void lock();
-			void unlock();
-			mlock();
+			LINK_DE void lock();
+			LINK_DE void unlock();
+			LINK_DE mlock();
+			LINK_DE ~mlock();
+
+		private:
+			OS_lock_t * mutex;
+			mlock(const mlock&);
+			mlock operator=(const mlock&);
 	};
 
 	#ifdef WIN32
