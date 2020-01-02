@@ -71,7 +71,7 @@ namespace priscas_osi
 
 	void UPThread::Execute()
 	{
-		bool err;
+		int err;
 //		myself->SetInFlight(true); // Entering thread... (yes, it's not quite in YET [almost], but that doesn't matter)
 
 			#ifdef WIN32
@@ -89,21 +89,26 @@ namespace priscas_osi
 							&tid
 						);
 
-				err = thinst == NULL ? true : false;
-
+				err = thinst == NULL ? 1 : 0;
+			#else
+				if(thinst != nullptr)
+				{
+					// Destroy old PThread
+				}
 			#endif
 	}
 
 	#ifdef WIN32
 		DWORD WINAPI ThreadEventLoop(void* arg)
+	#else
+		void* ThreadEventLoop(void* arg)
 	#endif
 		{
 			UPThread* myself = static_cast<UPThread*>(arg);
 			
 			// Just do some work.
-			
 			myself->Work();
-		//	myself->SetInFlight(false); // Exiting thread...
+
 			return 0;
 		}
 }

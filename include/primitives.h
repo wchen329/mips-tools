@@ -50,52 +50,52 @@ namespace priscas
 
 			switch(val)
 			{
-				case 0:
+				case 0x0:
 					interm = "0" + interm;
 					break;
-				case 1:
+				case 0x1:
 					interm = "1" + interm;
 					break;
-				case 2:
+				case 0x2:
 					interm = "2" + interm;
 					break;
-				case 3:
+				case 0x3:
 					interm = "3" + interm;
 					break;
-				case 4:
+				case 0x4:
 					interm = "4" + interm;
 					break;
-				case 5:
+				case 0x5:
 					interm = "5" + interm;
 					break;
-				case 6:
+				case 0x6:
 					interm = "6" + interm;
 					break;
-				case 7:
+				case 0x7:
 					interm = "7" + interm;
 					break;
-				case 8:
+				case 0x8:
 					interm = "8" + interm;
 					break;
-				case 9:
+				case 0x9:
 					interm = "9" + interm;
 					break;
-				case 10:
+				case 0xA:
 					interm = "a" + interm;
 					break;
-				case 11:
+				case 0xB:
 					interm = "b" + interm;
 					break;
-				case 12:
+				case 0xC:
 					interm = "c" + interm;
 					break;
-				case 13:
+				case 0xD:
 					interm = "d" + interm;
 					break;
-				case 14:
+				case 0xE:
 					interm = "e" + interm;
 					break;
-				case 15:
+				case 0xF:
 					interm = "f" + interm;
 					break;
 			};

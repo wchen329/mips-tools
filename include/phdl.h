@@ -674,10 +674,7 @@ namespace priscas
 
 			void start()
 			{
-				for(size_t tind = 0; tind < threads.size(); ++tind)
-				{
-
-				}
+				// todo
 			}
 
 		private:

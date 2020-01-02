@@ -26,9 +26,6 @@ namespace priscas
 	{
 		// Initialize registers and main memory to 0 values
 		this->mb_cpu->rst();
-
-		// Start fetch decoding and executing until hlt is received
-		this->mb_cpu->cycle();
 	}
 
 	size_t mb::get_mmem_size()
@@ -54,10 +51,13 @@ namespace priscas
 		{
 			cvi->base_cycle();
 		}
+		
+		// Then we evaluate the cycle, using the execution engine.
+		this->execeng->start();
 
 		// Then we execute further "cycling" in the cpu.
-		// Please note that if something is tied to both cycle and a clock signal on the motherboard,
-		// it will execute twice. So this is better for diagnostic stuff which may require the CPU to be
+		// Please note that this is a tad different from clock cycling
+		// This is for diagnostic stuff which may require the CPU to be
 		// in a known good state.
 		// TODO: change this to cpu->debug_cycle()
 		this->mb_cpu->cycle();
@@ -86,7 +86,7 @@ namespace priscas
 		return *(this->mb_cpu);
 	}
 
-	mb::mb(cpu_t ct, int mt) : cpu_type(ct), mmem_type(mt), sim_time(CPUTime()), cycle_ct(0), execeng(new PHDL_TLP_Execution_Engine(4))
+	mb::mb(cpu_t ct, int mt) : cpu_type(ct), mmem_type(mt), sim_time(CPUTime()), cycle_ct(0), execeng(new PHDL_Sequential_Execution_Engine)
 	{
 		
 		size_t s = 1 << mt;

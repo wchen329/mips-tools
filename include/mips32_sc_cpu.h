@@ -86,7 +86,7 @@ namespace priscas
 			// Disabled copy constructor
 			mips32_sc_cpu(mips32_sc_cpu&);
 			mips32_sc_cpu operator=(mips32_sc_cpu&);
-
+			
 			CPU_ControlPanel cp;
 
 			std::vector<DebugView*> debug_views;
@@ -98,6 +98,8 @@ namespace priscas
 			 */
 			static const int REG_COUNT = 32;
 			Register_32 RegisterFile[REG_COUNT];
+			
+			// PC Register
 			Register_32 pc;
 
 			/* Memory state
