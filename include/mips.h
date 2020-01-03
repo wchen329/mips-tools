@@ -267,23 +267,6 @@ namespace priscas
 			 */
 			static bool jorb_inst(opcode operation, funct fcode);
 
-			/* Decoding unit for MIPS-32
-			 *
-			 */
-			class mips_decoding_unit_32
-			{
-				public:
-					void decode(	BW_32 inst_word,
-									format& fm,
-									opcode& op,
-									int& rs,
-									int& rt,
-									int& rd,
-									funct& funct,
-									int32_t& shamt,
-									int32_t& imm );
-			};
-
 			/* "Generic" MIPS-32 architecture
 			 * encoding function asm -> binary
 			 */

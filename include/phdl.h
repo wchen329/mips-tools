@@ -34,6 +34,7 @@
  * and sequential blocks (or just the an unconnected bus the stop nodes)
  */
 #include <algorithm>
+#include <deque>
 #include <queue>
 #include "primitives.h"
 #include "priscas_global.h"
@@ -50,14 +51,18 @@ namespace priscas
 	class Drivable;
 	typedef Drivable* pDrivable;
 	typedef std::shared_ptr<Drivable> mDrivable;
-	typedef std::list<mDrivable> mDrivableList;
-	typedef std::list<pDrivable> pDrivableList;
+	typedef std::deque<mDrivable> mDrivableList;
+	typedef std::deque<pDrivable> pDrivableList;
 
 	class PHDL_Execution_Engine;
 	typedef std::shared_ptr<PHDL_Execution_Engine> mPHDL_Execution_Engine; 
 
 	/* Drivable
 	 * Elements which derive this within may be driven by a bus connection (or Node).
+	 * The Drivable also has a single default output bus. Driving the default bus and feeding another Drivable through the default
+	 * bus will in turn use "implicit connection" and feed the output of the source branch directly as an input to the output branch.
+	 *
+	 * If, for verbosity, or more than one output bus is needed, use the Node (Bus) class to define more output buses.
 	 */
 	class Drivable
 	{
@@ -74,7 +79,13 @@ namespace priscas
 			 * Connect new input to this drivable.
 			 * This automatically links the other way as well, adding the argument as a dependent node
 			 */
-			void connect_input(mDrivable inp) { drivers.push_back(inp); inp->drivees.push_back(this);}
+			void connect_input(mDrivable inp) { drivers.push_back(inp.get()); inp->drivees.push_back(this);}
+
+			/* connect_input(...)
+			 * Connect new input to this drivable.
+			 * This automatically links the other way as well, adding the argument as a dependent node
+			 */
+			void connect_input(pDrivable inp) { drivers.push_back(inp); inp->drivees.push_back(this);}
 
 			 /* get_dependents
 			  * Get the elements which are driven by this drivable
@@ -94,7 +105,7 @@ namespace priscas
 			 * Get the elements which are driving this drivable
 			 * (This is protected, rather than public since this is technically representing a DAG. This is only intended to be used to receive inputs as necessary)
 			 */
-			virtual mDrivableList get_drivers() { return this->drivers; }
+			virtual pDrivableList get_drivers() { return this->drivers; }
 
 			/* set_Drive_Output
 			 * Set the output of driving this block which will be visible to its children.
@@ -105,7 +116,7 @@ namespace priscas
 			}
 
 		private:
-			mDrivableList drivers;
+			pDrivableList drivers;
 			pDrivableList drivees;
 			BW_32 drive_output;
 	};
@@ -386,7 +397,7 @@ namespace priscas
 			{
 				if(this->get_drivers().size() > 0)
 				{
-					mDrivable dout = this->get_drivers().front();
+					pDrivable dout = this->get_drivers().front();
 					const BW& input = dout->get_Drive_Output();
 					this->next_state.AsInt32() = input.AsInt32();
 					this->current_state.AsInt32() = input.AsInt32();
@@ -489,23 +500,63 @@ namespace priscas
 	 *
 	 * Be aware, that the correctness of this still assumes
 	 * that only one bus is driving a node/connection at once
+	 *
+	 * Nodes are particularly useful when more than one bus is needed (i.e. can't drive a branch's output using the default bus)
+	 *
 	 */
 	class Node : public Drivable
 	{
 		public:
 
+
 			/* Drive the connection with data.
-			 * A node ought not to drive to the Drivable which is currently driving it.
+			 * If this bus did not have an explicit charge, then it will implicitly assume the
+			 * first block feeding this bus's default bus has the value to pass through.
+			 *
+			 * Otherwise, the explicit charge is used.
+			 *
 			 * This drives all connected devices' with the provided data accordingly.
 			 */
 			bool drive()
 			{
-				mDrivableList drl = this->get_drivers(); // todo use references
+				pDrivableList drl = this->get_drivers(); // todo use references
 
-				this->set_Drive_Output(this->get_drivers().front()->get_Drive_Output());
-			
+				if(this->charge_data.get() == nullptr)
+				{
+					this->set_Drive_Output(this->get_drivers().front()->get_Drive_Output());
+				}
+
+				else
+				{
+					this->set_Drive_Output(*this->charge_data);
+				}
+
+				if(this->get_dependents().size() == 0)
+				{
+					return true;
+				}
+
+				else
+				{
 				return false;
+				}
 			}
+
+			
+			/* explicit_charge(...)
+			 *
+			 */
+			void explicit_charge(const BW& charge_data)
+			{
+				if(this->charge_data.get() == nullptr)
+				{
+					this->charge_data = mBW(new BW_default());
+				}
+			}
+
+		private:
+
+			mBW charge_data;
 	};
 
 	/* PHDL Execution Engine

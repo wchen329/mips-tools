@@ -39,19 +39,51 @@ namespace priscas
 		);*/
 	}
 
+	void mips_decoding_unit_32::decode(BW_32 inst)
+	{
+		int32_t inst_word = inst.AsInt32();
+
+		// -Masks-
+		int32_t opcode_mask = (~(1 << 26)) + 1;
+		int32_t rs_mask = ~( ((~(1 << 26)) + 1) | ((1 << 21) - 1));
+		int32_t rt_mask = ~( ((~(1 << 21)) + 1) | ((1 << 16) - 1));
+		int32_t rd_mask = ~( ((~(1 << 16)) + 1) | ((1 << 11) - 1));
+		int32_t funct_mask = 63;
+		int32_t shamt_mask = (1 << 11) - 1 - funct_mask;
+		int32_t imm_mask_i = (1 << 16) - 1;
+		int32_t addr_mask = (1 << 26) - 1;
+
+		// - Actual values
+		MIPS_32::opcode op = static_cast<MIPS_32::opcode>(((opcode_mask & inst_word) >> 26) & ((1 << 6) - 1));
+		MIPS_32::format fm;
+		int rs;
+		int rt;
+		int rd;
+		MIPS_32::funct func;
+		int shamt;
+		int imm;
+
+		// Set a mode based on OP
+		if(op == MIPS_32::R_FORMAT) fm = MIPS_32::R;
+		else if(MIPS_32::j_inst(static_cast<MIPS_32::opcode>(op))) fm = MIPS_32::J;
+		else fm = MIPS_32::I;
+
+		// Then decode!
+		rs = (rs_mask & inst_word) >> 21;
+		rt = (rt_mask & inst_word) >> 16;
+		rd = (rd_mask & inst_word) >> 11;
+		func = static_cast<MIPS_32::funct>((funct_mask & inst_word));
+		shamt = (shamt_mask & inst_word) >> 6;
+		imm = fm == MIPS_32::I	? (imm_mask_i & inst_word) | (~(inst_word & (1 << 15)) + 1)
+						: (addr_mask & inst_word) | (~(inst_word & (1 << 25)) + 1); // make it signed
+
+	}
+
 	void RTLB_mips32_sc::decode()
 	{
 
-		MIPS_32::mips_decoding_unit_32 decoding_unit;
-		decoding_unit.decode(	inst,
-								fm,
-								op,
-								rs,
-								rt,
-								rd,
-								func,
-								shamt,
-								imm		);
+		mips_decoding_unit_32 decoding_unit;
+		decoding_unit.decode(inst);
 
 		// Set the write enable accordingly
 		bool reg_we = MIPS_32::reg_write_inst(op, func);

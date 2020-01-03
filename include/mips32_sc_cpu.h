@@ -22,7 +22,7 @@
 #define __SC_CPU_H__
 #include <memory>
 #include "phdl.h"
-#include "reg_32.h"
+#include "rtl_cpu_common.h"
 #include "primitives.h"
 #include "mmem.h"
 #include "mips.h"
@@ -52,22 +52,18 @@ namespace priscas
 			/* BW_32& get_reg_data(int index)
 			 * Get the current state of the index'th register
 			 */
-			BW_32& get_reg_data(int index) { return this->RegisterFile[index].get_current_state(); }
+			BW_32& get_reg_data(int index) { return this->RegisterFile[index]->get_current_state(); }
 			
 			/* BW_32& get_PC()
 			 * Get current state of the PC
 			 */
-			BW_32& get_PC() { return this->pc.get_current_state(); }
+			BW_32& get_PC() { return this->pc->get_current_state(); }
 			
 			/* Constructor.
 			 * Allows CPU to read from/write to meomry
 			 * and also sets up timing with any clocks.
 			 */
-			mips32_sc_cpu(mmem & m, Clock& bclk) :
-				mm(m),
-				comcount(0),
-				mips32_cpu("Generic MIPS-32 Single Cycle", 200000)
-			{}
+			mips32_sc_cpu(mmem & m, Clock& bclk);
 
 			virtual CPU_ControlPanel& get_CPU_options() { return this->cp; }
 
@@ -93,14 +89,26 @@ namespace priscas
 			
 			// Statistics
 			InstCount comcount; // amount of instructions committed (since last reset)
+			
+			////////////////////////////////////////
 
 			/* Non-Memory CPU State 
 			 */
-			static const int REG_COUNT = 32;
-			Register_32 RegisterFile[REG_COUNT];
 			
+			// "Register File"
+			static const int REG_COUNT = 32;
+			mRegister_32 RegisterFile[REG_COUNT];
+			
+			// RF read/write ports
+			std::shared_ptr<Mux_Generic<REG_COUNT>> rf_read_port_1;
+			std::shared_ptr<Mux_Generic<REG_COUNT>> rf_read_port_2;
+			mNode rf_write_port;
+
 			// PC Register
-			Register_32 pc;
+			mRegister_32 pc;
+
+
+			////////////////////////////////////////
 
 			/* Memory state
 			 * (as reference)

@@ -31,12 +31,13 @@ namespace priscas
 
 	void mips32_sc_cpu::rst()
 	{
-/*		for(int i = 0; i < 32; i++)
+		this->pc->force_current_state(0);
+
+		// Set each register's state to zero
+		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
 		{
-			this->RegisterFile
+			RegisterFile[regind]->force_current_state(0);
 		}
-		*/
-		this->pc.force_current_state(0);
 	}
 
 	void mips32_sc_cpu::mem_req_write(byte_8b data, int index)
@@ -47,5 +48,22 @@ namespace priscas
 	byte_8b mips32_sc_cpu::mem_req_load(int index)
 	{
 		return this->mm[index % this->mm.get_size()];
+	}
+
+	mips32_sc_cpu::mips32_sc_cpu(mmem & m, Clock& bclk) :
+		mm(m),
+		pc(new Register_32),
+		comcount(0),
+		mips32_cpu("Generic MIPS-32 Single Cycle", 200000)
+	{
+		// Connect the PC
+		bclk.connect(pc);
+
+		// Connect each register (the so-called "register file")
+		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
+		{
+			RegisterFile[regind] = mRegister_32(new Register_32);
+			bclk.connect(RegisterFile[regind]);
+		}
 	}
 }

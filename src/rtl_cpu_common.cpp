@@ -32,9 +32,9 @@ namespace priscas
 
 	void PrimitiveAnd::cycle()
 	{
-		mDrivableList dl = this->get_drivers();
+		pDrivableList dl = this->get_drivers();
 
-		mDrivableList::iterator dlter = dl.begin();
+		pDrivableList::iterator dlter = dl.begin();
 
 		// Get drive output
 		const BW& A = (*dlter)->get_Drive_Output();

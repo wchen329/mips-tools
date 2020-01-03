@@ -262,7 +262,7 @@ namespace priscas
 			 * These will be modified when > 64 bitlength is supported
 			 */
 			BW_generic<bitlength> operator=(const BW& in) {return BW_generic<bitlength>(in.asInt64());}
-			BW_generic<bitlength>(const BW& in) { BW_generic<bitlength>(in.AsInt64()); }
+			BW_generic<bitlength>(const BW& in) { this->w.i64 = (in.AsInt64()); }
 
 			/* get_bitlength()
 			 * Return bitlength;
@@ -341,6 +341,7 @@ namespace priscas
 	typedef BW_generic<16> BW_16;
 	typedef BW_generic<32> BW_32;
 	typedef BW_generic<64> BW_64;
+	typedef BW_32 BW_default;
 
 	/* Just a collection of two strings
 	 * Name - the name of this object

@@ -30,6 +30,52 @@
  */
 namespace priscas
 {
+	/* Decoding unit for MIPS-32
+	 *
+	 */
+	class mips_decoding_unit_32 : public RTLBranch
+	{
+		public:
+
+			void cycle()
+			{
+				decode(this->get_drivers()[0]->get_Drive_Output());
+			}
+
+			void decode(BW_32 inst_word);
+
+			mips_decoding_unit_32() :
+				rs_out(new Node),
+				rt_out(new Node),
+				rd_out(new Node),
+				funct_out(new Node),
+				shamt_out(new Node),
+				imm_out(new Node)
+			{
+				rs_out->connect_input(this);
+				rt_out->connect_input(this);
+				rd_out->connect_input(this);
+				funct_out->connect_input(this);
+				shamt_out->connect_input(this);
+				imm_out->connect_input(this);
+			}
+
+			mNode get_bus_rs_out() { return this->rs_out; }
+			mNode get_bus_rt_out() { return this->rt_out; }
+			mNode get_bus_rd_out() { return this->rd_out; }
+			mNode get_bus_funct_out() { return this->funct_out; }
+			mNode get_bus_shamt_out() { return this->shamt_out; }
+			mNode get_bus_imm_out() { return this->imm_out; }
+
+		private:
+			mNode rs_out;
+			mNode rt_out;
+			mNode rd_out;
+			mNode funct_out;
+			mNode shamt_out;
+			mNode imm_out;
+	};
+
 	class RTLB_mips32_sc : protected RTLB_basic_sc
 	{
 		public:

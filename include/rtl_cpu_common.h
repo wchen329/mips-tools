@@ -43,6 +43,94 @@ namespace priscas
 
 	typedef std::shared_ptr<PrimitiveAnd> mPrimitiveAnd;
 
+	// Adders
+	template<int bitcount, unsigned input_count> class nnaryIntAdder : public RTLBranch
+	{
+		void cycle()
+		{
+			mDrivableList dl = this->get_drivers();
+			
+			BW_generic<bitcount> sum;
+
+			unsigned depth = 0;
+
+			for(mDrivableList::iterator dlitr = dl.begin(); dlitr != dl.end() && depth < input_count; ++dlitr)
+			{
+				sum += (*dlitr)->get_Drive_Output().AsInt64();
+				++depth;
+			}
+		}
+
+		nnaryIntAdder() : RTLBranch(input_count) {}
+	};
+
+	typedef nnaryIntAdder<8, 2> BinaryIntAdder8;
+	typedef nnaryIntAdder<16, 2> BinaryIntAdder16;
+	typedef nnaryIntAdder<32, 2> BinaryIntAdder32;
+	typedef nnaryIntAdder<64, 2> BinaryIntAdder64;
+
+	template<int bitcount, unsigned input_count> class nnaryUIntAdder : public RTLBranch
+	{
+		void cycle()
+		{
+			mDrivableList dl = this->get_drivers();
+			
+			BW_generic<bitcount> sum;
+
+			unsigned depth = 0;
+
+			for(mDrivableList::iterator dlitr = dl.begin(); dlitr != dl.end() && depth < input_count; ++dlitr)
+			{
+				sum += (*dlitr)->get_Drive_Output().AsUInt64();
+				++depth;
+			}
+		}
+
+		nnaryUIntAdder() : RTLBranch(input_count) {}
+	};
+
+	typedef nnaryIntAdder<8, 2> BinaryUIntAdder8;
+	typedef nnaryIntAdder<16, 2> BinaryUIntAdder16;
+	typedef nnaryIntAdder<32, 2> BinaryUIntAdder32;
+	typedef nnaryIntAdder<64, 2> BinaryUIntAdder64;
+
+	template<uint64_t incamount> class PrimitiveIntegerIncrementer : public RTLBranch
+	{
+		public:
+			void cycle()
+			{
+				mDrivableList dl = this->get_drivers();
+				
+				// Increment the first by 4
+				dl.front();
+
+				this->set_Drive_Output(dl.front()->get_Drive_Output().AsUInt64() + incamount);
+			}
+
+	};
+	
+	typedef PrimitiveIntegerIncrementer<1> rtlbIntegerIncPlus1;
+	typedef PrimitiveIntegerIncrementer<4> rtlbIntegerIncPlus2;
+	typedef PrimitiveIntegerIncrementer<4> rtlbIntegerIncPlus4;
+	typedef PrimitiveIntegerIncrementer<4> rtlbIntegerIncPlus8;
+
+	/* Mux_Generic
+	 * Requires one select input, and n other inputs
+	 */
+	template<unsigned register_count> class Mux_Generic : public RTLBranch
+	{
+		public:
+			void cycle()
+			{
+				mBW addr = this->get_drivers()[0]->get_Drive_Output();
+				unsigned selection = addr->AsUInt32() % register_count;
+
+				this->set_Drive_Output(this->get_drivers()[selection + 1]->get_Drive_Output());
+			}
+
+			Mux_Generic() : RTLBranch(register_count + 1) {}
+	};
+
 	/* Basic Single Cycle CPU
 	 * RTL "template"
 	 *
