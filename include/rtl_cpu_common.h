@@ -38,13 +38,12 @@ namespace priscas
 		public:
 			LINK_DE void cycle();
 
-			PrimitiveAnd() : RTLBranch(2) {} // 2 inputs
 	};
 
 	typedef std::shared_ptr<PrimitiveAnd> mPrimitiveAnd;
 
 	// Adders
-	template<int bitcount, unsigned input_count> class nnaryIntAdder : public RTLBranch
+	template<int bitcount> class nnaryIntAdder : public RTLBranch
 	{
 		void cycle()
 		{
@@ -54,22 +53,20 @@ namespace priscas
 
 			unsigned depth = 0;
 
-			for(mDrivableList::iterator dlitr = dl.begin(); dlitr != dl.end() && depth < input_count; ++dlitr)
+			for(size_t pind = 0; pind < this->get_num_inputs(); ++pind)
 			{
-				sum += (*dlitr)->get_Drive_Output().AsInt64();
+				sum += this->get_nth_input(pind)->get_Drive_Output().AsInt64();
 				++depth;
 			}
 		}
-
-		nnaryIntAdder() : RTLBranch(input_count) {}
 	};
 
-	typedef nnaryIntAdder<8, 2> BinaryIntAdder8;
-	typedef nnaryIntAdder<16, 2> BinaryIntAdder16;
-	typedef nnaryIntAdder<32, 2> BinaryIntAdder32;
-	typedef nnaryIntAdder<64, 2> BinaryIntAdder64;
+	typedef nnaryIntAdder<8> nnaryIntAdder8;
+	typedef nnaryIntAdder<16> nnaryIntAdder16;
+	typedef nnaryIntAdder<32> nnaryIntAdder32;
+	typedef nnaryIntAdder<64> nnaryIntAdder64;
 
-	template<int bitcount, unsigned input_count> class nnaryUIntAdder : public RTLBranch
+	template<int bitcount> class nnaryUIntAdder : public RTLBranch
 	{
 		void cycle()
 		{
@@ -79,20 +76,19 @@ namespace priscas
 
 			unsigned depth = 0;
 
-			for(mDrivableList::iterator dlitr = dl.begin(); dlitr != dl.end() && depth < input_count; ++dlitr)
+			for(size_t pind = 0; pind != this->get_num_inputs(); ++pind)
 			{
-				sum += (*dlitr)->get_Drive_Output().AsUInt64();
+				sum += this->get_nth_input(pind)->get_Drive_Output().AsUInt64();
 				++depth;
 			}
 		}
 
-		nnaryUIntAdder() : RTLBranch(input_count) {}
 	};
 
-	typedef nnaryIntAdder<8, 2> BinaryUIntAdder8;
-	typedef nnaryIntAdder<16, 2> BinaryUIntAdder16;
-	typedef nnaryIntAdder<32, 2> BinaryUIntAdder32;
-	typedef nnaryIntAdder<64, 2> BinaryUIntAdder64;
+	typedef nnaryUIntAdder<8> BinaryUIntAdder8;
+	typedef nnaryUIntAdder<16> BinaryUIntAdder16;
+	typedef nnaryUIntAdder<32> BinaryUIntAdder32;
+	typedef nnaryUIntAdder<64> BinaryUIntAdder64;
 
 	template<uint64_t incamount> class PrimitiveIntegerIncrementer : public RTLBranch
 	{
@@ -122,13 +118,12 @@ namespace priscas
 		public:
 			void cycle()
 			{
-				mBW addr = this->get_drivers()[0]->get_Drive_Output();
-				unsigned selection = addr->AsUInt32() % register_count;
+				BW_32 addr = this->get_drivers()[0]->get_Drive_Output();
+				unsigned selection = addr.AsUInt32() % register_count;
 
 				this->set_Drive_Output(this->get_drivers()[selection + 1]->get_Drive_Output());
 			}
 
-			Mux_Generic() : RTLBranch(register_count + 1) {}
 	};
 
 	/* Basic Single Cycle CPU
@@ -150,9 +145,6 @@ namespace priscas
 			virtual void fetch() = 0;
 			virtual void decode() = 0;
 			virtual void execute() = 0;
-			
-			// placeholder
-			RTLB_basic_sc() : RTLBranch(1) {}
 	};
 }
 

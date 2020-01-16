@@ -548,4 +548,22 @@ namespace priscas
 				return rt;
 		}
 	}
+
+	uint32_t MIPS_32::getALUOpControlSig(opcode op, funct fcode)
+	{
+		if(mem_inst(op) || op == ADDI || op == ADDIU)
+		{
+			return ALUOp_ADD;
+		}
+		
+		else if(jorb_inst(op, fcode))
+		{
+			return ALUOp_SUB;
+		}
+
+		else
+		{
+			return ALUOp_FUNCT_DEFINED;
+		}
+	}
 }

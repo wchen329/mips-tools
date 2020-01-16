@@ -25,12 +25,9 @@ namespace priscas
 	bool RTLBranch::drive()
 	{
 		synch.lock();
-		++this->visit_count; // increase visit count
 
 		// Test if ready. If not ready, simply exit true without doing anything.
-		// TODO: make this thread safe
-		
-		if(this->ready_requirement != this->visit_count)
+		if(this->get_num_inputs() != this->visit_count)
 		{
 			synch.unlock();
 			return true;
@@ -57,6 +54,18 @@ namespace priscas
 			{
 				return false;
 			}
+		}
+	}
+
+	void RTLBranch::event_notify(eventcode_t ev)
+	{
+		switch(ev)
+		{
+			case 0:
+				synch.lock();
+				++this->visit_count;
+				synch.unlock();
+				break;
 		}
 	}
 

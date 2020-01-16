@@ -30,6 +30,37 @@
  */
 namespace priscas
 {
+	/* Single Fetch
+	 * Fetches only one instruction per cycle.
+	 */
+	class mips_single_fetch_unit_32 : public RTLBranch
+	{
+		public:
+
+			void cycle()
+			{
+				const BW& fetch_addr = this->get_drivers()[0]->get_Drive_Output();
+				BW_32 inst;
+				inst.set_ByteN(ma[0], 0);
+				inst.set_ByteN(ma[1], 1);
+				inst.set_ByteN(ma[2], 2);
+				inst.set_ByteN(ma[3], 3);
+				this->set_Drive_Output(inst);
+			}
+
+			/* Fetch Unit.
+			 * Constructs a single 32-bit word by reading the provided main memory.
+			 * It needs to connect to the PC so a Register ptr must be given too
+			 *
+			 * ALTERNATIVELY: a branch predictor can be given instead; PC is just the source address. TODO: flush_unit
+			 */
+			mips_single_fetch_unit_32(mmem& m, mRegister_32 pc) : ma(m) { this->connect_input(pc.get()); }
+
+		private:
+			mmem& ma;
+	};
+	typedef std::shared_ptr<mips_single_fetch_unit_32> mmips_single_fetch_unit_32;
+
 	/* Decoding unit for MIPS-32
 	 *
 	 */
@@ -44,20 +75,37 @@ namespace priscas
 
 			void decode(BW_32 inst_word);
 
-			mips_decoding_unit_32() :
+			mips_decoding_unit_32(mmips_single_fetch_unit_32 fu) :
 				rs_out(new Node),
 				rt_out(new Node),
 				rd_out(new Node),
 				funct_out(new Node),
 				shamt_out(new Node),
-				imm_out(new Node)
+				imm_out(new Node),
+				RegWrite_out(new Node),
+				RegDst_out(new Node),
+				ALUSrc_out(new Node),
+				ALUOp_out(new Node),
+				Branch_out(new Node),
+				MemWrite_out(new Node),
+				MemRead_out(new Node),
+				MemToReg_out(new Node)
 			{
+				this->connect_input(fu);
 				rs_out->connect_input(this);
 				rt_out->connect_input(this);
 				rd_out->connect_input(this);
 				funct_out->connect_input(this);
 				shamt_out->connect_input(this);
 				imm_out->connect_input(this);
+				RegWrite_out->connect_input(this);
+				RegDst_out->connect_input(this);
+				ALUSrc_out->connect_input(this);
+				ALUOp_out->connect_input(this);
+				Branch_out->connect_input(this);
+				MemWrite_out->connect_input(this);
+				MemRead_out->connect_input(this);
+				MemToReg_out->connect_input(this);
 			}
 
 			mNode get_bus_rs_out() { return this->rs_out; }
@@ -66,6 +114,14 @@ namespace priscas
 			mNode get_bus_funct_out() { return this->funct_out; }
 			mNode get_bus_shamt_out() { return this->shamt_out; }
 			mNode get_bus_imm_out() { return this->imm_out; }
+			mNode get_RegWrite_out() { return this->RegWrite_out; }
+			mNode get_RegDst_out() { return this->RegDst_out; }
+			mNode get_ALUSrc_out() { return this->ALUSrc_out; }
+			mNode get_ALUOp_out() { return this->ALUOp_out; }
+			mNode get_Branch_out() { return this->Branch_out; }
+			mNode get_MemWrite_out() { return this->MemWrite_out; }
+			mNode get_MemRead_out() { return this->MemRead_out; }
+			mNode get_MemToReg_out() { return this->MemToReg_out; }
 
 		private:
 			mNode rs_out;
@@ -74,56 +130,109 @@ namespace priscas
 			mNode funct_out;
 			mNode shamt_out;
 			mNode imm_out;
+			mNode RegWrite_out;
+			mNode RegDst_out;
+			mNode ALUSrc_out;
+			mNode ALUOp_out;
+			mNode Branch_out;
+			mNode MemWrite_out;
+			mNode MemRead_out;
+			mNode MemToReg_out;
 	};
 
-	class RTLB_mips32_sc : protected RTLB_basic_sc
+	typedef std::shared_ptr<mips_decoding_unit_32> mmips_decoding_unit_32;
+
+	/* Branch Resolver.
+	 * Given the:
+	 *    - PCSrc input (0)
+	 *    - PC + 4 (input 1)
+	 *    - Sign Extended Immediate (input 2)
+	 *
+	 *    Selects the correct branch signal.
+	 */
+	class mips_branch_resolver_32 : public RTLBranch
 	{
 		public:
-			RTLB_mips32_sc(
-					mmem min
-			) :
-				m(min)//,
-				//RTLB_basic_sc(1)
-			{}
+			void cycle()
+			{
+				pDrivableList pdr = this->get_drivers();
 
-		protected:
-			void fetch();
-			void decode();
-			void execute();
+				BW_32 PCSrc = pdr[0]->get_Drive_Output();
+				BW_32 PC_Plus_4 = pdr[1]->get_Drive_Output();
+				BW_32 SignExtendedImm = pdr[2]->get_Drive_Output();
+
+				int32_t PCSrc_i32 = PCSrc.AsInt32();
+
+				BW_32 next_PC =		PCSrc_i32 == 0 ? PC_Plus_4 :
+									PCSrc_i32 == 1 ? SignExtendedImm.AsInt32() << 2 : PC_Plus_4; 
+
+				this->set_Drive_Output(next_PC);
+			}
+
+	};
+
+	/* mips_architecture_rf
+	 * MIPS Architectural Register File. Two read ports and one write port.
+	 * Used for SC CPU, and Five Stage Pipeline.
+	 * Potentially usable for checkpointing in SS?
+	 *
+	 * Although this has sequential elements
+	 */
+	class mips_architecture_rf : public RTLBranch
+	{
+
+		public:
+			
+		private:
+			mRegister_32 RegisterFile[32]; // todo: cleanup, change this to a constant
+	};
+
+	/* mips_32_alu
+	 * It's an ALU.
+	 * It takes in
+	 * (0) ALUOp - which helps distinguish what type of operation it is performing
+	 * (1) Funct - which helps distinguish what type of operation it is performing
+	 * (2) Data_1 - the first operand (in non-commutative operations) from register file port 1
+	 * (3) Data_2 - the second operand (in non-commutative operations)
+	 *              the output of a mux. If 0, then source is from register file port 2
+	 *              If 1, then source if the sign extended immediate.
+	 *
+	 * Outputs
+	 * (default bus) - 
+	 * (branch_out) - 
+	 */
+	class mips_32_alu : public RTLBranch
+	{
+		public:
+			void cycle();
 
 		private:
-			// Temporaries
-			mmem& m;
-			BW_32 inst;
-			BW_32 curr_pc;
-			MIPS_32::format fm;
-			MIPS_32::opcode op; 
-			int rs; 
-			int rt;
-			int rd;
-			MIPS_32::funct func;
-			int32_t shamt;
-			int32_t imm;
+			
+			// If branch evaluates true, this is 1. If not, this is 0.
+			mNode branch_true;
 
-			// Potential candidates for new PC
-			BW_32 jr_pc;
-			BW_32 next_pc;
-			BW_32 pc_plus_4;
-			BW_32 branch_target;
+			// Constants
+			static const size_t input_ALUOp = 0;
+			static const size_t input_Funct = 1;
+			static const size_t input_Data_1 = 2;
+			static const size_t input_Data_2 = 3;
+	};
 
-			// PC Ports
-			Node pc_read_bus;
-			Node pc_write_bus;
+	/* mips_32_write_back
+	 * Register Write Back
+	 * for SC CPU and FSP
+	 * takes in two inputs
+	 * (1) RegWrite. Write if 1, Don't write if 0
+	 * (1) WriteData. The data that is written if RegWrite
+	 *
+	 * In addition this 
+	 */
+	class mips_32_write_back : public RTLBranch
+	{
+		public:
+			void cycle();
 
-			// RF Read Ports
-			Node reg_file_read_addr_1_bus; // TODO: shrink these ports down to the actual 5-bit (or something that looks like it)
-			Node reg_file_read_addr_2_bus;
-			Node reg_file_read_data_1_bus;
-			Node reg_file_read_data_2_bus;
-
-			// RF Write Ports
-			Node reg_file_write_addr_bus;
-			Node reg_file_write_data_bus;
+		private:
 	};
 }
 

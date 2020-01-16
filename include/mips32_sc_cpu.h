@@ -23,6 +23,7 @@
 #include <memory>
 #include "phdl.h"
 #include "rtl_cpu_common.h"
+#include "rtl_cpu_mips.h"
 #include "primitives.h"
 #include "mmem.h"
 #include "mips.h"
@@ -100,13 +101,19 @@ namespace priscas
 			mRegister_32 RegisterFile[REG_COUNT];
 			
 			// RF read/write ports
-			std::shared_ptr<Mux_Generic<REG_COUNT>> rf_read_port_1;
-			std::shared_ptr<Mux_Generic<REG_COUNT>> rf_read_port_2;
+			std::shared_ptr<Mux_Generic<REG_COUNT>> rf_read_port_1_mux;
+			std::shared_ptr<Mux_Generic<REG_COUNT>> rf_read_port_2_mux;
 			mNode rf_write_port;
 
 			// PC Register
 			mRegister_32 pc;
 
+			////////////////////////////////////////
+
+			/* Purely combinationals
+			 */
+			mmips_single_fetch_unit_32 fu;
+			mmips_decoding_unit_32 decodingunit;
 
 			////////////////////////////////////////
 

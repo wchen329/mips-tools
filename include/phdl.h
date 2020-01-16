@@ -53,6 +53,7 @@ namespace priscas
 	typedef std::shared_ptr<Drivable> mDrivable;
 	typedef std::deque<mDrivable> mDrivableList;
 	typedef std::deque<pDrivable> pDrivableList;
+	typedef uint16_t eventcode_t;
 
 	class PHDL_Execution_Engine;
 	typedef std::shared_ptr<PHDL_Execution_Engine> mPHDL_Execution_Engine; 
@@ -87,6 +88,14 @@ namespace priscas
 			 */
 			void connect_input(pDrivable inp) { drivers.push_back(inp); inp->drivees.push_back(this);}
 
+			/* event_notify(...)
+			 * Notify a block that an event has occurred.
+			 * Predefined:
+			 * 0 - RTLBranches this is going to be "input ready"
+			 * 1 - For registers, this is going to be "ignore structual links (i.e. do not read input except for those specified by <=)"
+			 */
+			virtual void event_notify(eventcode_t event_code) {};
+
 			 /* get_dependents
 			  * Get the elements which are driven by this drivable
 			  */
@@ -95,17 +104,35 @@ namespace priscas
 			/* get_Drive_Output
 			 * Get the input of this block which resulted from driving this block.
 			 */
-			const BW& get_Drive_Output() { return this->drive_output; }
+			const BW& get_Drive_Output() const { return this->drive_output; for(size_t oind = 0; oind < drivers.size(); ++oind) drivers[oind]->event_notify(0); }
 
-			Drivable() : drive_output(false) {}
-			
+			Drivable() : drive_output(0) {}
+
+			enum EventCodes
+			{
+				EventCode_InputReady = 0,
+				EventCode_IgnoreRegisterStructualLink = 1
+			};
+
 		protected:
 
 			/* get_drivers
 			 * Get the elements which are driving this drivable
 			 * (This is protected, rather than public since this is technically representing a DAG. This is only intended to be used to receive inputs as necessary)
+			 *
+			 * TO BE REMOVED: this is no longer necessary
 			 */
 			virtual pDrivableList get_drivers() { return this->drivers; }
+
+			/* get_num_inputs
+			 * Return the amount of inputs this circuit element has
+			 */
+			size_t get_num_inputs() { return this->drivers.size(); }
+
+			/* get_nth_input
+			 * Returns the nth input if available (checked)
+			 */
+			const pDrivable get_nth_input(size_t n) { return this->drivers.at(n); }
 
 			/* set_Drive_Output
 			 * Set the output of driving this block which will be visible to its children.
@@ -119,58 +146,6 @@ namespace priscas
 			pDrivableList drivers;
 			pDrivableList drivees;
 			BW_32 drive_output;
-	};
-
-
-	/* Execution_Synchronized
-	 *
-	 * Execution synchronized objects 
-	 * are those which have explicit execution parents
-	 * and must wait for their completion before executing themselves
-	 *
-	 * This only means "execution synchronized"- this doesn't handle anything specific outside of the pHDL execution engine
-	 * necessarily
-	 */
-	class Execution_Synchronized
-	{
-		public:
-
-			/* bool ready()
-			 * Return if this object is ready to execute/cycle
-			 * False if not
-			 *
-			 * It is ready if the ready count is equal to
-			 *
-			 */
-			bool ready() { return tthresh == tcount; }
-
-			/* execute()
-			 * Execute the enclosed block.
-			 */
-			virtual void execute() = 0;
-
-			/* steal()
-			 * Take over execution of this object.
-			 * (i.e. climb down the graph chain)
-			 */
-			void steal() { lock.lock(); tcount = 0; execute(); lock.unlock(); }
-
-			/* declare_parent_ready()
-			 * Raise the ready count by one
-			 */
-			void declare_parent_ready() { lock.lock(); ++tcount; lock.unlock();}
-
-			/* Constructor.
-			 * Takes in a single threshhold.
-			 */
-			Execution_Synchronized(int tthresh) : tthresh(tthresh) {}
-
-		private:
-			int tthresh;
-			int tcount;
-			priscas_osi::mlock lock;
-			Execution_Synchronized();
-
 	};
 
 	/* RTLBranch
@@ -200,15 +175,13 @@ namespace priscas
 				 */
 				LINK_DE bool drive();
 
-				/* Constructor.
-				 * Set the visit count to zero.
+				/* virtual void event_notify(...)
+				 * Register event. For RTLBranches, 0 = input ready
 				 */
-				RTLBranch(unsigned input_count = 1) : visit_count(0), ready_requirement(input_count) {}
+				LINK_DE void event_notify(eventcode_t event_code);
 
 			private:
-
 				unsigned visit_count;
-				unsigned ready_requirement;
 				priscas_osi::mlock synch;
 	};
 

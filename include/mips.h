@@ -168,11 +168,17 @@ namespace priscas
 			{
 						ALUOp_ADD = 0,
 						ALUOp_SUB = 1,
-						ALUOp_SLL = 2,
-						ALUOp_SRL = 3,
-						ALUOp_OR = 4,
-						ALUOp_AND = 5,
-						ALUOp_XOR = 6
+						ALUOp_FUNCT_DEFINED = 2
+			};
+
+			enum Operation
+			{
+				Operation_AND = 0,
+				Operation_OR = 1,
+				Operation_ADD = 2,
+				Operation_SUBTRACT = 6,
+				Operation_SETLESSTHAN = 7,
+				Operation_NOR = 8
 			};
 
 			/* Generic ALU with four operations:
@@ -194,20 +200,8 @@ namespace priscas
 						case ALUOp_SUB:
 							ret = arg1 - arg2;
 							break;
-						case ALUOp_SLL:
+						case ALUOp_FUNCT_DEFINED:
 							ret = arg1 << arg2;
-							break;
-						case ALUOp_SRL:
-							ret = ((arg1 >> arg2) & ((1 << (32 - arg2)) - 1));
-							break;
-						case ALUOp_OR:
-							ret = (arg1 | arg2);
-							break;
-						case ALUOp_AND:
-							ret = (arg1 & arg2);
-							break;
-						case ALUOp_XOR:
-							ret = (arg1 ^ arg2);
 							break;
 
 						default:
@@ -276,11 +270,11 @@ namespace priscas
 			 */
 			static BW_32 offset_to_address_br(BW_32 current, BW_32 target);
 
-
 			/* Get register write destination for Integer unit instructions
 			 */
 			static int getRegDst(int rd, int rt, opcode op);
 
+			static uint32_t getALUOpControlSig(opcode op, funct fcode);
 
 		private:
 			static const unsigned REG_COUNT = 32;

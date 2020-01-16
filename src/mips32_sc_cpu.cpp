@@ -54,7 +54,9 @@ namespace priscas
 		mm(m),
 		pc(new Register_32),
 		comcount(0),
-		mips32_cpu("Generic MIPS-32 Single Cycle", 200000)
+		mips32_cpu("Generic MIPS-32 Single Cycle", 200000),
+		fu(new mips_single_fetch_unit_32(mm, pc)),
+		decodingunit(new mips_decoding_unit_32(fu))
 	{
 		// Connect the PC
 		bclk.connect(pc);
@@ -65,5 +67,26 @@ namespace priscas
 			RegisterFile[regind] = mRegister_32(new Register_32);
 			bclk.connect(RegisterFile[regind]);
 		}
+
+		/// READ PORT 1
+		// Then connect each register to Read Port Mux and Write Port
+		rf_read_port_1_mux->connect_input(this->decodingunit->get_bus_rs_out()); // selector
+
+		// connect each register...
+		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
+		{
+			rf_read_port_1_mux->connect_input(RegisterFile[regind]);
+		}
+
+		/// READ PORT 2
+		rf_read_port_2_mux->connect_input(this->decodingunit->get_bus_rt_out()); // selector
+
+		// connect each register...
+		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
+		{
+			rf_read_port_2_mux->connect_input(RegisterFile[regind]);
+		}
+
+
 	}
 }
