@@ -22,21 +22,21 @@
 
 namespace priscas
 {
+	// Todo: make thread safe
 	bool RTLBranch::drive()
 	{
-		synch.lock();
+		++this->visit_count;
 
 		// Test if ready. If not ready, simply exit true without doing anything.
 		if(this->get_num_inputs() != this->visit_count)
 		{
-			synch.unlock();
 			return true;
 		}
 
 		// Otherwise, we're ready to execute.
 		else
 		{
-			synch.unlock();
+			this->visit_count = 0;
 
 			// Execute.
 			this->cycle();
@@ -109,9 +109,6 @@ namespace priscas
 		tschedind = (tschedind + 1) % threads.size();
 
 		threads[tschedind]->addWork_ts(PHDL_Work_Unit(executable));
-
-		// Get the children, use breadth-first traversal to register them
-		// TODO
 	}
 
 	void PHDL_TLP_Execution_Engine::pHDL_EventHandler::Work()

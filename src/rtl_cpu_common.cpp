@@ -32,16 +32,9 @@ namespace priscas
 
 	void PrimitiveAnd::cycle()
 	{
-		pDrivableList dl = this->get_drivers();
-
-		pDrivableList::iterator dlter = dl.begin();
-
 		// Get drive output
-		const BW& A = (*dlter)->get_Drive_Output();
-
-		++dlter;
-
-		const BW& B = (*dlter)->get_Drive_Output();
+		const BW& A = this->get_nth_input(0)->get_Drive_Output();
+		const BW& B = this->get_nth_input(1)->get_Drive_Output();
 
 		// Set the output as the bitwise and of them
 		this->set_Drive_Output(BW_32(A.AsInt32() & B.AsInt32()));

@@ -51,6 +51,7 @@ namespace priscas
 	class Drivable;
 	typedef Drivable* pDrivable;
 	typedef std::shared_ptr<Drivable> mDrivable;
+	typedef std::deque<Drivable> DrivableList;
 	typedef std::deque<mDrivable> mDrivableList;
 	typedef std::deque<pDrivable> pDrivableList;
 	typedef uint16_t eventcode_t;
@@ -179,6 +180,8 @@ namespace priscas
 				 * Register event. For RTLBranches, 0 = input ready
 				 */
 				LINK_DE void event_notify(eventcode_t event_code);
+
+				RTLBranch() : visit_count(0) {}
 
 			private:
 				unsigned visit_count;
