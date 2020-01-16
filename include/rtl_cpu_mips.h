@@ -37,7 +37,7 @@ namespace priscas
 	{
 		public:
 
-			void cycle()
+			LINK_DE void cycle()
 			{
 				const BW& fetch_addr = this->get_drivers()[0]->get_Drive_Output();
 				BW_32 inst;
@@ -54,7 +54,7 @@ namespace priscas
 			 *
 			 * ALTERNATIVELY: a branch predictor can be given instead; PC is just the source address. TODO: flush_unit
 			 */
-			mips_single_fetch_unit_32(mmem& m, mRegister_32 pc) : ma(m) { this->connect_input(pc.get()); }
+			LINK_DE mips_single_fetch_unit_32(mmem& m, mRegister_32 pc) : ma(m) { this->connect_input(pc.get()); }
 
 		private:
 			mmem& ma;
@@ -68,14 +68,14 @@ namespace priscas
 	{
 		public:
 
-			void cycle()
+			LINK_DE void cycle()
 			{
 				decode(this->get_drivers()[0]->get_Drive_Output());
 			}
 
-			void decode(BW_32 inst_word);
+			LINK_DE void decode(BW_32 inst_word);
 
-			mips_decoding_unit_32(mmips_single_fetch_unit_32 fu) :
+			LINK_DE mips_decoding_unit_32(mmips_single_fetch_unit_32 fu) :
 				rs_out(new Node),
 				rt_out(new Node),
 				rd_out(new Node),
@@ -108,20 +108,20 @@ namespace priscas
 				MemToReg_out->connect_input(this);
 			}
 
-			mNode get_bus_rs_out() { return this->rs_out; }
-			mNode get_bus_rt_out() { return this->rt_out; }
-			mNode get_bus_rd_out() { return this->rd_out; }
-			mNode get_bus_funct_out() { return this->funct_out; }
-			mNode get_bus_shamt_out() { return this->shamt_out; }
-			mNode get_bus_imm_out() { return this->imm_out; }
-			mNode get_RegWrite_out() { return this->RegWrite_out; }
-			mNode get_RegDst_out() { return this->RegDst_out; }
-			mNode get_ALUSrc_out() { return this->ALUSrc_out; }
-			mNode get_ALUOp_out() { return this->ALUOp_out; }
-			mNode get_Branch_out() { return this->Branch_out; }
-			mNode get_MemWrite_out() { return this->MemWrite_out; }
-			mNode get_MemRead_out() { return this->MemRead_out; }
-			mNode get_MemToReg_out() { return this->MemToReg_out; }
+			LINK_DE mNode get_bus_rs_out() { return this->rs_out; }
+			LINK_DE mNode get_bus_rt_out() { return this->rt_out; }
+			LINK_DE mNode get_bus_rd_out() { return this->rd_out; }
+			LINK_DE mNode get_bus_funct_out() { return this->funct_out; }
+			LINK_DE mNode get_bus_shamt_out() { return this->shamt_out; }
+			LINK_DE mNode get_bus_imm_out() { return this->imm_out; }
+			LINK_DE mNode get_RegWrite_out() { return this->RegWrite_out; }
+			LINK_DE mNode get_RegDst_out() { return this->RegDst_out; }
+			LINK_DE mNode get_ALUSrc_out() { return this->ALUSrc_out; }
+			LINK_DE mNode get_ALUOp_out() { return this->ALUOp_out; }
+			LINK_DE mNode get_Branch_out() { return this->Branch_out; }
+			LINK_DE mNode get_MemWrite_out() { return this->MemWrite_out; }
+			LINK_DE mNode get_MemRead_out() { return this->MemRead_out; }
+			LINK_DE mNode get_MemToReg_out() { return this->MemToReg_out; }
 
 		private:
 			mNode rs_out;

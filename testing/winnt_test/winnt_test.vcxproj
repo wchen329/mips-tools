@@ -72,6 +72,7 @@
     <ClCompile Include="..\tests\test_basic_node.cpp" />
     <ClCompile Include="..\tests\test_combinational.cpp" />
     <ClCompile Include="..\tests\test_dual_clock_signals.cpp" />
+    <ClCompile Include="..\tests\test_mips32_singlefetchdecode.cpp" />
     <ClCompile Include="..\tests\test_register32.cpp" />
     <ClCompile Include="test_ds.cpp" />
     <ClCompile Include="winnt_test.cpp" />

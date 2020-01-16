@@ -17,6 +17,7 @@ void Setup_Tests()
 	AddTest(test_clock_signal, "test_clock_signal");
 	AddTest(test_dual_clock_signals, "test_dual_clock_signals");
 	AddTest(test_combinational, "test_combinational");
+	AddTest(test_mips32_singlefetchdecode, "test_mips32_singlefetch_decode");
 
 	/*
 	AddTest(test_shell_comments, "test_shell_comments");

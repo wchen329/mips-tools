@@ -30,14 +30,14 @@ namespace priscas
 	class mmem : public bit_storage, public srpackable
 	{
 		public:
-			size_t get_size(){return size;}		// returns size;
-			byte_8b * begin() {return data;}	// get beginning address of data range
-			mmem(size_t size = 1024);
-			byte_8b& operator[](ptrdiff_t ind);
-			const byte_8b& operator[](ptrdiff_t ind) const;
-			void save(FILE*);
-			void restore(FILE*);
-			~mmem();
+			LINK_DE size_t get_size(){return size;}		// returns size;
+			LINK_DE byte_8b * begin() {return data;}	// get beginning address of data range
+			LINK_DE mmem(size_t size = 1024);
+			LINK_DE byte_8b& operator[](ptrdiff_t ind);
+			LINK_DE const byte_8b& operator[](ptrdiff_t ind) const;
+			LINK_DE void save(FILE*);
+			LINK_DE void restore(FILE*);
+			LINK_DE ~mmem();
 		private:
 			mmem operator=(const mmem &);		// copy assignment, disabled
 			mmem(const mmem &);					// copy constructor, disabled

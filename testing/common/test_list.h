@@ -14,6 +14,9 @@ void test_shell_comments();
 void test_shell_justexit();
 void test_shell_multidirectsymbol();
 
+// MIPS RTL
+void test_mips32_singlefetchdecode();
+
 // Single CPU - MIPS32
 void test_sc_cpu_core_instructions();
 void test_sc_cpu_loop();

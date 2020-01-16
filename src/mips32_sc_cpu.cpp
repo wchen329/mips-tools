@@ -36,7 +36,7 @@ namespace priscas
 		// Set each register's state to zero
 		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
 		{
-			RegisterFile[regind]->force_current_state(0);
+	//		RegisterFile[regind]->force_current_state(0);
 		}
 	}
 
@@ -61,19 +61,19 @@ namespace priscas
 		// Connect the PC
 		bclk.connect(pc);
 
-		// Connect each register (the so-called "register file")
+/*		// Connect each register (the so-called "register file")
 		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
 		{
 			RegisterFile[regind] = mRegister_32(new Register_32);
 			bclk.connect(RegisterFile[regind]);
 		}
-
+*/
 		/// READ PORT 1
 		// Then connect each register to Read Port Mux and Write Port
-		rf_read_port_1_mux->connect_input(this->decodingunit->get_bus_rs_out()); // selector
+//		rf_read_port_1_mux->connect_input(this->decodingunit->get_bus_rs_out()); // selector
 
 		// connect each register...
-		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
+/*		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
 		{
 			rf_read_port_1_mux->connect_input(RegisterFile[regind]);
 		}
@@ -85,7 +85,7 @@ namespace priscas
 		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
 		{
 			rf_read_port_2_mux->connect_input(RegisterFile[regind]);
-		}
+		}*/
 
 
 	}

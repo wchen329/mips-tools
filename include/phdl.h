@@ -526,7 +526,7 @@ namespace priscas
 			{
 				if(this->charge_data.get() == nullptr)
 				{
-					this->charge_data = mBW(new BW_default());
+					this->charge_data = mBW(new BW_default(charge_data));
 				}
 			}
 

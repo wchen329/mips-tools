@@ -7,15 +7,6 @@ int test_collection::run_test(int index)
 	std::string n(this->test_to_name.at(test_routine));
 
 	fprintf(stdout, "Running test [%d] : %s ", index, n.c_str());
-	
-	//running_test->StartInfo->FileName = "winnt_test.exe";
-	//running_test->StartInfo->Arguments = "-t " + addr;
-	//running_test->StartInfo->UseShellExecute = false;
-	//running_test->StartInfo->RedirectStandardError = true;
-	//running_test->Start();
-	//running_test->WaitForExit();
-
-	//int status = running_test->ExitCode;
 
 	int status = 0;
 
@@ -28,11 +19,6 @@ int test_collection::run_test(int index)
 		status = 1;
 	}
 
-	//Timer^ t = gcnew Timer();
-	//t->Interval = 5;
-	//t->Elapsed() = gcnew(System::EventHandler(this, &Timer::Elapsed());
-	//t->Start();
-
 	if(status == 0)
 	{
 		fprintf(stdout, "PASSED\n");
@@ -43,7 +29,6 @@ int test_collection::run_test(int index)
 	{
 		fprintf(stdout, "FAILED\n");
 		fprintf(stdout, "[Debug Information]\n\t");
-		//Console::WriteLine(running_test->StandardError->ReadToEnd());
 		ret = 1;
 	}
 
