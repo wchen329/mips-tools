@@ -70,8 +70,8 @@ namespace priscas
 
 		// Assign control signals
 		BW_32 RegWrite = MIPS_32::reg_write_inst(op, func) && MIPS_32::getRegDst(rd, rt, op) != 0 ? 1 : 0;
-		BW_32 RegDst = MIPS_32::getRegDst(0, 1, op);
-		BW_32 ALUSrc = MIPS_32::mem_inst(op) ? 1 : 0;
+		BW_32 RegDst = MIPS_32::getRegDst(1, 0, op);
+		BW_32 ALUSrc = MIPS_32::r_inst(op) ? 0 : 1;
 		BW_32 ALUOp = MIPS_32::getALUOpControlSig(op, func);
 		BW_32 Branch = MIPS_32::jorb_inst(op, func) ? 1 : 0;
 		BW_32 MemWrite = MIPS_32::mem_write_inst(op) ? 1 : 0;
@@ -89,7 +89,7 @@ namespace priscas
 		MemToReg_out->explicit_charge(MemToReg);
 	}
 
-	void mips_32_alu::cycle()
+	void mips_alu_32::cycle()
 	{
 		// Receive inputs.
 		BW_32 aluop = this->get_nth_input(input_ALUOp)->get_Drive_Output();
@@ -105,11 +105,11 @@ namespace priscas
 		switch(rop)
 		{
 			case MIPS_32::ALUOp_ADD:
-				result = srcdata1.AsUInt32() + srcdata1.AsUInt32();
+				result = srcdata1.AsUInt32() + srcdata2.AsUInt32();
 				break;
 
 			case MIPS_32::ALUOp_SUB:
-				result = srcdata1.AsUInt32() - srcdata1.AsUInt32();
+				result = srcdata1.AsUInt32() - srcdata2.AsUInt32();
 				break;
 
 			case MIPS_32::ALUOp_FUNCT_DEFINED:

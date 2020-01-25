@@ -50,10 +50,13 @@ namespace priscas
 		pc(new Register_32),
 		comcount(0),
 		mips32_cpu("Generic MIPS-32 Single Cycle", 200000),
-		fu(new mips_single_fetch_unit_32(mm, pc)),
+		fu(new mips_single_fetch_unit_32(m, pc)),
 		decodingunit(new mips_decoding_unit_32(fu)),
 		rf(new RegisterFile_32_32_2_1(bclk)),
-		ALUSrcMux(new Mux_2_1)
+		ALUSrcMux(new Mux_2_1),
+		MemToRegMux(new Mux_2_1),
+		RegDstMux(new Mux_2_1),
+		malu(new mips_alu_32)
 	{
 		// Connect the PC
 		bclk.connect(pc);
@@ -65,6 +68,33 @@ namespace priscas
 		rf->get_nth_read_addr_port(0)->connect_input(this->decodingunit->get_bus_rs_out());
 		rf->get_nth_read_addr_port(1)->connect_input(this->decodingunit->get_bus_rt_out());
 
-		// Connecct ALU mux to the register file
+		// Connect write enable signal
+		rf->get_nth_write_enable(0)->connect_input(this->decodingunit->get_RegWrite_out());
+
+		// Connect regdst mux
+		RegDstMux->connect_input(this->decodingunit->get_RegDst_out());
+		RegDstMux->connect_input(this->decodingunit->get_bus_rt_out());
+		RegDstMux->connect_input(this->decodingunit->get_bus_rd_out());
+		rf->get_nth_write_addr_port(0)->connect_input(RegDstMux);
+
+		// Connect final data to RF write port
+		rf->get_nth_write_port(0)->connect_input(MemToRegMux);
+
+		// Connect ALU Src Mux
+		this->ALUSrcMux->connect_input(this->decodingunit->get_ALUSrc_out());
+		this->ALUSrcMux->connect_input(this->rf->get_nth_read_port(1));
+		this->ALUSrcMux->connect_input(this->decodingunit->get_bus_imm_out());
+
+		// Connect ALU bits input: 0 is ALUOp, 1 is funct, 2 is data_1 and 3 is data_2
+		malu->connect_input(this->decodingunit->get_ALUOp_out());
+		malu->connect_input(this->decodingunit->get_bus_funct_out());
+		malu->connect_input(this->rf->get_nth_read_port(0));
+		malu->connect_input(this->ALUSrcMux);
+		
+		// Connect mem to reg mux (write back)
+		MemToRegMux->connect_input(this->decodingunit->get_MemToReg_out());
+		MemToRegMux->connect_input(this->malu);
+		rf->get_nth_write_port(0)->connect_input(MemToRegMux);
+
 	}
 }

@@ -108,8 +108,11 @@ namespace priscas
 			 */
 			mmips_single_fetch_unit_32 fu;
 			mmips_decoding_unit_32 decodingunit;
-			mMux_2_1 ALUSrcMux;
+			mmips_alu_32 malu;
 
+			mMux_2_1 ALUSrcMux;
+			mMux_2_1 MemToRegMux;
+			mMux_2_1 RegDstMux;
 
 			////////////////////////////////////////
 

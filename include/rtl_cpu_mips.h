@@ -185,13 +185,13 @@ namespace priscas
 	 * (default bus) - 
 	 * (branch_out) - 
 	 */
-	class mips_32_alu : public RTLBranch
+	class mips_alu_32 : public RTLBranch
 	{
 		public:
 			void cycle();
 
 		private:
-			
+
 			// If branch evaluates true, this is 1. If not, this is 0.
 			mNode branch_true;
 
@@ -201,6 +201,14 @@ namespace priscas
 			static const size_t input_Data_1 = 2;
 			static const size_t input_Data_2 = 3;
 	};
+
+	typedef std::shared_ptr<mips_alu_32> mmips_alu_32;
+
+	/* mips_32_sc_mem
+	 * It's a memory.
+	 * It takes in a memory
+	 */
+
 
 	/* mips_32_write_back
 	 * Register Write Back
