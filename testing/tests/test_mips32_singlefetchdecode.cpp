@@ -38,9 +38,13 @@ void test_mips32_singlefetchdecode()
 	// Test basic control signals (for R-inst)
 	int32_t memread_out = mdu32->get_MemRead_out()->get_Drive_Output().AsInt32();
 	int32_t memwrite_out = mdu32->get_MemWrite_out()->get_Drive_Output().AsInt32();
-	int32_t rd_out = mdu32->get_RegDst_out()->get_Drive_Output().AsInt32();
+	int32_t rd_out = mdu32->get_bus_rd_out()->get_Drive_Output().AsInt32();
+	int32_t rs_out = mdu32->get_bus_rs_out()->get_Drive_Output().AsInt32();
+	int32_t rt_out = mdu32->get_bus_rt_out()->get_Drive_Output().AsInt32();
 
 	assertEquals(memread_out, 0); // Assert: Not mem read
 	assertEquals(memwrite_out, 0); // Assert: Not mem write
 	assertEquals(rd_out, 5); // Writing to Register 5
+	assertEquals(rs_out, 6); // Writing to Register 6
+	assertEquals(rt_out, 7); // Writing to Register 7
 }

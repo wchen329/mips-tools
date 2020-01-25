@@ -42,6 +42,12 @@
     <ClCompile Include="..\tests\test_mips32_singlefetchdecode.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_mips32_backend.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_registerfile_32_32.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test_ds.h">

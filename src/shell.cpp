@@ -255,9 +255,10 @@ namespace priscas
 				else
 				{
 					priscas::BW_32 asm_pc = dcpu.get_PC();
-					this->AsmFlash(val, *motherboard, asm_pc); 
-				
-					motherboard->step();
+					if(this->AsmFlash(val, *motherboard, asm_pc))
+					{
+						motherboard->step();
+					}
 				}
 			}
 
@@ -325,7 +326,7 @@ namespace priscas
 		size_t real_end = input.size();
 		for(size_t cind = 0; cind < input.size(); cind++)
 		{
-			if(input[cind] == '#')
+			if(input[cind] == '#' || input[cind] == ';')
 			{
 				real_end = cind;
 				break;
@@ -340,6 +341,7 @@ namespace priscas
 
 		bool has_escaped = false;
 		bool in_quotes = false;
+		bool in_single_quotes = false;
 
 		// Use a linear search
 		for(size_t ind = 0; ind < commentless_input.size(); ind++)
