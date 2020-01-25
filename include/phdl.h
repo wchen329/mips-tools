@@ -207,21 +207,7 @@ namespace priscas
 			/* drive()
 			 * Execute epilogue when clock is met. Then return true.
 			 */
-			virtual bool drive()
-			{
-				if(timeout == 0)
-				{
-					epilogue();
-					timeout = thresh;
-				}
-
-				else
-				{
-					--timeout;
-				}
-
-				return true;
-			}
+			LINK_DE bool drive();
 
 			/* prologue()
 			 * IMPLEMENTATION: perform operations during which would otherwise happen during a cycle.
@@ -233,7 +219,7 @@ namespace priscas
 			 */
 			virtual void epilogue() = 0;
 
-			SequentialBlock() : thresh(0), timeout(0) {}
+			SequentialBlock() : thresh(0), timeout(0), visit_count(0) {}
 
 		protected:
 			/* set_Thresh(...)
@@ -244,6 +230,7 @@ namespace priscas
 		private:
 			uint64_t thresh;
 			uint64_t timeout; // the amount of time left until this clock can fire.
+			unsigned visit_count;
 	};
 
 	typedef std::shared_ptr<SequentialBlock> mSequentialBlock;

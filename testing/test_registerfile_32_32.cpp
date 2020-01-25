@@ -20,6 +20,7 @@ void test_registerfile_32_32()
 	mNode rdata_1(new Node);
 	mNode rdata_2(new Node);
 	mRegister_32 wdata_1(new Register_32);
+	mRegister_32 we(new Register_32);
 
 	// Register File
 	std::shared_ptr<UniformRegisterFile<BW_32, 32, 2, 1>> rf(new UniformRegisterFile<BW_32, 32, 2, 1>(c1));
@@ -33,6 +34,7 @@ void test_registerfile_32_32()
 	// Connect write port related
 	rf->get_nth_write_port(0)->connect_input(wdata_1);
 	rf->get_nth_write_addr_port(0)->connect_input(waddr_1);
+	rf->get_nth_write_enable(0)->connect_input(we);
 
 	// Reset rf
 	rf->rst();
@@ -43,13 +45,15 @@ void test_registerfile_32_32()
 	c1.connect(raddr_2);
 	c1.connect(waddr_1);
 	c1.connect(wdata_1);
+	c1.connect(we);
 	c1.setExecutionEngine(see);
 
 	// Drive the write wire with 5, and all other wires with 0
 	waddr_1->force_current_state(BW_32(5));
 	wdata_1->force_current_state(BW_32(5));
 	raddr_1->force_current_state(BW_32(0));
-	raddr_2->force_current_state(BW_32(0));
+	raddr_2->force_current_state(BW_32(1));
+	we->force_current_state(BW_32(1));
 	c1.cycle();
 	see->start();
 

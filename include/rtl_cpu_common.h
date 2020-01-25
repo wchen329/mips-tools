@@ -131,6 +131,13 @@ namespace priscas
 
 	};
 
+	typedef Mux_Generic<2> Mux_2_1;
+	typedef Mux_Generic<4> Mux_4_1;
+	typedef Mux_Generic<8> Mux_8_1;
+	typedef std::shared_ptr<Mux_2_1> mMux_2_1;
+	typedef std::shared_ptr<Mux_4_1> mMux_4_1;
+	typedef std::shared_ptr<Mux_8_1> mMux_8_1;
+
 	/* Basic Single Cycle CPU
 	 * RTL "template"
 	 *
@@ -188,9 +195,12 @@ namespace priscas
 				// For each of the write addresses, write the corresponding data to the registers.
 				for(unsigned in = 0; in < write_port_count; ++in)
 				{
-					const BW& addr = write_address_select[in]->get_Drive_Output();
-					const BW& writable = write_ports[in]->get_Drive_Output();
-					this->regs[addr.AsUInt32()]->force_current_state(writable);
+					if(write_enable_ports[in]->get_Drive_Output().AsInt32() != 0)
+					{
+						const BW& addr = write_address_select[in]->get_Drive_Output();
+						const BW& writable = write_ports[in]->get_Drive_Output();
+						this->regs[addr.AsUInt32()]->force_current_state(writable);
+					}
 				}
 			}
 
@@ -223,16 +233,23 @@ namespace priscas
 			 */
 			mNode get_nth_write_port(ptrdiff_t n)
 			{
-				mNode test = write_ports[n];
 				return write_ports[n];
+			}
+
+			/* get_nth_write_enable
+			 * Get the writable enable for the nth port
+			 */
+			mNode get_nth_write_enable(ptrdiff_t n)
+			{
+				return write_enable_ports[n];
 			}
 
 			/* read_reg
 			 * Read the nth register's data
 			 */
-			const BW_default read_reg(unsigned n)
+			const bwclass& read_reg(unsigned n)
 			{
-				return **regs[n];
+				return regs[n]->get_current_state();
 			}
 
 			UniformRegisterFile(Clock& clk)
@@ -247,6 +264,7 @@ namespace priscas
 				{
 					write_address_select[c2] = mNode(new Node);
 					write_ports[c2] = mNode(new Node);
+					write_enable_ports[c2] = mNode(new Node);
 				}
 
 				for(unsigned c3 = 0; c3 < regcount; ++c3)
@@ -271,6 +289,7 @@ namespace priscas
 				{
 					this->connect_input(write_ports[t2]);
 					this->connect_input(write_address_select[t2]);
+					this->connect_input(write_enable_ports[t2]);
 				}
 
 			}
@@ -285,7 +304,11 @@ namespace priscas
 			std::shared_ptr<Mux_Generic<regcount>> read_ports[read_port_count];
 			mNode write_address_select[write_port_count];
 			mNode write_ports[write_port_count];
+			mNode write_enable_ports[write_port_count];
 	};
+
+	typedef UniformRegisterFile<BW_32, 32, 2, 1> RegisterFile_32_32_2_1;
+	typedef std::shared_ptr<UniformRegisterFile<BW_32, 32, 2, 1>> mRegisterFile_32_32_2_1;
 }
 
 #endif

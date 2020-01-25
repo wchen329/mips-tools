@@ -79,12 +79,12 @@ namespace priscas
 			/* get_reg_data(int index)
 			 * IMPLEMENTATION: returns the data at the register specified
 			 */
-			virtual BW_32& get_reg_data(int index) = 0;
+			virtual const BW_32& get_reg_data(int index) = 0;
 
 			/* get_PC()
 			 * IMPLEMENTATION: return the value of the PC
 			 */
-			virtual BW_32& get_PC() = 0;
+			virtual const BW_32& get_PC() = 0;
 				
 			/* CPU_ControlPanel& get_CPU_Options()
 			 * IMPLEMENTATION: return the CPU control panel

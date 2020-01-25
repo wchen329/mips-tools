@@ -53,7 +53,7 @@ namespace priscas
 			/* BW_32& get_reg_data(int index)
 			 * Get the current state of the index'th register
 			 */
-			BW_32& get_reg_data(int index) { return this->RegisterFile[index]->get_current_state(); }
+			const BW_32& get_reg_data(int index) { return this->rf->read_reg(index); }
 			
 			/* BW_32& get_PC()
 			 * Get current state of the PC
@@ -84,10 +84,10 @@ namespace priscas
 			mips32_sc_cpu(mips32_sc_cpu&);
 			mips32_sc_cpu operator=(mips32_sc_cpu&);
 			
+			// Debugging and Control Panel
 			CPU_ControlPanel cp;
-
 			std::vector<DebugView*> debug_views;
-			
+
 			// Statistics
 			InstCount comcount; // amount of instructions committed (since last reset)
 			
@@ -97,13 +97,7 @@ namespace priscas
 			 */
 			
 			// "Register File"
-			static const int REG_COUNT = 32;
-			mRegister_32 RegisterFile[REG_COUNT];
-			
-			// RF read/write ports
-			std::shared_ptr<Mux_Generic<REG_COUNT>> rf_read_port_1_mux;
-			std::shared_ptr<Mux_Generic<REG_COUNT>> rf_read_port_2_mux;
-			mNode rf_write_port;
+			mRegisterFile_32_32_2_1 rf;
 
 			// PC Register
 			mRegister_32 pc;
@@ -114,6 +108,8 @@ namespace priscas
 			 */
 			mmips_single_fetch_unit_32 fu;
 			mmips_decoding_unit_32 decodingunit;
+			mMux_2_1 ALUSrcMux;
+
 
 			////////////////////////////////////////
 

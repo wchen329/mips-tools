@@ -22,6 +22,22 @@
 
 namespace priscas
 {
+	bool SequentialBlock::drive()
+	{
+		if(timeout == 0)
+		{
+			epilogue();
+			timeout = thresh;
+		}
+
+		else
+		{
+			--timeout;
+		}
+
+		return true;
+	}
+
 	// Todo: make thread safe
 	bool RTLBranch::drive()
 	{

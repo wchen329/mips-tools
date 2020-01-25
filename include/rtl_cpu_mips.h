@@ -171,22 +171,6 @@ namespace priscas
 
 	};
 
-	/* mips_architecture_rf
-	 * MIPS Architectural Register File. Two read ports and one write port.
-	 * Used for SC CPU, and Five Stage Pipeline.
-	 * Potentially usable for checkpointing in SS?
-	 *
-	 * Although this has sequential elements
-	 */
-	class mips_architecture_rf : public RTLBranch
-	{
-
-		public:
-			
-		private:
-			mRegister_32 RegisterFile[32]; // todo: cleanup, change this to a constant
-	};
-
 	/* mips_32_alu
 	 * It's an ALU.
 	 * It takes in

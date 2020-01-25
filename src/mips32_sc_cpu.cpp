@@ -32,12 +32,7 @@ namespace priscas
 	void mips32_sc_cpu::rst()
 	{
 		this->pc->force_current_state(0);
-
-		// Set each register's state to zero
-		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
-		{
-	//		RegisterFile[regind]->force_current_state(0);
-		}
+		this->rf->rst();
 	}
 
 	void mips32_sc_cpu::mem_req_write(byte_8b data, int index)
@@ -56,37 +51,20 @@ namespace priscas
 		comcount(0),
 		mips32_cpu("Generic MIPS-32 Single Cycle", 200000),
 		fu(new mips_single_fetch_unit_32(mm, pc)),
-		decodingunit(new mips_decoding_unit_32(fu))
+		decodingunit(new mips_decoding_unit_32(fu)),
+		rf(new RegisterFile_32_32_2_1(bclk)),
+		ALUSrcMux(new Mux_2_1)
 	{
 		// Connect the PC
 		bclk.connect(pc);
 
-/*		// Connect each register (the so-called "register file")
-		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
-		{
-			RegisterFile[regind] = mRegister_32(new Register_32);
-			bclk.connect(RegisterFile[regind]);
-		}
-*/
-		/// READ PORT 1
-		// Then connect each register to Read Port Mux and Write Port
-//		rf_read_port_1_mux->connect_input(this->decodingunit->get_bus_rs_out()); // selector
+		// Connect the Register File
+		bclk.connect(rf);
 
-		// connect each register...
-/*		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
-		{
-			rf_read_port_1_mux->connect_input(RegisterFile[regind]);
-		}
+		// Connect the addressing ports from decoding unit to RF
+		rf->get_nth_read_addr_port(0)->connect_input(this->decodingunit->get_bus_rs_out());
+		rf->get_nth_read_addr_port(1)->connect_input(this->decodingunit->get_bus_rt_out());
 
-		/// READ PORT 2
-		rf_read_port_2_mux->connect_input(this->decodingunit->get_bus_rt_out()); // selector
-
-		// connect each register...
-		for(ptrdiff_t regind = 0; regind < REG_COUNT; ++regind)
-		{
-			rf_read_port_2_mux->connect_input(RegisterFile[regind]);
-		}*/
-
-
+		// Connecct ALU mux to the register file
 	}
 }
