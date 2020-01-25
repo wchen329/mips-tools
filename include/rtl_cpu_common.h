@@ -107,20 +107,24 @@ namespace priscas
 	};
 	
 	typedef PrimitiveIntegerIncrementer<1> rtlbIntegerIncPlus1;
-	typedef PrimitiveIntegerIncrementer<4> rtlbIntegerIncPlus2;
+	typedef PrimitiveIntegerIncrementer<2> rtlbIntegerIncPlus2;
 	typedef PrimitiveIntegerIncrementer<4> rtlbIntegerIncPlus4;
-	typedef PrimitiveIntegerIncrementer<4> rtlbIntegerIncPlus8;
+	typedef PrimitiveIntegerIncrementer<8> rtlbIntegerIncPlus8;
 
 	/* Mux_Generic
 	 * Requires one select input, and n other inputs
+	 *
+	 * drivers[0] - is always the select input
+	 * drivers[1, ...] - the rest are the data inputs
+	 *
 	 */
-	template<unsigned register_count> class Mux_Generic : public RTLBranch
+	template<unsigned data_input_count> class Mux_Generic : public RTLBranch
 	{
 		public:
 			void cycle()
 			{
 				BW_32 addr = this->get_drivers()[0]->get_Drive_Output();
-				unsigned selection = addr.AsUInt32() % register_count;
+				unsigned selection = addr.AsUInt32() % data_input_count;
 
 				this->set_Drive_Output(this->get_drivers()[selection + 1]->get_Drive_Output());
 			}
@@ -154,13 +158,26 @@ namespace priscas
 	template<class bwclass, unsigned regcount, unsigned read_port_count, unsigned write_port_count> class UniformRegisterFile : public SequentialBlock
 	{
 		public:
+			
+			/* rst
+			 * Asynchronous reset.
+			 * Reset the state of all contained registers
+			 */
+			void rst()
+			{
+				for(unsigned rind = 0; rind < regcount; ++rind)
+				{
+					regs[rind]->force_current_state(0);
+				}
+			}
+
 			/* prologue
 			 * Based on input buses, drive the read ports.
 			 * (Too change the register driving in zero cycles, use zc_address_select)
 			 */
 			void prologue()
 			{
-				
+				// Do nothing. 
 			}
 
 			/* epilogue
@@ -168,73 +185,105 @@ namespace priscas
 			 */
 			void epilogue()
 			{
-				while(!this->commit_list.empty())
+				// For each of the write addresses, write the corresponding data to the registers.
+				for(unsigned in = 0; in < write_port_count; ++in)
 				{
-					// Commit the dirty registers
-					commit_list.front()->epilogue();
-
-					// Remove from commit log
-					commit_list.pop_front();
+					const BW& addr = write_address_select[in]->get_Drive_Output();
+					const BW& writable = write_ports[in]->get_Drive_Output();
+					this->regs[addr.AsUInt32()]->force_current_state(writable);
 				}
 			}
 
-			/* zc_read_address_select(BW_class addr, unsigned read_port_no)
-			 * Select the register corresponding to the
-			 * address passed in for the read_port_no'th read port, in zero cycles
+			/* get_nth_read_addr_port
+			 * Return the nth read addr port
 			 */
-			void zc_read_address_select(const bwclass& in, unsigned read_port_no)
+			mNode get_nth_read_addr_port(ptrdiff_t n)
 			{
-				// Set the read port index
-				this->read_mux_indicies[read_port_no] = in.AsUInt32();
-
-				// Perform a read
+				return read_address_select[n];
 			}
 
-			/* zc_write_address_select(BW_class addr, unsigned write_port_no)
-			 * Select the register corresponding to the write_port_no'th port, in zero cycles
+			/* get_nth_write_addr_port
+			 * Return the nth write addr port
 			 */
-			void zc_write_address_select(const bwclass& in, unsigned write_port_no)
+			mNode get_nth_write_addr_port(ptrdiff_t n)
 			{
-
+				return write_address_select[n];
 			}
 
-			/* drive_write_data
-			 * Drive the nth write port with given data
+			/* get_nth_read_port
+			 * Return the nth read port
 			 */
-			void drive_write_data(const bwclass& in, unsigned n)
+			std::shared_ptr<Mux_Generic<regcount>> get_nth_read_port(ptrdiff_t n)
 			{
-				this->regs[write_mux_indicies[n]] <= in;
-				commit_list.push_back(&in);
+				return read_ports[n];
+			}
+
+			/* get_nth_write_port
+			 * Return the nth write_port
+			 */
+			mNode get_nth_write_port(ptrdiff_t n)
+			{
+				mNode test = write_ports[n];
+				return write_ports[n];
 			}
 
 			/* read_reg
 			 * Read the nth register's data
 			 */
-			const BW& read_reg(unsigned n)
+			const BW_default read_reg(unsigned n)
 			{
-				return *regs[n];
+				return **regs[n];
 			}
 
-			UniformRegisterFile() :
-				read_ports(new Node[read_port_count]),
-				write_ports(new Node[write_port_count])
+			UniformRegisterFile(Clock& clk)
 			{
-				for(unsigned rpi = 0; rpi < read_port_count; ++rpi)
+				// Initialize everything
+				for(unsigned c1 = 0; c1 < read_port_count; ++c1)
 				{
-					read_ports[rpi]->connect_input(this);
+					read_address_select[c1] = mNode(new Node);
+					read_ports[c1] = std::shared_ptr<Mux_Generic<regcount>>(new Mux_Generic<regcount>);
+				}
+				for(unsigned c2 = 0; c2 < write_port_count; ++c2)
+				{
+					write_address_select[c2] = mNode(new Node);
+					write_ports[c2] = mNode(new Node);
+				}
+
+				for(unsigned c3 = 0; c3 < regcount; ++c3)
+				{
+					regs[c3] = std::shared_ptr<Register_Generic<bwclass>>(new Register_Generic<bwclass>);
+					clk.connect(regs[c3]);
+				}
+
+				// Connect each mux to the addresser, and each register to the muxes
+				for(unsigned t1 = 0; t1 < read_port_count; ++t1)
+				{	
+					read_ports[t1]->connect_input(read_address_select[t1]);
+				
+					for(unsigned t11 = 0; t11 < regcount; ++t11)
+					{
+						read_ports[t1]->connect_input(regs[t11]);
+					}
+				}
+				
+				// Connect each write port as children and write address
+				for(unsigned t2 = 0; t2 < write_port_count; ++t2)
+				{
+					this->connect_input(write_ports[t2]);
+					this->connect_input(write_address_select[t2]);
 				}
 
 			}
 
 		private:
-			Register_Generic<bwclass> regs[regcount];
-			unsigned address;
+			std::shared_ptr<Register_Generic<bwclass>> regs[regcount];
 			unsigned read_mux_indicies[read_port_count];
 			unsigned write_mux_indicies[write_port_count];
-			std::list<Register_Generic<bwclass>*> commit_list;
 
 			// Read and write ports
-			mNode read_ports[read_port_count];
+			mNode read_address_select[read_port_count];
+			std::shared_ptr<Mux_Generic<regcount>> read_ports[read_port_count];
+			mNode write_address_select[write_port_count];
 			mNode write_ports[write_port_count];
 	};
 }
