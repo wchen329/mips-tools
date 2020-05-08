@@ -2,7 +2,6 @@
 #include <vector>
 #include <cstdio>
 #include "basic_assert.h"
-#include "sc_cpu.h"
 #include "mb.h"
 #include "shell.h"
 
@@ -21,7 +20,6 @@ void test_shell_justexit()
 	test_shell.SetQuiet();
 	test_shell.Run();
 	mb & test_m = test_shell.GetMotherboard();
-	cpu & c = test_m.get_cpu();
-	diag_cpu & single_cycle = dynamic_cast<diag_cpu&>(c);
+	cpu & single_cycle = test_m.get_cpu();
 	assertEquals(single_cycle.get_PC().AsInt32(), 0);
 }

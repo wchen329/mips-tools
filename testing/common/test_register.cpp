@@ -19,10 +19,9 @@ void Setup_Tests()
 	AddTest(test_combinational, "test_combinational");
 	AddTest(test_mips32_singlefetchdecode, "test_mips32_singlefetch_decode");
 	AddTest(test_registerfile_32_32, "test_registerfile_32_32");
-
-	/*
 	AddTest(test_shell_comments, "test_shell_comments");
 	AddTest(test_shell_justexit, "test_shell_justexit");
+/*
 	AddTest(test_shell_multidirectsymbol, "test_shell_multidirect_symbol");
 	AddTest(test_sc_cpu_core_instructions, "test_sc_cpu_core_instructions");
 	AddTest(test_sc_cpu_loop, "test_sc_cpu_loop");
