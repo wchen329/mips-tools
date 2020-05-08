@@ -50,11 +50,11 @@ namespace priscas
 			/* This "mask" is to support
 			 * bitword non-aligned with modulo 4
 			 */
-			char mask =	tbl == 4 ? 0x0F :
-						tbl == 3 ? 0x07 :
-						tbl == 2 ? 0x03 :
-						tbl == 1 ? 0x01 :
-						0;
+			char mask =	0xF;//tbl == 4 ? 0x0F :
+//						tbl == 3 ? 0x07 :
+//						tbl == 2 ? 0x03 :
+//						tbl == 1 ? 0x01 :
+//						0;
 
 			char val = c & mask;
 

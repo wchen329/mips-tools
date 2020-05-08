@@ -101,6 +101,8 @@ namespace priscas
 
 			// PC Register
 			mRegister_32 pc;
+			mRegister_32 constant_four;
+			mRegister_32 constant_zero;
 
 			////////////////////////////////////////
 
@@ -109,6 +111,8 @@ namespace priscas
 			mmips_single_fetch_unit_32 fu;
 			mmips_decoding_unit_32 decodingunit;
 			mmips_alu_32 malu;
+			mmips_branch_resolver_32 mbr;
+			std::shared_ptr<nnaryIntAdder32> pc_adder;
 
 			mMux_2_1 ALUSrcMux;
 			mMux_2_1 MemToRegMux;

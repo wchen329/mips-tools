@@ -511,10 +511,8 @@ namespace priscas
 			 */
 			void explicit_charge(const BW& charge_data)
 			{
-				if(this->charge_data.get() == nullptr)
-				{
-					this->charge_data = mBW(new BW_default(charge_data));
-				}
+				this->charge_data = mBW(new BW_default(charge_data));
+				this->set_Drive_Output(charge_data);
 			}
 
 		private:

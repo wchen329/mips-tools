@@ -48,18 +48,23 @@ namespace priscas
 	{
 		void cycle()
 		{
-			mDrivableList dl = this->get_drivers();
+			pDrivableList dl = this->get_drivers();
 			
-			BW_generic<bitcount> sum;
+			int64_t sum = 0;
 
-			unsigned depth = 0;
 
 			for(size_t pind = 0; pind < this->get_num_inputs(); ++pind)
 			{
 				sum += this->get_nth_input(pind)->get_Drive_Output().AsInt64();
-				++depth;
 			}
+
+			
+			sum_r = BW_32((int32_t)sum);
+			this->set_Drive_Output(sum_r);
 		}
+
+		private:
+			BW_32 sum_r;
 	};
 
 	typedef nnaryIntAdder<8> nnaryIntAdder8;

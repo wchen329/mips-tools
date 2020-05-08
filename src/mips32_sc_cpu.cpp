@@ -56,13 +56,30 @@ namespace priscas
 		ALUSrcMux(new Mux_2_1),
 		MemToRegMux(new Mux_2_1),
 		RegDstMux(new Mux_2_1),
-		malu(new mips_alu_32)
+		malu(new mips_alu_32),
+		mbr(new mips_branch_resolver_32),
+		pc_adder(new nnaryIntAdder32),
+		constant_zero(new Register_32),
+		constant_four(new Register_32)
 	{
 		// Connect the PC
 		bclk.connect(pc);
 
 		// Connect the Register File
 		bclk.connect(rf);
+		bclk.connect(constant_zero);
+		bclk.connect(constant_four);
+
+		// Connect the PC to the Branch Unit
+		pc->connect_input(mbr);
+		constant_zero->force_current_state(0);
+		constant_four->force_current_state(4);
+
+		// ... And the Branch Unit to the correct signals
+		mbr->connect_input(constant_zero);
+		pc_adder->connect_input(pc);
+		pc_adder->connect_input(constant_four);
+		mbr->connect_input(pc_adder);
 
 		// Connect the addressing ports from decoding unit to RF
 		rf->get_nth_read_addr_port(0)->connect_input(this->decodingunit->get_bus_rs_out());

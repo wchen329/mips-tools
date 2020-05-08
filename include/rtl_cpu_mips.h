@@ -41,10 +41,11 @@ namespace priscas
 			{
 				const BW& fetch_addr = this->get_drivers()[0]->get_Drive_Output();
 				BW_32 inst;
-				inst.set_ByteN(ma[0], 0);
-				inst.set_ByteN(ma[1], 1);
-				inst.set_ByteN(ma[2], 2);
-				inst.set_ByteN(ma[3], 3);
+				int32_t base_addr = fetch_addr.AsInt32();
+				inst.set_ByteN(ma[base_addr], 0);
+				inst.set_ByteN(ma[base_addr + 1], 1);
+				inst.set_ByteN(ma[base_addr + 2], 2);
+				inst.set_ByteN(ma[base_addr + 3], 3);
 				this->set_Drive_Output(inst);
 			}
 
@@ -159,17 +160,20 @@ namespace priscas
 
 				BW_32 PCSrc = pdr[0]->get_Drive_Output();
 				BW_32 PC_Plus_4 = pdr[1]->get_Drive_Output();
-				BW_32 SignExtendedImm = pdr[2]->get_Drive_Output();
+				//BW_32 SignExtendedImm = pdr[2]->get_Drive_Output();
 
 				int32_t PCSrc_i32 = PCSrc.AsInt32();
 
-				BW_32 next_PC =		PCSrc_i32 == 0 ? PC_Plus_4 :
-									PCSrc_i32 == 1 ? SignExtendedImm.AsInt32() << 2 : PC_Plus_4; 
+				BW_32 next_PC =		PC_Plus_4;//PCSrc_i32 == 0 ? PC_Plus_4 :
+									//PCSrc_i32 == 1 ? SignExtendedImm.AsInt32() << 2 : PC_Plus_4; 
 
 				this->set_Drive_Output(next_PC);
 			}
 
 	};
+	
+	typedef std::shared_ptr<mips_branch_resolver_32> mmips_branch_resolver_32;
+
 
 	/* mips_32_alu
 	 * It's an ALU.
