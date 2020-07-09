@@ -491,7 +491,8 @@ namespace priscas
 		float instCount = static_cast<float>(dynamic_cast<diag_cpu&>(inst.GetMotherboard().get_cpu()).get_InstCommitCount());
 		instCount = instCount == 0 ? 1 : instCount;
 		UPString strCPI = priscas_io::StrTypes::FloatToStr(static_cast<float>(n) / instCount);
-		inst.WriteToOutput(UPString("CPI: ") + strCPI + priscas_io::newLine);
+		UPString cpict = UPString("CPI: ") + strCPI + priscas_io::newLine;
+		inst.WriteToOutput(cpict);
 
 		// Print it out in terms of smallest units
 		inst.WriteToOutput("Time Elapsed: ");
@@ -571,7 +572,8 @@ namespace priscas
 			inst.WriteToOutput(t);
 		}
 
-		inst.WriteToOutput( "" + priscas_io::newLine);
+		UPString ups = "" + priscas_io::newLine;
+		inst.WriteToOutput(ups);
 	}
 
 	void trace(const Arg_Vec & args, Shell& inst)

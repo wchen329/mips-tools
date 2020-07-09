@@ -20,6 +20,8 @@
 //////////////////////////////////////////////////////////////////////////////
 #ifndef __HDD_H__
 #define __HDD_H__
+#include <cstring>
+
 #include "io_device.h"
 #include "primitives.h"
 #include "priscas_global.h"
